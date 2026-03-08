@@ -183,7 +183,17 @@ try {
   onSnapshot(doc(db, 'siteConfig', 'main'), snap => {
     if (!snap.exists()) return;
     const nav = snap.data().nav;
-    if (nav && nav.length) renderHeader(nav);
+    // Only use Firebase nav if it has all links (not an old partial save)
+    if (nav && nav.length >= 5) {
+      // Fix URLs — if stored as #section, prefix with index.html
+      const fixed = nav.map(item => ({
+        ...item,
+        url: item.url && item.url.startsWith('#') ? 'index.html' + item.url : (item.url || 'index.html')
+      }));
+      renderHeader(fixed);
+    } else {
+      renderHeader(DEFAULT_NAV);
+    }
   });
 } catch(e) {
   console.warn('SA Header: using defaults.', e);
