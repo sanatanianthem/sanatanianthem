@@ -27,14 +27,7 @@ body{
 ::-webkit-scrollbar-thumb{background:linear-gradient(var(--sf),var(--green));border-radius:5px;}
 
 /* ── INDIA FLAG STRIPE ── */
-.flag-top{
-  height:6px;
-  background:linear-gradient(to right,
-    #FF6B00 0%,#FF6B00 33.33%,
-    #fff 33.33%,#fff 66.66%,
-    #138808 66.66%,#138808 100%);
-  position:relative;z-index:1000;
-}
+
 .flag-top::after{
   content:'';position:absolute;left:50%;top:50%;
   transform:translate(-50%,-50%);
@@ -1613,5 +1606,6 @@ triggerReveals();
   draw();
 })();
 </script>
+<script type="module" src="header.js"></script>
 </body>
 </html>

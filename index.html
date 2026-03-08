@@ -55,14 +55,7 @@ body{
 .d1{transition-delay:.05s;}.d2{transition-delay:.1s;}.d3{transition-delay:.15s;}.d4{transition-delay:.2s;}.d5{transition-delay:.25s;}
 
 /* ─── INDIA FLAG STRIPE ─── */
-.flag-top{
-  height:6px;
-  background:linear-gradient(to right,
-    var(--sf) 0%,var(--sf) 33.33%,
-    #fff 33.33%,#fff 66.66%,
-    var(--green) 66.66%,var(--green) 100%);
-  position:relative;
-}
+
 .flag-top::after{
   content:'';position:absolute;left:50%;top:50%;
   transform:translate(-50%,-50%);
@@ -1407,39 +1400,8 @@ footer{
 
 </head>
 <body>
-<!-- FLAG + NAV -->
-<div class="flag-top"></div>
-<nav>
-  <div class="nav-wrap">
-    <a href="index.html" class="nav-logo">
-      <span class="brand-tip"><span class="nav-brand"><span class="nb-s">Sanatani</span><span class="nb-a">Anthem</span></span></span>
-    </a>
-    <div class="nav-links" id="navLinks">
-      <a href="index.html">Home</a>
-      <a href="#anthem">🎵 Anthem</a>
-      <a href="#travel">✈ Book Yatra</a>
-      <a href="#sanskrit">📚 Sanskrit Sikho</a>
-      <a href="#pilgrimage">⛩ Pilgrimage</a>
-      <a href="#maps">🗺 Maps</a>
-      <a href="#puja">🪔 Puja</a>
-      <a href="#bhajan">🎶 Bhajan Club</a>
-    </div>
-    <div class="nav-right">
-      <div class="lang-toggle" id="langToggle" onclick="toggleSanskrit()" title="Toggle English / Sanskrit">
-        <span class="lt-label lt-en" id="ltEn">English</span>
-        <div class="lt-track">
-          <div class="lt-thumb" id="ltThumb"></div>
-        </div>
-        <span class="lt-label lt-sa" id="ltSa">संस्कृत</span>
-      </div>
-
-
-      <button class="ham" id="hamBtn" onclick="toggleNav()">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </div>
-</nav>
+<!-- UNIVERSAL HEADER -->
+<div id="sa-header-root"></div>
 
 <!-- ══════════════════════════════════════════
      HERO
@@ -2996,5 +2958,6 @@ setInterval(populatePanjika, 60000);
   });
 })();
 </script>
+<script type="module" src="header.js"></script>
 </body>
 </html>
