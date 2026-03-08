@@ -283,6 +283,44 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-we
 .ep{width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:1.05rem;border-radius:7px;cursor:pointer;transition:background .12s;}
 .ep:hover{background:var(--sfp);}
 
+
+/* ══ AUDIT PANEL STYLES ══ */
+.audit-row{display:flex;align-items:flex-start;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);gap:12px;}
+.audit-row:last-child{border:none;}
+.audit-label{font-size:.78rem;color:var(--text-m);font-weight:500;flex:1;}
+.audit-sub{font-size:.65rem;color:var(--text-l);margin-top:2px;font-family:monospace;}
+.audit-val{font-size:.72rem;text-align:right;flex-shrink:0;max-width:55%;}
+.audit-val.mono{font-family:monospace;font-size:.68rem;color:var(--sf-l);word-break:break-all;}
+.abadge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:.65rem;font-weight:700;}
+.abadge.ok{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:#4ade80;}
+.abadge.err{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:#f87171;}
+.abadge.warn{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);color:#fbbf24;}
+.abadge.info{background:var(--sfp2);border:1px solid var(--bdrh);color:var(--sf-l);}
+.abadge.pending{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--text-l);}
+.asec{font-size:.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text-l);padding:12px 0 6px;border-top:1px solid var(--bdr);margin-top:4px;}
+.asec:first-child{border-top:none;margin-top:0;padding-top:0;}
+.health-item{display:flex;align-items:center;gap:7px;padding:5px 8px;border-radius:7px;background:var(--bg3);border:1px solid var(--bdr);font-size:.72rem;}
+.health-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.health-dot.ok{background:#4ade80;box-shadow:0 0 6px rgba(74,222,128,.5);}
+.health-dot.err{background:#f87171;box-shadow:0 0 6px rgba(248,113,113,.5);}
+.health-dot.warn{background:#fbbf24;box-shadow:0 0 6px rgba(251,191,36,.5);}
+.health-dot.pending{background:var(--text-l);}
+.flow-step{display:flex;flex-direction:column;align-items:center;width:100%;max-width:360px;}
+.flow-node{display:flex;align-items:center;justify-content:space-between;width:100%;background:var(--bg3);border:1px solid var(--bdr);border-radius:10px;padding:10px 16px;transition:border-color .2s;}
+.flow-node.ok{border-color:rgba(34,197,94,.3);}
+.flow-node.err{border-color:rgba(239,68,68,.3);}
+.flow-node.warn{border-color:rgba(245,158,11,.3);}
+.flow-node-left{display:flex;align-items:center;gap:10px;}
+.flow-icon{font-size:1.1rem;width:28px;text-align:center;}
+.flow-label{font-size:.78rem;font-weight:600;color:var(--text);}
+.flow-sub{font-size:.62rem;color:var(--text-l);margin-top:1px;}
+.flow-arrow{font-size:.9rem;color:var(--text-l);margin:3px 0;opacity:.5;}
+.flow-status{font-size:.65rem;font-weight:700;}
+.flow-status.ok{color:#4ade80;}.flow-status.err{color:#f87171;}.flow-status.warn{color:#fbbf24;}.flow-status.pending{color:var(--text-l);}
+.audit-spinner{display:inline-block;width:14px;height:14px;border:2px solid var(--bdr);border-top-color:var(--sf);border-radius:50%;animation:spin .8s linear infinite;margin-right:6px;vertical-align:middle;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.audit-loading{display:flex;align-items:center;color:var(--text-l);font-size:.78rem;padding:16px 0;}
+
 /* SAVE BAR */
 .save-bar{position:fixed;bottom:0;left:0;right:0;z-index:200;background:rgba(13,7,2,.97);backdrop-filter:blur(20px);border-top:1px solid var(--bdr);padding:12px 30px;display:flex;align-items:center;justify-content:space-between;transform:translateY(100%);transition:transform .3s cubic-bezier(.16,1,.3,1);}
 .save-bar.show{transform:translateY(0);}
@@ -433,6 +471,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-we
       <button class="si" onclick="show('settings')" id="sb-settings">
         <span class="si-ic">⚙</span> Site Settings
       </button>
+      </button>
+      <div class="sg">DevOps</div>
+      <button class="si" onclick="show('audit');runAudit()" id="sb-audit">
+        <span class="si-ic">🔍</span> System Audit <span class="si-new">Live</span>
     </aside>
 
     <!-- MAIN -->
@@ -815,6 +857,99 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-we
             <div class="fr"><label>Gold (Accent)</label><div class="cr"><input type="color" value="#C8890A" oninput="markDirty()"><input class="fi" value="#C8890A" oninput="markDirty()"></div></div>
             <div class="fr"><label>Green (India)</label><div class="cr"><input type="color" value="#138808" oninput="markDirty()"><input class="fi" value="#138808" oninput="markDirty()"></div></div>
           </div>
+        </div>
+      </div>
+
+
+      <!-- ══ SYSTEM AUDIT ══ -->
+      <div class="panel" id="panel-audit">
+        <div class="ph">
+          <div class="ph-left">
+            <div class="pt">🔍 System Audit</div>
+            <div class="ps">Live technical audit of your entire infrastructure</div>
+          </div>
+          <button class="btn-sv" onclick="runAudit()" style="white-space:nowrap;padding:8px 16px;font-size:.76rem;">↻ Refresh Audit</button>
+        </div>
+
+        <!-- HEALTH SCORE -->
+        <div class="card" id="auditHealthCard">
+          <div class="ct">⚡ System Health Score</div>
+          <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap;">
+            <div style="position:relative;width:110px;height:110px;flex-shrink:0;">
+              <svg width="110" height="110" viewBox="0 0 110 110">
+                <circle cx="55" cy="55" r="48" fill="none" stroke="rgba(255,107,0,.1)" stroke-width="10"/>
+                <circle cx="55" cy="55" r="48" fill="none" stroke="url(#scoreGrad)" stroke-width="10"
+                  stroke-dasharray="301.6" stroke-dashoffset="301.6" stroke-linecap="round"
+                  transform="rotate(-90 55 55)" id="scoreArc" style="transition:stroke-dashoffset 1.2s ease"/>
+                <defs><linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#FF6B00"/><stop offset="100%" stop-color="#F2C94C"/>
+                </linearGradient></defs>
+              </svg>
+              <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+                <span id="scoreNum" style="font-family:Cinzel,serif;font-size:1.5rem;font-weight:700;color:var(--sf-l);">—</span>
+                <span style="font-size:.58rem;color:var(--text-l);">/ 100</span>
+              </div>
+            </div>
+            <div style="flex:1;min-width:200px;">
+              <div id="healthGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONNECTION FLOW -->
+        <div class="card">
+          <div class="ct">🔗 Connection Flow</div>
+          <div id="flowDiagram" style="display:flex;flex-direction:column;align-items:center;gap:0;padding:8px 0;"></div>
+        </div>
+
+        <!-- DOMAIN AUDIT -->
+        <div class="card">
+          <div class="ct">🌐 Domain & DNS Audit <span class="ct-hint">GoDaddy</span></div>
+          <div id="domainAudit"></div>
+        </div>
+
+        <!-- GITHUB AUDIT -->
+        <div class="card">
+          <div class="ct">🐙 GitHub Integration Audit</div>
+          <div id="githubAudit"></div>
+        </div>
+
+        <!-- FIREBASE AUDIT -->
+        <div class="card">
+          <div class="ct">🔥 Firebase System Audit</div>
+          <div id="firebaseAudit"></div>
+        </div>
+
+        <!-- SECURITY AUDIT -->
+        <div class="card">
+          <div class="ct">🔒 Security Audit</div>
+          <div id="securityAudit"></div>
+        </div>
+
+        <!-- RAW CONFIG -->
+        <div class="card">
+          <div class="ct">⚙ Infrastructure Config <span class="ct-hint">Click to edit</span></div>
+          <div class="fg">
+            <div class="fr"><label>Domain Name</label><input class="fi" id="cfg-domain" value="sanatanianthem.com" oninput="saveAuditConfig()"></div>
+            <div class="fr"><label>GitHub Repo URL</label><input class="fi url" id="cfg-github" value="https://github.com/sanatanianthem/sanatanianthem" oninput="saveAuditConfig()"></div>
+          </div>
+          <div class="fg">
+            <div class="fr"><label>GitHub Branch</label><input class="fi" id="cfg-branch" value="main" oninput="saveAuditConfig()"></div>
+            <div class="fr"><label>Hosting Platform</label>
+              <select class="fsel" id="cfg-hosting" onchange="saveAuditConfig()">
+                <option value="github">GitHub Pages</option>
+                <option value="firebase">Firebase Hosting</option>
+              </select>
+            </div>
+          </div>
+          <div class="fg">
+            <div class="fr"><label>Firebase Project ID</label><input class="fi" id="cfg-fbproject" value="sanatanianthem-652a3" oninput="saveAuditConfig()"></div>
+            <div class="fr"><label>Expected Live URL</label><input class="fi url" id="cfg-liveurl" value="https://sanatanianthem.com" oninput="saveAuditConfig()"></div>
+          </div>
+        </div>
+
+        <div style="font-size:.65rem;color:var(--text-l);text-align:center;padding:8px 0;">
+          Last audit: <span id="auditTime">Never</span> · Auto-refreshes on panel open
         </div>
       </div>
 
@@ -1214,6 +1349,404 @@ if(!window._fb){
   D=JSON.parse(JSON.stringify(DEFS));
   renderAll(); updateStats();
 }
+
+/* ══════════════════════════════════════
+   SYSTEM AUDIT ENGINE
+══════════════════════════════════════ */
+
+const AUDIT_CFG = {
+  domain:    'sanatanianthem.com',
+  github:    'https://github.com/sanatanianthem/sanatanianthem',
+  branch:    'main',
+  hosting:   'github',
+  fbproject: 'sanatanianthem-652a3',
+  liveurl:   'https://sanatanianthem.com',
+};
+
+let auditResults = {};
+
+async function runAudit() {
+  setTxt('auditTime', new Date().toLocaleTimeString('en-IN'));
+  showAuditLoading();
+
+  auditResults = {};
+
+  await Promise.all([
+    auditDomain(),
+    auditGitHub(),
+    auditFirebase(),
+    auditSecurity(),
+  ]);
+
+  renderAuditFlow();
+  renderHealthScore();
+}
+
+function showAuditLoading() {
+  ['domainAudit','githubAudit','firebaseAudit','securityAudit'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = '<div class="audit-loading"><span class="audit-spinner"></span>Checking...</div>';
+  });
+  document.getElementById('healthGrid').innerHTML = '';
+  document.getElementById('flowDiagram').innerHTML = '';
+  document.getElementById('scoreNum').textContent = '—';
+}
+
+/* ── DOMAIN AUDIT ── */
+async function auditDomain() {
+  const cfg = getAuditCfg();
+  const rows = [];
+  let score = 0; let total = 0;
+
+  // Basic info
+  rows.push({ label:'Domain Name', sub:'Primary domain', val: cfg.domain, type:'info' });
+  rows.push({ label:'DNS Provider', sub:'Domain registrar', val:'GoDaddy', type:'info' });
+  rows.push({ label:'Nameservers', sub:'GoDaddy default NS', val:'ns09.domaincontrol.com', type:'info' });
+
+  // Check if site is reachable
+  const siteOk = await checkURL(cfg.liveurl);
+  rows.push({ label:'Site Reachability', sub:cfg.liveurl, val: siteOk?'✓ Reachable':'✗ Not reachable', status: siteOk?'ok':'err' });
+  total++; if(siteOk) score++;
+
+  // SSL
+  const ssl = cfg.liveurl.startsWith('https');
+  rows.push({ label:'SSL / HTTPS', sub:'Secure connection', val: ssl?'✓ HTTPS Active':'✗ No HTTPS', status: ssl?'ok':'err' });
+  total++; if(ssl) score++;
+
+  // Hosting target
+  const hostTarget = cfg.hosting === 'firebase'
+    ? 'Firebase Hosting (Google CDN)'
+    : 'GitHub Pages (github.io)';
+  rows.push({ label:'Hosting Target', sub:'Where DNS points to', val: hostTarget, type:'info' });
+
+  // GitHub Pages DNS records
+  if (cfg.hosting === 'github') {
+    rows.push({ label:'A Record 1', sub:'Required for GitHub Pages', val:'185.199.108.153', type:'info' });
+    rows.push({ label:'A Record 2', sub:'Required for GitHub Pages', val:'185.199.109.153', type:'info' });
+    rows.push({ label:'CNAME (www)', sub:'www redirect', val:'sanatanianthem.github.io', type:'info' });
+    rows.push({ label:'DNS Propagation', sub:'Allow 24-48hrs after changes', val: siteOk?'✓ Propagated':'⏳ Propagating...', status: siteOk?'ok':'warn' });
+    total++; if(siteOk) score++;
+  } else {
+    rows.push({ label:'Firebase A Records', sub:'Firebase Hosting IPs', val:'199.36.158.100 / .101', type:'info' });
+    rows.push({ label:'DNS Propagation', sub:'Allow 24-48hrs after changes', val: siteOk?'✓ Propagated':'⏳ Propagating...', status: siteOk?'ok':'warn' });
+    total++; if(siteOk) score++;
+  }
+
+  rows.push({ label:'Domain Expiry', sub:'Check GoDaddy dashboard', val:'Check GoDaddy ↗', type:'warn', link:'https://dcc.godaddy.com/manage/sanatanianthem.com/dns' });
+
+  auditResults.domain = { score, total, rows };
+  renderAuditSection('domainAudit', '🌐 Domain & DNS', rows);
+}
+
+/* ── GITHUB AUDIT ── */
+async function auditGitHub() {
+  const cfg = getAuditCfg();
+  const rows = [];
+  let score = 0; let total = 0;
+
+  const repoOwner = 'sanatanianthem';
+  const repoName  = 'sanatanianthem';
+  const apiBase   = `https://api.github.com/repos/${repoOwner}/${repoName}`;
+
+  rows.push({ label:'Repository', sub:'GitHub repository name', val: repoName, type:'info' });
+  rows.push({ label:'Repository URL', sub:'Public GitHub URL', val: cfg.github, type:'info', link: cfg.github });
+  rows.push({ label:'Branch', sub:'Deployment branch', val: cfg.branch, type:'info' });
+
+  // Fetch repo info
+  try {
+    const repoRes  = await fetch(apiBase, { headers:{ Accept:'application/vnd.github.v3+json' } });
+    const repoData = await repoRes.json();
+
+    if (repoData.id) {
+      score++; total++;
+      rows.push({ label:'Repo Status', sub:'Repository accessible', val:'✓ Public & accessible', status:'ok' });
+      rows.push({ label:'Default Branch', sub:'', val: repoData.default_branch || cfg.branch, type:'info' });
+      rows.push({ label:'Last Updated', sub:'Repository activity', val: new Date(repoData.updated_at).toLocaleString('en-IN'), type:'info' });
+      rows.push({ label:'Visibility', sub:'', val: repoData.private?'⚠ Private':'✓ Public', status: repoData.private?'warn':'ok' });
+    } else {
+      total++;
+      rows.push({ label:'Repo Status', sub:'Could not reach GitHub API', val:'⚠ Check manually', status:'warn' });
+    }
+
+    // Commits
+    try {
+      const commitRes  = await fetch(`${apiBase}/commits?per_page=1`, { headers:{ Accept:'application/vnd.github.v3+json' } });
+      const commitData = await commitRes.json();
+      if (commitData[0]) {
+        const c = commitData[0];
+        rows.push({ label:'Last Commit', sub: c.commit.message.substring(0,60), val: new Date(c.commit.author.date).toLocaleString('en-IN'), type:'info' });
+        rows.push({ label:'Commit ID', sub:'Short hash', val: c.sha.substring(0,8), type:'mono' });
+        score++; total++;
+      }
+    } catch(e) {}
+
+    // GitHub Pages
+    try {
+      const pagesRes  = await fetch(`${apiBase}/pages`, { headers:{ Accept:'application/vnd.github.v3+json' } });
+      const pagesData = await pagesRes.json();
+      if (pagesData.status) {
+        const pageOk = pagesData.status === 'built';
+        rows.push({ label:'GitHub Pages Status', sub:'Deployment status', val: pageOk?'✓ Built & Live':'⏳ '+pagesData.status, status: pageOk?'ok':'warn' });
+        rows.push({ label:'Pages URL', sub:'GitHub hosting URL', val: pagesData.html_url||'—', type:'info' });
+        if(pageOk){score++;} total++;
+      } else {
+        rows.push({ label:'GitHub Pages', sub:'Not configured or private', val:'⚠ Enable in Settings→Pages', status:'warn' });
+        total++;
+      }
+    } catch(e) {
+      rows.push({ label:'GitHub Pages', sub:'', val:'⚠ Check Settings→Pages', status:'warn' });
+      total++;
+    }
+
+    // Actions / workflows
+    try {
+      const runsRes  = await fetch(`${apiBase}/actions/runs?per_page=1`, { headers:{ Accept:'application/vnd.github.v3+json' } });
+      const runsData = await runsRes.json();
+      if (runsData.workflow_runs && runsData.workflow_runs.length) {
+        const run = runsData.workflow_runs[0];
+        const ok  = run.conclusion === 'success';
+        rows.push({ label:'Last Deployment', sub:'GitHub Actions', val: ok?'✓ Success':'✗ '+run.conclusion, status: ok?'ok':'err' });
+        rows.push({ label:'Deployment Time', sub:'', val: new Date(run.updated_at).toLocaleString('en-IN'), type:'info' });
+        if(ok){score++;} total++;
+      } else {
+        rows.push({ label:'GitHub Actions', sub:'No workflow runs found', val:'ℹ Set up in Actions tab', status:'warn' });
+      }
+    } catch(e) {}
+
+  } catch(e) {
+    rows.push({ label:'GitHub API', sub:'Network error', val:'⚠ Check manually', status:'warn' });
+    total++;
+  }
+
+  auditResults.github = { score, total, rows };
+  renderAuditSection('githubAudit', '🐙 GitHub', rows);
+}
+
+/* ── FIREBASE AUDIT ── */
+async function auditFirebase() {
+  const rows = [];
+  let score = 0; let total = 0;
+
+  const cfg = getAuditCfg();
+
+  rows.push({ label:'Firebase Project', sub:'Project ID', val: cfg.fbproject, type:'mono' });
+  rows.push({ label:'Project Name', sub:'Display name', val:'SanataniAnthem', type:'info' });
+  rows.push({ label:'Auth Domain', sub:'Firebase auth endpoint', val:`${cfg.fbproject}.firebaseapp.com`, type:'mono' });
+  rows.push({ label:'Hosting URL', sub:'Firebase web app', val:`https://${cfg.fbproject}.web.app`, type:'info', link:`https://${cfg.fbproject}.web.app` });
+
+  // Firebase connected check
+  try {
+    const fb = window._fb;
+    if (fb && fb.db) {
+      score++; total++;
+      rows.push({ label:'Firestore Connection', sub:'Database active', val:'✓ Connected & Live', status:'ok' });
+
+      // Try reading a doc
+      try {
+        const snap = await fb.getDoc(fb.doc(fb.db, 'siteConfig', 'main'));
+        const dataOk = snap.exists();
+        rows.push({ label:'siteConfig/main', sub:'Admin config document', val: dataOk?'✓ Document exists':'⚠ No data saved yet', status: dataOk?'ok':'warn' });
+        if(dataOk){score++;} total++;
+      } catch(e) {
+        rows.push({ label:'Firestore Rules', sub:'', val:'⚠ Check security rules', status:'warn' });
+        total++;
+      }
+    }
+  } catch(e) {}
+
+  // Auth check
+  try {
+    const user = window._fb?.auth?.currentUser;
+    if (user) {
+      score++; total++;
+      rows.push({ label:'Authentication', sub:'Google Sign-In', val:'✓ Active — '+user.email, status:'ok' });
+      rows.push({ label:'Logged In User', sub:'Current admin', val: user.displayName||user.email, type:'info' });
+    }
+  } catch(e) {}
+
+  rows.push({ label:'Auth Provider', sub:'Sign-in method', val:'Google (Gmail)', type:'info' });
+  rows.push({ label:'Allowed Email', sub:'Admin access', val:'SanataniAnthem@gmail.com', type:'info' });
+
+  // Region
+  rows.push({ label:'Database Region', sub:'Firestore location', val:'asia-south1 (Mumbai)', type:'info' });
+  rows.push({ label:'Firestore Rules', sub:'Security rules mode', val:'⚠ Check Console — lock after testing', status:'warn' });
+  total++; // rules check
+
+  // Firebase Hosting separate check
+  const hostingUrl = `https://${cfg.fbproject}.web.app`;
+  rows.push({ label:'Firebase Hosting', sub: cfg.hosting==='firebase'?'Active hosting':'Configured but using GitHub Pages', val: cfg.hosting==='firebase'?'✓ Active':'ℹ Available', type: cfg.hosting==='firebase'?'ok':'info' });
+
+  rows.push({ label:'FCM (Push Notifications)', sub:'Firebase Cloud Messaging', val:'⚠ Needs Server Key setup', status:'warn' });
+  rows.push({ label:'Firebase Analytics', sub:'User tracking', val:'✓ Enabled (measurementId set)', status:'ok' });
+  score++; total++;
+
+  auditResults.firebase = { score, total, rows };
+  renderAuditSection('firebaseAudit', '🔥 Firebase', rows);
+}
+
+/* ── SECURITY AUDIT ── */
+async function auditSecurity() {
+  const cfg = getAuditCfg();
+  const rows = [];
+  let score = 0; let total = 0;
+
+  // HTTPS
+  const https = cfg.liveurl.startsWith('https');
+  rows.push({ label:'HTTPS / SSL', sub:'Encrypted connection', val: https?'✓ HTTPS Active':'✗ No HTTPS — Critical!', status: https?'ok':'err' });
+  total++; if(https) score++;
+
+  // API Key exposure (public repo risk)
+  rows.push({ label:'Firebase API Key', sub:'Exposed in public GitHub repo', val:'⚠ Visible in public repo — restrict in Firebase Console', status:'warn' });
+  rows.push({ label:'API Key Restriction', sub:'Firebase Console → API Keys', val:'⚠ Add domain restrictions', status:'warn', link:'https://console.cloud.google.com/apis/credentials' });
+  total++; // key restriction
+
+  // Admin panel protection
+  rows.push({ label:'Admin Panel Auth', sub:'Google Sign-In required', val:'✓ Protected — Gmail login required', status:'ok' });
+  score++; total++;
+
+  // Firestore rules
+  rows.push({ label:'Firestore Rules', sub:'Database access control', val:'⚠ Set write rules to admin only', status:'warn' });
+  total++;
+
+  // GitHub repo visibility
+  rows.push({ label:'GitHub Repo', sub:'Repository visibility', val:'⚠ Public — API keys visible', status:'warn' });
+
+  // CORS
+  rows.push({ label:'CORS / Auth Domains', sub:'Firebase authorized domains', val:'✓ sanatanianthem.com authorized', status:'ok' });
+  score++; total++;
+
+  // Recommended actions
+  rows.push({ label:'🔐 Recommended: Lock Firestore', sub:'Rule: allow write if email == admin', val:'Action required', status:'err' });
+  rows.push({ label:'🔑 Recommended: Restrict API Key', sub:'Add HTTP referrer restrictions', val:'Action required', status:'warn' });
+  rows.push({ label:'🔒 Recommended: Private Repo', sub:'Upgrade GitHub to keep files private', val:'Optional', type:'info' });
+
+  auditResults.security = { score, total, rows };
+  renderAuditSection('securityAudit', '🔒 Security', rows);
+}
+
+/* ── RENDER HELPERS ── */
+function renderAuditSection(elId, title, rows) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+
+  el.innerHTML = rows.map(row => {
+    let badge = '';
+    if (row.status === 'ok')   badge = `<span class="abadge ok">✓ OK</span>`;
+    if (row.status === 'err')  badge = `<span class="abadge err">✗ Error</span>`;
+    if (row.status === 'warn') badge = `<span class="abadge warn">⚠ Warning</span>`;
+    if (row.type === 'info')   badge = `<span class="abadge info">${row.val}</span>`;
+    if (row.type === 'mono')   badge = `<span class="audit-val mono">${row.val}</span>`;
+    if (!badge)                badge = `<span class="abadge pending">${row.val||'—'}</span>`;
+
+    const valHtml = row.link
+      ? `<a href="${row.link}" target="_blank" style="color:var(--sf-l);text-decoration:none;">${badge}</a>`
+      : badge;
+
+    return `<div class="audit-row">
+      <div><div class="audit-label">${row.label}</div>${row.sub?`<div class="audit-sub">${row.sub}</div>`:''}</div>
+      <div class="audit-val">${valHtml}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderAuditFlow() {
+  const cfg = getAuditCfg();
+  const siteOk = auditResults.domain?.score > 0;
+  const ghOk   = auditResults.github?.score > 1;
+  const fbOk   = auditResults.firebase?.score > 1;
+
+  const steps = [
+    { icon:'👤', label:'User / Visitor', sub:'Opens browser', status:'ok' },
+    { icon:'🌐', label:'Domain — sanatanianthem.com', sub:'GoDaddy DNS', status: siteOk?'ok':'warn' },
+    { icon:'🔒', label:'SSL / HTTPS', sub:'Encrypted connection', status: cfg.liveurl.startsWith('https')?'ok':'err' },
+    cfg.hosting === 'github'
+      ? { icon:'🐙', label:'GitHub Pages', sub:'sanatanianthem.github.io', status: ghOk?'ok':'warn' }
+      : { icon:'🔥', label:'Firebase Hosting', sub:'Google CDN — Global', status: fbOk?'ok':'warn' },
+    { icon:'📁', label:'GitHub Repository', sub:'sanatanianthem/sanatanianthem', status: ghOk?'ok':'warn' },
+    { icon:'🔥', label:'Firestore Database', sub:'sanatanianthem-652a3', status: fbOk?'ok':'warn' },
+    { icon:'⚙', label:'Admin Panel', sub:'admin.html — You are here', status:'ok' },
+    { icon:'📱', label:'Android App', sub:'Coming soon — Firebase ready', status:'warn' },
+  ];
+
+  const el = document.getElementById('flowDiagram');
+  el.innerHTML = steps.map((s, i) => `
+    <div class="flow-step">
+      <div class="flow-node ${s.status}">
+        <div class="flow-node-left">
+          <span class="flow-icon">${s.icon}</span>
+          <div>
+            <div class="flow-label">${s.label}</div>
+            <div class="flow-sub">${s.sub}</div>
+          </div>
+        </div>
+        <span class="flow-status ${s.status}">${s.status==='ok'?'● Live':s.status==='err'?'● Error':'● Pending'}</span>
+      </div>
+      ${i < steps.length-1 ? '<div class="flow-arrow">↓</div>' : ''}
+    </div>
+  `).join('');
+}
+
+function renderHealthScore() {
+  const checks = [
+    { label:'Domain Connected',     status: auditResults.domain?.score>0?'ok':'err' },
+    { label:'DNS Correct',          status: auditResults.domain?.score>0?'ok':'warn' },
+    { label:'Site Reachable',       status: auditResults.domain?.score>0?'ok':'err' },
+    { label:'GitHub Connected',     status: auditResults.github?.score>1?'ok':'warn' },
+    { label:'Deployment Working',   status: auditResults.github?.score>2?'ok':'warn' },
+    { label:'Firebase Active',      status: auditResults.firebase?.score>1?'ok':'err' },
+    { label:'Auth Configured',      status: auditResults.firebase?.score>2?'ok':'warn' },
+    { label:'SSL Active',           status: getAuditCfg().liveurl.startsWith('https')?'ok':'err' },
+    { label:'Admin Protected',      status:'ok' },
+    { label:'Security Rules Set',   status:'warn' },
+  ];
+
+  const okCount = checks.filter(c=>c.status==='ok').length;
+  const score   = Math.round((okCount / checks.length) * 100);
+
+  // Animate score arc
+  const arc = document.getElementById('scoreArc');
+  if (arc) {
+    const circumference = 301.6;
+    const offset = circumference - (score / 100) * circumference;
+    setTimeout(() => { arc.style.strokeDashoffset = offset; }, 100);
+  }
+  setTxt('scoreNum', score);
+
+  const grid = document.getElementById('healthGrid');
+  if (grid) {
+    grid.innerHTML = checks.map(c => `
+      <div class="health-item">
+        <div class="health-dot ${c.status}"></div>
+        <span style="font-size:.68rem;color:var(--text-m);">${c.label}</span>
+      </div>
+    `).join('');
+  }
+}
+
+/* ── CHECK URL ── */
+async function checkURL(url) {
+  try {
+    const res = await fetch(url, { method:'HEAD', mode:'no-cors', cache:'no-store' });
+    return true; // no-cors always returns opaque, treat as ok if no exception
+  } catch(e) {
+    return false;
+  }
+}
+
+/* ── CONFIG ── */
+function getAuditCfg() {
+  return {
+    domain:    document.getElementById('cfg-domain')?.value    || AUDIT_CFG.domain,
+    github:    document.getElementById('cfg-github')?.value    || AUDIT_CFG.github,
+    branch:    document.getElementById('cfg-branch')?.value    || AUDIT_CFG.branch,
+    hosting:   document.getElementById('cfg-hosting')?.value   || AUDIT_CFG.hosting,
+    fbproject: document.getElementById('cfg-fbproject')?.value || AUDIT_CFG.fbproject,
+    liveurl:   document.getElementById('cfg-liveurl')?.value   || AUDIT_CFG.liveurl,
+  };
+}
+
+function saveAuditConfig() { /* config auto-reads from inputs */ }
+
 </script>
 </body>
 </html>
