@@ -861,6 +861,70 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-we
       </div>
 
 
+
+      <!-- ══ INTERNAL LINKS ══ -->
+      <div class="panel" id="panel-internal">
+        <div class="ph">
+          <div class="ph-left">
+            <div class="pt">Internal Links</div>
+            <div class="ps">All internal links and section anchors across your website</div>
+          </div>
+        </div>
+        <span class="stag web">🌐 Website Only</span>
+
+        <!-- PAGE SECTIONS -->
+        <div class="card">
+          <div class="ct">📄 Website Pages <span class="ct-hint">All HTML files</span></div>
+          <div class="lhdr"><span></span><span>Page Name</span><span>File / URL</span><span>Status</span><span></span></div>
+          <div class="ll" id="ll-pages"></div>
+          <button class="add-btn" onclick="addLink('pages')">+ Add Page</button>
+        </div>
+
+        <!-- NAV SECTIONS -->
+        <div class="card">
+          <div class="ct">🔗 Section Anchors <span class="ct-hint">All #id sections on homepage</span></div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-bottom:8px;" id="anchorGrid">
+            <!-- rendered by JS -->
+          </div>
+        </div>
+
+        <!-- CHIP LINKS -->
+        <div class="card">
+          <div class="ct">🏷 Quick Chip Links <span class="ct-hint">Hero section chips</span></div>
+          <div class="ll" id="ll-chips"></div>
+          <button class="add-btn" onclick="addLink('chips')">+ Add Chip</button>
+        </div>
+
+        <!-- FOOTER INTERNAL -->
+        <div class="card">
+          <div class="ct">📋 Footer Internal Links <span class="ct-hint">All footer column links</span></div>
+          <div class="ext-hd">✈ Yatra Column</div>
+          <div class="ll" id="ll-fi-yatra"></div>
+          <div class="ext-hd">🪔 Services Column</div>
+          <div class="ll" id="ll-fi-services"></div>
+          <div class="ext-hd">📚 Learn Column</div>
+          <div class="ll" id="ll-fi-learn"></div>
+        </div>
+
+        <!-- ALL LINKS TABLE -->
+        <div class="card">
+          <div class="ct">📊 Complete Link Map <span class="ct-hint">Every internal link on your site</span></div>
+          <div style="overflow-x:auto;">
+            <table style="width:100%;border-collapse:collapse;font-size:.72rem;">
+              <thead>
+                <tr style="background:var(--bg3);border-bottom:1px solid var(--bdr);">
+                  <th style="padding:8px 12px;text-align:left;color:var(--text-l);font-size:.62rem;letter-spacing:.5px;text-transform:uppercase;">Location</th>
+                  <th style="padding:8px 12px;text-align:left;color:var(--text-l);font-size:.62rem;letter-spacing:.5px;text-transform:uppercase;">Link Text</th>
+                  <th style="padding:8px 12px;text-align:left;color:var(--text-l);font-size:.62rem;letter-spacing:.5px;text-transform:uppercase;">Target</th>
+                  <th style="padding:8px 12px;text-align:left;color:var(--text-l);font-size:.62rem;letter-spacing:.5px;text-transform:uppercase;">Type</th>
+                </tr>
+              </thead>
+              <tbody id="linkMapBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
       <!-- ══ SYSTEM AUDIT ══ -->
       <div class="panel" id="panel-audit">
         <div class="ph">
@@ -1746,6 +1810,135 @@ function getAuditCfg() {
 }
 
 function saveAuditConfig() { /* config auto-reads from inputs */ }
+
+
+/* ══ INTERNAL LINKS DATA ══ */
+const SITE_SECTIONS = [
+  { id:'home',        label:'Home',           icon:'🏠' },
+  { id:'anthem',      label:'Anthem',         icon:'🎵' },
+  { id:'travel',      label:'Book Yatra',     icon:'✈' },
+  { id:'sanskrit',    label:'Sanskrit Sikho', icon:'📚' },
+  { id:'pilgrimage',  label:'Pilgrimage',     icon:'⛩' },
+  { id:'maps',        label:'Maps',           icon:'🗺' },
+  { id:'puja',        label:'Puja',           icon:'🪔' },
+  { id:'bhajan',      label:'Bhajan Club',    icon:'🎶' },
+];
+
+const SITE_PAGES = [
+  { emoji:'🏠', label:'Home Page',           url:'index.html',                    visible:true  },
+  { emoji:'🕉', label:'Mantras & Texts',     url:'sanatani-anthem-mantras.html',  visible:true  },
+  { emoji:'⚙',  label:'Admin Panel',         url:'admin.html',                    visible:true  },
+];
+
+const CHIP_LINKS = [
+  { emoji:'🔱', label:'51 Shakti Peetha',    url:'#pilgrimage', visible:true },
+  { emoji:'🕌', label:'12 Jyotirlinga',      url:'#pilgrimage', visible:true },
+  { emoji:'🏹', label:'Ramayana Route',      url:'#maps',       visible:true },
+  { emoji:'⚔',  label:'Mahabharata Kings',  url:'#maps',       visible:true },
+  { emoji:'🎵', label:'Hanuman Chalisa',     url:'#anthem',     visible:true },
+  { emoji:'📖', label:'Sanskrit Sikho',      url:'#sanskrit',   visible:true },
+];
+
+const ALL_LINKS = [
+  // Nav links
+  { location:'Nav Bar',        text:'Home',             target:'#home',                        type:'Anchor' },
+  { location:'Nav Bar',        text:'Anthem',           target:'#anthem',                      type:'Anchor' },
+  { location:'Nav Bar',        text:'Book Yatra',       target:'#travel',                      type:'Anchor' },
+  { location:'Nav Bar',        text:'Sanskrit Sikho',   target:'#sanskrit',                    type:'Anchor' },
+  { location:'Nav Bar',        text:'Pilgrimage',       target:'#pilgrimage',                  type:'Anchor' },
+  { location:'Nav Bar',        text:'Maps',             target:'#maps',                        type:'Anchor' },
+  { location:'Nav Bar',        text:'Puja',             target:'#puja',                        type:'Anchor' },
+  { location:'Nav Bar',        text:'Bhajan Club',      target:'#bhajan',                      type:'Anchor' },
+  // Hero chips
+  { location:'Hero Chips',     text:'51 Shakti Peetha', target:'#pilgrimage',                  type:'Chip' },
+  { location:'Hero Chips',     text:'12 Jyotirlinga',   target:'#pilgrimage',                  type:'Chip' },
+  { location:'Hero Chips',     text:'Ramayana Route',   target:'#maps',                        type:'Chip' },
+  { location:'Hero Chips',     text:'Mahabharata Kings',target:'#maps',                        type:'Chip' },
+  { location:'Hero Chips',     text:'Hanuman Chalisa',  target:'#anthem',                      type:'Chip' },
+  { location:'Hero Chips',     text:'Sanskrit Sikho',   target:'#sanskrit',                    type:'Chip' },
+  // Footer - Yatra
+  { location:'Footer — Yatra', text:'51 Shakti Peetha', target:'#pilgrimage',                  type:'Footer' },
+  { location:'Footer — Yatra', text:'12 Jyotirlinga',   target:'#pilgrimage',                  type:'Footer' },
+  { location:'Footer — Yatra', text:'Char Dham Yatra',  target:'#pilgrimage',                  type:'Footer' },
+  { location:'Footer — Yatra', text:'Ramayana Route',   target:'#maps',                        type:'Footer' },
+  { location:'Footer — Yatra', text:'Mahabharata Map',  target:'#maps',                        type:'Footer' },
+  // Footer - Learn
+  { location:'Footer — Learn', text:'Sanskrit Sikho',   target:'#sanskrit',                    type:'Footer' },
+  { location:'Footer — Learn', text:'Hanuman Chalisa',  target:'sanatani-anthem-mantras.html', type:'Page' },
+  { location:'Footer — Learn', text:'Sarve Bhavantu',   target:'sanatani-anthem-mantras.html', type:'Page' },
+  { location:'Footer — Learn', text:'Bhajan Clubbing',  target:'#bhajan',                      type:'Footer' },
+  { location:'Footer — Learn', text:'Book Yatra',       target:'#travel',                      type:'Footer' },
+  // Pages
+  { location:'Global',         text:'Home Page',        target:'index.html',                   type:'Page' },
+  { location:'Global',         text:'Mantras & Texts',  target:'sanatani-anthem-mantras.html', type:'Page' },
+  { location:'Global',         text:'Admin Panel',      target:'admin.html',                   type:'Page' },
+];
+
+function initInternalLinks() {
+  // Pages list
+  if (!D.pages) D.pages = SITE_PAGES.map((p,i) => ({...p, id:i+1}));
+  renderList('pages');
+
+  // Chips
+  if (!D.chips) D.chips = CHIP_LINKS.map((c,i) => ({...c, id:i+1}));
+  renderList('chips');
+
+  // Footer mirrors
+  renderList('fi-yatra');
+  renderList('fi-services');
+  renderList('fi-learn');
+
+  // Anchor grid
+  renderAnchorGrid();
+
+  // Link map table
+  renderLinkMap();
+}
+
+function renderAnchorGrid() {
+  const el = document.getElementById('anchorGrid');
+  if (!el) return;
+  el.innerHTML = SITE_SECTIONS.map(s => `
+    <div style="background:var(--bg3);border:1px solid var(--bdr);border-radius:9px;padding:10px 14px;display:flex;align-items:center;gap:10px;">
+      <span style="font-size:1.2rem;">${s.icon}</span>
+      <div>
+        <div style="font-size:.78rem;font-weight:600;color:var(--text);">${s.label}</div>
+        <div style="font-size:.65rem;color:var(--sf-l);font-family:monospace;">#${s.id}</div>
+      </div>
+      <a href="index.html#${s.id}" target="_blank"
+         style="margin-left:auto;font-size:.62rem;color:var(--text-l);text-decoration:none;border:1px solid var(--bdr);border-radius:5px;padding:2px 7px;">
+        ↗ View
+      </a>
+    </div>
+  `).join('');
+}
+
+function renderLinkMap() {
+  const el = document.getElementById('linkMapBody');
+  if (!el) return;
+  const typeColors = {
+    'Anchor': 'rgba(0,0,128,.2)',
+    'Page':   'rgba(255,107,0,.1)',
+    'Chip':   'rgba(200,137,10,.1)',
+    'Footer': 'rgba(19,136,8,.1)',
+  };
+  const typeText = {
+    'Anchor': '#6699ff',
+    'Page':   'var(--sf-l)',
+    'Chip':   'var(--gold-l)',
+    'Footer': '#4ade80',
+  };
+  el.innerHTML = ALL_LINKS.map((l,i) => `
+    <tr style="border-bottom:1px solid rgba(255,255,255,.03);${i%2===0?'background:rgba(255,255,255,.01)':''}">
+      <td style="padding:6px 12px;font-size:.7rem;color:var(--text-l);">${l.location}</td>
+      <td style="padding:6px 12px;font-size:.74rem;color:var(--text);">${l.text}</td>
+      <td style="padding:6px 12px;font-size:.68rem;color:var(--sf-l);font-family:monospace;">${l.target}</td>
+      <td style="padding:6px 12px;">
+        <span style="background:${typeColors[l.type]||'transparent'};color:${typeText[l.type]||'var(--text-l)'};padding:2px 8px;border-radius:10px;font-size:.6rem;font-weight:700;">${l.type}</span>
+      </td>
+    </tr>
+  `).join('');
+}
 
 </script>
 </body>
