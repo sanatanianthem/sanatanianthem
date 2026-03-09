@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>SanataniAnthem – Har Ghar Mandir</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=Lora:ital,wght@0,400;0,600;1,400&family=Noto+Sans+Devanagari:wght@300;400;600&display=swap" rel="stylesheet"/>
+<style>
+/* ─── DESIGN TOKENS ─── */
+:root{
+  --saffron:#FF6B00;--saffron-h:#FF8C35;--saffron-d:#C95000;
+  --gold:#D4AF37;--gold-h:#E8CC6A;--gold-d:#A08828;
+  --cream:#FFF6E5;--cream-d:#F5E6C8;--cream-dd:#E8D0A8;
+  --maroon:#7A1E1E;--maroon-d:#5A0E0E;--maroon-l:#A83232;
+  --ink:#2C1A0E;--ink-m:#5C3A1E;--ink-l:#8B6040;
+  --white:#FFFDF5;
+  --r-xs:4px;--r-sm:8px;--r-md:12px;--r-lg:20px;--r-xl:32px;
+  --sh-sm:0 2px 12px rgba(44,26,14,.1);
+  --sh-md:0 6px 28px rgba(122,30,30,.15);
+  --sh-lg:0 16px 56px rgba(122,30,30,.2);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:'Lora',Georgia,serif;background:var(--cream);color:var(--ink);overflow-x:hidden}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--cream-d)}::-webkit-scrollbar-thumb{background:var(--saffron);border-radius:3px}
+img{max-width:100%;display:block}
+a{text-decoration:none;color:inherit}
+button{cursor:pointer;font-family:inherit;border:none;background:none}
+
+/* ─── TYPOGRAPHY ─── */
+.font-display{font-family:'Cinzel Decorative',serif}
+.font-heading{font-family:'Cinzel',serif}
+.font-devanagari{font-family:'Noto Sans Devanagari',sans-serif}
+
+/* ─── UTILITY ─── */
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+.hidden{display:none!important}
+.flex{display:flex}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-between{justify-content:space-between}.justify-center{justify-content:center}.gap-sm{gap:8px}.gap-md{gap:16px}.gap-lg{gap:24px}.gap-xl{gap:40px}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.text-center{text-align:center}
+.mt-sm{margin-top:8px}.mt-md{margin-top:16px}.mt-lg{margin-top:32px}.mt-xl{margin-top:56px}
+.mb-sm{margin-bottom:8px}.mb-md{margin-bottom:16px}.mb-lg{margin-bottom:32px}.mb-xl{margin-bottom:56px}
+
+/* ─── SECTION DECORATORS ─── */
+.section-eyebrow{
+  font-family:'Cinzel',serif;font-size:10px;font-weight:700;
+  letter-spacing:4px;text-transform:uppercase;color:var(--saffron);
+  display:flex;align-items:center;gap:12px;justify-content:center;margin-bottom:10px
+}
+.section-eyebrow::before,.section-eyebrow::after{content:'';width:32px;height:1px;background:var(--gold)}
+.section-title{font-family:'Cinzel Decorative',serif;font-size:clamp(22px,3.5vw,38px);color:var(--maroon);line-height:1.2;margin-bottom:14px}
+.section-sub{font-family:'Lora',serif;font-size:16px;color:var(--ink-m);line-height:1.75;max-width:540px;margin:0 auto}
+.section-header{text-align:center;margin-bottom:56px}
+
+/* ─── BUTTONS ─── */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 30px;border-radius:var(--r-xs);font-family:'Cinzel',serif;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;transition:all .3s;border:2px solid transparent}
+.btn-primary{background:linear-gradient(135deg,var(--saffron),var(--saffron-d));color:var(--white);box-shadow:0 4px 20px rgba(255,107,0,.35)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(255,107,0,.5)}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-d));color:var(--maroon-d);box-shadow:0 4px 20px rgba(212,175,55,.35)}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(212,175,55,.5)}
+.btn-outline{border-color:var(--gold);color:var(--gold);background:transparent}
+.btn-outline:hover{background:var(--gold);color:var(--maroon-d)}
+.btn-ghost{color:var(--saffron);padding:0;font-size:12px;letter-spacing:1px}
+.btn-ghost:hover{color:var(--saffron-d)}
+
+/* ─── BADGE ─── */
+.badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:40px;font-family:'Cinzel',serif;font-size:10px;letter-spacing:1.5px}
+.badge-live{background:rgba(229,62,62,.15);color:#E53E3E;border:1px solid rgba(229,62,62,.3)}
+.badge-new{background:rgba(212,175,55,.15);color:var(--gold-d);border:1px solid rgba(212,175,55,.3)}
+.badge-dot{width:5px;height:5px;border-radius:50%;background:currentColor;animation:pulse 1.4s infinite}
+
+/* ─── ANIMATIONS ─── */
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.4)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes spin-slow{to{transform:rotate(360deg)}}
+@keyframes spin-rev{to{transform:rotate(-360deg)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+@keyframes glow{0%,100%{box-shadow:0 0 20px rgba(212,175,55,.3)}50%{box-shadow:0 0 40px rgba(212,175,55,.6)}}
+@keyframes particle-rise{from{transform:translateY(0);opacity:1}to{transform:translateY(-80px);opacity:0}}
+
+/* ─── HEADER ─── */
+#site-header{position:fixed;top:0;left:0;right:0;z-index:1000;transition:all .35s}
+.topbar{background:var(--maroon-d);padding:6px 24px;display:flex;justify-content:space-between;align-items:center}
+.topbar-text{font-family:'Noto Sans Devanagari',sans-serif;font-size:12px;color:var(--gold-h);letter-spacing:1px}
+.topbar-links{display:flex;gap:20px}
+.topbar-links a{font-family:'Cinzel',serif;font-size:10px;color:rgba(255,246,229,.6);letter-spacing:1px;transition:color .2s}
+.topbar-links a:hover{color:var(--gold)}
+.navbar{background:rgba(255,246,229,.97);backdrop-filter:blur(16px);padding:0 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--gold);box-shadow:var(--sh-md)}
+.logo{display:flex;align-items:center;gap:12px;padding:12px 0}
+.logo-ring{
+  width:48px;height:48px;border-radius:50%;
+  background:linear-gradient(135deg,var(--saffron),var(--gold));
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;color:var(--white);
+  box-shadow:0 4px 16px rgba(255,107,0,.4);
+  position:relative;
+}
+.logo-ring::before{
+  content:'';position:absolute;inset:-3px;border-radius:50%;
+  border:2px solid var(--gold);opacity:.5;
+}
+.logo-words{display:flex;flex-direction:column;line-height:1.1}
+.logo-name{font-family:'Cinzel Decorative',serif;font-size:17px;font-weight:900;color:var(--maroon)}
+.logo-sub{font-family:'Noto Sans Devanagari',sans-serif;font-size:10px;color:var(--saffron);letter-spacing:2px;margin-top:1px}
+.nav-links{display:flex;align-items:center;gap:2px}
+.nav-link{
+  font-family:'Cinzel',serif;font-size:11.5px;font-weight:600;letter-spacing:.8px;
+  color:var(--ink);padding:10px 14px;border-radius:var(--r-xs);
+  transition:all .25s;position:relative;white-space:nowrap
+}
+.nav-link:hover,.nav-link.active{color:var(--saffron);background:rgba(255,107,0,.07)}
+.nav-link.active::after{content:'';position:absolute;bottom:5px;left:50%;transform:translateX(-50%);width:18px;height:2px;background:var(--saffron);border-radius:1px}
+.nav-actions{display:flex;align-items:center;gap:10px}
+.nav-icon-btn{
+  width:36px;height:36px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--cream-dd);color:var(--ink-m);font-size:16px;transition:all .25s
+}
+.nav-icon-btn:hover{background:var(--saffron);color:var(--white);border-color:var(--saffron)}
+.hamburger{display:none;flex-direction:column;gap:5px;padding:8px}
+.hamburger span{width:22px;height:2px;background:var(--ink);border-radius:1px;transition:all .3s}
+
+/* ─── HERO ─── */
+#hero{
+  min-height:100vh;padding-top:100px;
+  background:
+    radial-gradient(ellipse at 15% 60%,rgba(255,107,0,.14) 0%,transparent 55%),
+    radial-gradient(ellipse at 85% 20%,rgba(212,175,55,.1) 0%,transparent 50%),
+    linear-gradient(160deg,#1E0800 0%,#4A1200 40%,#2C0808 70%,#1A0505 100%);
+  display:flex;align-items:center;position:relative;overflow:hidden
+}
+.hero-particles{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.ptcl{
+  position:absolute;width:2px;height:2px;border-radius:50%;background:var(--gold);
+  animation:particle-rise 3s ease-in infinite;opacity:0
+}
+.hero-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;
+  position:relative;z-index:1;padding:60px 0
+}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.35);
+  padding:6px 16px;border-radius:40px;
+  font-family:'Cinzel',serif;font-size:10px;color:var(--gold-h);letter-spacing:2px;
+  margin-bottom:20px
+}
+.hero-title{font-family:'Cinzel Decorative',serif;font-size:clamp(30px,5vw,60px);line-height:1.1;color:var(--white);margin-bottom:10px}
+.hero-title .accent{color:var(--gold)}
+.hero-shloka{font-family:'Noto Sans Devanagari',sans-serif;font-size:18px;color:var(--saffron-h);letter-spacing:2px;margin-bottom:20px;opacity:.9}
+.hero-desc{font-family:'Lora',serif;font-size:16px;color:rgba(255,246,229,.7);line-height:1.85;max-width:460px;margin-bottom:36px}
+.hero-cta{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:48px}
+.hero-stats{display:flex;gap:36px;padding-top:28px;border-top:1px solid rgba(212,175,55,.2)}
+.stat-n{font-family:'Cinzel Decorative',serif;font-size:26px;color:var(--gold);display:block;line-height:1}
+.stat-l{font-family:'Cinzel',serif;font-size:9px;color:rgba(255,246,229,.5);letter-spacing:2px;text-transform:uppercase;margin-top:3px}
+/* Mandala */
+.hero-visual{display:flex;align-items:center;justify-content:center;position:relative}
+.mandala-wrap{position:relative;width:400px;height:400px}
+.ring{position:absolute;border-radius:50%;border:1px solid;top:50%;left:50%;transform:translate(-50%,-50%)}
+.ring-1{width:400px;height:400px;border-color:rgba(212,175,55,.15);animation:spin-slow 35s linear infinite}
+.ring-2{width:320px;height:320px;border-color:rgba(255,107,0,.2);animation:spin-rev 25s linear infinite;border-style:dashed}
+.ring-3{width:240px;height:240px;border-color:rgba(212,175,55,.3);animation:spin-slow 18s linear infinite}
+.mandala-core{
+  position:absolute;width:160px;height:160px;border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);
+  background:radial-gradient(circle,rgba(255,107,0,.3),rgba(212,175,55,.15));
+  border:2px solid rgba(212,175,55,.5);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 60px rgba(212,175,55,.3),inset 0 0 40px rgba(255,107,0,.15);
+  animation:glow 3s ease-in-out infinite
+}
+.om-symbol{font-family:'Noto Sans Devanagari',sans-serif;font-size:72px;color:var(--gold);text-shadow:0 0 40px rgba(212,175,55,.8);line-height:1}
+.mandala-dot{position:absolute;width:8px;height:8px;background:var(--gold);border-radius:50%;top:50%;left:50%;transform-origin:0 0;box-shadow:0 0 6px var(--gold)}
+
+/* ─── MARQUEE STRIP ─── */
+.marquee-strip{background:var(--maroon-d);padding:10px 0;overflow:hidden;border-top:1px solid rgba(212,175,55,.2);border-bottom:1px solid rgba(212,175,55,.2)}
+.marquee-track{display:flex;gap:0;animation:marquee-scroll 30s linear infinite;white-space:nowrap}
+@keyframes marquee-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.marquee-item{font-family:'Noto Sans Devanagari',sans-serif;font-size:13px;color:var(--gold-h);padding:0 32px;display:flex;align-items:center;gap:10px}
+.marquee-sep{color:var(--saffron);font-size:18px}
+
+/* ─── DARSHAN SECTION ─── */
+#darshan{padding:90px 0;background:var(--maroon-d);position:relative;overflow:hidden}
+#darshan::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--saffron),var(--gold),var(--saffron))}
+#darshan::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--saffron),var(--gold),var(--saffron))}
+#darshan .section-title{color:var(--gold)}
+#darshan .section-eyebrow{color:var(--saffron-h)}
+#darshan .section-eyebrow::before,#darshan .section-eyebrow::after{background:rgba(212,175,55,.4)}
+#darshan .section-sub{color:rgba(255,246,229,.6)}
+.darshan-scroll{display:flex;gap:20px;overflow-x:auto;padding-bottom:12px;scrollbar-width:thin;scrollbar-color:var(--saffron) transparent}
+.darshan-card{
+  flex-shrink:0;width:220px;background:rgba(255,246,229,.06);
+  border:1px solid rgba(212,175,55,.2);border-radius:var(--r-md);
+  overflow:hidden;cursor:pointer;transition:all .35s
+}
+.darshan-card:hover{transform:translateY(-6px);border-color:var(--gold);box-shadow:0 16px 40px rgba(0,0,0,.4),0 0 20px rgba(212,175,55,.15)}
+.darshan-thumb{
+  width:100%;aspect-ratio:1;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,rgba(90,14,14,.8),rgba(61,10,0,.9));
+  display:flex;align-items:center;justify-content:center;
+}
+.darshan-emoji{font-size:64px;filter:drop-shadow(0 0 16px rgba(212,175,55,.5))}
+.darshan-overlay{position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(0,0,0,.7));display:flex;align-items:flex-end;padding:12px}
+.darshan-badge-wrap{position:absolute;top:10px;right:10px}
+.darshan-info{padding:14px}
+.darshan-name{font-family:'Cinzel',serif;font-size:13px;font-weight:600;color:var(--gold-h);margin-bottom:3px}
+.darshan-loc{font-size:11px;color:rgba(255,246,229,.45);display:flex;align-items:center;gap:4px}
+.darshan-time{display:flex;align-items:center;gap:5px;margin-top:10px;padding-top:10px;border-top:1px solid rgba(212,175,55,.12);font-family:'Cinzel',serif;font-size:10px;color:var(--saffron-h)}
+
+/* ─── PUJA SECTION ─── */
+#puja{padding:90px 0;background:var(--cream)}
+.puja-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:24px}
+.puja-card{
+  background:var(--white);border-radius:var(--r-lg);overflow:hidden;
+  box-shadow:var(--sh-sm);border:1px solid rgba(212,175,55,.18);
+  transition:all .35s;cursor:pointer;position:relative
+}
+.puja-card:hover{transform:translateY(-8px);box-shadow:var(--sh-lg)}
+.puja-card-ribbon{
+  position:absolute;top:14px;left:-2px;
+  background:linear-gradient(135deg,var(--saffron),var(--saffron-d));
+  color:var(--white);font-family:'Cinzel',serif;font-size:9px;font-weight:700;letter-spacing:1px;
+  padding:3px 12px 3px 10px;border-radius:0 3px 3px 0;
+  box-shadow:2px 2px 8px rgba(255,107,0,.3)
+}
+.puja-thumb{
+  width:100%;height:200px;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,#F5E6C8,#E8D0A8);
+  display:flex;align-items:center;justify-content:center
+}
+.puja-emoji{font-size:72px;filter:drop-shadow(0 4px 8px rgba(122,30,30,.2))}
+.puja-body{padding:20px}
+.puja-name{font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:var(--maroon);margin-bottom:6px}
+.puja-desc{font-size:13px;color:var(--ink-m);line-height:1.6;margin-bottom:14px}
+.puja-footer{display:flex;align-items:center;justify-content:space-between;padding-top:14px;border-top:1px solid var(--cream-dd)}
+.puja-price{font-family:'Cinzel Decorative',serif;font-size:18px;color:var(--saffron)}
+.puja-price span{font-family:'Cinzel',serif;font-size:10px;color:var(--ink-l);display:block;font-weight:400}
+.puja-btn{background:linear-gradient(135deg,var(--saffron),var(--saffron-d));color:var(--white);border:none;padding:8px 18px;border-radius:var(--r-xs);font-family:'Cinzel',serif;font-size:10px;font-weight:700;letter-spacing:1px;cursor:pointer;transition:all .25s}
+.puja-btn:hover{transform:scale(1.05)}
+
+/* ─── SERVICES SECTION ─── */
+#services{padding:90px 0;background:var(--cream-d)}
+.services-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:20px}
+.service-card{
+  background:var(--white);border-radius:var(--r-md);padding:28px 20px;
+  text-align:center;border:1px solid rgba(212,175,55,.15);
+  box-shadow:var(--sh-sm);transition:all .3s;cursor:pointer
+}
+.service-card:hover{transform:translateY(-6px);border-color:var(--saffron);box-shadow:0 12px 36px rgba(255,107,0,.15)}
+.service-icon{
+  width:64px;height:64px;border-radius:50%;margin:0 auto 16px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:28px;
+  background:linear-gradient(135deg,rgba(255,107,0,.12),rgba(212,175,55,.12));
+  border:1px solid rgba(212,175,55,.25)
+}
+.service-name{font-family:'Cinzel',serif;font-size:13px;font-weight:600;color:var(--maroon);line-height:1.3}
+
+/* ─── ASTROLOGY SECTION ─── */
+#astrology{
+  padding:90px 0;
+  background:linear-gradient(160deg,#1E0800,#3D0A00,#2C0808);
+  position:relative;overflow:hidden
+}
+#astrology .section-title{color:var(--gold)}
+#astrology .section-eyebrow{color:var(--saffron-h)}
+#astrology .section-eyebrow::before,#astrology .section-eyebrow::after{background:rgba(212,175,55,.3)}
+#astrology .section-sub{color:rgba(255,246,229,.6)}
+.astro-grid{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center}
+.astro-cards{display:flex;flex-direction:column;gap:14px}
+.astro-card{
+  background:rgba(255,246,229,.06);border:1px solid rgba(212,175,55,.2);
+  border-radius:var(--r-md);padding:18px 22px;
+  display:flex;align-items:center;gap:16px;cursor:pointer;transition:all .3s
+}
+.astro-card:hover{background:rgba(255,246,229,.1);border-color:var(--gold);transform:translateX(6px)}
+.astro-card-icon{width:48px;height:48px;border-radius:50%;background:rgba(212,175,55,.15);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.astro-card-title{font-family:'Cinzel',serif;font-size:13px;font-weight:600;color:var(--gold-h);margin-bottom:3px}
+.astro-card-sub{font-size:12px;color:rgba(255,246,229,.5)}
+.astro-visual{display:flex;align-items:center;justify-content:center}
+.zodiac-wheel{
+  width:320px;height:320px;border-radius:50%;
+  background:radial-gradient(circle,rgba(212,175,55,.08),transparent);
+  border:1px solid rgba(212,175,55,.2);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;animation:spin-slow 40s linear infinite
+}
+.zodiac-sign{
+  position:absolute;font-size:20px;top:50%;left:50%;
+  transform-origin:0 0
+}
+.zodiac-center{
+  width:100px;height:100px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,107,0,.3),rgba(212,175,55,.1));
+  border:2px solid rgba(212,175,55,.4);
+  display:flex;align-items:center;justify-content:center;
+  font-size:36px;animation:spin-rev 40s linear infinite;
+  box-shadow:0 0 40px rgba(212,175,55,.3)
+}
+
+/* ─── DONATION ─── */
+#donation{padding:90px 0;background:var(--cream)}
+.donation-hero{
+  background:linear-gradient(135deg,var(--maroon-d),var(--maroon));
+  border-radius:var(--r-xl);padding:60px;
+  display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;
+  position:relative;overflow:hidden;box-shadow:var(--sh-lg)
+}
+.donation-hero::before{
+  content:'';position:absolute;right:-60px;top:-60px;
+  width:280px;height:280px;border-radius:50%;
+  background:radial-gradient(circle,rgba(212,175,55,.12),transparent);
+  border:1px solid rgba(212,175,55,.15)
+}
+.donation-title{font-family:'Cinzel Decorative',serif;font-size:32px;color:var(--gold);margin-bottom:14px;line-height:1.2}
+.donation-desc{color:rgba(255,246,229,.65);line-height:1.8;margin-bottom:28px;font-size:15px}
+.donation-amounts{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:24px}
+.amt-btn{
+  padding:10px 22px;border-radius:var(--r-sm);
+  border:1px solid rgba(212,175,55,.4);
+  font-family:'Cinzel',serif;font-size:13px;color:var(--gold-h);
+  background:rgba(212,175,55,.08);cursor:pointer;transition:all .25s
+}
+.amt-btn:hover,.amt-btn.active{background:var(--gold);color:var(--maroon-d);border-color:var(--gold)}
+.donation-impact{display:flex;flex-direction:column;gap:16px}
+.impact-item{
+  display:flex;align-items:center;gap:14px;
+  background:rgba(255,246,229,.06);border:1px solid rgba(212,175,55,.15);
+  border-radius:var(--r-md);padding:14px 18px
+}
+.impact-icon{font-size:24px;width:40px;text-align:center}
+.impact-text{font-size:13px;color:rgba(255,246,229,.7);line-height:1.5}
+.impact-text strong{color:var(--gold-h);font-family:'Cinzel',serif;font-size:12px;display:block;margin-bottom:2px}
+
+/* ─── FESTIVALS ─── */
+#festivals{padding:90px 0;background:var(--cream-d)}
+.festival-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px}
+.festival-card{
+  border-radius:var(--r-md);overflow:hidden;cursor:pointer;transition:all .35s;
+  box-shadow:var(--sh-sm);position:relative
+}
+.festival-card:hover{transform:scale(1.03);box-shadow:var(--sh-lg)}
+.festival-bg{
+  height:160px;display:flex;align-items:center;justify-content:center;
+  font-size:56px;position:relative
+}
+.festival-date-badge{
+  position:absolute;top:12px;right:12px;
+  background:rgba(0,0,0,.6);backdrop-filter:blur(6px);
+  color:var(--gold);font-family:'Cinzel',serif;font-size:10px;
+  padding:4px 10px;border-radius:var(--r-xs);border:1px solid rgba(212,175,55,.3)
+}
+.festival-body{background:var(--white);padding:16px}
+.festival-name{font-family:'Cinzel',serif;font-size:14px;font-weight:600;color:var(--maroon);margin-bottom:4px}
+.festival-desc{font-size:12px;color:var(--ink-l);line-height:1.5}
+
+/* ─── KNOWLEDGE / BLOG ─── */
+#knowledge{padding:90px 0;background:var(--cream)}
+.blog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px}
+.blog-card{
+  background:var(--white);border-radius:var(--r-lg);overflow:hidden;
+  box-shadow:var(--sh-sm);border:1px solid rgba(212,175,55,.12);
+  transition:all .3s;cursor:pointer
+}
+.blog-card:hover{transform:translateY(-5px);box-shadow:var(--sh-md)}
+.blog-thumb{height:180px;display:flex;align-items:center;justify-content:center;font-size:48px;position:relative}
+.blog-cat{
+  position:absolute;bottom:12px;left:12px;
+  background:var(--saffron);color:var(--white);
+  font-family:'Cinzel',serif;font-size:9px;font-weight:700;letter-spacing:1.5px;
+  padding:3px 10px;border-radius:var(--r-xs)
+}
+.blog-body{padding:20px}
+.blog-title{font-family:'Cinzel',serif;font-size:15px;font-weight:600;color:var(--maroon);margin-bottom:8px;line-height:1.4}
+.blog-excerpt{font-size:13px;color:var(--ink-m);line-height:1.6;margin-bottom:14px}
+.blog-meta{display:flex;justify-content:space-between;align-items:center;font-family:'Cinzel',serif;font-size:10px;color:var(--ink-l);letter-spacing:.5px}
+
+/* ─── APP DOWNLOAD ─── */
+#app{
+  padding:90px 0;
+  background:linear-gradient(135deg,#1E0800,#4A1200,#2C0808);
+  position:relative;overflow:hidden
+}
+#app .section-title{color:var(--gold)}
+#app .section-eyebrow{color:var(--saffron-h)}
+#app .section-eyebrow::before,#app .section-eyebrow::after{background:rgba(212,175,55,.3)}
+#app .section-sub{color:rgba(255,246,229,.6)}
+.app-features{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:40px}
+.app-feat{display:flex;align-items:flex-start;gap:12px}
+.app-feat-icon{width:40px;height:40px;border-radius:var(--r-sm);background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.2);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.app-feat-text{font-size:13px;color:rgba(255,246,229,.65);line-height:1.5}
+.app-feat-text strong{font-family:'Cinzel',serif;font-size:12px;color:var(--gold-h);display:block;margin-bottom:2px}
+.download-btns{display:flex;gap:14px;flex-wrap:wrap;margin-top:36px}
+.dl-btn{
+  display:flex;align-items:center;gap:12px;
+  background:rgba(255,246,229,.08);border:1px solid rgba(212,175,55,.3);
+  border-radius:var(--r-md);padding:12px 22px;transition:all .3s;cursor:pointer
+}
+.dl-btn:hover{background:rgba(212,175,55,.15);border-color:var(--gold);transform:translateY(-2px)}
+.dl-icon{font-size:28px}
+.dl-text{display:flex;flex-direction:column}
+.dl-label{font-family:'Cinzel',serif;font-size:9px;color:rgba(255,246,229,.5);letter-spacing:1.5px}
+.dl-store{font-family:'Cinzel',serif;font-size:15px;font-weight:600;color:var(--white)}
+.phone-mock{
+  width:260px;height:480px;border-radius:36px;
+  background:linear-gradient(160deg,rgba(212,175,55,.12),rgba(255,107,0,.08));
+  border:2px solid rgba(212,175,55,.3);
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:16px;
+  box-shadow:0 30px 80px rgba(0,0,0,.5),0 0 40px rgba(212,175,55,.12);
+  position:relative;overflow:hidden
+}
+.phone-screen-item{display:flex;align-items:center;gap:10px;padding:10px 16px;background:rgba(255,246,229,.06);border:1px solid rgba(212,175,55,.15);border-radius:var(--r-sm);width:200px}
+.psi-icon{font-size:20px}
+.psi-text{font-family:'Cinzel',serif;font-size:11px;color:var(--gold-h)}
+
+/* ─── FOOTER ─── */
+#footer{background:var(--maroon-d);padding:70px 0 30px;border-top:3px solid rgba(212,175,55,.3)}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:50px;margin-bottom:50px}
+.footer-brand-name{font-family:'Cinzel Decorative',serif;font-size:20px;color:var(--gold);margin-bottom:8px}
+.footer-brand-sub{font-family:'Noto Sans Devanagari',sans-serif;font-size:12px;color:var(--saffron-h);letter-spacing:2px;margin-bottom:16px}
+.footer-desc{font-size:13px;color:rgba(255,246,229,.5);line-height:1.75;max-width:280px;margin-bottom:24px}
+.footer-social{display:flex;gap:10px}
+.social-btn{
+  width:36px;height:36px;border-radius:50%;
+  background:rgba(255,246,229,.07);border:1px solid rgba(212,175,55,.2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;color:rgba(255,246,229,.6);transition:all .25s;cursor:pointer
+}
+.social-btn:hover{background:var(--saffron);border-color:var(--saffron);color:var(--white)}
+.footer-col-title{font-family:'Cinzel',serif;font-size:12px;font-weight:700;letter-spacing:2px;color:var(--gold-h);margin-bottom:18px;text-transform:uppercase}
+.footer-links{display:flex;flex-direction:column;gap:9px}
+.footer-link{font-size:13px;color:rgba(255,246,229,.5);transition:color .2s;cursor:pointer}
+.footer-link:hover{color:var(--gold)}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:28px;border-top:1px solid rgba(212,175,55,.15)}
+.footer-copy{font-family:'Cinzel',serif;font-size:10px;color:rgba(255,246,229,.35);letter-spacing:1px}
+.footer-dharma{font-family:'Noto Sans Devanagari',sans-serif;font-size:12px;color:var(--saffron-h);opacity:.6}
+
+/* ─── SCROLL TO TOP ─── */
+#scroll-top{
+  position:fixed;bottom:28px;right:28px;z-index:500;
+  width:44px;height:44px;border-radius:50%;
+  background:linear-gradient(135deg,var(--saffron),var(--saffron-d));
+  color:var(--white);font-size:18px;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 20px rgba(255,107,0,.4);cursor:pointer;
+  opacity:0;pointer-events:none;transition:all .3s;border:none
+}
+#scroll-top.visible{opacity:1;pointer-events:all}
+#scroll-top:hover{transform:translateY(-3px)}
+
+/* ─── TOAST ─── */
+.toast{
+  position:fixed;bottom:80px;right:28px;z-index:600;
+  background:var(--maroon-d);color:var(--gold-h);
+  font-family:'Cinzel',serif;font-size:12px;letter-spacing:.5px;
+  padding:12px 20px;border-radius:var(--r-sm);border-left:3px solid var(--gold);
+  box-shadow:var(--sh-lg);transform:translateX(120px);opacity:0;transition:all .35s;pointer-events:none
+}
+.toast.show{transform:translateX(0);opacity:1}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:900px){
+  .hero-grid,.astro-grid,.donation-hero{grid-template-columns:1fr}
+  .hero-visual,.astro-visual{display:none}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .nav-links{display:none}
+  .hamburger{display:flex}
+  .app-features{grid-template-columns:1fr 1fr}
+  .topbar{display:none}
+}
+@media(max-width:600px){
+  .footer-grid{grid-template-columns:1fr}
+  .grid-4{grid-template-columns:repeat(2,1fr)}
+  .app-features{grid-template-columns:1fr}
+  .hero-stats{gap:20px}
+}
+
+/* ─── MOBILE NAV ─── */
+#mobile-nav{
+  position:fixed;top:0;left:0;right:0;bottom:0;z-index:999;
+  background:var(--maroon-d);padding:80px 32px;
+  display:flex;flex-direction:column;gap:6px;
+  transform:translateX(100%);transition:transform .35s ease
+}
+#mobile-nav.open{transform:translateX(0)}
+#mobile-nav .nav-link{color:var(--gold-h);font-size:16px;padding:14px 0;border-bottom:1px solid rgba(212,175,55,.1)}
+#mobile-close{position:absolute;top:20px;right:24px;font-size:28px;color:var(--gold);cursor:pointer;background:none;border:none}
+</style>
+</head>
+<body>
+
+<!-- ═══ SITE HEADER ═══ -->
+<header id="site-header">
+  <div class="topbar">
+    <span class="topbar-text">🕉 जय श्री राम • हर हर महादेव • जय माता दी 🕉</span>
+    <div class="topbar-links">
+      <a href="#" onclick="showToast('App coming soon!')">Download App</a>
+      <a href="admin.html" target="_blank">Admin Panel</a>
+      <a href="#" onclick="showToast('Login coming soon!')">Sign In</a>
+    </div>
+  </div>
+  <nav class="navbar">
+    <a href="#" class="logo">
+      <div class="logo-ring">🕉</div>
+      <div class="logo-words">
+        <span class="logo-name">SanataniAnthem</span>
+        <span class="logo-sub">हर घर मंदिर</span>
+      </div>
+    </a>
+    <div class="nav-links" id="nav-links">
+      <!-- Populated by JS from "DB" -->
+    </div>
+    <div class="nav-actions">
+      <button class="nav-icon-btn" onclick="showToast('Search coming soon!')">🔍</button>
+      <button class="nav-icon-btn" onclick="showToast('Notifications coming soon!')">🔔</button>
+      <a href="admin.html" target="_blank" class="btn btn-primary" style="padding:9px 18px;font-size:10px">Admin</a>
+    </div>
+    <button class="hamburger" onclick="toggleMobileNav()" id="hamburger">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+</header>
+
+<!-- Mobile Nav -->
+<div id="mobile-nav">
+  <button id="mobile-close" onclick="toggleMobileNav()">✕</button>
+  <div id="mobile-nav-links"></div>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<section id="hero">
+  <div class="hero-particles" id="hero-particles"></div>
+  <div class="container">
+    <div class="hero-grid">
+      <div class="hero-content">
+        <div class="hero-eyebrow">
+          <span class="badge-dot"></span>
+          अथ श्री गणेशाय नमः
+        </div>
+        <h1 class="hero-title">
+          Connect With<br/>
+          <span class="accent">The Divine</span>
+        </h1>
+        <p class="hero-shloka">सत्यं शिवं सुन्दरम्</p>
+        <p class="hero-desc">SanataniAnthem unites millions of devotees with sacred temples, daily darshan, online pujas, and spiritual guidance — wherever you are.</p>
+        <div class="hero-cta">
+          <a href="#puja" class="btn btn-primary">🪔 Book a Puja</a>
+          <a href="#darshan" class="btn btn-outline">🛕 Daily Darshan</a>
+        </div>
+        <div class="hero-stats" id="hero-stats">
+          <div class="stat-item"><span class="stat-n">5M+</span><span class="stat-l">Devotees</span></div>
+          <div class="stat-item"><span class="stat-n">1200+</span><span class="stat-l">Temples</span></div>
+          <div class="stat-item"><span class="stat-n">350+</span><span class="stat-l">Pujas</span></div>
+          <div class="stat-item"><span class="stat-n">24/7</span><span class="stat-l">Darshan</span></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="mandala-wrap">
+          <div class="ring ring-1"></div>
+          <div class="ring ring-2"></div>
+          <div class="ring ring-3"></div>
+          <div class="mandala-core"><span class="om-symbol">ॐ</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ MARQUEE ═══ -->
+<div class="marquee-strip">
+  <div class="marquee-track" id="marquee-track">
+    <!-- JS populated -->
+  </div>
+</div>
+
+<!-- ═══ DARSHAN ═══ -->
+<section id="darshan" class="cms-section" data-key="darshan">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">Live Darshan</div>
+      <h2 class="section-title">Daily Temple Darshan</h2>
+      <p class="section-sub">Experience the divine presence of sacred temples from the comfort of your home, every single day.</p>
+    </div>
+    <div class="darshan-scroll" id="darshan-container"></div>
+    <div class="text-center mt-lg">
+      <a href="#" class="btn btn-gold" onclick="showToast('View all temples')">View All Temples →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PUJA BOOKING ═══ -->
+<section id="puja" class="cms-section" data-key="puja">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">Sacred Rituals</div>
+      <h2 class="section-title">Book Online Puja</h2>
+      <p class="section-sub">Connect with learned priests and have pujas performed on your behalf at sacred temples.</p>
+    </div>
+    <div class="puja-grid" id="puja-container"></div>
+  </div>
+</section>
+
+<!-- ═══ SERVICES ═══ -->
+<section id="services" class="cms-section" data-key="services">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">Our Offerings</div>
+      <h2 class="section-title">Spiritual Services</h2>
+      <p class="section-sub">A complete ecosystem of divine services for your spiritual journey.</p>
+    </div>
+    <div class="services-grid" id="services-container"></div>
+  </div>
+</section>
+
+<!-- ═══ ASTROLOGY ═══ -->
+<section id="astrology" class="cms-section" data-key="astrology">
+  <div class="container">
+    <div class="astro-grid">
+      <div>
+        <div class="section-eyebrow">Jyotish Vigyan</div>
+        <h2 class="section-title">Vedic Astrology &amp; Guidance</h2>
+        <p class="section-sub" style="text-align:left">Consult our learned Jyotishis for personalized guidance based on ancient Vedic wisdom.</p>
+        <div class="astro-cards mt-lg" id="astro-container"></div>
+        <div class="mt-lg"><a href="#" class="btn btn-primary" onclick="showToast('Booking astrology consultation!')">🔭 Consult Now</a></div>
+      </div>
+      <div class="astro-visual">
+        <div class="zodiac-wheel" id="zodiac-wheel">
+          <div class="zodiac-center">⭐</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ DONATION ═══ -->
+<section id="donation" class="cms-section" data-key="donation">
+  <div class="container">
+    <div class="donation-hero">
+      <div>
+        <div class="section-eyebrow" style="justify-content:flex-start">Daan &amp; Seva</div>
+        <h2 class="donation-title">Donate for a Sacred Cause</h2>
+        <p class="donation-desc">Your donation supports temple maintenance, feeds the hungry, and preserves our ancient Sanatan traditions for future generations.</p>
+        <div class="donation-amounts" id="donation-amounts"></div>
+        <button class="btn btn-gold" onclick="showToast('Redirecting to donation gateway...')">💛 Donate Now</button>
+      </div>
+      <div class="donation-impact" id="donation-impact"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FESTIVALS ═══ -->
+<section id="festivals" class="cms-section" data-key="festivals">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">Parva Utsav</div>
+      <h2 class="section-title">Sacred Festivals</h2>
+      <p class="section-sub">Celebrate the divine festivals with the global Sanatan community.</p>
+    </div>
+    <div class="festival-grid" id="festivals-container"></div>
+  </div>
+</section>
+
+<!-- ═══ KNOWLEDGE ═══ -->
+<section id="knowledge" class="cms-section" data-key="knowledge">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">Spiritual Wisdom</div>
+      <h2 class="section-title">Knowledge &amp; Scriptures</h2>
+      <p class="section-sub">Explore the timeless wisdom of Sanatan Dharma through articles, shlokas, and sacred texts.</p>
+    </div>
+    <div class="blog-grid" id="knowledge-container"></div>
+  </div>
+</section>
+
+<!-- ═══ APP DOWNLOAD ═══ -->
+<section id="app" class="cms-section" data-key="app">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center">
+      <div>
+        <div class="section-eyebrow">Mobile App</div>
+        <h2 class="section-title" style="color:var(--gold)">Your Temple in Your Pocket</h2>
+        <p class="section-sub">Carry the divine everywhere. Available on Android and iOS.</p>
+        <div class="app-features" id="app-features"></div>
+        <div class="download-btns">
+          <div class="dl-btn" onclick="showToast('Coming to Play Store soon!')">
+            <span class="dl-icon">🤖</span>
+            <div class="dl-text"><span class="dl-label">Get it on</span><span class="dl-store">Google Play</span></div>
+          </div>
+          <div class="dl-btn" onclick="showToast('Coming to App Store soon!')">
+            <span class="dl-icon">🍎</span>
+            <div class="dl-text"><span class="dl-label">Download on the</span><span class="dl-store">App Store</span></div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:center">
+        <div class="phone-mock">
+          <div style="font-family:'Cinzel Decorative',serif;font-size:14px;color:var(--gold);margin-bottom:8px">SanataniAnthem</div>
+          <div class="phone-screen-item"><span class="psi-icon">🛕</span><span class="psi-text">Live Temple Darshan</span></div>
+          <div class="phone-screen-item"><span class="psi-icon">🪔</span><span class="psi-text">Book Online Puja</span></div>
+          <div class="phone-screen-item"><span class="psi-icon">⭐</span><span class="psi-text">Vedic Astrology</span></div>
+          <div class="phone-screen-item"><span class="psi-icon">📿</span><span class="psi-text">Daily Devotionals</span></div>
+          <div class="phone-screen-item"><span class="psi-icon">💛</span><span class="psi-text">Donate & Seva</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer id="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-name">SanataniAnthem</div>
+        <div class="footer-brand-sub">हर घर मंदिर</div>
+        <p class="footer-desc">A complete spiritual ecosystem uniting devotees with the divine. Connecting Bharat and the global Sanatan community.</p>
+        <div class="footer-social">
+          <div class="social-btn" onclick="showToast('Follow us on Facebook!')">📘</div>
+          <div class="social-btn" onclick="showToast('Follow us on Instagram!')">📸</div>
+          <div class="social-btn" onclick="showToast('Follow us on YouTube!')">▶️</div>
+          <div class="social-btn" onclick="showToast('Follow us on Twitter/X!')">✖️</div>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Services</div>
+        <div class="footer-links" id="footer-services"></div>
+      </div>
+      <div>
+        <div class="footer-col-title">Temples</div>
+        <div class="footer-links">
+          <span class="footer-link">Kashi Vishwanath</span>
+          <span class="footer-link">Tirupati Balaji</span>
+          <span class="footer-link">Vaishno Devi</span>
+          <span class="footer-link">Jagannath Puri</span>
+          <span class="footer-link">Shirdi Sai Baba</span>
+          <span class="footer-link">All Temples →</span>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Company</div>
+        <div class="footer-links">
+          <span class="footer-link">About Us</span>
+          <span class="footer-link">Careers</span>
+          <span class="footer-link">Press</span>
+          <span class="footer-link">Privacy Policy</span>
+          <span class="footer-link">Terms of Service</span>
+          <span class="footer-link">Contact</span>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2024 SanataniAnthem. All rights reserved.</span>
+      <span class="footer-dharma">सनातन धर्म की जय 🕉</span>
+    </div>
+  </div>
+</footer>
+
+<button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ═══════════════════════════════════════════════
+   SIMULATED FIREBASE / CMS DATA STORE
+   In production: fetched from Firestore in real-time
+   Here: localStorage-backed with defaults
+═══════════════════════════════════════════════ */
+
+const DEFAULT_DB = {
+  settings: {
+    siteName: "SanataniAnthem",
+    tagline: "हर घर मंदिर",
+    primaryColor: "#FF6B00",
+    goldColor: "#D4AF37"
+  },
+  navLinks: [
+    {id:"n1", label:"Home",         href:"#",          active:true,  visible:true, order:1},
+    {id:"n2", label:"Darshan",      href:"#darshan",   active:false, visible:true, order:2},
+    {id:"n3", label:"Book Puja",    href:"#puja",      active:false, visible:true, order:3},
+    {id:"n4", label:"Services",     href:"#services",  active:false, visible:true, order:4},
+    {id:"n5", label:"Astrology",    href:"#astrology", active:false, visible:true, order:5},
+    {id:"n6", label:"Donate",       href:"#donation",  active:false, visible:true, order:6},
+    {id:"n7", label:"Festivals",    href:"#festivals", active:false, visible:true, order:7},
+    {id:"n8", label:"Knowledge",    href:"#knowledge", active:false, visible:true, order:8},
+  ],
+  sections: {
+    darshan:   {visible:true, order:1},
+    puja:      {visible:true, order:2},
+    services:  {visible:true, order:3},
+    astrology: {visible:true, order:4},
+    donation:  {visible:true, order:5},
+    festivals: {visible:true, order:6},
+    knowledge: {visible:true, order:7},
+    app:       {visible:true, order:8},
+  },
+  darshan: [
+    {id:"d1", name:"Kashi Vishwanath", location:"Varanasi, UP", time:"5:00 AM Aarti", emoji:"🛕", live:true},
+    {id:"d2", name:"Tirupati Balaji",  location:"Tirupati, AP", time:"6:30 AM Darshan", emoji:"🙏", live:false},
+    {id:"d3", name:"Vaishno Devi",     location:"Katra, J&K",    time:"4:00 AM Aarti",  emoji:"⛰️", live:true},
+    {id:"d4", name:"Jagannath Puri",   location:"Puri, Odisha",  time:"5:30 AM Darshan", emoji:"🌊", live:false},
+    {id:"d5", name:"Somnath",          location:"Prabhas Patan", time:"7:00 AM Puja",   emoji:"🌙", live:false},
+    {id:"d6", name:"Shirdi Sai Baba",  location:"Shirdi, MH",    time:"5:15 AM Kakad Aarti", emoji:"🌹", live:true},
+  ],
+  pujas: [
+    {id:"p1", name:"Satyanarayan Puja",  desc:"Complete puja for blessings, prosperity and divine grace of Lord Vishnu.", price:"₹1,100", ribbon:"Most Popular", emoji:"🪷"},
+    {id:"p2", name:"Ganesh Puja",        desc:"Remove all obstacles and invoke Lord Ganesha's blessings for new beginnings.", price:"₹501",   ribbon:"",            emoji:"🐘"},
+    {id:"p3", name:"Rudrabhishek",       desc:"Sacred Shiva puja with milk, honey and sacred herbs for divine blessings.", price:"₹2,100", ribbon:"Sacred",       emoji:"🔱"},
+    {id:"p4", name:"Kali Puja",          desc:"Powerful puja to Goddess Kali for protection, strength and victory.", price:"₹1,500", ribbon:"",            emoji:"🌺"},
+    {id:"p5", name:"Navgraha Puja",      desc:"Align all nine planets for health, wealth and spiritual harmony.", price:"₹3,100", ribbon:"Recommended",  emoji:"⭐"},
+    {id:"p6", name:"Lakshmi Puja",       desc:"Invite abundance and wealth with blessings of Goddess Lakshmi.", price:"₹1,100", ribbon:"",            emoji:"💫"},
+  ],
+  services: [
+    {id:"s1",  name:"Daily Darshan",     emoji:"🛕"},
+    {id:"s2",  name:"Online Puja",       emoji:"🪔"},
+    {id:"s3",  name:"Vedic Astrology",   emoji:"⭐"},
+    {id:"s4",  name:"Temple Tour",       emoji:"🗺️"},
+    {id:"s5",  name:"Prasad Delivery",   emoji:"🎁"},
+    {id:"s6",  name:"Sacred Texts",      emoji:"📖"},
+    {id:"s7",  name:"Mantra Classes",    emoji:"🎵"},
+    {id:"s8",  name:"Vastu Shastra",     emoji:"🏠"},
+    {id:"s9",  name:"Yoga & Meditation", emoji:"🧘"},
+    {id:"s10", name:"Pilgrimage Plans",  emoji:"✈️"},
+    {id:"s11", name:"Donation Drive",    emoji:"💛"},
+    {id:"s12", name:"Festival Calendar", emoji:"📅"},
+  ],
+  astrology: [
+    {id:"a1", title:"Birth Chart (Kundali)", sub:"Full analysis of your Janma Kundali", emoji:"🗺️"},
+    {id:"a2", title:"Love & Compatibility",  sub:"Kundali Milan for marriage matching",   emoji:"💕"},
+    {id:"a3", title:"Career & Finance",      sub:"Dasha analysis for career guidance",    emoji:"💼"},
+    {id:"a4", title:"Health Astrology",      sub:"Predict and prevent health issues",     emoji:"🌿"},
+    {id:"a5", title:"Vastu Consultation",    sub:"Harmonise your living & working space", emoji:"🏠"},
+  ],
+  festivals: [
+    {id:"f1", name:"Maha Shivratri",   desc:"The great night of Lord Shiva", date:"26 Feb",  emoji:"🔱", bg:"#2C0808"},
+    {id:"f2", name:"Holi",             desc:"Festival of colors and joy",    date:"14 Mar",  emoji:"🎨", bg:"#4A1200"},
+    {id:"f3", name:"Ram Navami",       desc:"Celebration of Lord Ram's birth",date:"6 Apr",  emoji:"🏹", bg:"#1A3A1A"},
+    {id:"f4", name:"Hanuman Jayanti",  desc:"Birthday of Lord Hanuman",      date:"12 Apr",  emoji:"🐒", bg:"#3A2A00"},
+    {id:"f5", name:"Navratri",         desc:"Nine nights of Goddess Durga",  date:"3 Oct",   emoji:"🌺", bg:"#2C0044"},
+    {id:"f6", name:"Diwali",           desc:"Festival of lights and prosperity","date":"20 Oct", emoji:"🪔", bg:"#3A2A00"},
+    {id:"f7", name:"Janmashtami",      desc:"Lord Krishna's birth celebration","date":"16 Aug", emoji:"🦚", bg:"#001C3A"},
+    {id:"f8", name:"Durga Puja",       desc:"Worship of Goddess Durga",      date:"10 Oct",  emoji:"🌟", bg:"#2C0A1E"},
+  ],
+  knowledge: [
+    {id:"k1", title:"The Significance of Sandhya Vandanam",     excerpt:"Understanding the ancient ritual of worshipping the three junctions of the day...", cat:"Rituals",   emoji:"🌅", bg:"#F5E6C8"},
+    {id:"k2", title:"108 Names of Lord Shiva — Ashtottara",      excerpt:"The sacred 108 names reveal the infinite facets of Mahadeva's divine nature...",  cat:"Scripture",  emoji:"🔱", bg:"#E8D5C8"},
+    {id:"k3", title:"Bhagavad Gita Chapter 2 — Sankhya Yoga",    excerpt:"Arjuna's grief and Krishna's cosmic wisdom on the immortality of the soul...",    cat:"Gita",       emoji:"📖", bg:"#D5E8D5"},
+    {id:"k4", title:"Science Behind Worship with Flowers",        excerpt:"Modern research now validates what rishis knew — flowers emit healing vibrations.", cat:"Science",    emoji:"🌸", bg:"#E8D5E8"},
+    {id:"k5", title:"Pancha Mahabhuta — Five Sacred Elements",    excerpt:"How Earth, Water, Fire, Air and Space form the foundation of Vedic cosmology...", cat:"Philosophy", emoji:"🌍", bg:"#C8D5E8"},
+    {id:"k6", title:"Ekadashi Fasting — Spiritual & Health Benefits","excerpt":"The sacred vrat observed twice a month and its profound effects on body and mind.", cat:"Vrat",       emoji:"🌙", bg:"#E8E8C8"},
+  ],
+  donationAmounts: [51,101,251,501,1001,2100],
+  donationImpacts: [
+    {emoji:"🪔", title:"Light the Way",    desc:"₹51 lights a diya at a sacred temple for an entire day"},
+    {emoji:"🍛", title:"Annadaan",          desc:"₹251 provides prasad meals to 10 devotees"},
+    {emoji:"🛕", title:"Temple Seva",       desc:"₹1001 contributes to temple restoration work"},
+    {emoji:"📚", title:"Vidya Daan",        desc:"₹2100 supports Sanskrit education for one child"},
+  ],
+  appFeatures: [
+    {emoji:"🛕", title:"Live Darshan",       desc:"Watch live temple streams daily"},
+    {emoji:"🪔", title:"Puja Booking",       desc:"Book sacred rituals in seconds"},
+    {emoji:"⭐", title:"Astrology",          desc:"Personalized Vedic guidance"},
+    {emoji:"📿", title:"Daily Mantra",       desc:"Morning and evening devotionals"},
+    {emoji:"💛", title:"Easy Donations",    desc:"Donate securely from the app"},
+    {emoji:"🔔", title:"Festival Alerts",   desc:"Never miss an auspicious day"},
+  ],
+  marqueeItems: ["🕉 जय श्री राम","🔱 हर हर महादेव","🌺 जय माता दी","🐘 गणपति बप्पा मोरया","🦚 राधे राधे","🌸 जय श्री कृष्ण","🏹 जय बजरंग बलि","🌊 जय जगन्नाथ"],
+};
+
+/* ── DATA ACCESS ── */
+function getDB(){
+  try{
+    const s = localStorage.getItem('sanatani_cms');
+    return s ? JSON.parse(s) : DEFAULT_DB;
+  }catch(e){ return DEFAULT_DB; }
+}
+
+/* ── RENDER ENGINE ── */
+function renderAll(){
+  const db = getDB();
+  renderNav(db);
+  renderMarquee(db);
+  renderSections(db);
+  renderDarshan(db);
+  renderPujas(db);
+  renderServices(db);
+  renderAstrology(db);
+  renderDonation(db);
+  renderFestivals(db);
+  renderKnowledge(db);
+  renderApp(db);
+  renderFooterServices(db);
+}
+
+function renderNav(db){
+  const links = [...db.navLinks].filter(n=>n.visible).sort((a,b)=>a.order-b.order);
+  const html = links.map(n=>`<a href="${n.href}" class="nav-link${n.active?' active':''}">${n.label}</a>`).join('');
+  document.getElementById('nav-links').innerHTML = html;
+  document.getElementById('mobile-nav-links').innerHTML = links.map(n=>`<a href="${n.href}" class="nav-link" onclick="toggleMobileNav()">${n.label}</a>`).join('');
+}
+
+function renderMarquee(db){
+  const items = db.marqueeItems || DEFAULT_DB.marqueeItems;
+  // Duplicate for infinite scroll
+  const doubled = [...items,...items];
+  const html = doubled.map(t=>`<span class="marquee-item">${t}<span class="marquee-sep">•</span></span>`).join('');
+  document.getElementById('marquee-track').innerHTML = html;
+}
+
+function renderSections(db){
+  const secs = db.sections || DEFAULT_DB.sections;
+  const sectionEls = document.querySelectorAll('.cms-section');
+  sectionEls.forEach(el=>{
+    const key = el.dataset.key;
+    if(secs[key] !== undefined){
+      el.classList.toggle('hidden', !secs[key].visible);
+    }
+  });
+}
+
+function renderDarshan(db){
+  const items = db.darshan || [];
+  const html = items.map(d=>`
+    <div class="darshan-card" onclick="showToast('Opening ${d.name} darshan...')">
+      <div class="darshan-thumb">
+        <span class="darshan-emoji">${d.emoji}</span>
+        ${d.live?`<div class="darshan-badge-wrap"><span class="badge badge-live"><span class="badge-dot"></span>LIVE</span></div>`:''}
+      </div>
+      <div class="darshan-info">
+        <div class="darshan-name">${d.name}</div>
+        <div class="darshan-loc">📍 ${d.location}</div>
+        <div class="darshan-time">🕐 ${d.time}</div>
+      </div>
+    </div>`).join('');
+  document.getElementById('darshan-container').innerHTML = html;
+}
+
+function renderPujas(db){
+  const items = db.pujas || [];
+  const html = items.map(p=>`
+    <div class="puja-card" onclick="showToast('Booking ${p.name}...')">
+      ${p.ribbon?`<div class="puja-card-ribbon">${p.ribbon}</div>`:''}
+      <div class="puja-thumb">
+        <span class="puja-emoji">${p.emoji}</span>
+      </div>
+      <div class="puja-body">
+        <div class="puja-name">${p.name}</div>
+        <div class="puja-desc">${p.desc}</div>
+        <div class="puja-footer">
+          <div class="puja-price">${p.price}<span>per puja</span></div>
+          <button class="puja-btn">Book Now</button>
+        </div>
+      </div>
+    </div>`).join('');
+  document.getElementById('puja-container').innerHTML = html;
+}
+
+function renderServices(db){
+  const items = db.services || [];
+  const html = items.map(s=>`
+    <div class="service-card" onclick="showToast('Opening ${s.name}...')">
+      <div class="service-icon">${s.emoji}</div>
+      <div class="service-name">${s.name}</div>
+    </div>`).join('');
+  document.getElementById('services-container').innerHTML = html;
+}
+
+function renderAstrology(db){
+  const items = db.astrology || [];
+  const html = items.map(a=>`
+    <div class="astro-card" onclick="showToast('Opening ${a.title}...')">
+      <div class="astro-card-icon">${a.emoji}</div>
+      <div>
+        <div class="astro-card-title">${a.title}</div>
+        <div class="astro-card-sub">${a.sub}</div>
+      </div>
+      <span style="color:rgba(212,175,55,.4);margin-left:auto;font-size:18px">›</span>
+    </div>`).join('');
+  document.getElementById('astro-container').innerHTML = html;
+  // Zodiac
+  const signs = ['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'];
+  const wheel = document.getElementById('zodiac-wheel');
+  signs.forEach((s,i)=>{
+    const el = document.createElement('div');
+    el.className = 'zodiac-sign';
+    const angle = (i/12)*360;
+    const rad = (angle-90)*(Math.PI/180);
+    const r = 130;
+    el.style.cssText = `transform:translate(calc(-50% + ${Math.cos(rad)*r}px), calc(-50% + ${Math.sin(rad)*r}px));font-size:18px;`;
+    el.textContent = s;
+    wheel.appendChild(el);
+  });
+}
+
+function renderDonation(db){
+  const amts = db.donationAmounts || DEFAULT_DB.donationAmounts;
+  document.getElementById('donation-amounts').innerHTML =
+    amts.map((a,i)=>`<button class="amt-btn${i===2?' active':''}" onclick="setDonation(this)">₹${a}</button>`).join('');
+  const impacts = db.donationImpacts || DEFAULT_DB.donationImpacts;
+  document.getElementById('donation-impact').innerHTML =
+    impacts.map(im=>`<div class="impact-item"><span class="impact-icon">${im.emoji}</span><div class="impact-text"><strong>${im.title}</strong>${im.desc}</div></div>`).join('');
+}
+
+function renderFestivals(db){
+  const items = db.festivals || [];
+  const html = items.map(f=>`
+    <div class="festival-card" onclick="showToast('Opening ${f.name} page...')">
+      <div class="festival-bg" style="background:${f.bg}">
+        <span style="font-size:56px">${f.emoji}</span>
+        <div class="festival-date-badge">${f.date}</div>
+      </div>
+      <div class="festival-body">
+        <div class="festival-name">${f.name}</div>
+        <div class="festival-desc">${f.desc}</div>
+      </div>
+    </div>`).join('');
+  document.getElementById('festivals-container').innerHTML = html;
+}
+
+function renderKnowledge(db){
+  const items = db.knowledge || [];
+  const html = items.map(k=>`
+    <div class="blog-card" onclick="showToast('Opening article: ${k.title}')">
+      <div class="blog-thumb" style="background:${k.bg}">
+        <span style="font-size:56px">${k.emoji}</span>
+        <div class="blog-cat">${k.cat}</div>
+      </div>
+      <div class="blog-body">
+        <div class="blog-title">${k.title}</div>
+        <div class="blog-excerpt">${k.excerpt}</div>
+        <div class="blog-meta"><span>5 min read</span><span style="color:var(--saffron)">Read →</span></div>
+      </div>
+    </div>`).join('');
+  document.getElementById('knowledge-container').innerHTML = html;
+}
+
+function renderApp(db){
+  const feats = db.appFeatures || DEFAULT_DB.appFeatures;
+  document.getElementById('app-features').innerHTML =
+    feats.map(f=>`<div class="app-feat"><div class="app-feat-icon">${f.emoji}</div><div class="app-feat-text"><strong>${f.title}</strong>${f.desc}</div></div>`).join('');
+}
+
+function renderFooterServices(db){
+  const items = (db.services||[]).slice(0,6);
+  document.getElementById('footer-services').innerHTML =
+    items.map(s=>`<span class="footer-link">${s.name}</span>`).join('');
+}
+
+/* ── PARTICLES ── */
+function spawnParticles(){
+  const container = document.getElementById('hero-particles');
+  for(let i=0;i<40;i++){
+    const p = document.createElement('div');
+    p.className = 'ptcl';
+    p.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;animation-delay:${Math.random()*4}s;animation-duration:${2+Math.random()*3}s;width:${1+Math.random()*3}px;height:${1+Math.random()*3}px;opacity:${.2+Math.random()*.5}`;
+    container.appendChild(p);
+  }
+}
+
+/* ── UI HELPERS ── */
+function setDonation(btn){
+  document.querySelectorAll('.amt-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  showToast(`Selected donation: ${btn.textContent}`);
+}
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+function toggleMobileNav(){
+  document.getElementById('mobile-nav').classList.toggle('open');
+}
+
+/* ── SCROLL EFFECTS ── */
+window.addEventListener('scroll',()=>{
+  const st = document.getElementById('scroll-top');
+  if(window.scrollY > 400) st.classList.add('visible');
+  else st.classList.remove('visible');
+  // Shrink header
+  const header = document.getElementById('site-header');
+  if(window.scrollY > 80){
+    header.querySelector('.topbar').style.transform = 'translateY(-100%)';
+    header.querySelector('.topbar').style.opacity = '0';
+  } else {
+    header.querySelector('.topbar').style.transform = '';
+    header.querySelector('.topbar').style.opacity = '';
+  }
+});
+
+/* ── LIVE SYNC (poll localStorage every 2s, simulating Firestore listener) ── */
+let _lastHash = '';
+setInterval(()=>{
+  const raw = localStorage.getItem('sanatani_cms') || '';
+  if(raw !== _lastHash){
+    _lastHash = raw;
+    renderAll();
+  }
+},2000);
+
+/* ── INIT ── */
+renderAll();
+spawnParticles();
+</script>
+</body>
+</html>

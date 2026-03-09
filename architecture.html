@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>SanataniAnthem – Architecture & Developer Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#0F0A05;--bg2:#1A1108;--panel:#1E1510;--border:rgba(212,175,55,.15);--saffron:#FF6B00;--gold:#D4AF37;--gold-l:#E8CC6A;--maroon:#7A1E1E;--text:#E8D5A8;--text-m:rgba(232,213,168,.65);--text-l:rgba(232,213,168,.4);--green:#22C55E;--blue:#3B82F6;--purple:#A855F7;--r:8px;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+.container{max-width:1100px;margin:0 auto;padding:0 28px}
+h1{font-family:'Cinzel',serif;font-size:36px;color:var(--gold);margin-bottom:8px}
+h2{font-family:'Cinzel',serif;font-size:22px;color:var(--gold-l);margin:40px 0 16px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+h3{font-family:'Cinzel',serif;font-size:16px;color:var(--saffron);margin:24px 0 10px}
+p{color:var(--text-m);margin-bottom:12px;font-size:15px}
+.hero{padding:60px 0 40px;border-bottom:1px solid var(--border);margin-bottom:40px}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,107,0,.1);border:1px solid rgba(255,107,0,.3);color:var(--saffron);padding:5px 14px;border-radius:40px;font-family:'Cinzel',serif;font-size:10px;letter-spacing:1.5px;margin-bottom:16px}
+.hero-sub{font-size:17px;color:var(--text-m);max-width:600px}
+
+/* Code blocks */
+pre{background:var(--panel);border:1px solid var(--border);border-radius:var(--r);padding:20px;overflow-x:auto;margin:14px 0}
+code{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--gold-l)}
+.code-label{font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:var(--text-l);text-transform:uppercase;margin-bottom:6px}
+.inline-code{font-family:'JetBrains Mono',monospace;font-size:12px;background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.15);padding:1px 6px;border-radius:3px;color:var(--gold-l)}
+
+/* Cards */
+.card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:20px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+
+/* Arch diagram */
+.arch{display:flex;flex-direction:column;gap:12px;margin:20px 0}
+.arch-layer{background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:16px 20px}
+.arch-layer-title{font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--saffron);margin-bottom:10px}
+.arch-boxes{display:flex;gap:10px;flex-wrap:wrap}
+.arch-box{padding:8px 16px;border-radius:6px;font-size:12px;font-family:'JetBrains Mono',monospace;border:1px solid}
+.box-web{background:rgba(59,130,246,.1);border-color:rgba(59,130,246,.3);color:#93C5FD}
+.box-mobile{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.3);color:#86EFAC}
+.box-api{background:rgba(255,107,0,.1);border-color:rgba(255,107,0,.3);color:#FDB896}
+.box-db{background:rgba(212,175,55,.1);border-color:rgba(212,175,55,.3);color:var(--gold-l)}
+.box-infra{background:rgba(168,85,247,.1);border-color:rgba(168,85,247,.3);color:#D8B4FE}
+.arch-arrow{text-align:center;color:var(--text-l);font-size:20px}
+
+/* Table */
+table{width:100%;border-collapse:collapse;margin:14px 0}
+th{font-family:'Cinzel',serif;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-l);padding:8px 12px;text-align:left;border-bottom:1px solid var(--border)}
+td{padding:10px 12px;border-bottom:1px solid rgba(212,175,55,.06);font-size:13px;color:var(--text-m)}
+td:first-child{color:var(--text);font-weight:500}
+
+/* Pills */
+.pill{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-family:'Cinzel',serif;letter-spacing:.5px}
+.pill-get{background:rgba(34,197,94,.1);color:#22C55E;border:1px solid rgba(34,197,94,.2)}
+.pill-post{background:rgba(59,130,246,.1);color:#3B82F6;border:1px solid rgba(59,130,246,.2)}
+.pill-put{background:rgba(245,158,11,.1);color:#F59E0B;border:1px solid rgba(245,158,11,.2)}
+.pill-del{background:rgba(239,68,68,.1);color:#EF4444;border:1px solid rgba(239,68,68,.2)}
+
+/* File tree */
+.tree{font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.8;background:var(--panel);border:1px solid var(--border);border-radius:8px;padding:20px}
+.tree-dir{color:var(--gold-l)}
+.tree-file{color:var(--text-m)}
+.tree-comment{color:var(--text-l)}
+
+/* Checklist */
+.checklist{list-style:none;padding:0}
+.checklist li{padding:8px 0;border-bottom:1px solid rgba(212,175,55,.06);display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--text-m)}
+.check-icon{color:var(--green);font-size:14px;margin-top:2px;flex-shrink:0}
+
+/* Steps */
+.step{display:flex;gap:16px;margin-bottom:20px}
+.step-num{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--saffron),#C95000);display:flex;align-items:center;justify-content:center;font-family:'Cinzel',serif;font-size:13px;font-weight:700;color:white;flex-shrink:0}
+.step-body{flex:1}
+.step-title{font-family:'Cinzel',serif;font-size:14px;color:var(--gold-l);margin-bottom:4px}
+
+/* Misc */
+.divider{height:1px;background:var(--border);margin:40px 0}
+a{color:var(--saffron);text-decoration:none}
+a:hover{text-decoration:underline}
+strong{color:var(--text);font-weight:600}
+@media(max-width:700px){.grid-2,.grid-3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="container" style="padding-top:40px;padding-bottom:80px">
+
+<div class="hero">
+  <div class="hero-badge">🕉 Developer Documentation</div>
+  <h1>SanataniAnthem<br/>Architecture & Dev Guide</h1>
+  <p class="hero-sub">Complete technical reference for building and deploying the SanataniAnthem spiritual platform — Website, Android App, iOS App, Admin Panel, and Backend API.</p>
+</div>
+
+<!-- ═══ SYSTEM ARCHITECTURE ═══ -->
+<h2>1. System Architecture Overview</h2>
+<p>All platforms share a <strong>single Firestore database</strong>. When the Admin updates any content, it propagates to the website via <strong>real-time listeners</strong> and to mobile apps via <strong>FCM + Firestore SDK</strong>.</p>
+
+<div class="arch">
+  <div class="arch-layer">
+    <div class="arch-layer-title">Client Layer</div>
+    <div class="arch-boxes">
+      <span class="arch-box box-web">🌐 Next.js Website</span>
+      <span class="arch-box box-mobile">🤖 Flutter Android</span>
+      <span class="arch-box box-mobile">🍎 Flutter iOS</span>
+      <span class="arch-box box-web">⚙️ React Admin Panel</span>
+    </div>
+  </div>
+  <div class="arch-arrow">↕ REST API + WebSocket + Firestore Real-time</div>
+  <div class="arch-layer">
+    <div class="arch-layer-title">API Gateway Layer</div>
+    <div class="arch-boxes">
+      <span class="arch-box box-api">Auth Service (Firebase Auth + JWT)</span>
+      <span class="arch-box box-api">Content Service (CMS API)</span>
+      <span class="arch-box box-api">Puja Service</span>
+      <span class="arch-box box-api">Donation Service (Razorpay)</span>
+      <span class="arch-box box-api">Notification Service (FCM)</span>
+      <span class="arch-box box-api">Media Service (S3/Firebase Storage)</span>
+    </div>
+  </div>
+  <div class="arch-arrow">↕ Firebase SDK / Node.js REST</div>
+  <div class="arch-layer">
+    <div class="arch-layer-title">Database Layer</div>
+    <div class="arch-boxes">
+      <span class="arch-box box-db">Firestore (Primary — real-time)</span>
+      <span class="arch-box box-db">Firebase Storage (Media)</span>
+      <span class="arch-box box-db">Firebase Auth (Users)</span>
+    </div>
+  </div>
+  <div class="arch-arrow">↕ Cloud Functions</div>
+  <div class="arch-layer">
+    <div class="arch-layer-title">Infrastructure</div>
+    <div class="arch-boxes">
+      <span class="arch-box box-infra">Firebase Hosting</span>
+      <span class="arch-box box-infra">Cloud Functions (Node.js)</span>
+      <span class="arch-box box-infra">FCM Push Notifications</span>
+      <span class="arch-box box-infra">Razorpay Payments</span>
+      <span class="arch-box box-infra">YouTube Live API</span>
+      <span class="arch-box box-infra">AWS S3 (Media Backup)</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FIRESTORE SCHEMA ═══ -->
+<h2>2. Firestore Database Schema</h2>
+
+<h3>Collection: <span class="inline-code">cms</span> (Central Content Store)</h3>
+<pre><code>// Document: cms/config
+{
+  siteName: "SanataniAnthem",
+  tagline: "हर घर मंदिर",
+  primaryColor: "#FF6B00",
+  goldColor: "#D4AF37",
+  maintenanceMode: false,
+  updatedAt: Timestamp
+}
+
+// Document: cms/sections  (toggle + reorder homepage sections)
+{
+  darshan:   { visible: true,  order: 1, name: "Daily Darshan",  icon: "🛕" },
+  puja:      { visible: true,  order: 2, name: "Puja Booking",   icon: "🪔" },
+  services:  { visible: true,  order: 3, name: "Services",       icon: "⚡" },
+  astrology: { visible: true,  order: 4, name: "Astrology",      icon: "⭐" },
+  donation:  { visible: true,  order: 5, name: "Donations",      icon: "💛" },
+  festivals: { visible: true,  order: 6, name: "Festivals",      icon: "🎉" },
+  knowledge: { visible: true,  order: 7, name: "Knowledge",      icon: "📖" },
+  app:       { visible: true,  order: 8, name: "App Download",   icon: "📱" }
+}
+
+// Document: cms/navLinks
+{
+  links: [
+    { id: "n1", label: "Home",      href: "#",          visible: true, order: 1 },
+    { id: "n2", label: "Darshan",   href: "#darshan",   visible: true, order: 2 },
+    { id: "n3", label: "Book Puja", href: "#puja",      visible: true, order: 3 },
+    { id: "n4", label: "Donate",    href: "#donation",  visible: true, order: 4 }
+  ]
+}</code></pre>
+
+<h3>Collection: <span class="inline-code">temples</span></h3>
+<pre><code>{
+  id: "temple_kashi",
+  name: "Kashi Vishwanath",
+  location: "Varanasi, Uttar Pradesh",
+  description: "One of the twelve Jyotirlinga temples...",
+  emoji: "🛕",
+  imageUrl: "https://storage.../kashi.jpg",
+  darshan: {
+    timings: ["4:00 AM Mangal Aarti", "12:00 PM Bhog Aarti", "7:00 PM Sandhya Aarti"],
+    liveStreamUrl: "https://youtube.com/...",
+    isLive: true,
+    nextDarshanAt: Timestamp
+  },
+  address: { street: "...", city: "Varanasi", state: "UP", pincode: "221001" },
+  coordinates: { lat: 25.3109, lng: 83.0107 },
+  active: true,
+  createdAt: Timestamp,
+  updatedAt: Timestamp
+}</code></pre>
+
+<h3>Collection: <span class="inline-code">pujas</span></h3>
+<pre><code>{
+  id: "puja_satyanarayan",
+  name: "Satyanarayan Puja",
+  description: "Complete puja for blessings and prosperity...",
+  emoji: "🪷",
+  imageUrl: "https://storage.../satyanarayan.jpg",
+  price: 1100,
+  currency: "INR",
+  ribbon: "Most Popular",
+  duration: "2-3 hours",
+  includes: ["Puja samagri", "Prasad delivery", "Photo/video"],
+  templeId: "temple_kashi",
+  priestId: "priest_001",
+  active: true,
+  order: 1,
+  createdAt: Timestamp
+}</code></pre>
+
+<h3>Collection: <span class="inline-code">bookings</span></h3>
+<pre><code>{
+  id: "booking_abc123",
+  userId: "user_xyz",
+  pujaId: "puja_satyanarayan",
+  templeId: "temple_kashi",
+  scheduledAt: Timestamp,
+  status: "confirmed",  // pending | confirmed | completed | cancelled
+  amount: 1100,
+  paymentId: "pay_rzp_001",
+  devoteeName: "Ramesh Kumar",
+  gotra: "Kashyap",
+  notes: "For family welfare",
+  createdAt: Timestamp
+}</code></pre>
+
+<h3>Collection: <span class="inline-code">donations</span></h3>
+<pre><code>{
+  id: "donation_001",
+  userId: "user_xyz",       // null if anonymous
+  amount: 1001,
+  cause: "Temple Seva",
+  anonymous: false,
+  donorName: "Ramesh Kumar",
+  paymentId: "pay_rzp_002",
+  platform: "android",      // web | android | ios
+  status: "success",
+  receipt: "https://...",
+  createdAt: Timestamp
+}</code></pre>
+
+<h3>Collection: <span class="inline-code">users</span></h3>
+<pre><code>{
+  uid: "firebase_auth_uid",
+  displayName: "Ramesh Kumar",
+  email: "ramesh@email.com",
+  phone: "+91-9876543210",
+  photoURL: "https://...",
+  city: "Varanasi",
+  preferences: { language: "hi", notifications: true },
+  wallet: { balance: 250, currency: "INR" },
+  stats: { pujas: 12, donations: 5, totalDonated: 5502 },
+  role: "devotee",   // devotee | priest | admin
+  platform: "android",
+  fcmToken: "...",
+  createdAt: Timestamp
+}</code></pre>
+
+<h3>Collections: <span class="inline-code">festivals</span>, <span class="inline-code">articles</span>, <span class="inline-code">services</span></h3>
+<pre><code>// festivals/{id}
+{ id, name, description, date, imageUrl, emoji, bgColor, active, order }
+
+// articles/{id}
+{ id, title, excerpt, content, category, emoji, bgColor, author, readTime, publishedAt, active }
+
+// services/{id}
+{ id, name, emoji, description, link, active, order }</code></pre>
+
+<!-- ═══ API STRUCTURE ═══ -->
+<h2>3. REST API Reference</h2>
+<p>Base URL: <span class="inline-code">https://api.sanatanianthem.com/v1</span> (Node.js + Express on Cloud Functions)</p>
+
+<h3>Authentication</h3>
+<table>
+  <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+  <tr><td><span class="pill pill-post">POST</span></td><td>/auth/register</td><td>Register new devotee</td></tr>
+  <tr><td><span class="pill pill-post">POST</span></td><td>/auth/login</td><td>Email/phone login</td></tr>
+  <tr><td><span class="pill pill-post">POST</span></td><td>/auth/google</td><td>Google OAuth sign-in</td></tr>
+  <tr><td><span class="pill pill-post">POST</span></td><td>/auth/refresh</td><td>Refresh JWT token</td></tr>
+  <tr><td><span class="pill pill-post">POST</span></td><td>/auth/logout</td><td>Invalidate token</td></tr>
+</table>
+
+<h3>CMS / Content (Admin)</h3>
+<table>
+  <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+  <tr><td><span class="pill pill-get">GET</span></td><td>/cms/config</td><td>Get full platform config (sections, nav, settings)</td></tr>
+  <tr><td><span class="pill pill-put">PUT</span></td><td>/cms/sections</td><td>Update section visibility + order</td></tr>
+  <tr><td><span class="pill pill-put">PUT</span></td><td>/cms/navlinks</td><td>Update navigation tabs</td></tr>
+  <tr><td><span class="pill pill-put">PUT</span></td><td>/cms/settings</td><td>Update branding settings</td></tr>
+</table>
+
+<h3>Temples & Darshan</h3>
+<table>
+  <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+  <tr><td><span class="pill pill-get">GET</span></td><td>/temples</td><td>List all active temples</td></tr>
+  <tr><td><span class="pill pill-get">GET</span></td><td>/temples/:id</td><td>Get temple detail</td></tr>
+  <tr><td><span class="pill pill-post">POST</span></td><td>/temples</td><td>Add temple (admin)</td></tr>
+  <tr><td><span class="pill pill-put">PUT</span></td><td>/temples/:id</td><td>Update temple (admin)</td></tr>
+  <tr><td><span class="pill pill-del">DELETE</span></td><td>/temples/:id</td><td>Delete temple (admin)</td></tr>
+  <tr><td><span class="pill pill-get">GET</span></td><td>/temples/live</td><td>Get currently live darshan streams</td></tr>
+</table>
+
+<h3>Puja Booking</h3>
+<table>
+  <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+  <tr><td><span class="pill pill-get">GET</span></td><td>/pujas</td><td>List all pujas</td></tr>
+  <tr><td><span class="pill pill-get">GET</span></td><td>/pujas/:id</td><td>Puja detail</td></tr>
+  <tr><td><span class="pill pill-post">POST</span></td><td>/bookings</td><td>Create puja booking</td></tr>
+  <tr><td><span class="pill pill-get">GET</span></td><td>/bookings/my</td><td>Get user's bookings</td></tr>
+  <tr><td><span class="pill pill-put">PUT</span></td><td>/bookings/:id</td><td>Update booking status</td></tr>
+  <tr><td><span class="pill pill-post">POST</span></td><td>/payments/create-order</td><td>Create Razorpay order</td></tr>
+  <tr><td><span class="pill pill-post">POST</span></td><td>/payments/verify</td><td>Verify payment signature</td></tr>
+</table>
+
+<h3>Donations</h3>
+<table>
+  <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+  <tr><td><span class="pill pill-post">POST</span></td><td>/donations</td><td>Create donation</td></tr>
+  <tr><td><span class="pill pill-get">GET</span></td><td>/donations/my</td><td>User's donation history</td></tr>
+  <tr><td><span class="pill pill-get">GET</span></td><td>/donations/stats</td><td>Platform donation stats (admin)</td></tr>
+</table>
+
+<h3>Notifications</h3>
+<table>
+  <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+  <tr><td><span class="pill pill-post">POST</span></td><td>/notifications/send</td><td>Send push to all/android/ios/web</td></tr>
+  <tr><td><span class="pill pill-get">GET</span></td><td>/notifications/history</td><td>Sent notification history</td></tr>
+  <tr><td><span class="pill pill-post">POST</span></td><td>/notifications/fcm-token</td><td>Register device FCM token</td></tr>
+</table>
+
+<!-- ═══ FOLDER STRUCTURE ═══ -->
+<h2>4. Project Folder Structure</h2>
+
+<div class="grid-2">
+<div>
+<h3>Website (Next.js)</h3>
+<div class="tree">
+<span class="tree-dir">sanatani-web/</span>
+├── <span class="tree-dir">app/</span>
+│   ├── <span class="tree-dir">layout.tsx</span>
+│   ├── <span class="tree-dir">page.tsx</span>         <span class="tree-comment">// Homepage</span>
+│   ├── <span class="tree-dir">darshan/</span>
+│   ├── <span class="tree-dir">puja/[id]/</span>
+│   ├── <span class="tree-dir">booking/</span>
+│   ├── <span class="tree-dir">donate/</span>
+│   ├── <span class="tree-dir">festivals/</span>
+│   └── <span class="tree-dir">knowledge/</span>
+├── <span class="tree-dir">components/</span>
+│   ├── <span class="tree-dir">layout/</span>
+│   │   ├── Header.tsx
+│   │   ├── Footer.tsx
+│   │   └── MobileNav.tsx
+│   ├── <span class="tree-dir">sections/</span>
+│   │   ├── HeroSection.tsx
+│   │   ├── DarshanSection.tsx
+│   │   ├── PujaSection.tsx
+│   │   ├── ServicesSection.tsx
+│   │   ├── AstrologySection.tsx
+│   │   ├── DonationSection.tsx
+│   │   ├── FestivalsSection.tsx
+│   │   └── KnowledgeSection.tsx
+│   └── <span class="tree-dir">ui/</span>
+│       ├── Button.tsx
+│       ├── Toggle.tsx
+│       └── Card.tsx
+├── <span class="tree-dir">hooks/</span>
+│   ├── useCMS.ts         <span class="tree-comment">// Firestore real-time</span>
+│   ├── useAuth.ts
+│   └── useBooking.ts
+├── <span class="tree-dir">lib/</span>
+│   ├── firebase.ts
+│   ├── api.ts
+│   └── razorpay.ts
+├── <span class="tree-dir">store/</span>
+│   └── cmsStore.ts       <span class="tree-comment">// Zustand</span>
+└── <span class="tree-dir">public/</span>
+</div>
+</div>
+
+<div>
+<h3>Admin Panel (React + Vite)</h3>
+<div class="tree">
+<span class="tree-dir">sanatani-admin/</span>
+├── <span class="tree-dir">src/</span>
+│   ├── <span class="tree-dir">pages/</span>
+│   │   ├── Dashboard.tsx
+│   │   ├── SectionControl.tsx
+│   │   ├── Navigation.tsx
+│   │   ├── TempleManager.tsx
+│   │   ├── PujaManager.tsx
+│   │   ├── ServiceManager.tsx
+│   │   ├── FestivalManager.tsx
+│   │   ├── KnowledgeManager.tsx
+│   │   ├── UserManager.tsx
+│   │   ├── DonationManager.tsx
+│   │   ├── Notifications.tsx
+│   │   └── Settings.tsx
+│   ├── <span class="tree-dir">components/</span>
+│   │   ├── DragDropList.tsx
+│   │   ├── ToggleRow.tsx
+│   │   ├── DataTable.tsx
+│   │   └── Modal.tsx
+│   ├── <span class="tree-dir">hooks/</span>
+│   │   └── useFirestore.ts
+│   ├── <span class="tree-dir">lib/</span>
+│   │   ├── firebase.ts
+│   │   └── api.ts
+│   └── App.tsx
+</div>
+</div>
+
+<div>
+<h3>Backend (Node.js + Firebase Functions)</h3>
+<div class="tree">
+<span class="tree-dir">sanatani-api/</span>
+├── <span class="tree-dir">functions/</span>
+│   ├── <span class="tree-dir">src/</span>
+│   │   ├── <span class="tree-dir">routes/</span>
+│   │   │   ├── auth.ts
+│   │   │   ├── cms.ts
+│   │   │   ├── temples.ts
+│   │   │   ├── pujas.ts
+│   │   │   ├── bookings.ts
+│   │   │   ├── donations.ts
+│   │   │   └── notifications.ts
+│   │   ├── <span class="tree-dir">middleware/</span>
+│   │   │   ├── auth.ts
+│   │   │   ├── adminOnly.ts
+│   │   │   └── rateLimit.ts
+│   │   ├── <span class="tree-dir">services/</span>
+│   │   │   ├── razorpay.ts
+│   │   │   ├── fcm.ts
+│   │   │   └── storage.ts
+│   │   └── index.ts
+│   └── package.json
+├── firestore.rules
+└── storage.rules
+</div>
+</div>
+
+<div>
+<h3>Flutter App (Android + iOS)</h3>
+<div class="tree">
+<span class="tree-dir">sanatani_flutter/</span>
+├── <span class="tree-dir">lib/</span>
+│   ├── <span class="tree-dir">models/</span>
+│   │   ├── cms_config.dart
+│   │   ├── temple.dart
+│   │   ├── puja.dart
+│   │   └── user.dart
+│   ├── <span class="tree-dir">screens/</span>
+│   │   ├── home_screen.dart
+│   │   ├── darshan_screen.dart
+│   │   ├── puja_screen.dart
+│   │   ├── booking_screen.dart
+│   │   ├── donate_screen.dart
+│   │   ├── astrology_screen.dart
+│   │   ├── festivals_screen.dart
+│   │   └── profile_screen.dart
+│   ├── <span class="tree-dir">widgets/</span>
+│   │   ├── section_builder.dart  <span class="tree-comment">// Dynamic sections</span>
+│   │   ├── darshan_card.dart
+│   │   ├── puja_card.dart
+│   │   └── festival_card.dart
+│   ├── <span class="tree-dir">services/</span>
+│   │   ├── cms_service.dart
+│   │   ├── auth_service.dart
+│   │   ├── payment_service.dart
+│   │   └── notification_service.dart
+│   ├── <span class="tree-dir">providers/</span>
+│   │   └── cms_provider.dart     <span class="tree-comment">// Riverpod</span>
+│   └── main.dart
+├── android/
+├── ios/
+└── pubspec.yaml
+</div>
+</div>
+</div>
+
+<!-- ═══ KEY CODE SNIPPETS ═══ -->
+<h2>5. Key Code Snippets</h2>
+
+<h3>Firestore Real-time CMS Listener (TypeScript)</h3>
+<pre><code>// hooks/useCMS.ts
+import { doc, onSnapshot } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+import { useEffect, useState } from 'react';
+
+export function useCMS() {
+  const [config, setConfig] = useState(null);
+  const [sections, setSections] = useState({});
+  const [navLinks, setNavLinks] = useState([]);
+
+  useEffect(() => {
+    // Real-time listener — website auto-updates when admin changes anything
+    const unsubSections = onSnapshot(doc(db, 'cms', 'sections'), (snap) => {
+      if (snap.exists()) setSections(snap.data());
+    });
+
+    const unsubNav = onSnapshot(doc(db, 'cms', 'navLinks'), (snap) => {
+      if (snap.exists()) {
+        const sorted = [...snap.data().links].sort((a, b) => a.order - b.order);
+        setNavLinks(sorted.filter(n => n.visible));
+      }
+    });
+
+    return () => { unsubSections(); unsubNav(); };
+  }, []);
+
+  return { sections, navLinks };
+}</code></pre>
+
+<h3>Dynamic Section Builder (React)</h3>
+<pre><code>// components/SectionBuilder.tsx
+import { useCMS } from '@/hooks/useCMS';
+import DarshanSection from './sections/DarshanSection';
+import PujaSection from './sections/PujaSection';
+// ... other section imports
+
+const SECTION_MAP = {
+  darshan:   DarshanSection,
+  puja:      PujaSection,
+  services:  ServicesSection,
+  astrology: AstrologySection,
+  donation:  DonationSection,
+  festivals: FestivalsSection,
+  knowledge: KnowledgeSection,
+  app:       AppSection,
+};
+
+export default function SectionBuilder() {
+  const { sections } = useCMS();
+
+  const sorted = Object.entries(sections)
+    .filter(([_, s]) => s.visible)
+    .sort(([_, a], [__, b]) => a.order - b.order);
+
+  return (
+    &lt;&gt;
+      {sorted.map(([key]) => {
+        const Component = SECTION_MAP[key];
+        return Component ? &lt;Component key={key} /&gt; : null;
+      })}
+    &lt;/&gt;
+  );
+}</code></pre>
+
+<h3>Flutter CMS Provider (Riverpod)</h3>
+<pre><code>// lib/providers/cms_provider.dart
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+// Real-time CMS config stream
+final cmsConfigProvider = StreamProvider&lt;Map&lt;String, dynamic&gt;&gt;((ref) {
+  return FirebaseFirestore.instance
+    .collection('cms')
+    .doc('sections')
+    .snapshots()
+    .map((snap) => snap.data() ?? {});
+});
+
+// Dynamic home screen sections
+final homeSectionsProvider = Provider&lt;List&lt;String&gt;&gt;((ref) {
+  final config = ref.watch(cmsConfigProvider);
+  return config.when(
+    data: (data) {
+      return data.entries
+        .where((e) => e.value['visible'] == true)
+        .toList()
+        ..sort((a, b) => (a.value['order'] as int).compareTo(b.value['order']))
+        ..map((e) => e.key).toList();
+    },
+    loading: () =&gt; [],
+    error: (_, __) =&gt; [],
+  );
+});</code></pre>
+
+<h3>Flutter Dynamic Home Screen</h3>
+<pre><code>// lib/screens/home_screen.dart
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+class HomeScreen extends ConsumerWidget {
+  const HomeScreen({super.key});
+
+  Widget _buildSection(String key) {
+    switch (key) {
+      case 'darshan':   return const DarshanSection();
+      case 'puja':      return const PujaSection();
+      case 'services':  return const ServicesSection();
+      case 'astrology': return const AstrologySection();
+      case 'donation':  return const DonationSection();
+      case 'festivals': return const FestivalsSection();
+      case 'knowledge': return const KnowledgeSection();
+      default: return const SizedBox.shrink();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final sections = ref.watch(homeSectionsProvider);
+
+    return Scaffold(
+      body: ListView(
+        children: [
+          const HeroBanner(),
+          ...sections.map(_buildSection), // Admin controls this order!
+          const AppDownloadBanner(),
+        ],
+      ),
+    );
+  }
+}</code></pre>
+
+<h3>Admin Section Toggle + Reorder (Firestore write)</h3>
+<pre><code>// admin: Update section visibility
+async function toggleSection(sectionKey: string, visible: boolean) {
+  await updateDoc(doc(db, 'cms', 'sections'), {
+    [`${sectionKey}.visible`]: visible,
+    updatedAt: serverTimestamp()
+  });
+  // Website + Apps update automatically via real-time listeners!
+}
+
+// admin: Save new section order after drag-drop
+async function saveOrder(orderedKeys: string[]) {
+  const updates: Record&lt;string, number&gt; = {};
+  orderedKeys.forEach((key, index) => {
+    updates[`${key}.order`] = index + 1;
+  });
+  await updateDoc(doc(db, 'cms', 'sections'), updates);
+}
+
+// admin: Add new section
+async function addSection(section: NewSection) {
+  const sectionsDoc = await getDoc(doc(db, 'cms', 'sections'));
+  const currentData = sectionsDoc.data() || {};
+  const maxOrder = Math.max(...Object.values(currentData).map((s: any) => s.order || 0), 0);
+
+  await updateDoc(doc(db, 'cms', 'sections'), {
+    [section.key]: {
+      name: section.name,
+      icon: section.icon,
+      visible: true,
+      order: maxOrder + 1,
+      createdAt: serverTimestamp()
+    }
+  });
+  // Appears on Website, Android, iOS immediately!
+}</code></pre>
+
+<h3>FCM Push Notification (Cloud Function)</h3>
+<pre><code>// functions/src/routes/notifications.ts
+import * as admin from 'firebase-admin';
+import express from 'express';
+
+const router = express.Router();
+
+router.post('/send', adminOnly, async (req, res) => {
+  const { title, body, target, imageUrl, link } = req.body;
+
+  const message: admin.messaging.MulticastMessage = {
+    notification: { title, body, imageUrl },
+    data: { link: link || '/', click_action: 'FLUTTER_NOTIFICATION_CLICK' },
+    android: { notification: { channelId: 'sanatani_main', color: '#FF6B00' } },
+    apns: { payload: { aps: { badge: 1, sound: 'default' } } },
+    tokens: await getTokensByTarget(target) // 'all' | 'android' | 'ios' | 'web'
+  };
+
+  const response = await admin.messaging().sendEachForMulticast(message);
+
+  // Log to Firestore
+  await admin.firestore().collection('notification_logs').add({
+    title, body, target, sentAt: admin.firestore.FieldValue.serverTimestamp(),
+    successCount: response.successCount, failureCount: response.failureCount
+  });
+
+  res.json({ success: true, sent: response.successCount });
+});</code></pre>
+
+<!-- ═══ FLUTTER PUBSPEC ═══ -->
+<h2>6. Flutter Dependencies (pubspec.yaml)</h2>
+<pre><code>name: sanatani_anthem
+description: SanataniAnthem - Spiritual Platform
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 &lt;4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Firebase
+  firebase_core: ^2.24.0
+  firebase_auth: ^4.16.0
+  cloud_firestore: ^4.14.0
+  firebase_storage: ^11.6.0
+  firebase_messaging: ^14.7.9
+
+  # State Management
+  flutter_riverpod: ^2.4.9
+
+  # Navigation
+  go_router: ^12.1.3
+
+  # Payments
+  razorpay_flutter: ^1.3.5
+
+  # UI
+  cached_network_image: ^3.3.1
+  flutter_svg: ^2.0.9
+  lottie: ^3.0.0          # Animations
+  shimmer: ^3.0.0          # Loading skeletons
+  infinite_scroll_pagination: ^4.0.0
+
+  # Media
+  youtube_player_flutter: ^8.1.2
+  video_player: ^2.8.2
+
+  # Utils
+  intl: ^0.19.0
+  url_launcher: ^6.2.2
+  share_plus: ^7.2.1
+  connectivity_plus: ^5.0.2
+  local_notifications: ^17.0.0</code></pre>
+
+<!-- ═══ DEPLOYMENT ═══ -->
+<h2>7. Deployment Guide</h2>
+
+<div class="card">
+<h3>Step 1: Firebase Setup</h3>
+<div class="step">
+  <div class="step-num">1</div>
+  <div class="step-body">
+    <div class="step-title">Create Firebase Project</div>
+    <pre><code>npm install -g firebase-tools
+firebase login
+firebase init
+# Select: Hosting, Firestore, Functions, Storage, Auth</code></pre>
+  </div>
+</div>
+<div class="step">
+  <div class="step-num">2</div>
+  <div class="step-body">
+    <div class="step-title">Configure Firestore Security Rules</div>
+    <pre><code>rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // CMS — only admins write
+    match /cms/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null && 
+                      get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    // Temples — public read
+    match /temples/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    // Users — read own, admin reads all
+    match /users/{uid} {
+      allow read, write: if request.auth.uid == uid;
+      allow read: if isAdmin();
+    }
+    // Bookings — user owns their bookings
+    match /bookings/{id} {
+      allow read, write: if request.auth != null && 
+                            request.auth.uid == resource.data.userId;
+      allow read, write: if isAdmin();
+    }
+    function isAdmin() {
+      return request.auth != null && 
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+  }
+}</code></pre>
+  </div>
+</div>
+<div class="step">
+  <div class="step-num">3</div>
+  <div class="step-body">
+    <div class="step-title">Deploy Website</div>
+    <pre><code>cd sanatani-web
+npm run build
+firebase deploy --only hosting</code></pre>
+  </div>
+</div>
+<div class="step">
+  <div class="step-num">4</div>
+  <div class="step-body">
+    <div class="step-title">Deploy API Functions</div>
+    <pre><code>cd sanatani-api
+npm run build
+firebase deploy --only functions</code></pre>
+  </div>
+</div>
+<div class="step">
+  <div class="step-num">5</div>
+  <div class="step-body">
+    <div class="step-title">Build Flutter App</div>
+    <pre><code># Android APK / AAB
+flutter build apk --release
+flutter build appbundle --release  # For Play Store
+
+# iOS
+flutter build ios --release
+# Then archive and upload via Xcode</code></pre>
+  </div>
+</div>
+</div>
+
+<!-- ═══ CHECKLIST ═══ -->
+<h2>8. Feature Checklist</h2>
+<div class="grid-2">
+<div class="card">
+<h3>✅ Admin Controls</h3>
+<ul class="checklist">
+  <li><span class="check-icon">✓</span>Toggle any section ON/OFF (Website + Apps update instantly)</li>
+  <li><span class="check-icon">✓</span>Drag-and-drop reorder homepage sections</li>
+  <li><span class="check-icon">✓</span>Add new sections dynamically</li>
+  <li><span class="check-icon">✓</span>Add/edit/delete navigation tabs</li>
+  <li><span class="check-icon">✓</span>Add/edit/delete temples</li>
+  <li><span class="check-icon">✓</span>Add/edit/delete puja offerings</li>
+  <li><span class="check-icon">✓</span>Add/edit/delete services</li>
+  <li><span class="check-icon">✓</span>Add festivals and articles</li>
+  <li><span class="check-icon">✓</span>Send push notifications to all platforms</li>
+  <li><span class="check-icon">✓</span>View user analytics and donations</li>
+  <li><span class="check-icon">✓</span>Manage platform branding and colors</li>
+  <li><span class="check-icon">✓</span>Role-based access control</li>
+</ul>
+</div>
+<div class="card">
+<h3>✅ Website Features</h3>
+<ul class="checklist">
+  <li><span class="check-icon">✓</span>Dynamic sections from Firestore real-time</li>
+  <li><span class="check-icon">✓</span>Daily Darshan with live stream badge</li>
+  <li><span class="check-icon">✓</span>Puja booking with Razorpay payment</li>
+  <li><span class="check-icon">✓</span>Dynamic services grid</li>
+  <li><span class="check-icon">✓</span>Vedic astrology section</li>
+  <li><span class="check-icon">✓</span>Donation portal with impact display</li>
+  <li><span class="check-icon">✓</span>Festival calendar</li>
+  <li><span class="check-icon">✓</span>Knowledge / articles section</li>
+  <li><span class="check-icon">✓</span>App download section</li>
+  <li><span class="check-icon">✓</span>Fully responsive design</li>
+  <li><span class="check-icon">✓</span>SEO-optimized (Next.js SSR)</li>
+  <li><span class="check-icon">✓</span>Firebase Auth (Google + Email)</li>
+</ul>
+</div>
+<div class="card">
+<h3>✅ Mobile App (Flutter)</h3>
+<ul class="checklist">
+  <li><span class="check-icon">✓</span>Single Flutter codebase → Android + iOS</li>
+  <li><span class="check-icon">✓</span>Dynamic home screen from Firestore</li>
+  <li><span class="check-icon">✓</span>Live temple darshan (YouTube player)</li>
+  <li><span class="check-icon">✓</span>Puja booking + payment</li>
+  <li><span class="check-icon">✓</span>Donation portal</li>
+  <li><span class="check-icon">✓</span>Push notifications (FCM)</li>
+  <li><span class="check-icon">✓</span>User profile + booking history</li>
+  <li><span class="check-icon">✓</span>Wallet / transaction history</li>
+  <li><span class="check-icon">✓</span>Festival notifications</li>
+  <li><span class="check-icon">✓</span>Offline reading (articles cached)</li>
+</ul>
+</div>
+<div class="card">
+<h3>✅ Platform Sync</h3>
+<ul class="checklist">
+  <li><span class="check-icon">✓</span>Single Firestore database for all platforms</li>
+  <li><span class="check-icon">✓</span>Real-time listeners on website</li>
+  <li><span class="check-icon">✓</span>Firestore SDK in Flutter apps</li>
+  <li><span class="check-icon">✓</span>Admin adds service → appears everywhere instantly</li>
+  <li><span class="check-icon">✓</span>Admin toggles section OFF → hidden everywhere instantly</li>
+  <li><span class="check-icon">✓</span>Admin reorders → new order on all platforms</li>
+  <li><span class="check-icon">✓</span>Notifications sent to Website + Android + iOS</li>
+  <li><span class="check-icon">✓</span>Shared user accounts across platforms</li>
+</ul>
+</div>
+</div>
+
+<div class="divider"></div>
+<p style="text-align:center;color:var(--text-l);font-family:'Cinzel',serif;font-size:13px;letter-spacing:1px">🕉 SanataniAnthem — हर घर मंदिर · Built with Dharma &amp; Technology</p>
+
+</div>
+</body>
+</html>
