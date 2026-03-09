@@ -25,7 +25,7 @@ const DEFAULT_NAV = [
   { emoji:'🎵', label:'Anthem',         url:'index.html#anthem',     visible:true },
   { emoji:'✈',  label:'Book Yatra',     url:'yatra.html',     visible:true },
   { emoji:'📚', label:'Sanskrit Sikho', url:'sanskrit.html',   visible:true },
-  { emoji:'⛩', label:'Pilgrimage',     url:'index.html#pilgrimage', visible:true },
+  { emoji:'⛩', label:'Pilgrimage',     url:'yatra.html', visible:true },
   { emoji:'🗺', label:'Maps',           url:'index.html#maps',       visible:true },
   { emoji:'🪔', label:'Puja',           url:'index.html#puja',       visible:true },
   { emoji:'🎶', label:'Bhajan Club',    url:'index.html#bhajan',     visible:true },

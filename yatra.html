@@ -383,6 +383,72 @@ body{
   .rb-grid{grid-template-columns:1fr;}
   .hero-h1{font-size:2rem;}
 }
+
+/* ── PILGRIMAGE ── */
+.tcard-body{padding:18px 20px;}
+.ptabs{flex-wrap:wrap;gap:6px;}
+.tc-tag{
+  padding:3px 10px;border-radius:20px;font-size:.62rem;font-weight:600;
+  background:rgba(255,107,0,.07);color:var(--sf);border:1px solid rgba(255,107,0,.15);
+}
+.tc-name{font-family:'Cinzel',serif;font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:7px;line-height:1.3;}
+.ptabs{
+  display:flex;gap:6px;flex-wrap:wrap;
+  margin-bottom:28px;
+  border-bottom:2px solid var(--border);padding-bottom:0;
+}
+.tcard{border-radius:14px;}
+.tc-price{font-family:'Cinzel',serif;font-size:1.3rem;color:var(--sf);font-weight:700;line-height:1;}
+.ptab{font-size:.68rem;padding:7px 12px;}
+.tcard:hover{transform:translateY(-7px);box-shadow:0 20px 50px rgba(255,107,0,.12);}
+.tc-desc{font-size:.78rem;}
+.ti4{background:linear-gradient(145deg,#FBE9E7,#FFAB91);}
+.ti2{background:linear-gradient(145deg,#F8E8FF,#E0B8FF);}
+.tcard-img{height:140px;font-size:2.2rem;}
+.tc-foot{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.ti3{background:linear-gradient(145deg,#E8F5E9,#A5D6A7);}
+.ti5{background:linear-gradient(145deg,#E0F2F1,#80CBC4);}
+.temple-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;}
+.tc-btn{
+  padding:9px 18px;border-radius:25px;border:none;cursor:pointer;
+  background:linear-gradient(135deg,var(--sf),#C85000);
+  color:#fff;font-family:'DM Sans',sans-serif;
+  font-weight:700;font-size:.75rem;transition:all .3s;
+}
+.ptab{font-size:.7rem;padding:8px 14px;}
+.tc-name{font-size:.95rem;}
+.tc-desc{font-size:.77rem;color:var(--text-m);line-height:1.55;margin-bottom:14px;}
+.tcard-img{
+  height:150px;display:flex;align-items:center;justify-content:center;
+  font-size:4.5rem;position:relative;
+}
+.tc-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px;}
+.tc-state{font-size:.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--sf);margin-bottom:4px;}
+.tcard-img{height:160px;}
+.ptab.on{
+  background:#fff;border-color:var(--border);
+  color:var(--sf);border-bottom:2px solid #fff;
+}
+.tc-price small{font-size:.65rem;color:var(--text-l);font-family:'DM Sans',sans-serif;font-weight:400;}
+.ptab{
+  padding:10px 22px;border:none;border-radius:10px 10px 0 0;
+  background:transparent;font-family:'DM Sans',sans-serif;
+  font-weight:600;font-size:.8rem;color:var(--text-m);
+  cursor:pointer;transition:all .2s;
+  border:1px solid transparent;border-bottom:none;
+  position:relative;bottom:-2px;
+}
+.pcontent{display:none;}
+.temple-grid{grid-template-columns:1fr;gap:16px;}
+.temple-grid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr));}
+.tcard-body{padding:14px;}
+.ti1{background:linear-gradient(145deg,#FFF3E0,#FFE0B2);}
+.tcard{
+  background:#fff;border-radius:var(--r20);overflow:hidden;
+  border:1px solid var(--border);transition:all .35s;
+}
+.tc-btn:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(255,107,0,.35);}
+.pcontent.on{display:block;}
 </style>
 </head>
 <body>
@@ -484,6 +550,145 @@ body{
         <div class="dest-price">From ₹6,999/person</div>
       </div>
     </div>
+  </div>
+</section>
+
+
+<!-- ════════ EXPLORE HOLY YATRAS ════════ -->
+<section class="dest-section" style="background:var(--cream);padding:56px 24px;">
+  <div class="sec-inner">
+    
+    <span class="sec-label reveal">⛩ Sacred Pilgrimage</span>
+    <h2 class="sec-h2 reveal">
+      <span class="lang-en">Explore <span class="ita">Holy Yatras</span></span>
+      <span class="lang-sa">पवित्र <span class="ita">तीर्थयात्रा</span> अन्वेषण</span>
+    </h2>
+    <div class="sec-rule reveal"><div class="sec-rule-bar"></div><div class="sec-rule-dot"></div></div>
+
+    <div class="ptabs reveal">
+      <button class="ptab on" onclick="setPTab(this,'shakti')">🔱 51 Shakti Peetha</button>
+      <button class="ptab" onclick="setPTab(this,'jyoti')">🕌 12 Jyotirlinga</button>
+      <button class="ptab" onclick="setPTab(this,'char')">🏔 Char Dham</button>
+      <button class="ptab" onclick="setPTab(this,'divya')">🛕 Divya Desam</button>
+    </div>
+
+    <!-- Shakti Peetha -->
+    <div class="pcontent on" id="pc-shakti">
+      <div style="background:rgba(255,107,0,.05);border:1px solid rgba(255,107,0,.12);border-radius:var(--r12);padding:16px 20px;margin-bottom:24px;font-size:.84rem;color:var(--text-m);line-height:1.7;">
+        🌺 <strong>51 Shakti Peetha</strong> — Sacred sites where parts of Goddess Sati's body fell. Each has a presiding Devi, a Bhairava, and immense spiritual power. Spread across India, Nepal, Bangladesh & Sri Lanka.
+      </div>
+      <div class="temple-grid">
+        <div class="tcard reveal d1">
+          <div class="tcard-img ti2">🌺</div>
+          <div class="tcard-body">
+            <div class="tc-state">📍 Guwahati, Assam</div>
+            <div class="tc-name">Kamakhya Devi</div>
+            <div class="tc-desc">Most powerful of all 51 Shakti Peethas. The divine womb of Maa Sati. Ambubachi Mela attracts millions.</div>
+            <div class="tc-tags"><span class="tc-tag">Shakti Peetha</span><span class="tc-tag">✈ Flight Available</span></div>
+            <div class="tc-foot">
+              <div class="tc-price">₹6,999<br><small>/ person</small></div>
+              <button class="tc-btn" onclick="bookIt('Kamakhya Devi, Guwahati','₹6,999')">Book 🙏</button>
+            </div>
+          </div>
+        </div>
+        <div class="tcard reveal d2">
+          <div class="tcard-img ti1">🔱</div>
+          <div class="tcard-body">
+            <div class="tc-state">📍 Kolkata, West Bengal</div>
+            <div class="tc-name">Kalighat — Maa Kali</div>
+            <div class="tc-desc">One of the most revered Shakti Peethas in India. Right toes of Sati fell here. Ancient temple in heart of Kolkata.</div>
+            <div class="tc-tags"><span class="tc-tag">Shakti Peetha</span><span class="tc-tag">🚂 Train</span></div>
+            <div class="tc-foot">
+              <div class="tc-price">₹3,499<br><small>/ person</small></div>
+              <button class="tc-btn" onclick="bookIt('Kalighat Kolkata','₹3,499')">Book 🙏</button>
+            </div>
+          </div>
+        </div>
+        <div class="tcard reveal d3">
+          <div class="tcard-img ti4">🌸</div>
+          <div class="tcard-body">
+            <div class="tc-state">📍 Varanasi, Uttar Pradesh</div>
+            <div class="tc-name">Vishalakshi Varanasi</div>
+            <div class="tc-desc">Devi Sati's earrings fell here. Near Manikarnika Ghat. Combined with Kashi Vishwanath darshan.</div>
+            <div class="tc-tags"><span class="tc-tag">Shakti Peetha</span><span class="tc-tag">Ganga Aarti</span></div>
+            <div class="tc-foot">
+              <div class="tc-price">₹5,499<br><small>/ person</small></div>
+              <button class="tc-btn" onclick="bookIt('Vishalakshi Varanasi','₹5,499')">Book 🙏</button>
+            </div>
+          </div>
+        </div>
+        <div class="tcard reveal d4">
+          <div class="tcard-img ti5">🏔</div>
+          <div class="tcard-body">
+            <div class="tc-state">📍 Jammu & Kashmir</div>
+            <div class="tc-name">Vaishno Devi</div>
+            <div class="tc-desc">Right arm of Sati fell here. Cave shrine at Trikuta hills. Millions visit annually. Ropeway + trek options.</div>
+            <div class="tc-tags"><span class="tc-tag">Shakti Peetha</span><span class="tc-tag">✈ + Trek</span></div>
+            <div class="tc-foot">
+              <div class="tc-price">₹8,999<br><small>/ person</small></div>
+              <button class="tc-btn" onclick="bookIt('Vaishno Devi','₹8,999')">Book 🙏</button>
+            </div>
+          </div>
+        </div>
+        <div class="tcard reveal d1">
+          <div class="tcard-img ti3">✨</div>
+          <div class="tcard-body">
+            <div class="tc-state">📍 Haridwar, Uttarakhand</div>
+            <div class="tc-name">Maya Devi Peetha</div>
+            <div class="tc-desc">Heart and navel of Sati fell here. Near sacred Har Ki Pauri. One of the oldest Shakti shrines.</div>
+            <div class="tc-tags"><span class="tc-tag">Shakti Peetha</span><span class="tc-tag">Ganga Aarti</span></div>
+            <div class="tc-foot">
+              <div class="tc-price">₹4,499<br><small>/ person</small></div>
+              <button class="tc-btn" onclick="bookIt('Maya Devi Haridwar','₹4,499')">Book 🙏</button>
+            </div>
+          </div>
+        </div>
+        <div class="tcard reveal d2">
+          <div class="tcard-img ti2">🌊</div>
+          <div class="tcard-body">
+            <div class="tc-state">📍 Ujjain, Madhya Pradesh</div>
+            <div class="tc-name">Harsiddhi Shakti Peetha</div>
+            <div class="tc-desc">Elbow of Sati fell here. Near Mahakaleshwar. Combine with Bhasma Aarti for a complete experience.</div>
+            <div class="tc-tags"><span class="tc-tag">Shakti Peetha</span><span class="tc-tag">Mahakal combo</span></div>
+            <div class="tc-foot">
+              <div class="tc-price">₹5,999<br><small>/ person</small></div>
+              <button class="tc-btn" onclick="bookIt('Harsiddhi Ujjain','₹5,999')">Book 🙏</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Jyotirlinga -->
+    <div class="pcontent" id="pc-jyoti">
+      <div class="temple-grid">
+        <div class="tcard reveal d1"><div class="tcard-img ti1">🕌</div><div class="tcard-body"><div class="tc-state">📍 Varanasi, UP</div><div class="tc-name">Kashi Vishwanath</div><div class="tc-desc">One of the 12 Jyotirlingas. The eternal city of Lord Shiva. New grand corridor darshan. Ganga Aarti included.</div><div class="tc-tags"><span class="tc-tag">Jyotirlinga</span><span class="tc-tag">Ganga Aarti</span></div><div class="tc-foot"><div class="tc-price">₹5,999<br><small>/ person</small></div><button class="tc-btn" onclick="bookIt('Kashi Vishwanath','₹5,999')">Book 🙏</button></div></div></div>
+        <div class="tcard reveal d2"><div class="tcard-img ti3">🏔</div><div class="tcard-body"><div class="tc-state">📍 Rudraprayag, Uttarakhand</div><div class="tc-name">Kedarnath</div><div class="tc-desc">Himalayan Shiva shrine at 3,583m altitude. Helicopter or 18km trek. Most powerful Jyotirlinga.</div><div class="tc-tags"><span class="tc-tag">Jyotirlinga</span><span class="tc-tag">Heli Available</span></div><div class="tc-foot"><div class="tc-price">₹14,999<br><small>/ person</small></div><button class="tc-btn" onclick="bookIt('Kedarnath','₹14,999')">Book 🙏</button></div></div></div>
+        <div class="tcard reveal d3"><div class="tcard-img ti5">🌊</div><div class="tcard-body"><div class="tc-state">📍 Somnath, Gujarat</div><div class="tc-name">Somnath — First Jyotirlinga</div><div class="tc-desc">The eternal first Jyotirlinga on the Arabian Sea coast. Rebuilt 7 times, stands eternal. Sound & Light show.</div><div class="tc-tags"><span class="tc-tag">Jyotirlinga</span><span class="tc-tag">Arabian Sea</span></div><div class="tc-foot"><div class="tc-price">₹7,999<br><small>/ person</small></div><button class="tc-btn" onclick="bookIt('Somnath','₹7,999')">Book 🙏</button></div></div></div>
+        <div class="tcard reveal d4"><div class="tcard-img ti4">🔱</div><div class="tcard-body"><div class="tc-state">📍 Ujjain, Madhya Pradesh</div><div class="tc-name">Mahakaleshwar</div><div class="tc-desc">The only south-facing Jyotirlinga. World-famous Bhasma Aarti at 4 AM with sacred ash ritual from cremation ground.</div><div class="tc-tags"><span class="tc-tag">Jyotirlinga</span><span class="tc-tag">Bhasma Aarti</span></div><div class="tc-foot"><div class="tc-price">₹5,499<br><small>/ person</small></div><button class="tc-btn" onclick="bookIt('Mahakaleshwar Ujjain','₹5,499')">Book 🙏</button></div></div></div>
+        <div class="tcard reveal d1"><div class="tcard-img ti2">🌺</div><div class="tcard-body"><div class="tc-state">📍 Rameshwaram, Tamil Nadu</div><div class="tc-name">Ramanathaswamy</div><div class="tc-desc">Where Lord Rama installed a Shivalinga. 22 sacred theerthams. Longest corridor in any Indian temple.</div><div class="tc-tags"><span class="tc-tag">Jyotirlinga</span><span class="tc-tag">Ram Setu</span></div><div class="tc-foot"><div class="tc-price">₹6,999<br><small>/ person</small></div><button class="tc-btn" onclick="bookIt('Rameshwaram','₹6,999')">Book 🙏</button></div></div></div>
+        <div class="tcard reveal d2"><div class="tcard-img ti1">⛰</div><div class="tcard-body"><div class="tc-state">📍 Trimbak, Maharashtra</div><div class="tc-name">Trimbakeshwar</div><div class="tc-desc">Source of River Godavari. Unique three-faced Shivalinga representing Brahma, Vishnu, and Mahesh.</div><div class="tc-tags"><span class="tc-tag">Jyotirlinga</span><span class="tc-tag">Godavari source</span></div><div class="tc-foot"><div class="tc-price">₹4,999<br><small>/ person</small></div><button class="tc-btn" onclick="bookIt('Trimbakeshwar','₹4,999')">Book 🙏</button></div></div></div>
+      </div>
+    </div>
+
+    <!-- Char Dham -->
+    <div class="pcontent" id="pc-char">
+      <div class="temple-grid">
+        <div class="tcard reveal d1"><div class="tcard-img ti3">🏔</div><div class="tcard-body"><div class="tc-state">📍 All Uttarakhand</div><div class="tc-name">Char Dham Complete Package</div><div class="tc-desc">All four in one yatra: Yamunotri • Gangotri • Kedarnath • Badrinath. The ultimate spiritual circuit.</div><div class="tc-tags"><span class="tc-tag">Char Dham</span><span class="tc-tag">10 Nights</span></div><div class="tc-foot"><div class="tc-price">₹39,999<br><small>/ person</small></div><button class="tc-btn" onclick="bookIt('Full Char Dham Yatra','₹39,999')">Book 🙏</button></div></div></div>
+        <div class="tcard reveal d2"><div class="tcard-img ti5">🌊</div><div class="tcard-body"><div class="tc-state">📍 Uttarkashi, UK</div><div class="tc-name">Gangotri — Ganga Origin</div><div class="tc-desc">Source of the holy River Ganga. Goddess Ganga descended here. Sacred bathing in Bhagirathi river.</div><div class="tc-tags"><span class="tc-tag">Char Dham</span><span class="tc-tag">Ganga source</span></div><div class="tc-foot"><div class="tc-price">₹8,999<br><small>/ person</small></div><button class="tc-btn" onclick="bookIt('Gangotri','₹8,999')">Book 🙏</button></div></div></div>
+        <div class="tcard reveal d3"><div class="tcard-img ti1">✨</div><div class="tcard-body"><div class="tc-state">📍 Chamoli, Uttarakhand</div><div class="tc-name">Badrinath Dham</div><div class="tc-desc">Lord Vishnu's eternal abode. Tapt Kund hot spring. Flanked by Nar and Narayan peaks. Open May–Nov only.</div><div class="tc-tags"><span class="tc-tag">Char Dham</span><span class="tc-tag">Vishnu</span></div><div class="tc-foot"><div class="tc-price">₹10,999<br><small>/ person</small></div><button class="tc-btn" onclick="bookIt('Badrinath','₹10,999')">Book 🙏</button></div></div></div>
+      </div>
+    </div>
+
+    <!-- Divya Desam -->
+    <div class="pcontent" id="pc-divya">
+      <div class="temple-grid">
+        <div class="tcard reveal d1"><div class="tcard-img ti2">🛕</div><div class="tcard-body"><div class="tc-state">📍 Tirupati, Andhra Pradesh</div><div class="tc-name">Tirupati Venkateshwara</div><div class="tc-desc">Most visited temple on Earth. Richest temple. Special darshan + famous Laddu prasadam included.</div><div class="tc-tags"><span class="tc-tag">Divya Desam</span><span class="tc-tag">Special Darshan</span></div><div class="tc-foot"><div class="tc-price">₹7,499<br><small>/ person</small></div><button class="tc-btn" onclick="bookIt('Tirupati Balaji','₹7,499')">Book 🙏</button></div></div></div>
+        <div class="tcard reveal d2"><div class="tcard-img ti4">🌺</div><div class="tcard-body"><div class="tc-state">📍 Puri, Odisha</div><div class="tc-name">Jagannath Puri</div><div class="tc-desc">Lord of the Universe. One of the four sacred Dhams. World-famous Rath Yatra with massive chariots.</div><div class="tc-tags"><span class="tc-tag">Char Dham</span><span class="tc-tag">Rath Yatra</span></div><div class="tc-foot"><div class="tc-price">₹6,499<br><small>/ person</small></div><button class="tc-btn" onclick="bookIt('Jagannath Puri','₹6,499')">Book 🙏</button></div></div></div>
+        <div class="tcard reveal d3"><div class="tcard-img ti5">🌊</div><div class="tcard-body"><div class="tc-state">📍 Srirangam, Tamil Nadu</div><div class="tc-name">Srirangam Ranganatha</div><div class="tc-desc">Largest functioning Hindu temple. First of the 108 Divya Desams. Island temple in River Kaveri.</div><div class="tc-tags"><span class="tc-tag">Divya Desam</span><span class="tc-tag">Largest Temple</span></div><div class="tc-foot"><div class="tc-price">₹8,999<br><small>/ person</small></div><button class="tc-btn" onclick="bookIt('Srirangam','₹8,999')">Book 🙏</button></div></div></div>
+      </div>
+    </div>
+  
   </div>
 </section>
 
@@ -751,6 +956,16 @@ function showBookingOptions(from, to) {
   document.body.appendChild(ov);
 }
 
+function bookIt(name,price){
+  toast('🙏 Initiating booking for '+name+' — '+price+'. Scroll to Travel section to complete.');
+  document.getElementById('travel').scrollIntoView({behavior:'smooth'});
+}
+function setPTab(el,id){
+  document.querySelectorAll('.ptab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.pcontent').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('pc-'+id).classList.add('on');
+}
 /* ── TOAST ── */
 let tTimer;
 function toast(msg) {
