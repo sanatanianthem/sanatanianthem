@@ -6,19 +6,7 @@
  * ══════════════════════════════════════════════════════════
  */
 
-import { initializeApp }
-  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, doc, onSnapshot }
-  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey:            "AIzaSyBC1yt-YE74pKCKMfukmc7_3vicM49h6vE",
-  authDomain:        "sanatanianthem-652a3.firebaseapp.com",
-  projectId:         "sanatanianthem-652a3",
-  storageBucket:     "sanatanianthem-652a3.firebasestorage.app",
-  messagingSenderId: "1031082702558",
-  appId:             "1:1031082702558:web:744ffa9cfa54ff838db44f",
-};
+// No Firebase needed — nav is hardcoded for reliability
 
 const DEFAULT_NAV = [
   { emoji:'',   label:'Home',           url:'index.html',            visible:true },
@@ -172,17 +160,5 @@ window.uhToggleLang = function() {
   document.querySelectorAll('.lang-sa').forEach(x => x.style.display = isSa ? ''     : 'none');
 };
 
-/* ── INIT: always use DEFAULT_NAV (source of truth) ── */
+/* ── INIT: render immediately, no Firebase override ── */
 renderHeader(DEFAULT_NAV);
-
-try {
-  const app = initializeApp(firebaseConfig);
-  const db  = getFirestore(app);
-  onSnapshot(doc(db, 'siteConfig', 'main'), snap => {
-    // Nav is hardcoded in DEFAULT_NAV — ignore Firebase nav to prevent stale overrides
-    // Only Firebase footer/links data is used from here
-    renderHeader(DEFAULT_NAV);
-  });
-} catch(e) {
-  console.warn('SA Header: using defaults.', e);
-}
