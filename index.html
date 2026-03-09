@@ -624,47 +624,18 @@ body{
    SANSKRIT SIKHO
 ══════════════════════════════════════════ */
 .sa-section{background:linear-gradient(170deg,#070415,#0F0A25);}
-.alpha-grid{
-  display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));
-  gap:10px;margin-bottom:40px;
-}
-.a-card{
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(200,137,10,.15);
-  border-radius:var(--r12);padding:14px 8px;
-  text-align:center;cursor:pointer;transition:all .25s;
-}
-.a-card:hover{
-  background:rgba(255,107,0,.1);
-  border-color:rgba(255,107,0,.35);
-  transform:translateY(-4px) scale(1.04);
-}
-.a-deva{
-  font-family:'Tiro Devanagari Sanskrit',serif;
-  font-size:1.7rem;color:var(--gold-l);display:block;line-height:1.1;
-}
-.a-rom{font-size:.62rem;color:rgba(255,255,255,.35);margin-top:4px;}
-.words-grid{
-  display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
-  gap:14px;
-}
-.w-card{
-  background:rgba(255,255,255,.04);border:1px solid rgba(200,137,10,.15);
-  border-radius:var(--r16);padding:18px 16px;cursor:pointer;transition:all .25s;
-}
-.w-card:hover{border-color:rgba(255,107,0,.35);transform:translateY(-4px);}
-.w-sa{
-  font-family:'Tiro Devanagari Sanskrit',serif;
-  font-size:1.25rem;color:var(--gold-l);display:block;margin-bottom:4px;
-}
-.w-en{font-size:.78rem;color:rgba(255,255,255,.35);}
-.w-play{
-  margin-top:10px;padding:4px 12px;border-radius:20px;
-  background:rgba(255,107,0,.12);border:1px solid rgba(255,107,0,.2);
-  color:var(--sf);font-size:.63rem;font-weight:700;
-  cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;
-}
-.w-play:hover{background:var(--sf);color:#fff;}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -756,33 +727,20 @@ body{
 /* ══════════════════════════════════════════
    BHAJAN SECTION
 ══════════════════════════════════════════ */
-.bhajan-sec{
-  background:linear-gradient(135deg,#0C0418,#16072E,#1E080E);
-  padding:90px 20px;position:relative;overflow:hidden;
-}
-.bhajan-sec::before{
-  content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse at 50% 50%,rgba(255,107,0,.06),transparent 70%);
-}
-.modi-quote{
-  background:rgba(255,255,255,.04);border:1px solid rgba(255,107,0,.2);
-  border-left:4px solid var(--sf);border-radius:var(--r16);
-  padding:28px 30px;margin-bottom:32px;
-}
+
+
+
 .mq-text{
   font-family:'Cinzel',serif;font-style:italic;
   font-size:1.1rem;color:var(--gold-l);line-height:1.65;margin-bottom:10px;
 }
 .mq-src{font-size:.7rem;color:rgba(255,255,255,.28);letter-spacing:2px;text-transform:uppercase;}
-.bj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:18px;}
-.bj-card{
-  background:rgba(255,255,255,.04);border:1px solid rgba(255,107,0,.1);
-  border-radius:var(--r16);padding:24px;transition:all .35s;
-}
-.bj-card:hover{border-color:rgba(255,107,0,.35);transform:translateY(-6px);}
-.bj-ico{font-size:2rem;margin-bottom:12px;display:block;}
-.bj-title{font-family:'Cinzel',serif;font-size:.92rem;color:#fff;margin-bottom:6px;}
-.bj-desc{font-size:.77rem;color:rgba(255,255,255,.35);line-height:1.6;}
+
+
+
+
+
+
 
 /* ══════════════════════════════════════════
    MODALS
@@ -977,7 +935,7 @@ footer{
   .fm-controls{margin-left:0;}
   
   .svc-grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));}
-  .bj-grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));}
+  
 }
 
 @media(max-width:768px){
@@ -1016,13 +974,13 @@ footer{
   
 
   /* BHAJAN / MUSIC */
-  .bhajan-sec{padding:40px 16px;}
-  .bj-grid{grid-template-columns:1fr 1fr;gap:12px;}
-  .bj-card{padding:14px;}
+  
+  
+  
 
   /* SANSKRIT */
   
-  .w-card{padding:12px 14px;}
+  
 
   /* SERVICES */
   .svc-grid{grid-template-columns:1fr 1fr;gap:12px;}
@@ -1070,7 +1028,7 @@ footer{
   
 
   /* BHAJAN */
-  .bj-grid{grid-template-columns:1fr;}
+  
   .fm-top{flex-direction:column;gap:8px;text-align:center;}
 
   /* SANSKRIT */
@@ -1273,7 +1231,7 @@ footer{
     
     
     <a class="chip" href="sanatani-anthem-mantras.html">🎵 Hanuman Chalisa</a>
-    <a class="chip" href="sanskrit.html">📖 Sanskrit Sikho</a>
+    
   </div>
 
   <div class="hero-stats reveal d5">
@@ -1337,25 +1295,7 @@ footer{
 <!-- ══════════════════════════════════════════
      BHAJAN CLUBBING
 ══════════════════════════════════════════ -->
-<section class="bhajan-sec" id="bhajan">
-  <div class="sec-inner" style="position:relative;z-index:1;">
-    <span class="sec-label reveal" style="color:var(--sf);">🎶 Mann Ki Baat — January 2026</span>
-    <h2 class="sec-h2 reveal" style="color:#fff;">Bhajan <span class="ita">Clubbing</span> — Gen Z Devotion</h2>
-    <div class="sec-rule reveal"><div class="sec-rule-bar"></div><div class="sec-rule-dot"></div></div>
 
-    <div class="modi-quote reveal">
-      <div class="mq-text">"These bhajan/kirtan gatherings — with modern lights and music — are no less than global concerts. Gen Z is not abandoning tradition; they are celebrating it in their own beautiful way."</div>
-      <div class="mq-src">— Prime Minister Narendra Modi · Mann Ki Baat 130th Episode · January 2026</div>
-    </div>
-
-    <div class="bj-grid">
-      <div class="bj-card reveal d1"><span class="bj-ico">🎵</span><div class="bj-title">Modern Stage, Ancient Soul</div><div class="bj-desc">DJ-style lights, electronic beats, live instruments — but the bhajans, mantras, and devotion remain pure and timeless.</div></div>
-      <div class="bj-card reveal d2"><span class="bj-ico">📱</span><div class="bj-title">Gen Z Going Spiritual</div><div class="bj-desc">Youth sharing bhajan events on Instagram and YouTube. Cultural revival happening organically through social media virality.</div></div>
-      <div class="bj-card reveal d3"><span class="bj-ico">🌆</span><div class="bj-title">City-Wide Bhajan Concerts</div><div class="bj-desc">From colony gatherings to stadium-scale bhajan nights — every city resonating with devotional energy.</div></div>
-      <div class="bj-card reveal d4"><span class="bj-ico">🤝</span><div class="bj-title">Sanatani Unity</div><div class="bj-desc">Bhajan clubbing unites North and South, young and old, across all sampradayas — one beat, one bhajan, one nation.</div></div>
-    </div>
-  </div>
-</section>
 
 <!-- ══════════════════════════════════════════
      FOOTER
@@ -1396,10 +1336,10 @@ footer{
       <div class="foot-col">
         <div class="foot-col-h">Learn</div>
         <ul>
-          <li><a href="sanskrit.html">Sanskrit Sikho</a></li>
+          <li></li>
           <li><a href="sanatani-anthem-mantras.html">Hanuman Chalisa</a></li>
           <li><a href="sanatani-anthem-mantras.html">Sarve Bhavantu</a></li>
-          <li><a href="#bhajan">Bhajan Clubbing</a></li>
+          <li></li>
           <li></li>
         </ul>
       </div>
@@ -1821,9 +1761,9 @@ function doSearch(){
     'kedarnath':'#pilgrimage','varanasi':'#pilgrimage','tirupati':'#pilgrimage',
     'shakti':'#pilgrimage','jyotirlinga':'#pilgrimage','char dham':'#pilgrimage',
     'ramayana':'#maps','mahabharata':'#maps','ram':'#maps','krishna':'#maps',
-    'sanskrit':'#sanskrit','chalisa':'#anthem','sarve':'#anthem',
+    ,
     'puja':'#puja','pandit':'#puja','prasad':'#puja',
-    'bhajan':'#bhajan','modi':'#bhajan',
+    ,
     'book':'#puja','yatra':'#puja','train':'#puja'
   };
   let dest='#pilgrimage';
