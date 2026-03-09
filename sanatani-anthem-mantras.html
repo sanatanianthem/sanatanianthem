@@ -1,0 +1,1977 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quantum Field 🕉 — SanataniAnthem</title>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Sanskrit&family=Cinzel:wght@400;600;700;900&family=Cinzel+Decorative:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&family=Raleway:wght@700;800;900&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sf:#FF6B00; --sf-light:#FF9A3C; --sf-pale:#FFF3E0;
+  --gold:#C8890A; --gold-l:#F2C94C;
+  --green:#138808; --navy:#000080;
+  --cream:#FFFDF8; --cream2:#FFF7ED;
+  --text:#1C0D00; --text-m:#5C3A18; --text-l:#A07040;
+  --border:rgba(200,137,10,0.18);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--cream);
+  color:var(--text);
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-thumb{background:linear-gradient(var(--sf),var(--green));border-radius:5px;}
+
+/* ── INDIA FLAG STRIPE ── */
+
+.flag-top::after{
+  content:'';position:absolute;left:50%;top:50%;
+  transform:translate(-50%,-50%);
+  width:14px;height:14px;border-radius:50%;
+  border:2px solid #000080;opacity:.25;
+}
+
+/* ── NAV ── */
+nav{
+  position:sticky;top:0;z-index:999;
+  background:rgba(255,253,248,.97);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);
+  box-shadow:0 2px 16px rgba(255,107,0,.08);
+}
+.nav-wrap{
+  max-width:1440px;margin:0 auto;padding:0 20px;
+  height:76px;display:flex;align-items:center;gap:12px;
+}
+.nav-logo{
+  display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;
+  background:transparent;border:none;border-radius:30px;
+  padding:4px 16px 4px 4px;box-shadow:none;
+}
+.nav-brand{
+  font-family:'Raleway',sans-serif;font-weight:900;font-size:2rem;
+  letter-spacing:2px;text-transform:none;font-variant:normal;font-style:normal;
+}
+.nav-brand .nb-s{
+  color:#8B2500;font-family:'Raleway',sans-serif;font-weight:900;font-style:normal;
+  text-shadow:0 0 8px rgba(255,255,255,1),0 0 16px rgba(255,255,255,.9),0 0 28px rgba(255,255,255,.7),0 0 6px rgba(139,37,0,.5);
+}
+.nav-brand .nb-a{
+  color:#004d00;font-family:'Raleway',sans-serif;font-weight:900;font-style:normal;
+  text-shadow:0 0 8px rgba(255,255,255,1),0 0 16px rgba(255,255,255,.9),0 0 28px rgba(255,255,255,.7),0 0 6px rgba(0,77,0,.4);
+}
+.nav-links{
+  display:flex;align-items:center;gap:2px;overflow-x:auto;
+  scrollbar-width:none;flex:1;
+}
+.nav-links::-webkit-scrollbar{display:none;}
+.nav-links a{
+  white-space:nowrap;padding:7px 13px;border-radius:10px;
+  text-decoration:none;color:var(--text-m);font-size:.78rem;font-weight:600;
+  letter-spacing:.3px;transition:all .2s;
+}
+.nav-links a:hover{background:rgba(255,107,0,.08);color:var(--sf);}
+.nav-links a.act{background:rgba(255,107,0,.1);color:var(--sf);}
+.nav-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+
+  padding:9px 20px;border-radius:30px;
+  background:linear-gradient(135deg,var(--sf),#C85000);
+  color:#fff;border:none;cursor:pointer;
+  font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:700;
+  letter-spacing:.5px;box-shadow:0 4px 14px rgba(255,107,0,.3);
+  transition:all .3s;text-decoration:none;
+}
+.nav-book:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(255,107,0,.45);}
+.nav-admin{
+  padding:7px 14px;border-radius:20px;border:1px solid var(--border);
+  font-size:.7rem;font-weight:600;color:var(--text-l);
+  background:transparent;cursor:pointer;transition:all .2s;
+  font-family:'DM Sans',sans-serif;
+}
+.nav-admin:hover{border-color:var(--sf);color:var(--sf);}
+flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px;}
+.ham span{display:block;width:22px;height:2px;background:var(--sf);border-radius:2px;transition:all .3s;}
+@media(max-width:768px){
+  .nav-links{display:none;position:absolute;top:76px;left:0;right:0;background:rgba(255,253,248,.98);border-bottom:1px solid var(--border);flex-direction:column;padding:12px 20px;gap:4px;}
+  .nav-links.open{display:flex;}
+  .ham{display:flex;}
+  .nav-brand{font-size:1.7rem;}
+}
+
+/* ── LANGUAGE SYSTEM ── */
+[data-lang="sa"] .lang-en{display:none!important;}
+[data-lang="en"] .lang-sa{display:none!important;}
+
+/* ── LANGUAGE TOGGLE ── */
+.lang-toggle{
+  display:flex;align-items:center;gap:8px;
+  cursor:pointer;user-select:none;
+  padding:4px 8px;border-radius:30px;
+  transition:all .2s;
+}
+.lang-toggle:hover{background:rgba(255,107,0,.06);}
+.lt-label{
+  font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:700;
+  letter-spacing:.5px;transition:all .25s;
+}
+.lt-en{color:var(--sf);}
+.lt-sa{color:var(--text-l);font-family:'Tiro Devanagari Sanskrit',serif;font-size:.75rem;}
+.lang-toggle.sa-on .lt-en{color:var(--text-l);}
+.lang-toggle.sa-on .lt-sa{color:var(--sf);}
+.lt-track{
+  width:42px;height:22px;border-radius:30px;
+  background:rgba(255,107,0,.15);
+  border:1.5px solid rgba(255,107,0,.3);
+  position:relative;transition:background .3s,border-color .3s;
+  flex-shrink:0;
+}
+.lang-toggle.sa-on .lt-track{background:rgba(255,107,0,.25);border-color:var(--sf);}
+.lt-thumb{
+  position:absolute;top:2px;left:2px;
+  width:14px;height:14px;border-radius:50%;
+  background:var(--sf);
+  box-shadow:0 1px 4px rgba(255,107,0,.4);
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1);
+}
+.lang-toggle.sa-on .lt-thumb{transform:translateX(20px);}
+
+
+#qf-canvas{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  pointer-events:none;z-index:0;opacity:.45;
+}
+
+/* ── HEADER ── */
+.qf-header{
+  position:relative;z-index:10;
+  text-align:center;
+  padding:44px 20px 28px;
+  background:linear-gradient(180deg,rgba(255,107,0,.07) 0%,transparent 100%);
+}
+  font-size:4rem;margin-bottom:10px;
+  display:inline-block;
+  animation:omPulse 3s ease-in-out infinite;
+  filter:drop-shadow(0 0 18px rgba(255,107,0,.5));
+}
+@keyframes omPulse{
+  0%,100%{transform:scale(1);}
+  50%{transform:scale(1.08);}
+}
+.qf-title{
+  font-family:'Cinzel Decorative',serif;font-weight:900;
+  font-size:clamp(1.6rem,5vw,3rem);
+  background:linear-gradient(135deg,var(--sf),var(--gold),var(--green));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  letter-spacing:3px;margin-bottom:8px;
+}
+.qf-sub{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  color:var(--text-l);font-size:1rem;letter-spacing:1px;
+}
+
+/* ── TAB NAV ── */
+.tab-nav{
+  position:sticky;top:5px;z-index:100;
+  display:flex;justify-content:center;gap:8px;
+  padding:14px 20px;
+  background:rgba(255,253,248,.9);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  flex-wrap:wrap;
+}
+.tab-btn{
+  display:flex;align-items:center;gap:7px;
+  padding:9px 18px;border-radius:30px;
+  border:1.5px solid var(--border);
+  background:transparent;cursor:pointer;
+  font-family:'Raleway',sans-serif;font-weight:700;
+  font-size:.75rem;letter-spacing:.5px;
+  color:var(--text-m);transition:all .22s;
+  white-space:nowrap;
+}
+.tab-btn:hover{border-color:var(--sf);color:var(--sf);background:rgba(255,107,0,.05);}
+.tab-btn.active{
+  background:linear-gradient(135deg,var(--sf),var(--sf-light));
+  color:#fff;border-color:transparent;
+  box-shadow:0 4px 16px rgba(255,107,0,.35);
+}
+.tab-icon{font-size:1.1rem;}
+
+/* ── MAIN CONTENT ── */
+.qf-main{
+  position:relative;z-index:5;
+  max-width:900px;margin:0 auto;
+  padding:40px 20px 80px;
+}
+
+/* ── MANTRA HEADING — always visible ── */
+.mantra-heading{
+  text-align:center;
+  padding:28px 20px 16px;
+}
+.mh-sa{
+  display:block;
+  font-family:'Tiro Devanagari Sanskrit',serif;
+  font-size:clamp(1.4rem,4vw,2.2rem);
+  color:#6B2500;
+  letter-spacing:1px;
+  line-height:1.5;
+  margin-bottom:6px;
+}
+.mh-en{
+  display:block;
+  font-family:'Cinzel',serif;
+  font-weight:700;
+  font-size:clamp(.75rem,2vw,1rem);
+  color:var(--text-l);
+  letter-spacing:3px;
+  text-transform:uppercase;
+}
+
+/* ── SECTION PANEL ── */
+.sacred-section{display:none;}
+.sacred-section.active{display:block;}
+
+.section-hero{
+  text-align:center;margin-bottom:36px;
+  padding:36px 24px;
+  background:linear-gradient(135deg,rgba(255,107,0,.06),rgba(255,153,51,.03));
+  border:1px solid var(--border);
+  border-radius:24px;
+  position:relative;overflow:hidden;
+}
+.section-hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 0%,rgba(255,107,0,.08),transparent 70%);
+  pointer-events:none;
+}
+.sh-deity{font-size:3.5rem;margin-bottom:8px;display:block;}
+.sh-name{
+  font-family:'Cinzel',serif;font-weight:900;
+  font-size:clamp(1.3rem,4vw,2rem);
+  color:var(--sf);letter-spacing:2px;margin-bottom:6px;
+}
+.sh-desc{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  color:var(--text-l);font-size:.95rem;line-height:1.7;
+  max-width:560px;margin:0 auto;
+}
+
+/* ── VERSE CARDS ── */
+.verses-wrap{display:flex;flex-direction:column;gap:20px;}
+.verse-card{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 2px 18px rgba(255,107,0,.06);
+  transition:transform .2s, box-shadow .2s;
+}
+.verse-card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 6px 28px rgba(255,107,0,.12);
+}
+.verse-head{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 18px;
+  background:linear-gradient(135deg,rgba(255,107,0,.07),rgba(255,153,51,.04));
+  border-bottom:1px solid var(--border);
+}
+.verse-num{
+  width:30px;height:30px;border-radius:50%;
+  background:linear-gradient(135deg,var(--sf),var(--sf-light));
+  color:#fff;font-size:.72rem;font-weight:800;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;font-family:'Raleway',sans-serif;
+}
+.verse-label{
+  font-family:'Cinzel',serif;font-size:.72rem;font-weight:600;
+  color:var(--text-l);letter-spacing:.5px;text-transform:uppercase;
+}
+.verse-body{padding:18px 20px;}
+.devanagari{
+  font-family:'Tiro Devanagari Sanskrit',serif;
+  font-size:1.15rem;line-height:2;
+  color:#6B2500;
+  margin-bottom:12px;
+  letter-spacing:.3px;
+}
+.transliteration{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:.92rem;line-height:1.8;
+  color:var(--text-l);margin-bottom:10px;
+  padding-left:14px;border-left:2px solid rgba(255,107,0,.2);
+}
+.meaning{
+  font-size:.82rem;line-height:1.75;
+  color:var(--text-m);
+  background:rgba(255,243,224,.5);
+  padding:10px 14px;border-radius:10px;
+}
+.meaning strong{color:var(--sf);font-weight:700;}
+
+/* ── FULL TEXT BLOCK (for Chalisa dohas) ── */
+.full-text-block{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:28px 24px;
+  box-shadow:0 2px 18px rgba(255,107,0,.06);
+  margin-bottom:20px;
+}
+.ftb-title{
+  font-family:'Cinzel',serif;font-weight:700;
+  font-size:.85rem;letter-spacing:1px;color:var(--gold);
+  text-transform:uppercase;margin-bottom:16px;
+  display:flex;align-items:center;gap:8px;
+}
+.ftb-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.chalisa-verse{
+  font-family:'Tiro Devanagari Sanskrit',serif;
+  font-size:1.08rem;line-height:2.1;
+  color:#4A1800;margin-bottom:20px;
+  padding-bottom:20px;
+  border-bottom:1px dashed rgba(200,137,10,.15);
+}
+.chalisa-verse:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+
+/* ── MANTRA HIGHLIGHT BOX ── */
+.mantra-box{
+  text-align:center;
+  padding:32px 24px;
+  background:linear-gradient(135deg,rgba(255,107,0,.06),rgba(19,136,8,.04));
+  border:2px solid rgba(200,137,10,.25);
+  border-radius:20px;
+  margin-bottom:20px;
+  position:relative;overflow:hidden;
+}
+.mantra-box::after{
+  content:'🕉';
+  position:absolute;right:-10px;bottom:-10px;
+  font-size:6rem;opacity:.04;
+  pointer-events:none;
+}
+.mantra-sanskrit{
+  font-family:'Tiro Devanagari Sanskrit',serif;
+  font-size:clamp(1.1rem,3vw,1.5rem);
+  line-height:2.1;color:#5C0A00;
+  margin-bottom:12px;
+}
+.mantra-meaning{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:1rem;line-height:1.8;color:var(--text-m);
+}
+
+/* ── MEANING TOGGLE ── */
+.meaning-toggle-wrap{
+  display:flex;align-items:center;gap:8px;
+  margin-left:auto;padding:4px 8px;
+  border-left:1px solid var(--border);
+  padding-left:16px;
+}
+.mt-label{
+  font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:700;
+  letter-spacing:.3px;color:var(--text-l);white-space:nowrap;
+  transition:color .25s;
+}
+.mt-track{
+  width:42px;height:22px;border-radius:30px;
+  background:rgba(255,107,0,.15);
+  border:1.5px solid rgba(255,107,0,.3);
+  position:relative;transition:background .3s,border-color .3s;
+  flex-shrink:0;cursor:pointer;
+}
+.mt-track.on{background:rgba(255,107,0,.25);border-color:var(--sf);}
+.mt-thumb{
+  position:absolute;top:2px;left:2px;
+  width:14px;height:14px;border-radius:50%;
+  background:var(--sf);
+  box-shadow:0 1px 4px rgba(255,107,0,.4);
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1);
+}
+.mt-track.on .mt-thumb{transform:translateX(20px);}
+.meaning-toggle-wrap.on .mt-label:last-child{color:var(--sf);}
+.meaning-toggle-wrap.on .mt-label:first-child{color:var(--text-l);}
+.meaning-toggle-wrap:not(.on) .mt-label:first-child{color:var(--sf);}
+
+/* hide meaning when toggle is OFF (Mantra only mode — default) */
+body.hide-meaning .meaning,
+body.hide-meaning .transliteration,
+body.hide-meaning .mantra-meaning,
+body.hide-meaning .sh-desc,
+body.hide-meaning .word-line,
+body.hide-meaning .line-meaning,
+body.hide-meaning .section-hero,
+body.hide-meaning .verse-label,
+body.hide-meaning .ftb-title{
+  display:none !important;
+}
+/* In mantra-only mode, strip card borders/padding — show only pure Sanskrit */
+body.hide-meaning .verse-card{
+  box-shadow:none;
+  border:none;
+  background:transparent;
+}
+body.hide-meaning .verse-body{
+  padding:6px 0;
+}
+body.hide-meaning .verse-head{
+  border:none;
+  background:transparent;
+  padding:6px 0 0 0;
+}
+body.hide-meaning .verse-num{
+  display:none;
+}
+/* Hide the word-by-word breakdown cards in mantra-only mode */
+body.hide-meaning .verses-wrap{
+  display:none !important;
+}
+/* mantra-only-box: show in mantra mode, hide when meaning is on */
+.mantra-only-box{ display:block; }
+body:not(.hide-meaning) .mantra-only-box{ display:none !important; }
+
+
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .5s cubic-bezier(.16,1,.3,1),transform .5s cubic-bezier(.16,1,.3,1);}
+.reveal.vis{opacity:1;transform:translateY(0);}
+.d1{transition-delay:.05s;}.d2{transition-delay:.1s;}.d3{transition-delay:.15s;}
+.d4{transition-delay:.2s;}.d5{transition-delay:.25s;}.d6{transition-delay:.3s;}
+
+/* ── WORD-BY-WORD INLINE ── */
+.word-line{
+  display:flex;flex-wrap:wrap;gap:6px 10px;
+  margin-bottom:10px;
+  padding:10px 14px;
+  background:rgba(255,107,0,.03);
+  border-radius:12px;
+  border:1px solid rgba(255,107,0,.1);
+}
+.word-pair{
+  display:inline-flex;flex-direction:column;align-items:center;
+  gap:2px;
+}
+.word-sa{
+  font-family:'Tiro Devanagari Sanskrit',serif;
+  font-size:1.05rem;color:#6B2500;line-height:1.3;
+  font-weight:600;
+}
+.word-en{
+  font-size:.65rem;color:var(--sf);line-height:1.3;
+  font-family:'DM Sans',sans-serif;font-weight:600;
+  letter-spacing:.2px;white-space:nowrap;
+}
+.word-sep{
+  align-self:center;color:var(--border);
+  font-size:.9rem;padding:0 2px;margin-top:-8px;
+}
+.line-meaning{
+  font-size:.82rem;line-height:1.75;
+  color:var(--text-m);
+  background:rgba(19,136,8,.05);
+  border-left:3px solid var(--green);
+  padding:8px 12px;border-radius:0 8px 8px 0;
+  margin-top:4px;
+}
+
+/* ── FOOTER ── */
+.qf-footer{
+  text-align:center;
+  padding:30px 20px 50px;
+  position:relative;z-index:5;
+  color:var(--text-l);font-size:.78rem;
+  font-family:'DM Sans',sans-serif;
+}
+.qf-footer a{color:var(--sf);text-decoration:none;}
+</style>
+
+<script>
+// Initialize meaning as visible (ON by default)
+document.addEventListener('DOMContentLoaded', function() {
+  document.body.classList.remove('hide-meaning');
+});
+</script>
+</head>
+<body>
+<!-- UNIVERSAL HEADER -->
+<div id="sa-header-root"></div>
+
+
+
+
+<!-- Particles canvas -->
+<canvas id="qf-canvas"></canvas>
+
+<!-- Tab Navigation -->
+<nav class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('chalisa',this)">
+    <span class="tab-icon">🐒</span> Sanatani Unity
+  </button>
+  <button class="tab-btn" onclick="switchTab('sarve',this)">
+    <span class="tab-icon">☮</span> Universal Peace
+  </button>
+  <button class="tab-btn" onclick="switchTab('durga',this)">
+    <span class="tab-icon">🔱</span> Country / Group / Individual Protection
+  </button>
+  <div class="meaning-toggle-wrap on">
+    <span class="mt-label">Mantra (Affirmation) Only</span>
+    <div class="mt-track" id="meaningTrack" onclick="toggleMeaning()" class="on">
+      <div class="mt-thumb" id="meaningThumb"></div>
+    </div>
+    <span class="mt-label">With Meaning</span>
+  </div>
+</nav>
+
+<!-- ════════════════════════════════════
+     SECTION 1 — HANUMAN CHALISA
+════════════════════════════════════ -->
+<main class="qf-main">
+
+<section id="sec-chalisa" class="sacred-section active">
+
+  <div class="mantra-heading">
+    <span class="mh-sa">हनुमान चालीसा</span>
+    <span class="mh-en">Hanuman Chalisa</span>
+  </div>
+
+  <div class="section-hero reveal">
+    <div class="sh-name">Hanuman Chalisa</div>
+    <div class="sh-desc">Forty divine verses composed by Goswami Tulsidas in the 16th century in praise of Lord Hanuman — the embodiment of devotion, strength, and selfless service.</div>
+  </div>
+<div class="audio-note">40 Chaupais · Composed by Tulsidas Ji</div>
+    </div>
+  </div>
+
+  <!-- Mantra-only full text -->
+  <div class="mantra-box mantra-only-box reveal d1">
+    <div class="mantra-sanskrit">
+      श्रीगुरु चरन सरोज रज, निज मनु मुकुरु सुधारि।<br>
+      बरनउँ रघुबर बिमल जसु, जो दायकु फल चारि॥<br>
+      बुद्धिहीन तनु जानिके, सुमिरौं पवन-कुमार।<br>
+      बल बुधि बिद्या देहु मोहि, हरहु कलेस बिकार॥<br><br>
+      जय हनुमान ज्ञान गुन सागर। जय कपीस तिहुँ लोक उजागर॥<br>
+      रामदूत अतुलित बल धामा। अञ्जनि-पुत्र पवनसुत नामा॥<br>
+      महाबीर बिक्रम बजरंगी। कुमति निवार सुमति के संगी॥<br>
+      कंचन बरन बिराज सुबेसा। कानन कुण्डल कुञ्चित केसा॥<br><br>
+      हाथ बज्र औ ध्वजा बिराजै। काँधे मूँज जनेऊ साजै॥<br>
+      संकर सुवन केसरी नंदन। तेज प्रताप महा जग बंदन॥<br>
+      विद्यावान गुणी अति चातुर। राम काज करिबे को आतुर॥<br>
+      प्रभु चरित्र सुनिबे को रसिया। राम लखन सीता मन बसिया॥<br><br>
+      सूक्ष्म रूप धरि सियहि दिखावा। बिकट रूप धरि लंक जरावा॥<br>
+      भीम रूप धरि असुर सँहारे। रामचंद्र के काज सँवारे॥<br>
+      लाय सजीवन लखन जियाये। श्रीरघुबीर हरषि उर लाये॥<br>
+      रघुपति कीन्ही बहुत बड़ाई। तुम मम प्रिय भरतहि सम भाई॥<br><br>
+      सहस बदन तुम्हरो जस गावैं। अस कहि श्रीपति कंठ लगावैं॥<br>
+      सनकादिक ब्रह्मादि मुनीसा। नारद सारद सहित अहीसा॥<br>
+      जम कुबेर दिगपाल जहाँ ते। कबि कोबिद कहि सकें कहाँ ते॥<br>
+      तुम उपकार सुग्रीवहि कीन्हा। राम मिलाय राजपद दीन्हा॥<br><br>
+      तुम्हरो मंत्र बिभीषन माना। लंकेस्वर भए सब जग जाना॥<br>
+      जुग सहस्र जोजन पर भानू। लील्यो ताहि मधुर फल जानू॥<br>
+      प्रभु मुद्रिका मेलि मुख माहीं। जलधि लाँघि गये अचरज नाहीं॥<br>
+      दुर्गम काज जगत के जेते। सुगम अनुग्रह तुम्हरे तेते॥<br><br>
+      राम दुआरे तुम रखवारे। होत न आज्ञा बिनु पैसारे॥<br>
+      सब सुख लहैं तुम्हारी सरना। तुम रक्षक काहू को डरना॥<br>
+      आपन तेज सम्हारो आपै। तीनों लोक हाँक तें काँपै॥<br>
+      भूत पिसाच निकट नहिं आवै। महाबीर जब नाम सुनावै॥<br><br>
+      नासै रोग हरे सब पीरा। जपत निरंतर हनुमत बीरा॥<br>
+      संकट तें हनुमान छुड़ावै। मन क्रम बचन ध्यान जो लावै॥<br>
+      सब पर राम तपस्वी राजा। तिन के काज सकल तुम साजा॥<br>
+      और मनोरथ जो कोई लावै। सोई अमित जीवन फल पावै॥<br><br>
+      चारों जुग परताप तुम्हारा। है परसिद्ध जगत उजियारा॥<br>
+      साधु संत के तुम रखवारे। असुर निकंदन राम दुलारे॥<br>
+      अष्ट सिद्धि नौ निधि के दाता। अस बर दीन जानकी माता॥<br>
+      राम रसायन तुम्हरे पासा। सदा रहो रघुपति के दासा॥<br><br>
+      तुम्हरे भजन राम को पावै। जनम जनम के दुख बिसरावै॥<br>
+      अंत काल रघुबर पुर जाई। जहाँ जन्म हरि-भक्त कहाई॥<br>
+      और देवता चित्त न धरई। हनुमत सेइ सर्ब सुख करई॥<br>
+      संकट कटै मिटै सब पीरा। जो सुमिरै हनुमत बलबीरा॥<br><br>
+      जय जय जय हनुमान गोसाईं। कृपा करहु गुरुदेव की नाईं॥<br>
+      जो सत बार पाठ कर कोई। छूटहि बंदि महा सुख होई॥<br>
+      जो यह पढ़ै हनुमान चालीसा। होय सिद्धि साखी गौरीसा॥<br>
+      तुलसीदास सदा हरि चेरा। कीजै नाथ हृदय मह डेरा॥<br><br>
+      पवनतनय संकट हरन, मंगल मूरति रूप।<br>
+      राम लखन सीता सहित, हृदय बसहु सुर भूप॥
+    </div>
+  </div>
+
+  <div class="verses-wrap">
+    <div class="verse-card reveal d1">
+      <div class="verse-head"><div class="verse-num">🙏</div><div class="verse-label">Doha — Opening Prayer (Verse 1)</div></div>
+      <div class="verse-body">
+        <div class="devanagari">श्रीगुरु चरन सरोज रज, निज मनु मुकुरु सुधारि।<br>बरनउँ रघुबर बिमल जसु, जो दायकु फल चारि॥</div>
+        <div class="transliteration meaning">Śrī guru carana saroja raja, nija manu mukuru sudhāri · Baranauṃ raghubar bimala jasu, jo dāyaku phala cāri</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">श्रीगुरु</span><span class="word-en">Holy Guru</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">चरन</span><span class="word-en">Feet</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">सरोज</span><span class="word-en">Lotus</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">रज</span><span class="word-en">Dust</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">निज</span><span class="word-en">My own</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">मनु</span><span class="word-en">Mind</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">मुकुरु</span><span class="word-en">Mirror</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">सुधारि</span><span class="word-en">Cleansing / Purifying</span></div>
+          </div>
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">बरनउँ</span><span class="word-en">I describe</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">रघुबर</span><span class="word-en">Best of Raghus (Ram)</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">बिमल</span><span class="word-en">Pure / Spotless</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">जसु</span><span class="word-en">Glory / Fame</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">दायकु</span><span class="word-en">Giver</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">फल चारि</span><span class="word-en">Four fruits of life</span></div>
+          </div>
+          <div class="line-meaning">🔹 Cleansing the mirror of my mind with the dust of my Guru's lotus feet, I sing the pure glory of Ram — the giver of the four fruits of life.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Doha 2 -->
+    <div class="verse-card reveal d1">
+      <div class="verse-head"><div class="verse-num">🙏</div><div class="verse-label">Doha — Opening Prayer (Verse 2)</div></div>
+      <div class="verse-body">
+        <div class="devanagari">बुद्धिहीन तनु जानिके, सुमिरौं पवन-कुमार।<br>बल बुधि बिद्या देहु मोहि, हरहु कलेस बिकार॥</div>
+        <div class="transliteration meaning">Buddhihīna tanu jānike, sumirauṃ pavana-kumāra · Bala budhi bidyā dehu mohi, harahu kalesa bikāra</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">बुद्धिहीन</span><span class="word-en">Devoid of intelligence</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">तनु</span><span class="word-en">Body / Self</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">जानिके</span><span class="word-en">Knowing this</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">सुमिरौं</span><span class="word-en">I remember / Meditate</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">पवन-कुमार</span><span class="word-en">Son of the Wind</span></div>
+          </div>
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">बल</span><span class="word-en">Strength</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">बुधि</span><span class="word-en">Wisdom</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">बिद्या</span><span class="word-en">Knowledge</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">देहु</span><span class="word-en">Grant me</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">हरहु</span><span class="word-en">Remove</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">कलेस</span><span class="word-en">Misery</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">बिकार</span><span class="word-en">Afflictions</span></div>
+          </div>
+          <div class="line-meaning">🔹 Knowing my body to be without intelligence, I remember you O Son of the Wind — grant me strength, wisdom and knowledge, and remove my misery and afflictions.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chaupai 1 -->
+    <div class="verse-card reveal d2">
+      <div class="verse-head"><div class="verse-num">1</div><div class="verse-label">Chaupai 1</div></div>
+      <div class="verse-body">
+        <div class="devanagari">जय हनुमान ज्ञान गुन सागर।<br>जय कपीस तिहुँ लोक उजागर॥</div>
+        <div class="transliteration meaning">Jaya hanumāna jñāna guna sāgara · Jaya kapīsa tihuṃ loka ujāgara</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">जय</span><span class="word-en">Victory / Hail</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">हनुमान</span><span class="word-en">Hanuman</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">ज्ञान</span><span class="word-en">Knowledge</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">गुन</span><span class="word-en">Virtue / Quality</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">सागर</span><span class="word-en">Ocean</span></div>
+          </div>
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">जय</span><span class="word-en">Victory</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">कपीस</span><span class="word-en">Lord of monkeys</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">तिहुँ</span><span class="word-en">Three</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">लोक</span><span class="word-en">Worlds</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">उजागर</span><span class="word-en">Illuminator / Famous</span></div>
+          </div>
+          <div class="line-meaning">🔹 Hail Hanuman — ocean of knowledge and virtue! Hail lord of monkeys, illuminator of all three worlds!</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chaupai 2 -->
+    <div class="verse-card reveal d2">
+      <div class="verse-head"><div class="verse-num">2</div><div class="verse-label">Chaupai 2</div></div>
+      <div class="verse-body">
+        <div class="devanagari">रामदूत अतुलित बल धामा।<br>अञ्जनि-पुत्र पवनसुत नामा॥</div>
+        <div class="transliteration meaning">Rāmadūta atulita bala dhāmā · Añjani-putra pavanasuta nāmā</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">रामदूत</span><span class="word-en">Messenger of Ram</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">अतुलित</span><span class="word-en">Incomparable</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">बल</span><span class="word-en">Strength</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">धामा</span><span class="word-en">Abode / Embodiment</span></div>
+          </div>
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">अञ्जनि-पुत्र</span><span class="word-en">Son of Anjani</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">पवनसुत</span><span class="word-en">Son of the Wind</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">नामा</span><span class="word-en">By name / Known as</span></div>
+          </div>
+          <div class="line-meaning">🔹 Ram's messenger, embodiment of incomparable strength — known by names: Son of Anjani, Son of the Wind God.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chaupai 3 -->
+    <div class="verse-card reveal d2">
+      <div class="verse-head"><div class="verse-num">3</div><div class="verse-label">Chaupai 3</div></div>
+      <div class="verse-body">
+        <div class="devanagari">महाबीर बिक्रम बजरंगी।<br>कुमति निवार सुमति के संगी॥</div>
+        <div class="transliteration meaning">Mahābīra bikrama bajaraṃgī · Kumati nivāra sumati ke saṃgī</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">महाबीर</span><span class="word-en">Great hero</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">बिक्रम</span><span class="word-en">Brave / Valiant</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">बजरंगी</span><span class="word-en">Thunderbolt-bodied</span></div>
+          </div>
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">कुमति</span><span class="word-en">Evil intellect</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">निवार</span><span class="word-en">Remover</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">सुमति</span><span class="word-en">Good intellect</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">संगी</span><span class="word-en">Companion / Friend</span></div>
+          </div>
+          <div class="line-meaning">🔹 Great hero, valiant, thunderbolt-bodied — remover of evil thoughts and companion of the virtuous.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chaupai 4 -->
+    <div class="verse-card reveal d3">
+      <div class="verse-head"><div class="verse-num">4</div><div class="verse-label">Chaupai 4</div></div>
+      <div class="verse-body">
+        <div class="devanagari">कंचन बरन बिराज सुबेसा।<br>कानन कुण्डल कुञ्चित केसा॥</div>
+        <div class="transliteration meaning">Kañcana barana birāja subesā · Kānana kuṇḍala kuñcita kesā</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">कंचन</span><span class="word-en">Golden</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">बरन</span><span class="word-en">Complexion</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">बिराज</span><span class="word-en">Radiating</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">सुबेसा</span><span class="word-en">Beautifully dressed</span></div>
+          </div>
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">कानन</span><span class="word-en">Ears</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">कुण्डल</span><span class="word-en">Earrings</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">कुञ्चित</span><span class="word-en">Curly</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">केसा</span><span class="word-en">Hair</span></div>
+          </div>
+          <div class="line-meaning">🔹 Golden-complexioned and radiantly dressed — with earrings in ears and curly locks of hair.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chaupai 5 -->
+    <div class="verse-card reveal d3">
+      <div class="verse-head"><div class="verse-num">5</div><div class="verse-label">Chaupai 5</div></div>
+      <div class="verse-body">
+        <div class="devanagari">हाथ बज्र औ ध्वजा बिराजै।<br>काँधे मूँज जनेऊ साजै॥</div>
+        <div class="transliteration meaning">Hātha bajra au dhvajā birājai · Kāṃdhe mūṃja janeu sājai</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">हाथ</span><span class="word-en">Hand</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">बज्र</span><span class="word-en">Thunderbolt / Mace</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">ध्वजा</span><span class="word-en">Flag</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">बिराजै</span><span class="word-en">Adorns / Shines</span></div>
+          </div>
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">काँधे</span><span class="word-en">Shoulder</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">मूँज</span><span class="word-en">Sacred grass</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">जनेऊ</span><span class="word-en">Sacred thread</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">साजै</span><span class="word-en">Adorns / Graces</span></div>
+          </div>
+          <div class="line-meaning">🔹 A thunderbolt and flag adorn his hands — a sacred thread of munja grass graces his shoulder.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chaupai 6 -->
+    <div class="verse-card reveal d3">
+      <div class="verse-head"><div class="verse-num">6</div><div class="verse-label">Chaupai 6</div></div>
+      <div class="verse-body">
+        <div class="devanagari">संकर सुवन केसरी नंदन।<br>तेज प्रताप महा जग बंदन॥</div>
+        <div class="transliteration meaning">Saṃkara suvana kesarī naṃdana · Teja pratāpa mahā jaga baṃdana</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">संकर</span><span class="word-en">Shiva's</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">सुवन</span><span class="word-en">Son / Manifestation</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">केसरी</span><span class="word-en">Kesari (father)</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">नंदन</span><span class="word-en">Son / Joy</span></div>
+          </div>
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">तेज</span><span class="word-en">Radiance</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">प्रताप</span><span class="word-en">Valour / Glory</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">महा</span><span class="word-en">Great</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">जग बंदन</span><span class="word-en">World worships</span></div>
+          </div>
+          <div class="line-meaning">🔹 Manifestation of Shiva, son of Kesari — whose great radiance and valour the whole world worships.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chaupai 7 -->
+    <div class="verse-card reveal d3">
+      <div class="verse-head"><div class="verse-num">7</div><div class="verse-label">Chaupai 7</div></div>
+      <div class="verse-body">
+        <div class="devanagari">विद्यावान गुणी अति चातुर।<br>राम काज करिबे को आतुर॥</div>
+        <div class="transliteration meaning">Vidyāvāna guṇī ati cātura · Rāma kāja karibe ko ātura</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">विद्यावान</span><span class="word-en">Learned / Knowledgeable</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">गुणी</span><span class="word-en">Virtuous</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">अति</span><span class="word-en">Very / Highly</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">चातुर</span><span class="word-en">Clever / Skillful</span></div>
+          </div>
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">राम काज</span><span class="word-en">Ram's work</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">करिबे को</span><span class="word-en">To accomplish</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">आतुर</span><span class="word-en">Ever eager</span></div>
+          </div>
+          <div class="line-meaning">🔹 Learned, virtuous and supremely clever — always eager to accomplish the work of Ram.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chaupai 8 -->
+    <div class="verse-card reveal d3">
+      <div class="verse-head"><div class="verse-num">8</div><div class="verse-label">Chaupai 8</div></div>
+      <div class="verse-body">
+        <div class="devanagari">प्रभु चरित्र सुनिबे को रसिया।<br>राम लखन सीता मन बसिया॥</div>
+        <div class="transliteration meaning">Prabhu caritra sunibe ko rasiyā · Rāma lakhana sītā mana basiyā</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">प्रभु</span><span class="word-en">Lord</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">चरित्र</span><span class="word-en">Stories / Deeds</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">सुनिबे को</span><span class="word-en">To listen to</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">रसिया</span><span class="word-en">Lover / Relisher</span></div>
+          </div>
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">राम लखन सीता</span><span class="word-en">Ram, Lakshman, Sita</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">मन</span><span class="word-en">Mind / Heart</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">बसिया</span><span class="word-en">Reside / Dwell</span></div>
+          </div>
+          <div class="line-meaning">🔹 A lover of listening to the Lord's stories — Ram, Lakshman and Sita dwell in his heart.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chaupai 9 -->
+    <div class="verse-card reveal d4">
+      <div class="verse-head"><div class="verse-num">9</div><div class="verse-label">Chaupai 9</div></div>
+      <div class="verse-body">
+        <div class="devanagari">सूक्ष्म रूप धरि सियहि दिखावा।<br>बिकट रूप धरि लंक जरावा॥</div>
+        <div class="transliteration meaning">Sūkṣma rūpa dhari siyahi dikhāvā · Bikaṭa rūpa dhari laṃka jarāvā</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">सूक्ष्म</span><span class="word-en">Tiny / Subtle</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">रूप</span><span class="word-en">Form</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">धरि</span><span class="word-en">Taking / Assuming</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">सियहि</span><span class="word-en">To Sita</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">दिखावा</span><span class="word-en">Appeared / Showed</span></div>
+          </div>
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">बिकट</span><span class="word-en">Terrific / Fierce</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">रूप</span><span class="word-en">Form</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">लंक</span><span class="word-en">Lanka</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">जरावा</span><span class="word-en">Set ablaze</span></div>
+          </div>
+          <div class="line-meaning">🔹 Taking a tiny form he appeared before Sita — taking a fierce form he set Lanka ablaze.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chaupai 10 -->
+    <div class="verse-card reveal d4">
+      <div class="verse-head"><div class="verse-num">10</div><div class="verse-label">Chaupai 10</div></div>
+      <div class="verse-body">
+        <div class="devanagari">भीम रूप धरि असुर सँहारे।<br>रामचंद्र के काज सँवारे॥</div>
+        <div class="transliteration meaning">Bhīma rūpa dhari asura saṃhāre · Rāmacaṃdra ke kāja saṃvāre</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">भीम</span><span class="word-en">Fearsome / Huge</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">रूप</span><span class="word-en">Form</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">असुर</span><span class="word-en">Demons</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">सँहारे</span><span class="word-en">Destroyed / Slew</span></div>
+          </div>
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">रामचंद्र</span><span class="word-en">Lord Ram</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">काज</span><span class="word-en">Tasks / Work</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">सँवारे</span><span class="word-en">Accomplished / Fulfilled</span></div>
+          </div>
+          <div class="line-meaning">🔹 Taking a fearsome form he slew the demons — and fulfilled all the tasks of Lord Ramchandra.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chaupai 11 -->
+    <div class="verse-card reveal d4">
+      <div class="verse-head"><div class="verse-num">11</div><div class="verse-label">Chaupai 11</div></div>
+      <div class="verse-body">
+        <div class="devanagari">लाय सजीवन लखन जियाये।<br>श्रीरघुबीर हरषि उर लाये॥</div>
+        <div class="transliteration meaning">Lāya sajīvana lakhana jiyāye · Śrīraghubīra haraṣi ura lāye</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">लाय</span><span class="word-en">Bringing</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">सजीवन</span><span class="word-en">Sanjeevani herb</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">लखन</span><span class="word-en">Lakshman</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">जियाये</span><span class="word-en">Revived / Brought back to life</span></div>
+          </div>
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">श्रीरघुबीर</span><span class="word-en">Lord Ram</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">हरषि</span><span class="word-en">With joy</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">उर लाये</span><span class="word-en">Embraced / Held to heart</span></div>
+          </div>
+          <div class="line-meaning">🔹 Bringing the Sanjeevani herb he revived Lakshman — and Lord Ram embraced him with great joy.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chaupai 12 -->
+    <div class="verse-card reveal d4">
+      <div class="verse-head"><div class="verse-num">12</div><div class="verse-label">Chaupai 12</div></div>
+      <div class="verse-body">
+        <div class="devanagari">रघुपति कीन्ही बहुत बड़ाई।<br>तुम मम प्रिय भरतहि सम भाई॥</div>
+        <div class="transliteration meaning">Raghupati kīnhī bahuta baṛāī · Tuma mama priya bharatahi sama bhāī</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">रघुपति</span><span class="word-en">Lord of Raghu clan (Ram)</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">कीन्ही</span><span class="word-en">Did / Gave</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">बहुत</span><span class="word-en">Much</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">बड़ाई</span><span class="word-en">Praise</span></div>
+          </div>
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">तुम</span><span class="word-en">You</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">मम</span><span class="word-en">My</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">प्रिय</span><span class="word-en">Dear</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">भरतहि सम</span><span class="word-en">Equal to Bharat</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">भाई</span><span class="word-en">Brother</span></div>
+          </div>
+          <div class="line-meaning">🔹 Ram praised him greatly — "You are as dear to me as my brother Bharat."</div>
+        </div>
+      </div>
+    </div>
+
+    
+    <!-- Chaupai 13 -->
+    <div class="verse-card reveal d4">
+      <div class="verse-head"><div class="verse-num">13</div><div class="verse-label">Chaupai 13</div></div>
+      <div class="verse-body">
+        <div class="devanagari">सहस बदन तुम्हरो जस गावैं।<br>अस कहि श्रीपति कंठ लगावैं॥</div>
+        <div class="transliteration meaning">Sahasa badana tumharo jasa gāvaiṃ · Asa kahi śrīpati kaṃṭha lagāvaiṃ</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">सहस बदन</span><span class="word-en">Thousand-mouthed serpent (Sheshnag)</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">जस गावैं</span><span class="word-en">Sings your glory</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">श्रीपति</span><span class="word-en">Lord of Lakshmi (Ram)</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">कंठ लगावैं</span><span class="word-en">Embraced to chest</span></div>
+          </div>
+          <div class="line-meaning">🔹 Even Sheshnag with his thousand mouths sings your glory — saying this, Lord Ram embraced Hanuman to his chest.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chaupai 14 -->
+    <div class="verse-card reveal d4">
+      <div class="verse-head"><div class="verse-num">14</div><div class="verse-label">Chaupai 14</div></div>
+      <div class="verse-body">
+        <div class="devanagari">सनकादिक ब्रह्मादि मुनीसा।<br>नारद सारद सहित अहीसा॥</div>
+        <div class="transliteration meaning">Sanakādika brahmādi munīsā · Nārada sārada sahita ahīsā</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">सनकादिक</span><span class="word-en">Sages like Sanaka</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">ब्रह्मादि</span><span class="word-en">Brahma and others</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">नारद</span><span class="word-en">Sage Narada</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">सारद</span><span class="word-en">Goddess Saraswati</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">अहीसा</span><span class="word-en">Sheshnag (king of serpents)</span></div>
+          </div>
+          <div class="line-meaning">🔹 Great sages like Sanaka, Brahma, Narada, Saraswati, and Sheshnag — all sing your divine glory.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chaupai 15 -->
+    <div class="verse-card reveal d4">
+      <div class="verse-head"><div class="verse-num">15</div><div class="verse-label">Chaupai 15</div></div>
+      <div class="verse-body">
+        <div class="devanagari">जम कुबेर दिगपाल जहाँ ते।<br>कबि कोबिद कहि सकें कहाँ ते॥</div>
+        <div class="transliteration meaning">Jama kubera digapāla jahāṃ te · Kabi kobida kahi sakaṃ kahāṃ te</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">जम</span><span class="word-en">Yama (god of death)</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">कुबेर</span><span class="word-en">God of wealth</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">दिगपाल</span><span class="word-en">Guardians of eight directions</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">कबि कोबिद</span><span class="word-en">Poets and scholars</span></div>
+          </div>
+          <div class="line-meaning">🔹 Even Yama, Kubera, the eight directional guardians, poets and scholars — none can fully describe your glory.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chaupai 16 -->
+    <div class="verse-card reveal d4">
+      <div class="verse-head"><div class="verse-num">16</div><div class="verse-label">Chaupai 16</div></div>
+      <div class="verse-body">
+        <div class="devanagari">तुम उपकार सुग्रीवहि कीन्हा।<br>राम मिलाय राजपद दीन्हा॥</div>
+        <div class="transliteration meaning">Tuma upakāra sugrīvahi kīnhā · Rāma milāya rājapada dīnhā</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">उपकार</span><span class="word-en">Great favour / help</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">सुग्रीव</span><span class="word-en">Monkey king Sugriva</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">राम मिलाय</span><span class="word-en">United with Ram</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">राजपद दीन्हा</span><span class="word-en">Gave him the kingdom</span></div>
+          </div>
+          <div class="line-meaning">🔹 You did a great favour to Sugriva — you united him with Lord Ram and he received his kingdom back.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chaupai 17 -->
+    <div class="verse-card reveal d4">
+      <div class="verse-head"><div class="verse-num">17</div><div class="verse-label">Chaupai 17</div></div>
+      <div class="verse-body">
+        <div class="devanagari">तुम्हरो मंत्र बिभीषन माना।<br>लंकेस्वर भए सब जग जाना॥</div>
+        <div class="transliteration meaning">Tumharo maṃtra bibhīṣana mānā · Laṃkeśvara bhae saba jaga jānā</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">मंत्र</span><span class="word-en">Counsel / advice</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">बिभीषन</span><span class="word-en">Vibhishana (Ravana's brother)</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">लंकेस्वर भए</span><span class="word-en">Became king of Lanka</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">जग जाना</span><span class="word-en">Known to the whole world</span></div>
+          </div>
+          <div class="line-meaning">🔹 Vibhishana accepted your counsel and became the king of Lanka — this is known throughout the world.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chaupai 18 -->
+    <div class="verse-card reveal d4">
+      <div class="verse-head"><div class="verse-num">18</div><div class="verse-label">Chaupai 18</div></div>
+      <div class="verse-body">
+        <div class="devanagari">जुग सहस्र जोजन पर भानू।<br>लील्यो ताहि मधुर फल जानू॥</div>
+        <div class="transliteration meaning">Juga sahasra jojana para bhānū · Līlyo tāhi madhura phala jānū</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">जुग सहस्र जोजन</span><span class="word-en">Thousands of yojanas away</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">भानू</span><span class="word-en">The Sun</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">लील्यो</span><span class="word-en">Swallowed</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">मधुर फल</span><span class="word-en">Sweet fruit</span></div>
+          </div>
+          <div class="line-meaning">🔹 The Sun is millions of miles away — yet as a child you swallowed it thinking it was a sweet fruit.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chaupai 19 -->
+    <div class="verse-card reveal d4">
+      <div class="verse-head"><div class="verse-num">19</div><div class="verse-label">Chaupai 19</div></div>
+      <div class="verse-body">
+        <div class="devanagari">प्रभु मुद्रिका मेलि मुख माहीं।<br>जलधि लाँघि गये अचरज नाहीं॥</div>
+        <div class="transliteration meaning">Prabhu mudrikā meli mukha māhīṃ · Jaladhi lāṃghi gaye acaraja nāhīṃ</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">मुद्रिका</span><span class="word-en">Ring (Ram's signet ring)</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">मुख माहीं</span><span class="word-en">Held in mouth</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">जलधि</span><span class="word-en">Ocean</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">लाँघि गये</span><span class="word-en">Leapt across</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">अचरज नाहीं</span><span class="word-en">No wonder</span></div>
+          </div>
+          <div class="line-meaning">🔹 Holding Lord Ram's ring in your mouth you leapt across the ocean — no wonder, for your strength comes from Ram.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chaupai 20 -->
+    <div class="verse-card reveal d4">
+      <div class="verse-head"><div class="verse-num">20</div><div class="verse-label">Chaupai 20</div></div>
+      <div class="verse-body">
+        <div class="devanagari">दुर्गम काज जगत के जेते।<br>सुगम अनुग्रह तुम्हरे तेते॥</div>
+        <div class="transliteration meaning">Durgama kāja jagata ke jete · Sugama anugraha tumhare tete</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">दुर्गम काज</span><span class="word-en">Difficult tasks</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">जगत के जेते</span><span class="word-en">All that exist in the world</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">सुगम</span><span class="word-en">Become easy</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">अनुग्रह</span><span class="word-en">With your grace</span></div>
+          </div>
+          <div class="line-meaning">🔹 All the difficult tasks of this world become easy with your grace and blessings.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chaupai 21 -->
+    <div class="verse-card reveal d4">
+      <div class="verse-head"><div class="verse-num">21</div><div class="verse-label">Chaupai 21</div></div>
+      <div class="verse-body">
+        <div class="devanagari">राम दुआरे तुम रखवारे।<br>होत न आज्ञा बिनु पैसारे॥</div>
+        <div class="transliteration meaning">Rāma duāre tuma rakhavāre · Hota na ājñā binu paisāre</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">राम दुआरे</span><span class="word-en">At Ram's door / abode</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">रखवारे</span><span class="word-en">Gatekeeper / Guardian</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">आज्ञा बिनु</span><span class="word-en">Without permission</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">पैसारे</span><span class="word-en">None can enter</span></div>
+          </div>
+          <div class="line-meaning">🔹 You are the guardian of Ram's abode — no one can enter without your permission.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chaupai 22 -->
+    <div class="verse-card reveal d4">
+      <div class="verse-head"><div class="verse-num">22</div><div class="verse-label">Chaupai 22</div></div>
+      <div class="verse-body">
+        <div class="devanagari">सब सुख लहैं तुम्हारी सरना।<br>तुम रक्षक काहू को डरना॥</div>
+        <div class="transliteration meaning">Saba sukha lahaṃi tumhārī saranā · Tuma rakṣaka kāhū ko ḍaranā</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">सब सुख</span><span class="word-en">All happiness / joys</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">तुम्हारी सरना</span><span class="word-en">In your shelter</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">तुम रक्षक</span><span class="word-en">You are the protector</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">काहू को डरना</span><span class="word-en">No one need fear</span></div>
+          </div>
+          <div class="line-meaning">🔹 All joys are found in your shelter — with you as protector, no devotee need fear anything.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chaupai 23 -->
+    <div class="verse-card reveal d4">
+      <div class="verse-head"><div class="verse-num">23</div><div class="verse-label">Chaupai 23</div></div>
+      <div class="verse-body">
+        <div class="devanagari">आपन तेज सम्हारो आपै।<br>तीनों लोक हाँक तें काँपै॥</div>
+        <div class="transliteration meaning">Āpana teja samhāro āpai · Tīnoṃ loka hāṃka teṃ kāṃpai</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">आपन तेज</span><span class="word-en">Your own radiance / power</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">सम्हारो आपै</span><span class="word-en">Only you can contain</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">तीनों लोक</span><span class="word-en">All three worlds</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">हाँक तें काँपै</span><span class="word-en">Tremble at your roar</span></div>
+          </div>
+          <div class="line-meaning">🔹 Only you can contain your own divine radiance — at your roar, all three worlds tremble.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chaupai 24 -->
+    <div class="verse-card reveal d4">
+      <div class="verse-head"><div class="verse-num">24</div><div class="verse-label">Chaupai 24</div></div>
+      <div class="verse-body">
+        <div class="devanagari">भूत पिसाच निकट नहिं आवै।<br>महाबीर जब नाम सुनावै॥</div>
+        <div class="transliteration meaning">Bhūta pisāca nikaṭa nahiṃ āvai · Mahābīra jaba nāma sunāvai</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">भूत पिसाच</span><span class="word-en">Ghosts and evil spirits</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">निकट नहिं आवै</span><span class="word-en">Cannot come near</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">महाबीर</span><span class="word-en">O Great Hero (Hanuman)</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">नाम सुनावै</span><span class="word-en">When your name is chanted</span></div>
+          </div>
+          <div class="line-meaning">🔹 Ghosts and evil spirits cannot come near when your name — O Great Hanuman — is chanted aloud.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chaupai 25-26 — key verses -->
+    <div class="verse-card reveal d5">
+      <div class="verse-head"><div class="verse-num">25</div><div class="verse-label">Chaupai 25 — Protection from Evil</div></div>
+      <div class="verse-body">
+        <div class="devanagari">भूत पिसाच निकट नहिं आवै।<br>महाबीर जब नाम सुनावै॥</div>
+        <div class="transliteration meaning">Bhūta pisāca nikaṭa nahiṃ āvai · Mahābīra jaba nāma sunāvai</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">भूत</span><span class="word-en">Ghosts</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">पिसाच</span><span class="word-en">Evil spirits</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">निकट</span><span class="word-en">Near / Close</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">नहिं</span><span class="word-en">Not</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">आवै</span><span class="word-en">Come</span></div>
+          </div>
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">महाबीर</span><span class="word-en">Great Hero (Hanuman)</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">जब</span><span class="word-en">When</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">नाम</span><span class="word-en">Name</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">सुनावै</span><span class="word-en">Is uttered / Heard</span></div>
+          </div>
+          <div class="line-meaning">🔹 Ghosts and evil spirits dare not come near — when the name of the Great Hero Hanuman is uttered.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chaupai 26 -->
+    <div class="verse-card reveal d5">
+      <div class="verse-head"><div class="verse-num">26</div><div class="verse-label">Chaupai 26 — Healer</div></div>
+      <div class="verse-body">
+        <div class="devanagari">नासै रोग हरे सब पीरा।<br>जपत निरंतर हनुमत बीरा॥</div>
+        <div class="transliteration meaning">Nāsai roga hare saba pīrā · Japata niraṃtara hanumata bīrā</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">नासै</span><span class="word-en">Destroys</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">रोग</span><span class="word-en">Disease</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">हरे</span><span class="word-en">Removes</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">सब</span><span class="word-en">All</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">पीरा</span><span class="word-en">Pain / Suffering</span></div>
+          </div>
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">जपत</span><span class="word-en">Chanting / Reciting</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">निरंतर</span><span class="word-en">Continuously</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">हनुमत</span><span class="word-en">Hanuman's name</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">बीरा</span><span class="word-en">O brave one</span></div>
+          </div>
+          <div class="line-meaning">🔹 Disease is destroyed and all pain removed — for those who continuously chant the name of brave Hanuman.</div>
+        </div>
+      </div>
+    </div>
+
+    
+    <!-- Chaupai 27 -->
+    <div class="verse-card reveal d4">
+      <div class="verse-head"><div class="verse-num">27</div><div class="verse-label">Chaupai 27</div></div>
+      <div class="verse-body">
+        <div class="devanagari">सब पर राम तपस्वी राजा।<br>तिन के काज सकल तुम साजा॥</div>
+        <div class="transliteration meaning">Saba para Rāma tapasvi rājā · Tina ke kāja sakala tuma sājā</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">सब पर</span><span class="word-en">Above all</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">राम तपस्वी राजा</span><span class="word-en">Ram the ascetic king</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">तिन के काज</span><span class="word-en">His divine tasks</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">सकल तुम साजा</span><span class="word-en">You accomplished all</span></div>
+          </div>
+          <div class="line-meaning">🔹 Ram is the supreme ascetic king above all — and you have accomplished all his divine tasks.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chaupai 28 -->
+    <div class="verse-card reveal d4">
+      <div class="verse-head"><div class="verse-num">28</div><div class="verse-label">Chaupai 28</div></div>
+      <div class="verse-body">
+        <div class="devanagari">और मनोरथ जो कोई लावै।<br>सोई अमित जीवन फल पावै॥</div>
+        <div class="transliteration meaning">Aura manoratha jo koī lāvai · Soī amita jīvana phala pāvai</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">और मनोरथ</span><span class="word-en">Whatever other wishes</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">जो कोई लावै</span><span class="word-en">Whoever brings</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">अमित जीवन फल</span><span class="word-en">Unlimited fruits of life</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">पावै</span><span class="word-en">Receives</span></div>
+          </div>
+          <div class="line-meaning">🔹 Whoever comes to you with any wish — they receive unlimited fruits and blessings in life.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chaupai 29 -->
+    <div class="verse-card reveal d4">
+      <div class="verse-head"><div class="verse-num">29</div><div class="verse-label">Chaupai 29</div></div>
+      <div class="verse-body">
+        <div class="devanagari">चारों जुग परताप तुम्हारा।<br>है परसिद्ध जगत उजियारा॥</div>
+        <div class="transliteration meaning">Cāroṃ juga paratāpa tumhārā · Hai parasiddha jagata ujiyārā</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">चारों जुग</span><span class="word-en">All four ages (Yugas)</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">परताप</span><span class="word-en">Glory / radiance</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">परसिद्ध</span><span class="word-en">Renowned / famous</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">जगत उजियारा</span><span class="word-en">Light of the world</span></div>
+          </div>
+          <div class="line-meaning">🔹 Your glory shines across all four ages — Satyuga, Treta, Dwapara and Kali — you are the eternal light of the world.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chaupai 30 -->
+    <div class="verse-card reveal d4">
+      <div class="verse-head"><div class="verse-num">30</div><div class="verse-label">Chaupai 30</div></div>
+      <div class="verse-body">
+        <div class="devanagari">साधु संत के तुम रखवारे।<br>असुर निकंदन राम दुलारे॥</div>
+        <div class="transliteration meaning">Sādhu saṃta ke tuma rakhavāre · Asura nikaṃdana Rāma dulāre</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">साधु संत</span><span class="word-en">Saints and holy souls</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">रखवारे</span><span class="word-en">Protector / guardian</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">असुर निकंदन</span><span class="word-en">Destroyer of demons</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">राम दुलारे</span><span class="word-en">Beloved of Ram</span></div>
+          </div>
+          <div class="line-meaning">🔹 You are the guardian of saints and holy souls, destroyer of demons — O beloved of Lord Ram.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chaupai 31 — Ashtasiddhi -->
+    
+    <!-- Chaupai 32 -->
+    <div class="verse-card reveal d5">
+      <div class="verse-head"><div class="verse-num">31</div><div class="verse-label">Chaupai 31 — Eight Siddhis</div></div>
+      <div class="verse-body">
+        <div class="devanagari">अष्ट सिद्धि नौ निधि के दाता।<br>अस बर दीन जानकी माता॥</div>
+        <div class="transliteration meaning">Aṣṭa siddhi nau nidhi ke dātā · Asa bara dīna jānakī mātā</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">अष्ट</span><span class="word-en">Eight</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">सिद्धि</span><span class="word-en">Divine powers</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">नौ</span><span class="word-en">Nine</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">निधि</span><span class="word-en">Treasures</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">दाता</span><span class="word-en">Giver / Bestower</span></div>
+          </div>
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">अस बर</span><span class="word-en">Such a boon</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">दीन</span><span class="word-en">Given</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">जानकी माता</span><span class="word-en">Mother Janaki (Sita)</span></div>
+          </div>
+          <div class="line-meaning">🔹 Bestower of the eight divine powers and nine treasures — such a boon was granted by Mother Sita herself.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Closing Doha -->
+    
+
+    <div class="verse-card reveal d4">
+      <div class="verse-head"><div class="verse-num">32</div><div class="verse-label">Chaupai 32</div></div>
+      <div class="verse-body">
+        <div class="devanagari">राम रसायन तुम्हरे पासा।<br>सदा रहो रघुपति के दासा॥</div>
+        <div class="transliteration meaning">Rāma rasāyana tumhare pāsā · Sadā raho Raghupati ke dāsā</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">राम रसायन</span><span class="word-en">Elixir of Ram's name</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">तुम्हरे पासा</span><span class="word-en">Is with you / in your possession</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">सदा रहो</span><span class="word-en">May you always remain</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">रघुपति के दासा</span><span class="word-en">Servant of Lord Ram</span></div>
+          </div>
+          <div class="line-meaning">🔹 The divine elixir of Ram's name is with you — may you always remain the devoted servant of Lord Ram.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chaupai 33 -->
+    <div class="verse-card reveal d4">
+      <div class="verse-head"><div class="verse-num">33</div><div class="verse-label">Chaupai 33</div></div>
+      <div class="verse-body">
+        <div class="devanagari">तुम्हरे भजन राम को पावै।<br>जनम जनम के दुख बिसरावै॥</div>
+        <div class="transliteration meaning">Tumhare bhajana Rāma ko pāvai · Janama janama ke dukha bisarāvai</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">तुम्हरे भजन</span><span class="word-en">By worshipping you</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">राम को पावै</span><span class="word-en">One attains Lord Ram</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">जनम जनम के</span><span class="word-en">Of birth after birth</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">दुख बिसरावै</span><span class="word-en">Sorrows are forgotten</span></div>
+          </div>
+          <div class="line-meaning">🔹 By worshipping you one attains Lord Ram — and the sorrows of countless births and lifetimes are all forgotten.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chaupai 34 -->
+    <div class="verse-card reveal d4">
+      <div class="verse-head"><div class="verse-num">34</div><div class="verse-label">Chaupai 34</div></div>
+      <div class="verse-body">
+        <div class="devanagari">अंत काल रघुबर पुर जाई।<br>जहाँ जन्म हरि-भक्त कहाई॥</div>
+        <div class="transliteration meaning">Aṃta kāla Raghubara pura jāī · Jahāṃ janma Hari-bhakta kahāī</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">अंत काल</span><span class="word-en">At the time of death</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">रघुबर पुर जाई</span><span class="word-en">Goes to Ram's divine abode</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">जहाँ जन्म</span><span class="word-en">Wherever born</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">हरि-भक्त कहाई</span><span class="word-en">Known as a devotee of Hari</span></div>
+          </div>
+          <div class="line-meaning">🔹 At death one goes to Ram's divine abode — and wherever reborn, is known as a true devotee of Lord Hari.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chaupai 35 -->
+    <div class="verse-card reveal d4">
+      <div class="verse-head"><div class="verse-num">35</div><div class="verse-label">Chaupai 35</div></div>
+      <div class="verse-body">
+        <div class="devanagari">और देवता चित्त न धरई।<br>हनुमत सेई सर्व सुख करई॥</div>
+        <div class="transliteration meaning">Aura devatā citta na dharaī · Hanumata seī sarva sukha karaī</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">और देवता</span><span class="word-en">Other deities</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">चित्त न धरई</span><span class="word-en">Need not be kept in mind</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">हनुमत सेई</span><span class="word-en">Serving / worshipping Hanuman</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">सर्व सुख करई</span><span class="word-en">Gives all joys and happiness</span></div>
+          </div>
+          <div class="line-meaning">🔹 One need not worry about pleasing other deities — worshipping Hanuman alone bestows all joys and fulfillment.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chaupai 36 -->
+    <div class="verse-card reveal d4">
+      <div class="verse-head"><div class="verse-num">36</div><div class="verse-label">Chaupai 36</div></div>
+      <div class="verse-body">
+        <div class="devanagari">संकट कटै मिटै सब पीरा।<br>जो सुमिरै हनुमत बलबीरा॥</div>
+        <div class="transliteration meaning">Saṃkaṭa kaṭai miṭai saba pīrā · Jo sumirai Hanumata balabīrā</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">संकट कटै</span><span class="word-en">Crises are cut away</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">मिटै सब पीरा</span><span class="word-en">All pain is erased</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">जो सुमिरै</span><span class="word-en">Whoever remembers</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">बलबीरा</span><span class="word-en">O mighty brave one</span></div>
+          </div>
+          <div class="line-meaning">🔹 All crises are removed and all pain is erased — for whoever remembers Hanuman the mighty and brave.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chaupai 37 -->
+    <div class="verse-card reveal d4">
+      <div class="verse-head"><div class="verse-num">37</div><div class="verse-label">Chaupai 37</div></div>
+      <div class="verse-body">
+        <div class="devanagari">जय जय जय हनुमान गोसाईं।<br>कृपा करहु गुरुदेव की नाईं॥</div>
+        <div class="transliteration meaning">Jaya jaya jaya Hanumāna gosāīṃ · Kṛpā karahu Gurudeva kī nāīṃ</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">जय जय जय</span><span class="word-en">Victory, victory, victory</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">गोसाईं</span><span class="word-en">Master / Lord of the senses</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">कृपा करहु</span><span class="word-en">Please bestow grace</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">गुरुदेव की नाईं</span><span class="word-en">As a Guru bestows</span></div>
+          </div>
+          <div class="line-meaning">🔹 Victory, victory, victory to Lord Hanuman — please bestow your grace upon me as a Guru bestows upon his disciple.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chaupai 38 -->
+    <div class="verse-card reveal d4">
+      <div class="verse-head"><div class="verse-num">38</div><div class="verse-label">Chaupai 38</div></div>
+      <div class="verse-body">
+        <div class="devanagari">जो सत बार पाठ कर कोई।<br>छूटहि बंदि महा सुख होई॥</div>
+        <div class="transliteration meaning">Jo sata bāra pāṭha kara koī · Chūṭahi baṃdi mahā sukha hoī</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">जो सत बार</span><span class="word-en">Whoever recites 100 times</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">पाठ कर</span><span class="word-en">Reads / recites</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">छूटहि बंदि</span><span class="word-en">Is freed from all bondage</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">महा सुख होई</span><span class="word-en">Attains great bliss</span></div>
+          </div>
+          <div class="line-meaning">🔹 Whoever recites this Chalisa 100 times — is freed from all bondage and attains supreme bliss and liberation.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chaupai 39 -->
+    <div class="verse-card reveal d4">
+      <div class="verse-head"><div class="verse-num">39</div><div class="verse-label">Chaupai 39</div></div>
+      <div class="verse-body">
+        <div class="devanagari">जो यह पढ़ै हनुमान चालीसा।<br>होय सिद्धि साखी गौरीसा॥</div>
+        <div class="transliteration meaning">Jo yaha paṛhai Hanumāna cālīsā · Hoya siddhi sākhī Gaurīsā</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">जो यह पढ़ै</span><span class="word-en">Whoever reads this</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">हनुमान चालीसा</span><span class="word-en">Hanuman Chalisa</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">होय सिद्धि</span><span class="word-en">Attains spiritual perfection</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">साखी गौरीसा</span><span class="word-en">Lord Shiva is witness</span></div>
+          </div>
+          <div class="line-meaning">🔹 Whoever reads this Hanuman Chalisa attains all siddhis and perfection — with Lord Shiva himself as witness.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chaupai 40 -->
+    <div class="verse-card reveal d4">
+      <div class="verse-head"><div class="verse-num">40</div><div class="verse-label">Chaupai 40</div></div>
+      <div class="verse-body">
+        <div class="devanagari">तुलसीदास सदा हरि चेरा।<br>कीजै नाथ हृदय मँह डेरा॥</div>
+        <div class="transliteration meaning">Tulasīdāsa sadā Hari cerā · Kījai nātha hṛdaya maṃha ḍerā</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">तुलसीदास</span><span class="word-en">The poet Tulsidas</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">सदा हरि चेरा</span><span class="word-en">Always a servant of Hari (Ram)</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">कीजै नाथ</span><span class="word-en">O Lord, please make</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">हृदय मँह डेरा</span><span class="word-en">Your abode in my heart</span></div>
+          </div>
+          <div class="line-meaning">🔹 Tulsidas is forever a servant of Lord Hari — O Hanuman, please make your eternal abode in my heart.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="verse-card reveal d6">
+      <div class="verse-head"><div class="verse-num">🙏</div><div class="verse-label">Closing Doha</div></div>
+      <div class="verse-body">
+        <div class="devanagari">पवनतनय संकट हरन, मंगल मूरति रूप।<br>राम लखन सीता सहित, हृदय बसहु सुर भूप॥</div>
+        <div class="transliteration meaning">Pavanatenaya saṃkaṭa harana, maṃgala mūrati rūpa · Rāma lakhana sītā sahita, hṛdaya basahu sura bhūpa</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">पवनतनय</span><span class="word-en">Son of Wind</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">संकट हरन</span><span class="word-en">Remover of troubles</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">मंगल</span><span class="word-en">Auspicious</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">मूरति</span><span class="word-en">Form / Embodiment</span></div>
+          </div>
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">राम लखन सीता सहित</span><span class="word-en">Along with Ram, Lakshman, Sita</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">हृदय</span><span class="word-en">Heart</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">बसहु</span><span class="word-en">Dwell / Reside</span></div><span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">सुर भूप</span><span class="word-en">King of gods</span></div>
+          </div>
+          <div class="line-meaning">🔹 O Son of Wind, remover of troubles, auspicious embodiment — along with Ram, Lakshman and Sita, dwell in my heart, O King of gods.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Significance -->
+    <div class="verse-card reveal d6">
+      <div class="verse-head"><div class="verse-num">🙏</div><div class="verse-label">Significance &amp; Benefits</div></div>
+      <div class="verse-body">
+        <div class="meaning">
+          <strong>Hanuman Chalisa</strong> is recited to invoke the blessings of Lord Hanuman — the divine son of the Wind God. Regular recitation grants <strong>courage, wisdom, and protection</strong> from negative forces. It removes obstacles, cures ailments, and fills the heart with devotion. The closing verse assures that one who reads it 100 times is freed from all bonds and attains great happiness.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════════════════════════
+     SECTION 2 — SARVE BHAVANTU SUKHINAH
+════════════════════════════════════ -->
+<section id="sec-sarve" class="sacred-section">
+
+  <div class="mantra-heading">
+    <span class="mh-sa">सर्वे भवन्तु सुखिनः</span>
+    <span class="mh-en">Sarve Bhavantu Sukhinaḥ</span>
+  </div>
+
+  <div class="section-hero reveal">
+    <div class="sh-name">Sarve Bhavantu Sukhinaḥ</div>
+    <div class="sh-desc">The universal prayer of peace — a profound Shanti mantra from the Brihadaranyaka Upanishad, offering wellbeing to all living beings without exception.</div>
+  </div>
+<div class="audio-note">From Brihadaranyaka Upanishad · Yajurveda</div>
+    </div>
+  </div>
+
+  <!-- Full Mantra -->
+  <div class="mantra-box reveal d1">
+    <div class="mantra-sanskrit">
+      सर्वे भवन्तु सुखिनः।<br>
+      सर्वे सन्तु निरामयाः।<br>
+      सर्वे भद्राणि पश्यन्तु।<br>
+      मा कश्चित् दुःख भाग्भवेत्॥<br><br>
+      ॐ शान्तिः शान्तिः शान्तिः॥
+    </div>
+    <div class="mantra-meaning">
+      May all beings be happy · May all beings be free from illness<br>
+      May all beings see the auspicious · May none suffer<br>
+      Om Peace · Peace · Peace
+    </div>
+  </div>
+
+  <div class="verses-wrap">
+
+    <!-- Line 1 -->
+    <div class="verse-card reveal d2">
+      <div class="verse-head"><div class="verse-num">1</div><div class="verse-label">Line One</div></div>
+      <div class="verse-body">
+        <div class="devanagari">सर्वे भवन्तु सुखिनः</div>
+        <div class="transliteration meaning">Sarve bhavantu sukhinaḥ</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">सर्वे</span><span class="word-en">All beings</span></div>
+            <span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">भवन्तु</span><span class="word-en">May they be</span></div>
+            <span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">सुखिनः</span><span class="word-en">Happy</span></div>
+          </div>
+          <div class="line-meaning">🔹 <strong>Line meaning:</strong> May all beings be happy — every creature, every soul, without exception.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Line 2 -->
+    <div class="verse-card reveal d2">
+      <div class="verse-head"><div class="verse-num">2</div><div class="verse-label">Line Two</div></div>
+      <div class="verse-body">
+        <div class="devanagari">सर्वे सन्तु निरामयाः</div>
+        <div class="transliteration meaning">Sarve santu nirāmayāḥ</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">सर्वे</span><span class="word-en">All beings</span></div>
+            <span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">सन्तु</span><span class="word-en">May they be</span></div>
+            <span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">निरामयाः</span><span class="word-en">Free from illness</span></div>
+          </div>
+          <div class="line-meaning">🔹 <strong>Line meaning:</strong> May all beings be free from illness — physical, mental, and spiritual.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Line 3 -->
+    <div class="verse-card reveal d3">
+      <div class="verse-head"><div class="verse-num">3</div><div class="verse-label">Line Three</div></div>
+      <div class="verse-body">
+        <div class="devanagari">सर्वे भद्राणि पश्यन्तु</div>
+        <div class="transliteration meaning">Sarve bhadrāṇi paśyantu</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">सर्वे</span><span class="word-en">All beings</span></div>
+            <span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">भद्राणि</span><span class="word-en">Auspicious things</span></div>
+            <span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">पश्यन्तु</span><span class="word-en">May they see</span></div>
+          </div>
+          <div class="line-meaning">🔹 <strong>Line meaning:</strong> May all beings see only the auspicious — beauty, truth, and grace in life.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Line 4 -->
+    <div class="verse-card reveal d3">
+      <div class="verse-head"><div class="verse-num">4</div><div class="verse-label">Line Four</div></div>
+      <div class="verse-body">
+        <div class="devanagari">मा कश्चित् दुःख भाग्भवेत्</div>
+        <div class="transliteration meaning">Mā kaścit duḥkha bhāgbhavet</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">मा</span><span class="word-en">Let not</span></div>
+            <span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">कश्चित्</span><span class="word-en">Anyone</span></div>
+            <span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">दुःख</span><span class="word-en">Sorrow / Pain</span></div>
+            <span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">भाग्भवेत्</span><span class="word-en">Become a partaker of</span></div>
+          </div>
+          <div class="line-meaning">🔹 <strong>Line meaning:</strong> May not a single soul ever be touched by sorrow or suffering.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Om Shanti -->
+    <div class="verse-card reveal d4">
+      <div class="verse-head"><div class="verse-num">🕉</div><div class="verse-label">Shanti Patha — Peace Invocation</div></div>
+      <div class="verse-body">
+        <div class="devanagari">ॐ शान्तिः शान्तिः शान्तिः</div>
+        <div class="transliteration meaning">Oṃ śāntiḥ śāntiḥ śāntiḥ</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">ॐ</span><span class="word-en">Primordial sound</span></div>
+            <span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">शान्तिः ①</span><span class="word-en">Cosmic peace</span></div>
+            <span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">शान्तिः ②</span><span class="word-en">Physical peace</span></div>
+            <span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">शान्तिः ③</span><span class="word-en">Inner peace</span></div>
+          </div>
+          <div class="line-meaning">🔹 <strong>Line meaning:</strong> Om — Peace at all three levels: cosmic, physical, and within oneself.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="verse-card reveal d5">
+      <div class="verse-head"><div class="verse-num">📖</div><div class="verse-label">Context &amp; Practice</div></div>
+      <div class="verse-body">
+        <div class="meaning">
+          This mantra is from the <strong>Brihadaranyaka Upanishad</strong> of the Yajurveda — one of the most universal prayers in human history, transcending all boundaries and praying for <strong>every living being</strong> across creation.<br><br>
+          Chanting it thrice with full intention sends vibrations of <strong>universal compassion</strong> into the quantum field of consciousness.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════════════════════════
+     SECTION 3 — DURGA MANTRA
+════════════════════════════════════ -->
+<section id="sec-durga" class="sacred-section">
+
+  <div class="mantra-heading">
+    <span class="mh-sa">दुर्गा मन्त्र</span>
+    <span class="mh-en">Durga Mantra</span>
+  </div>
+
+  <div class="section-hero reveal">
+    <div class="sh-name">Durga Mantra</div>
+    <div class="sh-desc">Sacred mantras of Maa Durga — the supreme feminine divine force who vanquishes darkness, destroys evil, and blesses her devotees with courage, protection, and liberation.</div>
+  </div>
+<div class="audio-note">Devi Mahatmyam · Markandeya Purana</div>
+    </div>
+  </div>
+
+  <!-- Mantra-only full text -->
+  <div class="mantra-box mantra-only-box reveal d1">
+    <div class="mantra-sanskrit">
+      ॐ दुं दुर्गायै नमः॥<br><br>
+      सर्वमङ्गल माङ्गल्ये शिवे सर्वार्थ साधिके।<br>
+      शरण्ये त्र्यम्बके गौरि नारायणि नमोऽस्तु ते॥<br><br>
+      या देवी सर्वभूतेषु शक्तिरूपेण संस्थिता।<br>
+      नमस्तस्यै नमस्तस्यै नमस्तस्यै नमो नमः॥<br><br>
+      या देवी सर्वभूतेषु चेतनेत्यभिधीयते।<br>
+      नमस्तस्यै नमस्तस्यै नमस्तस्यै नमो नमः॥<br>
+      या देवी सर्वभूतेषु बुद्धिरूपेण संस्थिता।<br>
+      नमस्तस्यै नमस्तस्यै नमस्तस्यै नमो नमः॥<br>
+      या देवी सर्वभूतेषु शान्तिरूपेण संस्थिता।<br>
+      नमस्तस्यै नमस्तस्यै नमस्तस्यै नमो नमः॥<br>
+      या देवी सर्वभूतेषु श्रद्धारूपेण संस्थिता।<br>
+      नमस्तस्यै नमस्तस्यै नमस्तस्यै नमो नमः॥<br>
+      या देवी सर्वभूतेषु लक्ष्मीरूपेण संस्थिता।<br>
+      नमस्तस्यै नमस्तस्यै नमस्तस्यै नमो नमः॥<br><br>
+      ॐ ऐं ह्रीं क्लीं चामुण्डायै विच्चे॥<br><br>
+      ॐ जयन्ती मङ्गला काली भद्रकाली कपालिनी।<br>
+      दुर्गा क्षमा शिवा धात्री स्वाहा स्वधा नमोऽस्तु ते॥
+    </div>
+  </div>
+
+  <div class="verses-wrap">
+
+    <!-- Mool Mantra -->
+    <div class="verse-card reveal d1">
+      <div class="verse-head"><div class="verse-num">1</div><div class="verse-label">Durga Mool Mantra — Seed of Power</div></div>
+      <div class="verse-body">
+        <div class="devanagari">ॐ दुं दुर्गायै नमः॥</div>
+        <div class="transliteration meaning">Oṃ Dum Durgāyai Namaḥ</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">ॐ</span><span class="word-en">Primordial sound</span></div>
+            <span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">दुं</span><span class="word-en">Seed of Durgā</span></div>
+            <span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">दुर्गायै</span><span class="word-en">To Durgā</span></div>
+            <span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">नमः</span><span class="word-en">Salutations</span></div>
+          </div>
+          <div class="line-meaning">🔹 <strong>Mantra meaning:</strong> Om — I invoke the seed-power of Durgā and offer my salutations to her.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sarvamangala -->
+    <div class="verse-card reveal d2">
+      <div class="verse-head"><div class="verse-num">2</div><div class="verse-label">Sarvamangala Mangalye</div></div>
+      <div class="verse-body">
+        <div class="devanagari">सर्वमङ्गल माङ्गल्ये शिवे सर्वार्थ साधिके।<br>शरण्ये त्र्यम्बके गौरि नारायणि नमोऽस्तु ते॥</div>
+        <div class="transliteration meaning">Sarvamaṅgala māṅgalye śive sarvārtha sādhike · Śaraṇye tryambake gauri nārāyaṇi namo'stu te</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">सर्वमङ्गल</span><span class="word-en">All auspiciousness</span></div>
+            <span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">माङ्गल्ये</span><span class="word-en">O auspicious one</span></div>
+            <span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">शिवे</span><span class="word-en">Benevolent</span></div>
+            <span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">सर्वार्थ</span><span class="word-en">All objectives</span></div>
+            <span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">साधिके</span><span class="word-en">Accomplisher</span></div>
+          </div>
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">शरण्ये</span><span class="word-en">Giver of refuge</span></div>
+            <span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">त्र्यम्बके</span><span class="word-en">Three-eyed one</span></div>
+            <span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">गौरि</span><span class="word-en">Radiant one</span></div>
+            <span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">नारायणि</span><span class="word-en">Daughter of Narayana</span></div>
+            <span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">नमोऽस्तु ते</span><span class="word-en">Salutations to you</span></div>
+          </div>
+          <div class="line-meaning">🔹 <strong>Line 1:</strong> O auspicious one, benevolent, accomplisher of all goals —<br>🔹 <strong>Line 2:</strong> O three-eyed Gauri, Narayani — I take refuge. Salutations!</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ya Devi -->
+    <div class="verse-card reveal d2">
+      <div class="verse-head"><div class="verse-num">3</div><div class="verse-label">Ya Devi Sarvabhuteshu — Universal Presence</div></div>
+      <div class="verse-body">
+        <div class="devanagari">या देवी सर्वभूतेषु शक्तिरूपेण संस्थिता।<br>नमस्तस्यै नमस्तस्यै नमस्तस्यै नमो नमः॥</div>
+        <div class="transliteration meaning">Yā devī sarvabhūteṣu śaktirūpeṇa saṃsthitā · Namastasyai namastasyai namastasyai namo namaḥ</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">या देवी</span><span class="word-en">That Goddess</span></div>
+            <span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">सर्वभूतेषु</span><span class="word-en">In all beings</span></div>
+            <span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">शक्तिरूपेण</span><span class="word-en">As Shakti / Power</span></div>
+            <span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">संस्थिता</span><span class="word-en">Dwells / Is present</span></div>
+          </div>
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">नमस्तस्यै</span><span class="word-en">Salutations to her</span></div>
+            <span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">नमस्तस्यै</span><span class="word-en">Salutations again</span></div>
+            <span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">नमस्तस्यै</span><span class="word-en">Salutations once more</span></div>
+            <span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">नमो नमः</span><span class="word-en">Again and again I bow</span></div>
+          </div>
+          <div class="line-meaning">🔹 <strong>Line 1:</strong> That Goddess who dwells in all beings as the power of Shakti —<br>🔹 <strong>Line 2:</strong> Salutations to her, salutations, salutations — again and again I bow.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ya Devi more forms -->
+    <div class="full-text-block reveal d3">
+      <div class="ftb-title">🔱 Ya Devi — More Forms</div>
+      <div class="chalisa-verse">
+        या देवी सर्वभूतेषु चेतनेत्यभिधीयते। नमस्तस्यै नमस्तस्यै नमस्तस्यै नमो नमः॥<br><br>
+        या देवी सर्वभूतेषु बुद्धिरूपेण संस्थिता। नमस्तस्यै नमस्तस्यै नमस्तस्यै नमो नमः॥<br><br>
+        या देवी सर्वभूतेषु शान्तिरूपेण संस्थिता। नमस्तस्यै नमस्तस्यै नमस्तस्यै नमो नमः॥<br><br>
+        या देवी सर्वभूतेषु श्रद्धारूपेण संस्थिता। नमस्तस्यै नमस्तस्यै नमस्तस्यै नमो नमः॥<br><br>
+        या देवी सर्वभूतेषु लक्ष्मीरूपेण संस्थिता। नमस्तस्यै नमस्तस्यै नमस्तस्यै नमो नमः॥
+      </div>
+      <div class="meaning" style="margin-top:14px;">
+        <div class="word-line">
+          <div class="word-pair"><span class="word-sa">चेतना</span><span class="word-en">Consciousness</span></div>
+          <span class="word-sep">·</span>
+          <div class="word-pair"><span class="word-sa">बुद्धि</span><span class="word-en">Intelligence</span></div>
+          <span class="word-sep">·</span>
+          <div class="word-pair"><span class="word-sa">शान्ति</span><span class="word-en">Peace</span></div>
+          <span class="word-sep">·</span>
+          <div class="word-pair"><span class="word-sa">श्रद्धा</span><span class="word-en">Faith</span></div>
+          <span class="word-sep">·</span>
+          <div class="word-pair"><span class="word-sa">लक्ष्मी</span><span class="word-en">Prosperity</span></div>
+        </div>
+        <div class="line-meaning">🔹 <strong>Line meaning (each):</strong> The Goddess dwells in all beings as [that form] — salutations to her again and again.</div>
+      </div>
+    </div>
+
+    <!-- Navarna Mantra -->
+    <div class="verse-card reveal d4">
+      <div class="verse-head"><div class="verse-num">4</div><div class="verse-label">Navarna Mantra — Nine-Syllable Mantra</div></div>
+      <div class="verse-body">
+        <div class="devanagari" style="font-size:1.4rem;text-align:center;padding:10px 0;">ॐ ऐं ह्रीं क्लीं चामुण्डायै विच्चे॥</div>
+        <div class="transliteration meaning" style="text-align:center;">Oṃ Aiṃ Hrīṃ Klīṃ Cāmuṇḍāyai Vicce</div>
+        <div class="meaning">
+          <div class="word-line">
+            <div class="word-pair"><span class="word-sa">ॐ</span><span class="word-en">Universal consciousness</span></div>
+            <span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">ऐं</span><span class="word-en">Wisdom (Saraswati)</span></div>
+            <span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">ह्रीं</span><span class="word-en">Cosmic Power</span></div>
+            <span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">क्लीं</span><span class="word-en">Transformation (Kali)</span></div>
+            <span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">चामुण्डायै</span><span class="word-en">To Chamunda</span></div>
+            <span class="word-sep">·</span>
+            <div class="word-pair"><span class="word-sa">विच्चे</span><span class="word-en">Grant me</span></div>
+          </div>
+          <div class="line-meaning">🔹 <strong>Mantra meaning:</strong> Om — invoking Wisdom, Cosmic Power, Transformation — salutations to Chamunda who destroys all evil.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Closing -->
+    <div class="mantra-box reveal d5">
+      <div class="mantra-sanskrit">
+        ॐ जयन्ती मङ्गला काली भद्रकाली कपालिनी।<br>
+        दुर्गा क्षमा शिवा धात्री स्वाहा स्वधा नमोऽस्तु ते॥
+      </div>
+      <div class="mantra-meaning">
+        Victory to Jayanti · Mangala · Kali · Bhadrakali · Kapalini<br>
+        Durga · Kshama · Shiva · Dhatri — Svaha · Svadha — Salutations to you!
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</main>
+
+<!-- Footer -->
+<div class="qf-footer">
+  🕉 <strong>SanataniAnthem</strong> · Quantum Field of Sacred Wisdom<br>
+  <span style="opacity:.6;">वसुधैव कुटुम्बकम् — The World is One Family</span>
+</div>
+
+<script>
+/* ── MEANING TOGGLE ── */
+function toggleMeaning() {
+  const track = document.getElementById('meaningTrack');
+  const wrap = track.closest('.meaning-toggle-wrap');
+  const isOn = track.classList.toggle('on');
+  wrap.classList.toggle('on', isOn);
+  document.body.classList.toggle('hide-meaning', !isOn);
+}
+
+/* ── LANGUAGE TOGGLE ── */
+function toggleLang() {
+  const html = document.documentElement;
+  const toggle = document.getElementById('langToggle');
+  const isSa = html.getAttribute('data-lang') === 'sa';
+  html.setAttribute('data-lang', isSa ? 'en' : 'sa');
+  toggle.classList.toggle('sa-on', !isSa);
+}
+
+/* ── TAB SWITCHING ── */
+function switchTab(id, btn) {
+  document.querySelectorAll('.sacred-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('act'));
+  document.getElementById('sec-' + id).classList.add('active');
+  if(btn) btn.classList.add('active');
+  // Highlight matching nav link
+  const navLink = document.querySelector(`.nav-links a[href="#sec-${id}"]`);
+  if(navLink) navLink.classList.add('act');
+  window.scrollTo({top:0, behavior:'smooth'});
+  setTimeout(triggerReveals, 50);
+}
+function switchTabByHash(id, e) {
+  e.preventDefault();
+  // find matching tab-btn
+  const btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.getAttribute('onclick').includes("'"+id+"'"));
+  switchTab(id, btn);
+}
+
+/* ── SCROLL REVEAL ── */
+function triggerReveals() {
+  const els = document.querySelectorAll('.reveal:not(.vis)');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('vis'); obs.unobserve(e.target); } });
+  }, {threshold:0.08});
+  els.forEach(el => obs.observe(el));
+}
+triggerReveals();
+
+/* ── PARTICLE BACKGROUND ── */
+(function(){
+  const canvas = document.getElementById('qf-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const COLORS = ['rgba(255,107,0,', 'rgba(200,137,10,', 'rgba(19,136,8,', 'rgba(0,0,128,'];
+
+  for(let i = 0; i < 55; i++) {
+    particles.push({
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      r: Math.random() * 2.5 + .5,
+      vx: (Math.random() - .5) * .4,
+      vy: (Math.random() - .5) * .4,
+      c: COLORS[Math.floor(Math.random() * COLORS.length)],
+      a: Math.random() * .5 + .1,
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach(p => {
+      p.x += p.vx; p.y += p.vy;
+      if(p.x < 0) p.x = W; if(p.x > W) p.x = 0;
+      if(p.y < 0) p.y = H; if(p.y > H) p.y = 0;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.c + p.a + ')';
+      ctx.fill();
+    });
+    // Draw subtle connections
+    for(let i = 0; i < particles.length; i++) {
+      for(let j = i+1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if(dist < 110) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(255,107,0,${0.04 * (1 - dist/110)})`;
+          ctx.lineWidth = .6;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
+<script type="module" src="header.js"></script>
+<!-- UNIVERSAL FOOTER -->
+<div id="sa-footer-root"></div>
+<script type="module" src="footer.js"></script>
+</body>
+</html>
