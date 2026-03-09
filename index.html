@@ -1416,11 +1416,11 @@ footer{
     </a>
     <div class="nav-links" id="navLinks">
       <a href="#home">Home</a>
-      <a href="#anthem">🎵 Anthem</a>
-      <a href="yatra.html">✈ Book Yatra</a>
+      <a href="sanatani-anthem-mantras.html">🎵 Anthem</a>
+      <a href="yatra.html#booking">✈ Book Yatra</a>
       <a href="sanskrit.html">📚 Sanskrit Sikho</a>
       <a href="yatra.html#pilgrimage">⛩ Pilgrimage</a>
-      <a href="#maps">🗺 Maps</a>
+      <a href="yatra.html#maps">🗺 Maps</a>
       <a href="#puja">🪔 Puja</a>
       <a href="#bhajan">🎶 Bhajan Club</a>
     </div>
@@ -1475,9 +1475,9 @@ footer{
   <div class="hero-chips reveal d4">
     <a class="chip" href="yatra.html#pilgrimage">🔱 51 Shakti Peetha</a>
     <a class="chip" href="yatra.html#pilgrimage">🕌 12 Jyotirlinga</a>
-    <a class="chip" href="#maps">🏹 Ramayana Route</a>
-    <a class="chip" href="#maps">⚔ Mahabharata Kings</a>
-    <a class="chip" href="#anthem">🎵 Hanuman Chalisa</a>
+    <a class="chip" href="yatra.html#maps">🏹 Ramayana Route</a>
+    <a class="chip" href="yatra.html#maps">⚔ Mahabharata Kings</a>
+    <a class="chip" href="sanatani-anthem-mantras.html">🎵 Hanuman Chalisa</a>
     <a class="chip" href="sanskrit.html">📖 Sanskrit Sikho</a>
   </div>
 
@@ -1513,97 +1513,7 @@ footer{
 <!-- ══════════════════════════════════════════
      INTERACTIVE MAPS
 ══════════════════════════════════════════ -->
-<section class="sec" id="maps" style="background:var(--sf-xpale);">
-  <div class="sec-inner">
-    <span class="sec-label reveal">🗺 Heritage Maps</span>
-    <h2 class="sec-h2 reveal">Sacred <span class="ita">Journey Maps</span></h2>
-    <div class="sec-rule reveal"><div class="sec-rule-bar"></div><div class="sec-rule-dot"></div></div>
 
-    <div class="map-tabs reveal">
-      <button class="mtab on" onclick="setMTab(this,'rama')">🏹 Ramayana Route</button>
-      <button class="mtab" onclick="setMTab(this,'maha')">⚔ Mahabharata Kingdoms</button>
-    </div>
-
-    <!-- Ramayana -->
-    <div class="mcontent on" id="mc-rama">
-      <div class="map-wrap reveal">
-        <h3 style="color:var(--gold-l);font-family:'Cinzel',serif;text-align:center;margin-bottom:18px;font-size:1rem;">
-          🏹 Lord Ram's Sacred Journey — Ayodhya to Lanka
-        </h3>
-        <svg viewBox="0 0 640 520" style="width:100%;max-width:600px;margin:0 auto;display:block;">
-          <!-- India silhouette simplified -->
-          <path d="M160,35 Q210,22 290,28 Q370,22 420,45 Q470,58 475,90 Q495,125 485,165 Q505,200 495,245 Q515,285 505,325 Q515,365 495,398 Q472,432 448,455 Q415,482 380,494 Q345,508 310,498 Q275,488 248,470 Q205,448 182,408 Q152,368 142,328 Q118,285 130,245 Q115,200 128,162 Q142,118 162,78 Q165,52 160,35Z"
-            fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.12)" stroke-width="1.5"/>
-
-          <!-- Route -->
-          <polyline points="292,108 270,152 258,195 248,232 238,265 248,295 236,332 258,360 278,382 308,402 330,425 352,455"
-            fill="none" stroke="#FF6B00" stroke-width="3" class="map-route-dash" opacity=".9"/>
-
-          <!-- Locations -->
-          <g class="map-location-btn" onclick="toast('🏹 Ayodhya — Ram Janmabhoomi. Sarayu river banks. New Ram Mandir. Hotel from ₹1,200/night')">
-            <circle cx="292" cy="108" r="9" fill="var(--sf)" opacity=".9"/>
-            <circle cx="292" cy="108" r="16" fill="rgba(255,107,0,.18)"/>
-            <text x="306" y="113" font-size="11" fill="white" font-family="sans-serif" font-weight="600">Ayodhya 🏹</text>
-          </g>
-          <g class="map-location-btn" onclick="toast('🌿 Chitrakoot — Ram, Sita, Laxman spent 11 years here. Hotel from ₹900/night')">
-            <circle cx="258" cy="195" r="7" fill="#FFB300"/>
-            <circle cx="258" cy="195" r="12" fill="rgba(255,179,0,.15)"/>
-            <text x="270" y="199" font-size="10" fill="rgba(255,255,255,.8)" font-family="sans-serif">Chitrakoot</text>
-          </g>
-          <g class="map-location-btn" onclick="toast('🌺 Panchavati (Nashik) — Sita was abducted by Ravana from here. Hotel from ₹1,100/night')">
-            <circle cx="238" cy="272" r="7" fill="#FF8C00"/>
-            <text x="190" y="276" font-size="10" fill="rgba(255,255,255,.75)" font-family="sans-serif">Panchavati (Nashik)</text>
-          </g>
-          <g class="map-location-btn" onclick="toast('🏔 Kishkindha (Hampi) — Ram met Hanuman here. Kingdom of Sugriva. Vali vadh. Hotel from ₹1,500/night')">
-            <circle cx="270" cy="350" r="7" fill="#FFB300"/>
-            <text x="278" y="354" font-size="10" fill="rgba(255,255,255,.75)" font-family="sans-serif">Kishkindha (Hampi)</text>
-          </g>
-          <g class="map-location-btn" onclick="toast('🌊 Rameshwaram — Ram built the Setu bridge to Lanka. Ramanathaswamy Jyotirlinga. Hotel from ₹1,800/night')">
-            <circle cx="308" cy="402" r="9" fill="var(--sf)" opacity=".9"/>
-            <circle cx="308" cy="402" r="16" fill="rgba(255,107,0,.18)"/>
-            <text x="320" y="407" font-size="11" fill="white" font-family="sans-serif" font-weight="600">Rameshwaram 🌊</text>
-          </g>
-          <g class="map-location-btn" onclick="toast('🔥 Lanka (Sri Lanka) — The golden city of Ravana. Ram defeated Ravana and rescued Sita here.')">
-            <circle cx="344" cy="465" r="9" fill="#E53935" opacity=".9"/>
-            <text x="354" y="469" font-size="11" fill="rgba(255,200,200,.9)" font-family="sans-serif" font-weight="600">Lanka 🔥</text>
-          </g>
-
-          <!-- Legend -->
-          <line x1="30" y1="485" x2="65" y2="485" stroke="#FF6B00" stroke-width="2.5" stroke-dasharray="7,4"/>
-          <text x="72" y="489" font-size="9" fill="rgba(255,255,255,.4)" font-family="sans-serif">Ram's route</text>
-          <circle cx="38" cy="500" r="5" fill="var(--sf)" opacity=".8"/>
-          <text x="48" y="504" font-size="9" fill="rgba(255,255,255,.4)" font-family="sans-serif">Click for hotel info</text>
-        </svg>
-      </div>
-      <div class="places-grid">
-        <div class="pcard reveal d1"><div class="pcard-ico">🏹</div><div class="pcard-name">Ayodhya</div><div class="pcard-sub">Ram Janmabhoomi • New Ram Mandir</div><div class="pcard-price">Package ₹3,999</div><button class="tc-btn" style="margin-top:10px;padding:8px 14px;" onclick="bookIt('Ayodhya','₹3,999')">Book</button></div>
-        <div class="pcard reveal d2"><div class="pcard-ico">🌿</div><div class="pcard-name">Chitrakoot</div><div class="pcard-sub">Ram Vanvas site • Kamadgiri</div><div class="pcard-price">Package ₹3,299</div><button class="tc-btn" style="margin-top:10px;padding:8px 14px;" onclick="bookIt('Chitrakoot','₹3,299')">Book</button></div>
-        <div class="pcard reveal d3"><div class="pcard-ico">🌺</div><div class="pcard-name">Nashik / Panchavati</div><div class="pcard-sub">Sita's abduction site</div><div class="pcard-price">Package ₹4,499</div><button class="tc-btn" style="margin-top:10px;padding:8px 14px;" onclick="bookIt('Nashik Panchavati','₹4,499')">Book</button></div>
-        <div class="pcard reveal d4"><div class="pcard-ico">🏔</div><div class="pcard-name">Hampi — Kishkindha</div><div class="pcard-sub">Sugriva's kingdom • Hanuman</div><div class="pcard-price">Package ₹5,499</div><button class="tc-btn" style="margin-top:10px;padding:8px 14px;" onclick="bookIt('Hampi Kishkindha','₹5,499')">Book</button></div>
-        <div class="pcard reveal d1"><div class="pcard-ico">🌊</div><div class="pcard-name">Rameshwaram</div><div class="pcard-sub">Ram Setu • Jyotirlinga</div><div class="pcard-price">Package ₹6,999</div><button class="tc-btn" style="margin-top:10px;padding:8px 14px;" onclick="bookIt('Rameshwaram','₹6,999')">Book</button></div>
-      </div>
-    </div>
-
-    <!-- Mahabharata -->
-    <div class="mcontent" id="mc-maha">
-      <div class="map-wrap reveal">
-        <h3 style="color:var(--gold-l);font-family:'Cinzel',serif;text-align:center;margin-bottom:20px;font-size:1rem;">
-          ⚔ Kings Who Came to Kurukshetra — Their Kingdoms
-        </h3>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:12px;">
-          <div class="mkcard" onclick="bookIt('Hastinapur — Pandava capital','₹2,999')"><div class="mkcard-ico">👑</div><div class="mkcard-name">Hastinapur</div><div class="mkcard-detail">Raja Dhritarashtra • Duryodhana's capital</div><div class="mkcard-price">Package ₹2,999 →</div></div>
-          <div class="mkcard" onclick="bookIt('Kurukshetra','₹2,499')"><div class="mkcard-ico">⚔</div><div class="mkcard-name">Kurukshetra</div><div class="mkcard-detail">Dharmakshetra where Gita was spoken</div><div class="mkcard-price">Package ₹2,499 →</div></div>
-          <div class="mkcard" onclick="bookIt('Dwarka — Krishna kingdom','₹6,999')"><div class="mkcard-ico">🌊</div><div class="mkcard-name">Dwarka</div><div class="mkcard-detail">Shri Krishna's Yadava kingdom. Submerged city.</div><div class="mkcard-price">Package ₹6,999 →</div></div>
-          <div class="mkcard" onclick="bookIt('Indraprastha — Pandava palace','₹1,999')"><div class="mkcard-ico">🏛</div><div class="mkcard-name">Indraprastha (Delhi)</div><div class="mkcard-detail">Yudhishthira's capital — Maya Sabha</div><div class="mkcard-price">Package ₹1,999 →</div></div>
-          <div class="mkcard" onclick="bookIt('Mathura — Kamsa kingdom','₹3,499')"><div class="mkcard-ico">🌺</div><div class="mkcard-name">Mathura</div><div class="mkcard-detail">Krishna Janmabhoomi • King Kamsa's city</div><div class="mkcard-price">Package ₹3,499 →</div></div>
-          <div class="mkcard" onclick="bookIt('Magadha Rajgir — Jarasandha','₹4,499')"><div class="mkcard-ico">🏰</div><div class="mkcard-name">Magadha — Rajgir</div><div class="mkcard-detail">King Jarasandha. Bihar. Hot springs & ruins.</div><div class="mkcard-price">Package ₹4,499 →</div></div>
-          <div class="mkcard" onclick="bookIt('Kashi — Karna connection','₹5,999')"><div class="mkcard-ico">🔱</div><div class="mkcard-name">Anga Kingdom (Bhagalpur)</div><div class="mkcard-detail">King Karna's kingdom gifted by Duryodhana</div><div class="mkcard-price">Package ₹3,999 →</div></div>
-          <div class="mkcard" onclick="bookIt('Kurukshetra — Dronacharya','₹2,499')"><div class="mkcard-ico">🎯</div><div class="mkcard-name">Panchal Kingdom</div><div class="mkcard-detail">Raja Drupada • Draupadi's father • Haryana</div><div class="mkcard-price">Package ₹2,999 →</div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
 
 <!-- ══════════════════════════════════════════
      TEMPLE SERVICES
@@ -1674,8 +1584,8 @@ footer{
           <li><a href="yatra.html#pilgrimage">51 Shakti Peetha</a></li>
           <li><a href="yatra.html#pilgrimage">12 Jyotirlinga</a></li>
           <li><a href="yatra.html#pilgrimage">Char Dham Yatra</a></li>
-          <li><a href="#maps">Ramayana Route</a></li>
-          <li><a href="#maps">Mahabharata Map</a></li>
+          <li><a href="yatra.html#maps">Ramayana Route</a></li>
+          <li><a href="yatra.html#maps">Mahabharata Map</a></li>
         </ul>
       </div>
       <div class="foot-col">
@@ -1692,10 +1602,10 @@ footer{
         <div class="foot-col-h">Learn</div>
         <ul>
           <li><a href="sanskrit.html">Sanskrit Sikho</a></li>
-          <li><a href="#anthem">Hanuman Chalisa</a></li>
-          <li><a href="#anthem">Sarve Bhavantu</a></li>
+          <li><a href="sanatani-anthem-mantras.html">Hanuman Chalisa</a></li>
+          <li><a href="sanatani-anthem-mantras.html">Sarve Bhavantu</a></li>
           <li><a href="#bhajan">Bhajan Clubbing</a></li>
-          <li><a href="yatra.html">Book Yatra</a></li>
+          <li><a href="yatra.html#booking">Book Yatra</a></li>
         </ul>
       </div>
     </div>
