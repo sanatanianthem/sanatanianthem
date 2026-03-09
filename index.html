@@ -1,0 +1,2576 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SanataniAnthem 🕉</title>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Sanskrit&family=Cinzel:wght@400;600;700;900&family=Cinzel+Decorative:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&family=Yatra+One&family=Playfair+Display:wght@700;900&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&family=IM+Fell+English:ital@0;1&family=Raleway:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════
+   DESIGN SYSTEM — Light Saffron + India Flag
+══════════════════════════════════════════ */
+:root{
+  --sf:        #FF6B00;
+  --sf-light:  #FF9A3C;
+  --sf-pale:   #FFF3E0;
+  --sf-xpale:  #FFFBF4;
+  --gold:      #C8890A;
+  --gold-l:    #F2C94C;
+  --green:     #138808;
+  --green-l:   #1EA80A;
+  --navy:      #000080;
+  --navy-l:    #0A1628;
+  --white:     #FFFFFF;
+  --cream:     #FFFDF8;
+  --cream2:    #FFF7ED;
+  --text:      #1C0D00;
+  --text-m:    #5C3A18;
+  --text-l:    #A07040;
+  --border:    rgba(200,137,10,0.18);
+  --shadow:    0 4px 24px rgba(255,107,0,0.10);
+  --r12: 12px; --r16:16px; --r20:20px; --r24:24px; --r32:32px;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--cream);
+  color:var(--text);
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-thumb{background:linear-gradient(var(--sf),var(--green));border-radius:5px;}
+
+/* ─── LANGUAGE SYSTEM ─── */
+[data-lang="sa"] .lang-en{display:none!important;}
+[data-lang="en"] .lang-sa{display:none!important;}
+
+/* ─── UTILITIES ─── */
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);}
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .55s cubic-bezier(.16,1,.3,1),transform .55s cubic-bezier(.16,1,.3,1);}
+.reveal.vis{opacity:1;transform:translateY(0);}
+
+
+/* ─── INDIA FLAG STRIPE ─── */
+.flag-top{
+  height:6px;
+  background:linear-gradient(to right,
+    var(--sf) 0%,var(--sf) 33.33%,
+    #fff 33.33%,#fff 66.66%,
+    var(--green) 66.66%,var(--green) 100%);
+  position:relative;
+}
+.flag-top::after{
+  content:'';position:absolute;left:50%;top:50%;
+  transform:translate(-50%,-50%);
+  width:14px;height:14px;border-radius:50%;
+  border:2px solid var(--navy);opacity:.25;
+}
+
+/* ─── NAV ─── */
+
+
+
+.nav-om{
+  width:46px;height:46px;border-radius:50%;
+  background:linear-gradient(145deg,#1a0800,#2d1000);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:
+    0 0 0 2px rgba(255,153,51,.5),
+    0 0 12px rgba(255,153,51,.25),
+    inset 0 1px 3px rgba(255,200,100,.15);
+  animation:omRing 3s ease-in-out infinite;
+  flex-shrink:0;
+}
+@keyframes omRing{
+  0%,100%{box-shadow:0 0 0 2px rgba(255,153,51,.5),0 0 12px rgba(255,153,51,.2),inset 0 1px 3px rgba(255,200,100,.15);}
+  50%{box-shadow:0 0 0 4px rgba(255,153,51,.7),0 0 22px rgba(255,153,51,.4),inset 0 1px 3px rgba(255,200,100,.2);}
+}
+/* ── BRAND TOOLTIP ── */
+
+#sa-tooltip{
+  position:fixed;
+  background:linear-gradient(135deg,#1a0800,#2d1000);
+  color:#FFE57A;
+  font-family:'Raleway',sans-serif;font-weight:600;font-size:.78rem;
+  font-style:normal;letter-spacing:.5px;
+  white-space:normal;
+  max-width:300px;
+  text-align:center;
+  line-height:1.75;
+  padding:14px 18px 14px 18px;border-radius:20px;
+  border:1px solid rgba(255,153,51,.5);
+  box-shadow:0 4px 20px rgba(0,0,0,.4),0 0 14px rgba(255,153,51,.2);
+  pointer-events:auto;
+  opacity:0;
+  transition:opacity .25s ease, transform .25s ease;
+  transform:translateY(-4px);
+  z-index:99999;
+}
+#sa-tooltip.show{opacity:1;transform:translateY(0);}
+#tip-close{
+  position:absolute;top:7px;right:10px;
+  background:none;border:none;cursor:pointer;
+  color:rgba(255,229,122,.55);font-size:1rem;line-height:1;
+  transition:color .2s;padding:0;
+}
+#tip-close:hover{color:#FFE57A;}
+#tip-enter-btn{
+  display:block;width:100%;margin-top:10px;
+  padding:8px 14px;border-radius:30px;
+  background:linear-gradient(135deg,var(--sf),#FF9A3C);
+  color:#fff;font-family:'Raleway',sans-serif;font-weight:800;
+  font-size:.76rem;letter-spacing:.8px;text-transform:uppercase;
+  border:none;cursor:pointer;
+  box-shadow:0 2px 12px rgba(255,107,0,.4);
+  transition:transform .15s, box-shadow .15s;
+}
+#tip-enter-btn:hover{transform:scale(1.04);box-shadow:0 4px 18px rgba(255,107,0,.6);}
+#tip-enter-btn:active{transform:scale(.97);}
+#sa-tooltip::before{
+  content:'';position:absolute;bottom:100%;left:50%;
+  transform:translateX(-50%);
+  border:6px solid transparent;
+  border-bottom-color:#2d1000;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* Language Pill */
+.lang-pill{display:flex;align-items:center;position:relative;}
+/* ── LANGUAGE TOGGLE SWITCH ── */
+
+
+
+
+
+
+
+
+
+
+
+  appearance:none;-webkit-appearance:none;
+  padding:7px 32px 7px 14px;
+  background:var(--cream2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23FF6B00' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 10px center;
+  border:1.5px solid var(--border);
+  border-radius:30px;
+  font-family:'DM Sans',sans-serif;
+  font-size:.75rem;font-weight:700;
+  color:var(--text-m);
+  cursor:pointer;
+  outline:none;
+  transition:all .2s;
+  min-width:110px;
+}
+.lang-select:hover,.lang-select:focus{border-color:var(--sf);color:var(--sf);}
+/* Sanskrit dedicated tab */
+.sa-tab{
+  display:flex;align-items:center;gap:5px;
+  padding:7px 14px;border-radius:30px;
+  background:linear-gradient(135deg,rgba(255,107,0,.1),rgba(19,136,8,.08));
+  border:1.5px solid rgba(255,107,0,.3);
+  color:var(--sf);
+  font-family:'Tiro Devanagari Sanskrit',serif;
+  font-size:.78rem;font-weight:700;
+  cursor:pointer;transition:all .25s;
+  position:relative;white-space:nowrap;
+}
+.sa-tab:hover,.sa-tab.on{
+  background:linear-gradient(135deg,var(--sf),#C85000);
+  color:#fff;border-color:var(--sf);
+  box-shadow:0 4px 14px rgba(255,107,0,.3);
+}
+.sa-tab-text{font-family:'Tiro Devanagari Sanskrit',serif;}
+.sa-tab-badge{
+  background:var(--green);color:#fff;
+  font-size:.5rem;font-weight:800;font-family:'DM Sans',sans-serif;
+  padding:1px 5px;border-radius:6px;letter-spacing:.3px;
+}
+.lbtn{display:none;}
+.lbtn#btnBen::after{display:none;}
+
+.nav-book{
+  padding:9px 20px;border-radius:30px;
+  background:linear-gradient(135deg,var(--sf),#C85000);
+  color:#fff;border:none;cursor:pointer;
+  font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:700;
+  letter-spacing:.5px;box-shadow:0 4px 14px rgba(255,107,0,.3);
+  transition:all .3s;text-decoration:none;
+}
+.nav-book:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(255,107,0,.45);}
+
+.nav-admin{
+  padding:7px 14px;border-radius:20px;border:1px solid var(--border);
+  font-size:.7rem;font-weight:600;color:var(--text-l);
+  background:transparent;cursor:pointer;transition:all .2s;
+  font-family:'DM Sans',sans-serif;
+}
+.nav-admin:hover{border-color:var(--sf);color:var(--sf);}
+
+
+
+
+/* ══════════════════════════════════════════
+   HERO
+══════════════════════════════════════════ */
+.hero{
+  min-height:100vh;
+  background: linear-gradient(
+    180deg,
+    #0d5fa3 0%,
+    #1470b8 6%,
+    #2183cc 16%,
+    #3d9ad6 28%,
+    #62b3e2 42%,
+    #8ecaed 57%,
+    #b8def5 72%,
+    #d8eef9 84%,
+    #ecf7fd 93%,
+    #f7fbff 100%
+  );
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:100px 20px 70px;
+  position:relative;overflow:hidden;
+}
+
+/* ─── ATMOSPHERE ─── */
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 120% 50% at 50% 0%, rgba(180,220,255,.12) 0%, transparent 55%),
+    radial-gradient(ellipse 100% 25% at 50% 100%, rgba(220,240,255,.15) 0%, transparent 100%);
+  pointer-events:none;z-index:0;
+}
+
+/* ─── CLOUDS LAYER ─── */
+.sky-clouds{
+  position:absolute;inset:0;
+  pointer-events:none;overflow:hidden;z-index:1;
+}
+
+/* ── SVG clouds are injected via JS into .sky-clouds ── */
+.cloud-svg{
+  position:absolute;
+  pointer-events:none;
+}
+.cloud-svg
+.cloud-svg
+.cloud-svg
+.cloud-svg
+.cloud-svg
+.cloud-svg.d6{ top:38%; left:-350px; animation:drift1 50s linear infinite 42s;  }
+.cloud-svg.d7{ top:2%;  left:-600px; animation:drift1 100s linear infinite 55s; opacity:.5; }
+
+@keyframes drift1{
+  0%  { transform:translateX(0); }
+  100%{ transform:translateX(calc(100vw + 800px)); }
+}
+@keyframes drift2{
+  0%  { transform:translateX(0); }
+  100%{ transform:translateX(calc(-100vw - 800px)); }
+}
+
+/* ─── HORIZON HAZE ─── */
+.sky-haze{
+  position:absolute;bottom:0;left:0;right:0;height:30%;
+  background:linear-gradient(to top, rgba(240,250,255,.45) 0%, transparent 100%);
+  pointer-events:none;z-index:2;
+}
+/* Mandala bg */
+.hero-mandala{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:700px;height:700px;border-radius:50%;
+  border:1px solid rgba(255,107,0,.06);
+  animation:mandalaSpin 80s linear infinite;
+  pointer-events:none;
+}
+.hero-mandala::before,.hero-mandala::after{
+  content:'';position:absolute;inset:40px;border-radius:50%;
+  border:1px solid rgba(200,137,10,.05);
+}
+.hero-mandala::after{inset:80px;border-color:rgba(19,136,8,.04);}
+@keyframes mandalaSpin{to{transform:translate(-50%,-50%) rotate(360deg);}}
+/* Particles */
+.hero-pts{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.pt{
+  position:absolute;border-radius:50%;
+  background:var(--gold);opacity:0;
+  width:var(--s);height:var(--s);left:var(--x);
+  animation:ptRise var(--d) ease-in infinite var(--dl);
+}
+@keyframes ptRise{
+  0%{opacity:0;transform:translateY(100vh);}
+  15%{opacity:.5;}85%{opacity:.05;}
+  100%{opacity:0;transform:translateY(-10vh);}
+}
+
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,0.72);
+  border:1px solid rgba(255,107,0,.30);
+  color:var(--sf);padding:7px 20px;border-radius:30px;
+  font-size:.7rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;
+  margin-bottom:24px;z-index:1;position:relative;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+
+.hero-om-text{
+  font-family:'Tiro Devanagari Sanskrit',serif;
+  font-size:clamp(5rem,14vw,10rem);
+  color:var(--sf);line-height:1;
+  text-shadow:0 0 80px rgba(255,107,0,.2);
+  animation:omFloat 5s ease-in-out infinite;
+  z-index:1;position:relative;margin-bottom:8px;
+  background:linear-gradient(180deg,var(--sf-light),var(--sf),#C85000);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+@keyframes omFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);}}
+
+.hero-h1{
+  font-family:'Raleway',sans-serif;font-weight:900;
+  font-size:clamp(3.2rem,8vw,7.5rem);
+  line-height:1.05;
+  z-index:1;position:relative;margin-bottom:8px;
+  letter-spacing:6px;
+  font-style:normal;
+  text-transform:none;
+}
+.hero-h1 .acc-sf{ color:#FF6B00; -webkit-text-fill-color:#FF6B00; font-weight:900; }
+.hero-h1 .acc-gr{ color:#C8890A; -webkit-text-fill-color:#C8890A; font-weight:900; }
+
+.hero-tagline{
+  font-family:'Tiro Devanagari Sanskrit',serif;
+  font-size:1.05rem;color:var(--text-m);
+  line-height:1.8;z-index:1;position:relative;margin-bottom:36px;
+  max-width:580px;
+}
+
+/* Hero Search */
+.hero-search{
+  display:flex;align-items:center;
+  background:#fff;border:2px solid rgba(200,137,10,.2);border-radius:60px;
+  padding:6px 6px 6px 22px;
+  max-width:660px;width:100%;
+  box-shadow:0 8px 40px rgba(255,107,0,.1),0 0 0 6px rgba(255,107,0,.04);
+  z-index:1;position:relative;transition:border-color .3s,box-shadow .3s;
+}
+.hero-search:focus-within{
+  border-color:rgba(255,107,0,.45);
+  box-shadow:0 8px 40px rgba(255,107,0,.18),0 0 0 6px rgba(255,107,0,.07);
+}
+.hero-search input{
+  flex:1;border:none;outline:none;font-family:'DM Sans',sans-serif;
+  font-size:.95rem;color:var(--text);background:transparent;
+}
+.hero-search input::placeholder{color:var(--text-l);}
+.hero-search-btn{
+  padding:12px 28px;border-radius:50px;border:none;
+  background:linear-gradient(135deg,var(--sf),#C85000);
+  color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;
+  font-size:.82rem;cursor:pointer;
+  box-shadow:0 4px 14px rgba(255,107,0,.3);
+  transition:all .3s;
+}
+.hero-search-btn:hover{transform:scale(1.03);box-shadow:0 6px 20px rgba(255,107,0,.5);}
+
+.hero-chips{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:8px;
+  margin-top:14px;z-index:1;position:relative;
+}
+.chip{
+  padding:6px 16px;border-radius:20px;
+  border:1px solid rgba(200,137,10,.2);background:rgba(255,255,255,.8);
+  font-size:.73rem;font-weight:500;color:var(--text-m);
+  cursor:pointer;transition:all .2s;text-decoration:none;
+  backdrop-filter:blur(8px);
+}
+.chip:hover{border-color:var(--sf);color:var(--sf);background:rgba(255,107,0,.05);}
+
+/* Hero Stats */
+.hero-stats{
+  display:flex;gap:0;flex-wrap:wrap;justify-content:center;
+  margin-top:52px;z-index:1;position:relative;
+  background:rgba(255,255,255,.7);backdrop-filter:blur(16px);
+  border:1px solid var(--border);border-radius:20px;
+  padding:4px;overflow:hidden;
+  box-shadow:0 8px 32px rgba(255,107,0,.08);
+}
+.hstat{
+  padding:18px 28px;text-align:center;
+  border-right:1px solid var(--border);
+}
+.hstat:last-child{border-right:none;}
+.hstat .n{
+  font-family:'Cinzel',serif;font-size:1.8rem;font-weight:900;
+  background:linear-gradient(135deg,var(--sf),#C85000);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  display:block;line-height:1;
+}
+.hstat .l{font-size:.65rem;color:var(--text-l);letter-spacing:1.5px;text-transform:uppercase;margin-top:4px;}
+
+/* ══════════════════════════════════════════
+   SECTIONS — SHARED
+══════════════════════════════════════════ */
+.sec{padding:90px 20px;}
+.sec-inner{max-width:1280px;margin:0 auto;}
+.sec-label{
+  font-size:.65rem;font-weight:700;letter-spacing:4px;
+  text-transform:uppercase;color:var(--sf);display:block;margin-bottom:8px;
+}
+.sec-h2{
+  font-family:'Cinzel',serif;font-weight:700;
+  font-size:clamp(1.7rem,3vw,2.8rem);color:var(--text);
+  line-height:1.2;margin-bottom:8px;
+}
+.sec-h2 .ita{font-style:italic;color:var(--sf);}
+.sec-rule{
+  display:flex;align-items:center;gap:10px;
+  margin:12px 0 36px;
+}
+.sec-rule-bar{height:1px;width:40px;background:linear-gradient(to right,var(--gold),transparent);}
+.sec-rule-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);}
+
+/* Dark section */
+.sec-dark{
+  background:linear-gradient(170deg,#100500,#1E0B00);
+  padding:90px 20px;
+}
+
+/* ══════════════════════════════════════════
+   ANTHEM SECTION
+══════════════════════════════════════════ */
+.anthem-boxes{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:20px;max-width:1060px;margin:0 auto 36px;
+}
+.abox{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(200,137,10,.2);
+  border-radius:var(--r20);padding:32px 28px;
+  position:relative;overflow:hidden;
+  transition:transform .3s,border-color .3s;
+}
+.abox::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 0%,rgba(255,107,0,.05),transparent 60%);
+  pointer-events:none;
+}
+.abox:hover{transform:translateY(-5px);border-color:rgba(255,107,0,.4);}
+.abox-label{
+  font-size:.6rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;
+  color:var(--sf);margin-bottom:14px;
+  display:flex;align-items:center;gap:8px;
+}
+.abox-label::after{content:'';flex:1;height:1px;background:linear-gradient(to right,rgba(255,107,0,.3),transparent);}
+.abox-title{
+  font-family:'Tiro Devanagari Sanskrit',serif;
+  font-size:1.5rem;color:var(--gold-l);line-height:1.3;margin-bottom:18px;
+}
+.abox-verse{
+  font-family:'Tiro Devanagari Sanskrit',serif;
+  font-size:.95rem;color:rgba(255,255,255,.75);
+  line-height:2.3;margin-bottom:16px;
+}
+.abox-meaning{
+  font-size:.8rem;color:rgba(255,255,255,.35);
+  font-style:italic;line-height:1.7;
+  border-top:1px solid rgba(255,255,255,.06);
+  padding-top:14px;margin-bottom:22px;
+}
+.abox-meaning strong{color:var(--sf-light);}
+
+/* Player widget */
+.player-widget{
+  background:rgba(0,0,0,.25);border-radius:var(--r12);
+  padding:16px;display:flex;flex-direction:column;gap:10px;
+}
+.player-top{display:flex;align-items:center;gap:12px;}
+.player-play-btn{
+  width:44px;height:44px;border-radius:50%;
+  border:none;cursor:pointer;
+  background:linear-gradient(135deg,var(--sf),#C85000);
+  color:#fff;font-size:1.1rem;
+  box-shadow:0 4px 14px rgba(255,107,0,.4);
+  transition:all .3s;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.player-play-btn:hover{transform:scale(1.1);box-shadow:0 6px 20px rgba(255,107,0,.6);}
+.player-info{flex:1;}
+.player-title{font-size:.78rem;font-weight:600;color:rgba(255,255,255,.8);margin-bottom:2px;}
+.player-sub{font-size:.65rem;color:rgba(255,255,255,.3);}
+/* Progress bar */
+.player-bar{
+  height:4px;background:rgba(255,255,255,.1);border-radius:4px;overflow:hidden;
+}
+.player-prog{
+  height:100%;background:linear-gradient(to right,var(--sf),var(--gold-l));
+  border-radius:4px;width:0%;transition:width .1s linear;
+}
+
+/* FM Radio Card */
+.fm-card{
+  max-width:1060px;margin:0 auto;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(200,137,10,.18);
+  border-radius:var(--r20);padding:26px 30px;
+  display:flex;align-items:center;gap:20px;flex-wrap:wrap;
+  transition:border-color .3s;
+}
+.fm-card:hover{border-color:rgba(255,107,0,.35);}
+.fm-icon-wrap{
+  width:58px;height:58px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,var(--sf),#C85000);
+  display:flex;align-items:center;justify-content:center;font-size:1.5rem;
+  animation:omRing 3s ease-in-out infinite;
+}
+.fm-info{flex:1;}
+.fm-info h3{font-family:'Cinzel',serif;font-size:1.15rem;color:var(--gold-l);margin-bottom:3px;}
+.fm-info p{font-size:.8rem;color:rgba(255,255,255,.35);}
+.fm-now{font-size:.73rem;color:var(--sf);margin-top:3px;display:none;}
+.fm-controls{margin-left:auto;display:flex;align-items:center;gap:14px;}
+.fm-waves{display:flex;align-items:flex-end;gap:3px;height:28px;}
+.fm-w{
+  width:3px;border-radius:3px;background:var(--sf);
+  animation:wave var(--d) ease-in-out infinite alternate;
+  height:var(--h);
+}
+@keyframes wave{0%{transform:scaleY(.25);}100%{transform:scaleY(1);}}
+.fm-btn{
+  width:48px;height:48px;border-radius:50%;border:none;cursor:pointer;
+  background:linear-gradient(135deg,var(--sf),#C85000);color:#fff;font-size:1.2rem;
+  box-shadow:0 4px 16px rgba(255,107,0,.4);transition:all .3s;
+  display:flex;align-items:center;justify-content:center;
+}
+.fm-btn:hover{transform:scale(1.1);}
+
+
+
+
+
+.btab.on,
+
+
+
+.fg label{
+  display:block;font-size:.68rem;font-weight:700;
+  letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--text-m);margin-bottom:7px;
+}
+.fg input,.fg select{
+  width:100%;padding:12px 16px;
+  border:1.5px solid rgba(200,137,10,.18);
+  border-radius:var(--r12);
+  font-family:'DM Sans',sans-serif;font-size:.88rem;color:var(--text);
+  background:var(--cream2);outline:none;transition:border-color .3s;
+}
+.fg input:focus,.fg select:focus{border-color:var(--sf);}
+
+.big-btn{
+  width:100%;padding:16px;border-radius:50px;border:none;cursor:pointer;
+  background:linear-gradient(135deg,var(--sf),#C85000);color:#fff;
+  font-family:'DM Sans',sans-serif;font-weight:700;font-size:1rem;letter-spacing:.5px;
+  box-shadow:0 8px 24px rgba(255,107,0,.3);transition:all .3s;
+}
+.big-btn:hover{transform:translateY(-2px);box-shadow:0 14px 32px rgba(255,107,0,.5);}
+
+/* Route Result */
+
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ══════════════════════════════════════════
+   SANSKRIT SIKHO
+══════════════════════════════════════════ */
+.sa-section{background:linear-gradient(170deg,#070415,#0F0A25);}
+.alpha-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));
+  gap:10px;margin-bottom:40px;
+}
+.a-card{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(200,137,10,.15);
+  border-radius:var(--r12);padding:14px 8px;
+  text-align:center;cursor:pointer;transition:all .25s;
+}
+.a-card:hover{
+  background:rgba(255,107,0,.1);
+  border-color:rgba(255,107,0,.35);
+  transform:translateY(-4px) scale(1.04);
+}
+.a-deva{
+  font-family:'Tiro Devanagari Sanskrit',serif;
+  font-size:1.7rem;color:var(--gold-l);display:block;line-height:1.1;
+}
+.a-rom{font-size:.62rem;color:rgba(255,255,255,.35);margin-top:4px;}
+.words-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+  gap:14px;
+}
+.w-card{
+  background:rgba(255,255,255,.04);border:1px solid rgba(200,137,10,.15);
+  border-radius:var(--r16);padding:18px 16px;cursor:pointer;transition:all .25s;
+}
+.w-card:hover{border-color:rgba(255,107,0,.35);transform:translateY(-4px);}
+.w-sa{
+  font-family:'Tiro Devanagari Sanskrit',serif;
+  font-size:1.25rem;color:var(--gold-l);display:block;margin-bottom:4px;
+}
+.w-en{font-size:.78rem;color:rgba(255,255,255,.35);}
+.w-play{
+  margin-top:10px;padding:4px 12px;border-radius:20px;
+  background:rgba(255,107,0,.12);border:1px solid rgba(255,107,0,.2);
+  color:var(--sf);font-size:.63rem;font-weight:700;
+  cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;
+}
+.w-play:hover{background:var(--sf);color:#fff;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@keyframes dash{to{stroke-dashoffset:-26;}}
+.places-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));
+  gap:14px;margin-top:22px;
+}
+.pcard{
+  background:#fff;border:1px solid var(--border);border-radius:var(--r16);
+  padding:16px;cursor:pointer;transition:all .3s;
+}
+.pcard:hover{border-color:var(--sf);transform:translateY(-4px);box-shadow:0 8px 24px rgba(255,107,0,.1);}
+.pcard-ico{font-size:1.8rem;margin-bottom:8px;}
+.pcard-name{font-family:'Cinzel',serif;font-size:.92rem;font-weight:700;color:var(--text);margin-bottom:3px;}
+.pcard-sub{font-size:.72rem;color:var(--text-m);}
+.pcard-price{font-size:.85rem;font-weight:700;color:var(--sf);margin-top:6px;}
+.mkcard{
+  background:rgba(255,107,0,.07);border:1px solid rgba(255,107,0,.2);
+  border-radius:var(--r12);padding:14px;cursor:pointer;transition:all .3s;
+}
+.mkcard:hover{background:rgba(255,107,0,.12);transform:translateY(-3px);}
+.mkcard-ico{font-size:1.4rem;margin-bottom:6px;}
+.mkcard-name{font-family:'Cinzel',serif;color:var(--gold-l);font-size:.88rem;margin-bottom:3px;}
+.mkcard-detail{font-size:.7rem;color:rgba(255,255,255,.35);}
+.mkcard-price{font-size:.8rem;color:var(--sf);font-weight:700;margin-top:5px;}
+
+/* ══════════════════════════════════════════
+   TEMPLE SERVICES
+══════════════════════════════════════════ */
+.svc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(225px,1fr));gap:20px;}
+.svc-card{
+  background:rgba(255,255,255,.04);border:1px solid rgba(200,137,10,.15);
+  border-radius:var(--r20);padding:28px 22px;text-align:center;
+  transition:all .35s;cursor:pointer;
+}
+.svc-card:hover{
+  border-color:rgba(255,107,0,.4);
+  background:rgba(255,255,255,.07);
+  transform:translateY(-7px);
+}
+.svc-ico{font-size:2.8rem;display:block;margin-bottom:14px;}
+.svc-title{font-family:'Cinzel',serif;font-size:1rem;color:var(--gold-l);margin-bottom:8px;}
+.svc-desc{font-size:.77rem;color:rgba(255,255,255,.38);line-height:1.6;}
+.svc-btn{
+  margin-top:16px;padding:9px 18px;border-radius:25px;
+  background:rgba(255,107,0,.12);border:1px solid rgba(255,107,0,.22);
+  color:var(--sf);font-family:'DM Sans',sans-serif;font-size:.72rem;
+  font-weight:700;cursor:pointer;transition:all .3s;
+}
+.svc-btn:hover{background:var(--sf);color:#fff;}
+
+/* ══════════════════════════════════════════
+   BHAJAN SECTION
+══════════════════════════════════════════ */
+.bhajan-sec{
+  background:linear-gradient(135deg,#0C0418,#16072E,#1E080E);
+  padding:90px 20px;position:relative;overflow:hidden;
+}
+.bhajan-sec::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 50%,rgba(255,107,0,.06),transparent 70%);
+}
+.modi-quote{
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,107,0,.2);
+  border-left:4px solid var(--sf);border-radius:var(--r16);
+  padding:28px 30px;margin-bottom:32px;
+}
+.mq-text{
+  font-family:'Cinzel',serif;font-style:italic;
+  font-size:1.1rem;color:var(--gold-l);line-height:1.65;margin-bottom:10px;
+}
+.mq-src{font-size:.7rem;color:rgba(255,255,255,.28);letter-spacing:2px;text-transform:uppercase;}
+.bj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:18px;}
+.bj-card{
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,107,0,.1);
+  border-radius:var(--r16);padding:24px;transition:all .35s;
+}
+.bj-card:hover{border-color:rgba(255,107,0,.35);transform:translateY(-6px);}
+.bj-ico{font-size:2rem;margin-bottom:12px;display:block;}
+.bj-title{font-family:'Cinzel',serif;font-size:.92rem;color:#fff;margin-bottom:6px;}
+.bj-desc{font-size:.77rem;color:rgba(255,255,255,.35);line-height:1.6;}
+
+/* ══════════════════════════════════════════
+   MODALS
+══════════════════════════════════════════ */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.85);
+  z-index:2000;display:none;align-items:center;justify-content:center;
+  padding:20px;backdrop-filter:blur(12px);
+}
+.modal-overlay.open{display:flex;}
+.modal-box{
+  background:#fff;border-radius:var(--r24);
+  max-width:520px;width:100%;
+  max-height:92vh;overflow-y:auto;position:relative;
+}
+.modal-head{
+  padding:28px 28px 20px;border-bottom:1px solid var(--border);
+}
+.modal-head h3{font-family:'Cinzel',serif;color:var(--sf);font-size:1.4rem;}
+.modal-head p{font-size:.82rem;color:var(--text-l);margin-top:4px;}
+.modal-body{padding:24px 28px;}
+.modal-close{
+  position:absolute;top:16px;right:16px;
+  width:30px;height:30px;border-radius:50%;
+  border:none;background:var(--cream2);cursor:pointer;
+  font-size:1rem;display:flex;align-items:center;justify-content:center;
+  transition:all .2s;
+}
+.modal-close:hover{background:var(--sf);color:#fff;}
+.mfg{margin-bottom:16px;}
+.mfg label{
+  display:block;font-size:.68rem;font-weight:700;
+  letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--text-m);margin-bottom:7px;
+}
+.mfg input,.mfg select,.mfg textarea{
+  width:100%;padding:11px 15px;
+  border:1.5px solid var(--border);border-radius:var(--r12);
+  font-family:'DM Sans',sans-serif;font-size:.88rem;color:var(--text);
+  background:var(--cream2);outline:none;transition:border-color .3s;
+}
+.mfg input:focus,.mfg select:focus,.mfg textarea:focus{border-color:var(--sf);}
+
+/* ══════════════════════════════════════════
+   ADMIN PANEL MODAL
+══════════════════════════════════════════ */
+.admin-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.9);
+  z-index:3000;display:none;
+}
+.admin-overlay.open{display:flex;}
+.admin-panel{
+  background:#fff;
+  display:flex;flex-direction:column;
+  width:100%;height:100%;
+  max-width:1000px;margin:auto;
+}
+@media(min-width:700px){
+  .admin-panel{border-radius:var(--r20);max-height:92vh;height:auto;}
+}
+.admin-top{
+  background:linear-gradient(135deg,#1C0D00,#2D1600);
+  padding:20px 24px;
+}
+.admin-top-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+.admin-top-row h2{font-family:'Cinzel',serif;color:var(--gold-l);font-size:1.15rem;}
+.admin-close-btn{
+  background:rgba(255,255,255,.15);border:none;border-radius:8px;
+  color:#fff;padding:7px 14px;cursor:pointer;font-size:.78rem;
+  font-family:'DM Sans',sans-serif;
+}
+.admin-tabs{display:flex;gap:4px;flex-wrap:wrap;}
+.atab{
+  padding:7px 16px;border-radius:8px;border:none;cursor:pointer;
+  background:rgba(255,255,255,.08);color:rgba(255,255,255,.5);
+  font-size:.7rem;font-weight:600;letter-spacing:.5px;text-transform:uppercase;
+  font-family:'DM Sans',sans-serif;transition:all .2s;
+}
+.atab.on{background:var(--sf);color:#fff;}
+.admin-content{padding:24px;overflow-y:auto;flex:1;}
+.asec{display:none;}
+.asec.on{display:block;}
+.astats{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin:16px 0;}
+.astat{
+  background:var(--cream2);border:1px solid var(--border);
+  border-radius:var(--r12);padding:16px;text-align:center;
+}
+.astat .big{
+  font-family:'Cinzel',serif;font-size:1.8rem;color:var(--sf);
+  display:block;font-weight:700;line-height:1;
+}
+.astat .sm{font-size:.65rem;color:var(--text-l);letter-spacing:1px;text-transform:uppercase;margin-top:3px;}
+.afg{margin-bottom:16px;}
+.afg label{
+  display:block;font-size:.68rem;font-weight:700;
+  letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--text-m);margin-bottom:7px;
+}
+.afg input,.afg select,.afg textarea{
+  width:100%;padding:11px 15px;border:1.5px solid var(--border);border-radius:var(--r12);
+  font-family:'DM Sans',sans-serif;font-size:.88rem;color:var(--text);
+  background:var(--cream2);outline:none;transition:border-color .3s;
+}
+.afg input:focus,.afg select:focus{border-color:var(--sf);}
+.a-save-btn{
+  padding:12px 26px;border-radius:30px;border:none;cursor:pointer;
+  background:linear-gradient(135deg,var(--sf),#C85000);color:#fff;
+  font-family:'DM Sans',sans-serif;font-weight:700;font-size:.82rem;
+  box-shadow:0 4px 14px rgba(255,107,0,.3);transition:all .3s;
+}
+.a-save-btn:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(255,107,0,.45);}
+.admin-login-wrap{
+  padding:50px 30px;max-width:380px;margin:0 auto;text-align:center;
+}
+.admin-login-wrap h3{font-family:'Cinzel',serif;color:var(--text);font-size:1.5rem;margin-bottom:6px;}
+.admin-login-wrap p{color:var(--text-l);font-size:.84rem;margin-bottom:28px;}
+.login-err{color:#dc2626;font-size:.76rem;margin-top:8px;display:none;}
+.bookings-table{width:100%;border-collapse:collapse;font-size:.82rem;}
+.bookings-table th{
+  padding:10px;text-align:left;background:var(--cream2);
+  color:var(--text-m);font-weight:600;font-size:.72rem;letter-spacing:.5px;
+  border-bottom:1px solid var(--border);
+}
+.bookings-table td{padding:10px;border-bottom:1px solid var(--border);color:var(--text);}
+.badge-confirm{background:rgba(19,136,8,.1);color:var(--green);padding:2px 10px;border-radius:12px;font-size:.68rem;font-weight:700;}
+.badge-pend{background:rgba(255,107,0,.1);color:var(--sf);padding:2px 10px;border-radius:12px;font-size:.68rem;font-weight:700;}
+
+/* ══════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════ */
+footer{
+  background:#0F0500;padding:60px 20px 28px;
+  border-top:5px solid transparent;
+  border-image:linear-gradient(to right,var(--sf),#fff,var(--green)) 1;
+}
+.foot-inner{max-width:1280px;margin:0 auto;}
+.foot-grid{
+  display:grid;grid-template-columns:2.2fr 1fr 1fr 1fr;
+  gap:44px;margin-bottom:44px;
+}
+.foot-brand{font-family:'Raleway',sans-serif;font-weight:800;font-size:1.3rem;margin-bottom:10px;letter-spacing:.5px;}
+.foot-brand 
+.foot-brand 
+.foot-desc{color:rgba(255,255,255,.25);font-size:.8rem;line-height:1.7;max-width:240px;margin-bottom:14px;}
+.foot-sa{font-family:'Tiro Devanagari Sanskrit',serif;font-size:1.3rem;color:rgba(255,107,0,.25);}
+.foot-col-h{font-size:.6rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:14px;}
+.foot-col ul{list-style:none;}
+.foot-col li{margin-bottom:8px;}
+.foot-col a{
+  color:rgba(255,255,255,.2);text-decoration:none;
+  font-size:.8rem;transition:color .2s;cursor:pointer;
+}
+.foot-col a:hover{color:var(--gold-l);}
+.foot-hr{border:none;border-top:1px solid rgba(255,255,255,.05);margin-bottom:18px;}
+.foot-bottom{
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:8px;
+}
+.foot-copy{font-size:.7rem;color:rgba(255,255,255,.12);}
+
+/* ══════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════ */
+#toast{
+  position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(10px);
+  background:rgba(15,5,0,.94);color:#fff;
+  padding:13px 24px;border-radius:30px;
+  font-size:.82rem;z-index:9999;
+  border:1px solid rgba(255,107,0,.3);
+  backdrop-filter:blur(12px);
+  max-width:90vw;text-align:center;
+  font-family:'DM Sans',sans-serif;
+  box-shadow:0 8px 32px rgba(0,0,0,.4);
+  transition:opacity .35s,transform .35s;
+  opacity:0;pointer-events:none;
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ══════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════ */
+@media(max-width:960px){
+  .anthem-boxes{grid-template-columns:1fr;}
+  .foot-grid{grid-template-columns:1fr 1fr;gap:24px;}
+  
+  
+  
+  
+  .nav-book{display:none;}
+  .hstat{padding:14px 18px;}
+  .fm-card{flex-direction:column;text-align:center;}
+  .fm-controls{margin-left:0;}
+  
+  .svc-grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));}
+  .bj-grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));}
+}
+
+@media(max-width:768px){
+  /* NAV */
+  
+  
+  
+  .lang-pill{display:flex;transform:scale(.85);transform-origin:right center;}
+  .nav-admin{display:none;}
+  /* Sanskrit shortcut always visible */
+  .nav-sanskrit-shortcut{display:flex;}
+
+  /* HERO */
+  .hero{padding:80px 16px 50px;}
+  .hero-eyebrow{font-size:.62rem;letter-spacing:2px;padding:6px 14px;}
+  .hero-h1{font-size:clamp(2.2rem,9vw,3.5rem);letter-spacing:1px;}
+  .hero-tagline{font-size:.92rem;}
+  .hero-search{padding:5px 5px 5px 16px;}
+  .hero-search input{font-size:.85rem;}
+  .hero-search-btn{padding:10px 18px;font-size:.75rem;}
+  .hero-chips{gap:6px;}
+  .chip{font-size:.68rem;padding:5px 12px;}
+  .hero-stats{margin-top:32px;border-radius:14px;}
+  .hstat{padding:12px 14px;}
+  .hstat .hn{font-size:1.3rem;}
+  .hstat .hl{font-size:.6rem;}
+
+  /* SECTIONS */
+  .sec-inner{padding:0 16px;}
+  .sec-h2{font-size:clamp(1.5rem,5vw,2.2rem);}
+  .sec-dark .sec-inner,.sec-light .sec-inner{padding:0 16px;}
+
+  /* TEMPLE CARDS */
+  
+  
+  
+
+  /* BHAJAN / MUSIC */
+  .bhajan-sec{padding:40px 16px;}
+  .bj-grid{grid-template-columns:1fr 1fr;gap:12px;}
+  .bj-card{padding:14px;}
+
+  /* SANSKRIT */
+  
+  .w-card{padding:12px 14px;}
+
+  /* SERVICES */
+  .svc-grid{grid-template-columns:1fr 1fr;gap:12px;}
+  .svc-card{padding:18px 14px;}
+
+  /* ANTHEM SECTION */
+  .anthem-boxes{gap:16px;}
+  .anthem-box{padding:20px 16px;}
+
+  /* FOOTER */
+  .foot-grid{grid-template-columns:1fr;}
+  .foot-inner{padding:40px 16px 24px;}
+  .foot-brand{font-size:1.1rem;}
+
+  /* MINI FOOTER */
+  .mini-footer{padding:18px 16px;}
+  .mf-text{font-size:.78rem;}
+}
+
+@media(max-width:480px){
+  /* NAV */
+  
+  
+
+  /* HERO */
+  .hero{padding:70px 14px 44px;}
+  .hero-h1{font-size:clamp(1.9rem,10vw,2.8rem);}
+  .hero-search{flex-direction:column;border-radius:16px;padding:10px;}
+  .hero-search input{width:100%;padding:6px 0;text-align:center;}
+  .hero-search-btn{width:100%;border-radius:10px;padding:11px;}
+  .hero-chips{gap:5px;}
+  .chip{font-size:.65rem;padding:4px 10px;}
+  .hero-stats{flex-direction:column;border-radius:12px;}
+  .hstat{border-right:none;border-bottom:1px solid var(--border);padding:12px 16px;}
+  .hstat:last-child{border-bottom:none;}
+
+  /* SECTION HEADERS */
+  .sec-h2{font-size:clamp(1.3rem,6vw,1.8rem);}
+  .sec-label{font-size:.6rem;letter-spacing:2px;}
+
+  /* CARDS */
+  
+  
+  
+  
+
+  /* BHAJAN */
+  .bj-grid{grid-template-columns:1fr;}
+  .fm-top{flex-direction:column;gap:8px;text-align:center;}
+
+  /* SANSKRIT */
+  
+  
+  
+
+  /* SERVICES */
+  .svc-grid{grid-template-columns:1fr;}
+
+  /* MODALS */
+  .modal-box{border-radius:var(--r16);margin:10px;}
+  .admin-panel{border-radius:0;max-height:100vh;}
+  .modal-body{padding:20px 16px;}
+
+  /* FOOTER */
+  .foot-grid{grid-template-columns:1fr;}
+  .foot-col{margin-top:8px;}
+  .foot-sa{font-size:1rem;}
+}
+
+@media(max-width:360px){
+  
+  .hero-h1{font-size:1.7rem;}
+  .hero-tagline{font-size:.82rem;}
+  .chip{font-size:.6rem;padding:4px 8px;}
+  .hstat .hn{font-size:1.1rem;}
+}
+
+/* ═══════════════════════════════════
+   PANJIKA SECTION STYLES
+═══════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap');
+.panjika-hero{background:linear-gradient(170deg,#0F0500,#1E0A00,#0A0300);padding:60px 20px 48px;position:relative;overflow:hidden;}
+.panjika-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(255,107,0,.08),transparent 60%);pointer-events:none;}
+.mandala-bg{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:600px;border-radius:50%;border:1px solid rgba(255,107,0,.04);pointer-events:none;}
+.mandala-bg::before,.mandala-bg::after{content:'';position:absolute;border-radius:50%;border:1px solid rgba(200,137,10,.03);}
+.mandala-bg::before{inset:60px;} .mandala-bg::after{inset:120px;}
+.panjika-inner{max-width:900px;margin:0 auto;position:relative;z-index:1;}
+.suprabhat-head{text-align:center;margin-bottom:28px;}
+.suprabhat-greeting{font-family:'Noto Sans Bengali',sans-serif;font-size:clamp(1.6rem,4vw,2.4rem);font-weight:700;background:linear-gradient(135deg,#F2C94C,#FF6B00,#FFE566);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:block;margin-bottom:6px;}
+.suprabhat-eng{font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:4px;color:rgba(255,255,255,.25);text-transform:uppercase;}
+.panjika-card{background:rgba(255,255,255,.04);border:1px solid rgba(200,137,10,.22);border-radius:20px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.4);}
+.pk-date-banner{background:linear-gradient(135deg,rgba(255,107,0,.15),rgba(200,137,10,.1));border-bottom:1px solid rgba(200,137,10,.2);padding:18px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.pk-weekday{font-family:'Noto Sans Bengali',sans-serif;font-size:1.4rem;font-weight:700;color:#F2C94C;display:block;line-height:1;margin-bottom:4px;}
+.pk-bengali-date{font-family:'Noto Sans Bengali',sans-serif;font-size:1rem;color:rgba(255,255,255,.7);line-height:1.4;}
+.pk-date-right{text-align:right;}
+.pk-english-date{font-family:'Cinzel',serif;font-size:1.1rem;color:rgba(255,255,255,.8);font-weight:600;}
+.pk-year{font-size:.72rem;color:rgba(255,255,255,.3);letter-spacing:2px;margin-top:2px;}
+.pk-surya-strip{display:flex;border-bottom:1px solid rgba(255,255,255,.06);}
+.pk-surya-item{flex:1;padding:14px 20px;display:flex;align-items:center;gap:10px;border-right:1px solid rgba(255,255,255,.05);}
+.pk-surya-item:last-child{border-right:none;}
+.pk-surya-icon{font-size:1.5rem;}
+.pk-surya-label{font-size:.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.28);display:block;margin-bottom:2px;}
+.pk-surya-time{font-family:'Cinzel',serif;font-size:1rem;color:#F2C94C;font-weight:700;}
+.pk-body{padding:6px 0;}
+.pk-row{display:flex;align-items:flex-start;border-bottom:1px solid rgba(255,255,255,.04);}
+.pk-row:last-child{border-bottom:none;}
+.pk-row:hover{background:rgba(255,255,255,.03);}
+.pk-key{min-width:130px;padding:13px 20px;font-size:.7rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.28);flex-shrink:0;}
+.pk-val{flex:1;padding:13px 20px 13px 0;font-family:'Noto Sans Bengali',sans-serif;font-size:.9rem;color:rgba(255,255,255,.78);line-height:1.55;}
+.pk-val .highlight{color:#FF9A3C;font-weight:600;}
+.pk-val .accent{color:#F2C94C;}
+.pk-events{background:rgba(255,107,0,.04);border-top:1px solid rgba(255,107,0,.1);padding:14px 20px;}
+.pk-events-label{font-size:.62rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#FF6B00;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.pk-events-label::after{content:'';flex:1;height:1px;background:linear-gradient(to right,rgba(255,107,0,.3),transparent);}
+.pk-event-item{font-family:'Noto Sans Bengali',sans-serif;font-size:.82rem;color:rgba(255,255,255,.55);line-height:1.7;padding-left:16px;position:relative;margin-bottom:4px;}
+.pk-event-item::before{content:'🌸';position:absolute;left:0;font-size:.65rem;}
+.rashi-section{padding:20px;border-top:1px solid rgba(255,255,255,.05);}
+.rashi-title{font-family:'Cinzel',serif;font-size:.75rem;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:14px;}
+.rashi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;}
+.rashi-card{background:rgba(255,255,255,.04);border:1px solid rgba(200,137,10,.12);border-radius:10px;padding:10px 12px;}
+.rashi-card.today-special{border-color:rgba(255,107,0,.3);background:rgba(255,107,0,.07);}
+.rashi-name-bn{font-family:'Noto Sans Bengali',sans-serif;font-size:.88rem;font-weight:600;color:#F2C94C;display:block;margin-bottom:2px;}
+.rashi-name-en{font-size:.62rem;color:rgba(255,255,255,.25);display:block;margin-bottom:4px;}
+.rashi-msg{font-size:.7rem;color:rgba(255,255,255,.45);line-height:1.5;}
+.rashi-tag{display:inline-block;margin-top:4px;padding:1px 8px;border-radius:10px;font-size:.6rem;font-weight:700;background:rgba(255,107,0,.15);color:#FF6B00;border:1px solid rgba(255,107,0,.2);}
+.pk-muhurat{background:rgba(19,136,8,.06);border:1px solid rgba(19,136,8,.12);margin:0 20px 16px;border-radius:12px;padding:14px 18px;}
+.pk-muhurat-title{font-size:.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#004d00;margin-bottom:8px;}
+.pk-muhurat-grid{display:flex;gap:16px;flex-wrap:wrap;}
+.pm-label{font-size:.6rem;color:rgba(255,255,255,.28);letter-spacing:1px;text-transform:uppercase;}
+.pm-time{font-family:'Cinzel',serif;font-size:.92rem;color:rgba(255,255,255,.75);font-weight:600;}
+.pm-time.good{color:#4CAF50;} .pm-time.bad{color:#ef5350;}
+.pk-sig{text-align:center;padding:14px 20px;border-top:1px solid rgba(255,255,255,.05);font-family:'Tiro Devanagari Sanskrit',serif;font-size:.78rem;color:rgba(255,255,255,.2);letter-spacing:1px;}
+.tilde-divider{text-align:center;padding:6px 0 2px;font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:4px;color:rgba(255,255,255,.15);}
+/* Subscribe section */
+.subscribe-section{background:linear-gradient(180deg,#1A0800,#100500);padding:60px 20px 70px;position:relative;overflow:hidden;}
+.subscribe-section::before{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(to right,transparent,#FF6B00,transparent);}
+.sub-inner{max-width:700px;margin:0 auto;position:relative;z-index:1;}
+.sub-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(255,107,0,.1);border:1px solid rgba(255,107,0,.2);color:#FF6B00;padding:6px 18px;border-radius:25px;font-size:.68rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;margin-bottom:20px;}
+.sub-h2{font-family:'Cinzel',serif;font-weight:700;font-size:clamp(1.6rem,3.5vw,2.4rem);color:#fff;line-height:1.2;margin-bottom:8px;}
+.sub-h2 .acc{color:#FF6B00;font-style:italic;}
+.sub-desc{font-family:'Noto Sans Bengali',sans-serif;font-size:.9rem;color:rgba(255,255,255,.35);line-height:1.8;margin-bottom:32px;max-width:580px;}
+.sub-form-card{background:rgba(255,255,255,.04);border:1px solid rgba(200,137,10,.2);border-radius:20px;padding:32px 28px;position:relative;overflow:hidden;}
+.sub-form-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,transparent,#FF6B00,#F2C94C,#FF6B00,transparent);}
+
+
+.fld label{display:block;font-size:.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:7px;}
+.fld input{width:100%;padding:13px 16px;background:rgba(255,255,255,.06);border:1.5px solid rgba(200,137,10,.18);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:.9rem;color:#fff;outline:none;transition:all .3s;}
+.fld input::placeholder{color:rgba(255,255,255,.2);}
+.fld input:focus{border-color:rgba(255,107,0,.5);background:rgba(255,107,0,.06);}
+.delivery-opts{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;}
+.d-opt{display:flex;align-items:center;gap:8px;cursor:pointer;background:rgba(255,255,255,.04);border:1.5px solid rgba(200,137,10,.15);border-radius:30px;padding:10px 18px;transition:all .25s;flex:1;min-width:140px;position:relative;}
+.d-opt input[type="checkbox"]{display:none;}
+.d-opt.selected{border-color:rgba(255,107,0,.5);background:rgba(255,107,0,.1);}
+.d-opt-icon{font-size:1.2rem;}
+.d-opt-label{font-size:.78rem;font-weight:600;color:rgba(255,255,255,.7);display:block;}
+.d-opt-sub{font-size:.62rem;color:rgba(255,255,255,.3);}
+.d-opt.selected .d-opt-label{color:#FF6B00;}
+.d-check{position:absolute;top:6px;right:8px;width:14px;height:14px;border-radius:50%;background:#FF6B00;display:none;align-items:center;justify-content:center;font-size:.5rem;color:#fff;}
+.d-opt.selected .d-check{display:flex;}
+.lang-opts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;}
+.lang-opt{padding:8px 16px;border-radius:20px;border:1.5px solid rgba(200,137,10,.15);background:rgba(255,255,255,.04);cursor:pointer;font-size:.75rem;font-weight:600;color:rgba(255,255,255,.45);transition:all .2s;}
+.lang-opt.sel{border-color:rgba(255,107,0,.4);background:rgba(255,107,0,.1);color:#FF6B00;}
+.sub-terms{font-size:.7rem;color:rgba(255,255,255,.2);line-height:1.6;margin-bottom:20px;padding:10px 14px;background:rgba(255,255,255,.02);border-radius:8px;border:1px solid rgba(255,255,255,.04);}
+.sub-btn{width:100%;padding:17px;border-radius:50px;border:none;cursor:pointer;background:linear-gradient(135deg,#FF6B00,#C85000);color:#fff;font-family:'DM Sans',sans-serif;font-weight:700;font-size:1rem;letter-spacing:.5px;box-shadow:0 8px 28px rgba(255,107,0,.35);transition:all .35s;}
+.sub-btn:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(255,107,0,.5);}
+.sub-success{display:none;text-align:center;padding:32px 20px;}
+.sub-success.show{display:block;}
+.success-icon{font-size:4rem;display:block;margin-bottom:16px;}
+@keyframes successPop{from{transform:scale(0) rotate(-20deg);}to{transform:scale(1) rotate(0);}}
+.success-h{font-family:'Cinzel',serif;font-size:1.5rem;color:#fff;margin-bottom:8px;}
+.success-p{color:rgba(255,255,255,.45);font-size:.88rem;line-height:1.7;}
+.success-preview{margin-top:20px;background:rgba(255,255,255,.04);border:1px solid rgba(200,137,10,.2);border-radius:14px;padding:18px;text-align:left;}
+.sp-label{font-size:.62rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#FF6B00;margin-bottom:8px;}
+.sp-msg{font-family:'Noto Sans Bengali',sans-serif;font-size:.82rem;color:rgba(255,255,255,.6);line-height:2;white-space:pre-line;}
+.sp-from{margin-top:10px;font-size:.72rem;color:rgba(255,255,255,.25);font-style:italic;}
+.preview-section{padding:32px 20px;background:linear-gradient(180deg,#0A0300,#100500);}
+.prev-inner{max-width:700px;margin:0 auto;}
+.prev-title{font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.2);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+.prev-title::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.06);}
+.wa-mockup{background:#111B21;border-radius:14px;padding:20px;}
+.wa-header{display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.06);padding-bottom:12px;margin-bottom:14px;}
+.wa-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#FF6B00,#C85000);display:flex;align-items:center;justify-content:center;font-family:'Tiro Devanagari Sanskrit',serif;color:#fff;font-size:.9rem;}
+.wa-name{font-size:.88rem;font-weight:600;color:#E9EDF0;}
+.wa-num{font-size:.7rem;color:rgba(255,255,255,.3);}
+.wa-bubble{background:#1F2C34;border-radius:4px 12px 12px 12px;padding:14px 16px;max-width:90%;position:relative;}
+.wa-bubble::before{content:'';position:absolute;left:-8px;top:0;border:8px solid transparent;border-right:8px solid #1F2C34;border-top:0;}
+.wa-text{font-family:'Noto Sans Bengali',sans-serif;font-size:.82rem;color:#E9EDF0;line-height:2.1;white-space:pre-line;}
+.wa-time{text-align:right;font-size:.62rem;color:rgba(255,255,255,.25);margin-top:6px;}
+.sub-count-strip{display:flex;align-items:center;justify-content:center;gap:20px;padding:16px 20px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,.04);}
+.sc-item{text-align:center;}
+.sc-num{font-family:'Cinzel',serif;font-size:1.5rem;color:#FF6B00;font-weight:700;display:block;line-height:1;}
+.sc-lbl{font-size:.6rem;color:rgba(255,255,255,.2);letter-spacing:1.5px;text-transform:uppercase;}
+.mini-footer{background:#0A0200;padding:20px;text-align:center;border-top:1px solid rgba(255,107,0,.08);}
+.mf-text{font-family:'Tiro Devanagari Sanskrit',serif;font-size:.75rem;color:rgba(255,255,255,.15);letter-spacing:1px;}
+.mf-brand{font-family:'Raleway',sans-serif;font-weight:800;font-size:.95rem;letter-spacing:.5px;}
+.mf-brand 
+.mf-brand 
+@media(max-width:600px){
+  
+  .pk-surya-strip{flex-direction:column;}
+  .pk-surya-item{border-right:none;border-bottom:1px solid rgba(255,255,255,.04);}
+  .pk-key{min-width:90px;font-size:.62rem;}
+  .rashi-grid{grid-template-columns:repeat(3,1fr);}
+}
+
+
+/* ── Panchang ───────────────────────────────────────── */
+.panch-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;margin-bottom:20px;}
+.panch-card{background:rgba(255,255,255,.04);border:1px solid rgba(200,137,10,.18);
+  border-radius:14px;padding:20px 12px;text-align:center;transition:transform .2s,border-color .2s;}
+.panch-card:hover{transform:translateY(-4px);border-color:rgba(200,137,10,.5);}
+.panch-icon{font-size:1.6rem;margin-bottom:8px;}
+.panch-label{font-size:.72rem;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;}
+.panch-val{font-size:1rem;font-weight:700;color:#fff;font-family:'Tiro Devanagari Sanskrit',serif;}
+.muhurat-bar{background:rgba(200,137,10,.1);border:1px solid rgba(200,137,10,.25);
+  border-radius:10px;padding:14px 20px;text-align:center;}
+@media(max-width:768px){.panch-grid{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:480px){.panch-grid{grid-template-columns:repeat(2,1fr);}}
+
+/* ── Puja Services ──────────────────────────────────── */
+.puja-services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+.ps-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,107,0,.15);
+  border-radius:18px;padding:28px 22px;transition:transform .25s,border-color .25s,box-shadow .25s;}
+.ps-card:hover{transform:translateY(-6px);border-color:rgba(255,107,0,.5);
+  box-shadow:0 12px 40px rgba(255,107,0,.15);}
+.ps-emoji{font-size:2.2rem;margin-bottom:14px;}
+.ps-name{font-size:1.05rem;font-weight:700;color:#fff;margin-bottom:8px;}
+.ps-desc{font-size:.85rem;color:rgba(255,255,255,.5);line-height:1.6;margin-bottom:16px;}
+.ps-btn{display:inline-block;color:var(--sf);font-size:.85rem;font-weight:700;
+  text-decoration:none;border:1px solid rgba(255,107,0,.4);padding:8px 16px;
+  border-radius:8px;transition:background .2s,color .2s;}
+.ps-btn:hover{background:var(--sf);color:#fff;}
+@media(max-width:768px){.puja-services-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:480px){.puja-services-grid{grid-template-columns:1fr;}}
+
+/* ── Temples ────────────────────────────────────────── */
+.temple-scroll{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;}
+.temple-card{position:relative;overflow:hidden;background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:24px 16px;
+  text-align:center;cursor:pointer;transition:transform .25s,border-color .25s;}
+.temple-card:hover{transform:translateY(-6px);border-color:rgba(255,107,0,.4);}
+.temple-glow{position:absolute;top:-20px;right:-20px;width:80px;height:80px;
+  background:radial-gradient(circle,var(--tc) 0%,transparent 70%);opacity:.15;border-radius:50%;}
+.temple-emoji{font-size:2rem;margin-bottom:10px;}
+.temple-name{font-size:.88rem;font-weight:700;color:#fff;margin-bottom:6px;}
+.temple-loc{font-size:.75rem;color:rgba(255,255,255,.4);margin-bottom:8px;}
+.temple-tag{display:inline-block;font-size:.68rem;font-weight:700;color:var(--sf);
+  background:rgba(255,107,0,.1);border:1px solid rgba(255,107,0,.3);
+  padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.06em;}
+@media(max-width:960px){.temple-scroll{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:480px){.temple-scroll{grid-template-columns:repeat(2,1fr);}}
+
+/* ── Features ───────────────────────────────────────── */
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+.feat-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
+  border-radius:18px;padding:30px 24px;transition:transform .25s,border-color .25s;}
+.feat-card:hover{transform:translateY(-6px);border-color:rgba(200,137,10,.4);}
+.feat-icon{font-size:2.2rem;margin-bottom:14px;}
+.feat-title{font-size:1rem;font-weight:700;color:#fff;margin-bottom:8px;}
+.feat-desc{font-size:.85rem;color:rgba(255,255,255,.5);line-height:1.65;}
+@media(max-width:768px){.feat-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:480px){.feat-grid{grid-template-columns:1fr;}}
+
+/* ── Mantras ────────────────────────────────────────── */
+.mantra-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.mantra-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,107,0,.15);
+  border-radius:16px;padding:24px 20px;cursor:pointer;
+  transition:transform .2s,border-color .2s,box-shadow .2s;text-align:center;}
+.mantra-card:hover{transform:translateY(-4px);border-color:rgba(255,107,0,.45);
+  box-shadow:0 8px 30px rgba(255,107,0,.12);}
+.mantra-deity{font-size:.78rem;font-weight:700;color:var(--sf);text-transform:uppercase;
+  letter-spacing:.08em;margin-bottom:10px;}
+.mantra-text{font-size:1.3rem;color:#fff;margin-bottom:8px;line-height:1.5;}
+.mantra-rom{font-size:.78rem;color:rgba(255,255,255,.4);margin-bottom:14px;font-style:italic;}
+.mantra-play{display:inline-block;font-size:.78rem;font-weight:700;color:var(--sf);
+  border:1px solid rgba(255,107,0,.4);padding:5px 14px;border-radius:20px;}
+.mantra-card.playing{border-color:var(--sf);box-shadow:0 0 20px rgba(255,107,0,.3);}
+.cta-btn{display:inline-block;background:linear-gradient(135deg,#FF6B00,#C85000);
+  color:#fff;padding:14px 32px;border-radius:12px;font-weight:700;font-size:.95rem;
+  text-decoration:none;box-shadow:0 6px 20px rgba(255,107,0,.35);
+  transition:transform .2s,box-shadow .2s;}
+.cta-btn:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(255,107,0,.45);}
+@media(max-width:768px){.mantra-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:480px){.mantra-grid{grid-template-columns:1fr;}}
+
+/* ── Stats ──────────────────────────────────────────── */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;}
+.stat-box{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
+  border-radius:18px;padding:32px 20px;text-align:center;
+  transition:transform .2s,border-color .2s;}
+.stat-box:hover{transform:translateY(-4px);border-color:rgba(200,137,10,.35);}
+.stat-num{font-size:2.4rem;font-weight:900;font-family:'Raleway',sans-serif;margin-bottom:6px;}
+.stat-lbl{font-size:.95rem;font-weight:700;color:#fff;margin-bottom:4px;}
+.stat-sub{font-size:.78rem;color:rgba(255,255,255,.35);}
+@media(max-width:768px){.stats-grid{grid-template-columns:repeat(2,1fr);}}
+
+/* ── Reviews ────────────────────────────────────────── */
+.review-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+.rev-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
+  border-radius:18px;padding:28px 24px;}
+.rev-stars{color:#C8890A;font-size:1rem;margin-bottom:14px;letter-spacing:2px;}
+.rev-text{font-size:.88rem;color:rgba(255,255,255,.65);line-height:1.7;margin-bottom:20px;font-style:italic;}
+.rev-author{display:flex;align-items:center;gap:12px;}
+.rev-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#FF6B00,#C8890A);
+  display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:.9rem;flex-shrink:0;}
+.rev-name{font-size:.85rem;font-weight:700;color:#fff;}
+.rev-city{font-size:.75rem;color:rgba(255,255,255,.35);}
+@media(max-width:768px){.review-grid{grid-template-columns:1fr;}}
+
+</style>
+
+
+<!-- ── Firebase SDK ─────────────────────────────────────────────────── -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey:            "AIzaSyBC1yt-YE74pKCKMfukmc7_3vicM49h6vE",
+    authDomain:        "sanatanianthem-652a3.firebaseapp.com",
+    projectId:         "sanatanianthem-652a3",
+    storageBucket:     "sanatanianthem-652a3.firebasestorage.app",
+    messagingSenderId: "1031082702558",
+    appId:             "1:1031082702558:web:744ffa9cfa54ff838db44f"
+  };
+  if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+</script>
+</head>
+<body>
+<!-- FLAG + NAV -->
+<div class="flag-top"></div>
+<div id="sa-header-root"></div>
+
+<!-- ══════════════════════════════════════════
+     HERO
+══════════════════════════════════════════ -->
+<section class="hero" id="home">
+  <!-- Clouds drawn as SVG with feTurbulence for organic natural edges -->
+  <div class="sky-clouds" id="skyClouds"></div>
+  <!-- Horizon haze -->
+  <div class="sky-haze"></div>
+  <div class="hero-mandala"></div>
+  <div class="hero-pts" id="heroPts"></div>
+
+  <div class="hero-eyebrow reveal">🌏 एकता &nbsp;•&nbsp; संस्कृति &nbsp;•&nbsp; धर्म</div>
+
+  <h1 class="hero-h1 reveal d1">
+    <span class="acc-sf">Sanatani</span><span class="acc-gr">Anthem</span>
+  </h1>
+
+  <p class="hero-tagline reveal d3">
+    <span class="lang-en">यात्रा · दर्शन · भक्ति · संस्कृत &nbsp;—&nbsp; One Platform 🇮🇳</span>
+    <span class="lang-sa">यात्रा · दर्शन · भक्ति · एक मंच · एक भारत 🇮🇳</span>
+  </p>
+
+  <div class="hero-search reveal d3">
+    <input id="heroInput" type="text"
+      placeholder="Search temples, Shakti Peetha, Jyotirlinga, Ramayana sites..."/>
+    <button class="hero-search-btn" onclick="doSearch()">🔍
+      <span class="lang-en">Search</span>
+      <span class="lang-sa">खोजें</span>
+    </button>
+  </div>
+
+  <div class="hero-chips reveal d4">
+    
+    
+    
+    
+    <a class="chip" href="sanatani-anthem-mantras.html">🎵 Hanuman Chalisa</a>
+    <a class="chip" href="sanskrit.html">📖 Sanskrit Sikho</a>
+  </div>
+
+  <div class="hero-stats reveal d5">
+    <div class="hstat"><span class="n">51</span><span class="l">Shakti Peetha</span></div>
+    <div class="hstat"><span class="n">12</span><span class="l">Jyotirlinga</span></div>
+    <div class="hstat"><span class="n">1.2B+</span><span class="l">Daily Chalisa Recitations</span></div>
+    <div class="hstat"><span class="n">500+</span><span class="l">Temples Listed</span></div>
+    <div class="hstat"><span class="n">∞</span><span class="l">Blessings</span></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ DAILY PANCHANG ══════════════════════════ -->
+
+
+<!-- ══════════════════════════════ DEVOTIONAL FEATURES ════════════════════ -->
+<section class="sec-dark" id="features" style="padding:72px 0;background:#0D0702;">
+  <div class="sec-inner">
+    <div style="text-align:center;margin-bottom:44px;">
+      <span class="sec-label" style="color:var(--gold-l);">✨ Sab Kuch Ek Jagah</span>
+      <h2 class="sec-h2 reveal" style="color:#fff;">One Platform for All Your <span class="ita">Devotional Needs</span></h2>
+      <div class="sec-rule reveal" style="justify-content:center;"><div class="sec-rule-bar"></div><div class="sec-rule-dot"></div></div>
+    </div>
+    <div class="feat-grid">
+      <div class="feat-card reveal">
+        <div class="feat-icon">🕌</div>
+        <h3 class="feat-title">Divine Temple</h3>
+        <p class="feat-desc">Set up your personal temple on your phone, dedicated to your beloved deities. Seek blessings anytime, anywhere.</p>
+      </div>
+      <div class="feat-card reveal">
+        <div class="feat-icon">📚</div>
+        <h3 class="feat-title">Hindu Literature</h3>
+        <p class="feat-desc">Specially curated books, articles and videos based on Sanatan Dharma — Puranas, Upanishads &amp; more.</p>
+      </div>
+      <div class="feat-card reveal">
+        <div class="feat-icon">🎵</div>
+        <h3 class="feat-title">Devotional Music</h3>
+        <p class="feat-desc">5000+ ad-free aartis, mantras, bhajans &amp; chalisas. Immerse yourself in divine energy.</p>
+      </div>
+      <div class="feat-card reveal">
+        <div class="feat-icon">📅</div>
+        <h3 class="feat-title">Panchang &amp; Horoscope</h3>
+        <p class="feat-desc">Daily horoscope, tithi, nakshatra, shubh muhurat, and upcoming vrat &amp; festivals — all in one place.</p>
+      </div>
+      <div class="feat-card reveal">
+        <div class="feat-icon">🪔</div>
+        <h3 class="feat-title">Puja &amp; Chadhava Seva</h3>
+        <p class="feat-desc">Book personalized puja &amp; chadhava in your name at 1000+ temples across India. Sacred &amp; verified.</p>
+      </div>
+      <div class="feat-card reveal">
+        <div class="feat-icon">🌏</div>
+        <h3 class="feat-title">Sanatani Community</h3>
+        <p class="feat-desc">Be part of India's largest devotional community. Connect with Sanatanis across 30+ countries worldwide.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ MANTRAS / QUICK PRAY ════════════════════ -->
+<section class="sec-dark" id="mantras" style="padding:72px 0;background:linear-gradient(180deg,#0D0702,#0F0803);">
+  <div class="sec-inner">
+    <div style="text-align:center;margin-bottom:44px;">
+      <span class="sec-label" style="color:var(--sf);">🕉 Nityam Jaap</span>
+      <h2 class="sec-h2 reveal" style="color:#fff;">Daily <span class="ita">Mantras</span></h2>
+      <div class="sec-rule reveal" style="justify-content:center;"><div class="sec-rule-bar"></div><div class="sec-rule-dot"></div></div>
+    </div>
+    <div class="mantra-grid">
+      <div class="mantra-card reveal" onclick="playMantraCard(this,'ॐ नमः शिवाय','Om Namah Shivaya — Shiva Panchakshara Mantra')">
+        <div class="mantra-deity">🔱 Shiva</div>
+        <div class="mantra-text" style="font-family:'Tiro Devanagari Sanskrit',serif;">ॐ नमः शिवाय</div>
+        <div class="mantra-rom">Om Namah Shivaya</div>
+        <div class="mantra-play">▶ Chant</div>
+      </div>
+      <div class="mantra-card reveal" onclick="playMantraCard(this,'ॐ नमो भगवते वासुदेवाय','Om Namo Bhagavate Vasudevaya — Vishnu Mantra')">
+        <div class="mantra-deity">🌺 Vishnu</div>
+        <div class="mantra-text" style="font-family:'Tiro Devanagari Sanskrit',serif;">ॐ नमो भगवते वासुदेवाय</div>
+        <div class="mantra-rom">Om Namo Bhagavate Vasudevaya</div>
+        <div class="mantra-play">▶ Chant</div>
+      </div>
+      <div class="mantra-card reveal" onclick="playMantraCard(this,'ॐ श्री गणेशाय नमः','Om Shri Ganeshaya Namah — Ganesha Mantra')">
+        <div class="mantra-deity">🐘 Ganesha</div>
+        <div class="mantra-text" style="font-family:'Tiro Devanagari Sanskrit',serif;">ॐ श्री गणेशाय नमः</div>
+        <div class="mantra-rom">Om Shri Ganeshaya Namah</div>
+        <div class="mantra-play">▶ Chant</div>
+      </div>
+      <div class="mantra-card reveal" onclick="playMantraCard(this,'ॐ दुं दुर्गायै नमः','Om Dum Durgayai Namah — Durga Mantra')">
+        <div class="mantra-deity">⚔️ Durga</div>
+        <div class="mantra-text" style="font-family:'Tiro Devanagari Sanskrit',serif;">ॐ दुं दुर्गायै नमः</div>
+        <div class="mantra-rom">Om Dum Durgayai Namah</div>
+        <div class="mantra-play">▶ Chant</div>
+      </div>
+      <div class="mantra-card reveal" onclick="playMantraCard(this,'जय श्री राम','Jai Shri Ram — Ram Mantra')">
+        <div class="mantra-deity">🏹 Ram</div>
+        <div class="mantra-text" style="font-family:'Tiro Devanagari Sanskrit',serif;">जय श्री राम</div>
+        <div class="mantra-rom">Jai Shri Ram</div>
+        <div class="mantra-play">▶ Chant</div>
+      </div>
+      <div class="mantra-card reveal" onclick="playMantraCard(this,'ॐ श्री महालक्ष्म्यै नमः','Om Shri Mahalakshmyai Namah — Lakshmi Mantra')">
+        <div class="mantra-deity">🪷 Lakshmi</div>
+        <div class="mantra-text" style="font-family:'Tiro Devanagari Sanskrit',serif;">ॐ श्री महालक्ष्म्यै नमः</div>
+        <div class="mantra-rom">Om Shri Mahalakshmyai Namah</div>
+        <div class="mantra-play">▶ Chant</div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:36px;">
+      <a href="sanatani-anthem-mantras.html" class="cta-btn">See All Mantras &amp; Chalisa →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ STATS / TRUST ═══════════════════════════ -->
+<section class="sec-dark" id="stats" style="padding:64px 0;background:linear-gradient(135deg,#1A0C02,#0D0702);">
+  <div class="sec-inner">
+    <div style="text-align:center;margin-bottom:44px;">
+      <span class="sec-label" style="color:var(--gold-l);">🇮🇳 Bharat Ki Shaan</span>
+      <h2 class="sec-h2 reveal" style="color:#fff;">Trusted by <span class="ita">Devotees</span> Worldwide</h2>
+      <div class="sec-rule reveal" style="justify-content:center;"><div class="sec-rule-bar"></div><div class="sec-rule-dot"></div></div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-box reveal">
+        <div class="stat-num" style="color:var(--sf);">1M+</div>
+        <div class="stat-lbl">Devotees</div>
+        <div class="stat-sub">Sanatanis on this platform</div>
+      </div>
+      <div class="stat-box reveal">
+        <div class="stat-num" style="color:var(--gold-l);">1000+</div>
+        <div class="stat-lbl">Temples</div>
+        <div class="stat-sub">Across India</div>
+      </div>
+      <div class="stat-box reveal">
+        <div class="stat-num" style="color:var(--green);">30+</div>
+        <div class="stat-lbl">Countries</div>
+        <div class="stat-sub">Global Sanatani reach</div>
+      </div>
+      <div class="stat-box reveal">
+        <div class="stat-num" style="color:var(--sf);">5000+</div>
+        <div class="stat-lbl">Devotional Songs</div>
+        <div class="stat-sub">Ad-free, always</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ TESTIMONIALS ════════════════════════════ -->
+<section class="sec-dark" id="reviews" style="padding:72px 0;background:#0D0702;">
+  <div class="sec-inner">
+    <div style="text-align:center;margin-bottom:44px;">
+      <span class="sec-label" style="color:var(--gold-l);">💬 Bhakton Ki Baatein</span>
+      <h2 class="sec-h2 reveal" style="color:#fff;">Devotee <span class="ita">Reviews</span></h2>
+      <div class="sec-rule reveal" style="justify-content:center;"><div class="sec-rule-bar"></div><div class="sec-rule-dot"></div></div>
+    </div>
+    <div class="review-grid">
+      <div class="rev-card reveal">
+        <div class="rev-stars">★★★★★</div>
+        <p class="rev-text">"Finally a platform that understands the heart of a true Sanatani. The puja booking is so simple and the pandit was wonderful. Jai Shri Ram! 🙏"</p>
+        <div class="rev-author">
+          <div class="rev-avatar">A</div>
+          <div><div class="rev-name">Achutam Nair</div><div class="rev-city">Bangalore</div></div>
+        </div>
+      </div>
+      <div class="rev-card reveal">
+        <div class="rev-stars">★★★★★</div>
+        <p class="rev-text">"The live darshan feature is a blessing for us living abroad. Being able to see Kashi Vishwanath aarti every morning keeps me connected to Bharat."</p>
+        <div class="rev-author">
+          <div class="rev-avatar">R</div>
+          <div><div class="rev-name">Ramesh Chandra Bhatt</div><div class="rev-city">Nagpur</div></div>
+        </div>
+      </div>
+      <div class="rev-card reveal">
+        <div class="rev-stars">★★★★★</div>
+        <p class="rev-text">"Got prasad from Tirupati delivered home — fresh and beautifully packed. The panchang feature helps me plan all my vrats. Highly recommended! 🪔"</p>
+        <div class="rev-author">
+          <div class="rev-avatar">S</div>
+          <div><div class="rev-name">Sunita Agarwal</div><div class="rev-city">Delhi</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════ -->
+
+
+<!-- FOOTER -->
+</div>
+
+<footer>
+  <div class="foot-inner">
+    <div class="foot-grid">
+      <div>
+        <div class="brand-tip foot-brand"><span class="nb-s" style="color:#FF6B00;font-weight:900;">Sanatani</span><span class="nb-a" style="color:#C8890A;font-weight:900;">Anthem</span></div>
+        <div class="foot-desc">Uniting all of India through Dharma, Sanskrit, Temple Travel, and the eternal Sanatani Anthem.</div>
+        <div class="foot-sa">वसुधैव कुटुम्बकम्</div>
+      </div>
+      <div class="foot-col">
+        <div class="foot-col-h">Yatra</div>
+        <ul>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <div class="foot-col-h">Services</div>
+        <ul>
+          <li><a onclick="openPujaModal()">Book Puja</a></li>
+          <li><a onclick="openPujaModal()">Book Pandit</a></li>
+          <li><a>Live Darshan</a></li>
+          <li><a>Prasad Delivery</a></li>
+          <li><a onclick="openAdmin()">Admin Panel</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <div class="foot-col-h">Learn</div>
+        <ul>
+          <li><a href="sanskrit.html">Sanskrit Sikho</a></li>
+          <li><a href="sanatani-anthem-mantras.html">Hanuman Chalisa</a></li>
+          <li><a href="sanatani-anthem-mantras.html">Sarve Bhavantu</a></li>
+          <li><a href="#bhajan">Bhajan Clubbing</a></li>
+          <li></li>
+        </ul>
+      </div>
+    </div>
+    <hr class="foot-hr">
+    <div class="foot-bottom">
+      <div class="foot-copy">© 2026 SanataniAnthem — All Rights Reserved 🕉 Sarve Bhavantu Sukhinah</div>
+      <div style="font-size:.68rem;color:rgba(255,255,255,.1);">जय भारत · जय संस्कृत · जय सनातन धर्म</div>
+    </div>
+  </div>
+</footer>
+
+<!-- ══════════════════════════════════════════
+     PUJA BOOKING MODAL
+══════════════════════════════════════════ -->
+<div class="modal-overlay" id="pujaOverlay">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closePujaModal()">✕</button>
+    <div class="modal-head">
+      <h3>🪔 Book Puja / Pandit</h3>
+      <p>Fill details — our verified pandit will confirm on WhatsApp within 2 hours.</p>
+    </div>
+    <div class="modal-body">
+      <div class="mfg"><label>Your Full Name</label><input type="text" placeholder="Your name"></div>
+      <div class="mfg"><label>WhatsApp Number</label><input type="tel" placeholder="+91 XXXXX XXXXX"></div>
+      <div class="mfg"><label>Type of Puja / Service</label>
+        <select>
+          <option>Satyanarayan Katha</option><option>Ganesh Puja</option>
+          <option>Griha Pravesh Puja</option><option>Navgraha Shanti Havan</option>
+          <option>Temple Puja Booking (on my behalf)</option>
+          <option>Pitru Tarpan</option><option>Rudrabhishek</option>
+          <option>Other — specify in notes</option>
+        </select>
+      </div>
+      <div class="mfg"><label>Date & Time Preferred</label><input type="datetime-local"></div>
+      <div class="mfg"><label>City / Full Address</label><input type="text" placeholder="Your city or address"></div>
+      <div class="mfg"><label>Pandit Language Preference</label>
+        <select><option>Hindi</option><option>Sanskrit</option><option>Bengali</option><option>Tamil</option><option>Telugu</option><option>Marathi</option></select>
+      </div>
+      <button class="big-btn" onclick="submitPuja()" style="font-size:.9rem;padding:14px;">
+        🙏 Submit Booking — Jai Shri Ram
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     ADMIN PANEL
+══════════════════════════════════════════ -->
+<div class="admin-overlay" id="adminOverlay">
+  <div class="admin-panel">
+    <!-- Login -->
+    <div id="adminLoginDiv">
+      <div style="padding:20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+        <h3 style="font-family:'Cinzel',serif;color:var(--text);font-size:1.1rem;">⚙ Admin Panel</h3>
+        <button onclick="closeAdmin()" style="background:var(--cream2);border:none;border-radius:8px;padding:7px 14px;cursor:pointer;font-size:.78rem;">✕ Close</button>
+      </div>
+      <div class="admin-login-wrap">
+        <h3>Admin Login</h3>
+        <p>SanataniAnthem Administration</p>
+        <div class="afg"><label>Admin ID</label><input type="text" id="aId" placeholder="Enter Admin ID"></div>
+        <div class="afg"><label>Password</label><input type="password" id="aPass" placeholder="Enter Password"></div>
+        <div class="login-err" id="loginErr">❌ Incorrect credentials. Try again.</div>
+        <button class="a-save-btn" style="width:100%;margin-top:14px;" onclick="doLogin()">Login to Admin Panel</button>
+      </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="adminDashDiv" style="display:none;flex-direction:column;height:100%;">
+      <div class="admin-top">
+        <div class="admin-top-row">
+          <h2>⚙ SanataniAnthem Admin Panel</h2>
+          <button class="admin-close-btn" onclick="closeAdmin()">✕ Close</button>
+        </div>
+        <div class="admin-tabs">
+          <button class="atab on" onclick="setATab(this,'dash')">Dashboard</button>
+          <button class="atab" onclick="setATab(this,'songs')">FM Songs</button>
+          <button class="atab" onclick="setATab(this,'temples')">Temples</button>
+          <button class="atab" onclick="setATab(this,'packages')">Packages</button>
+          <button class="atab" onclick="setATab(this,'sanskrit')">Sanskrit</button>
+          <button class="atab" onclick="setATab(this,'pandits')">Pandits</button>
+          <button class="atab" onclick="setATab(this,'bookings')">Bookings</button>
+        </div>
+      </div>
+      <div class="admin-content">
+        <!-- Dashboard -->
+        <div class="asec on" id="asec-dash">
+          <h3 style="font-family:'Cinzel',serif;color:var(--text);margin-bottom:4px;">Platform Overview</h3>
+          <div class="astats">
+            <div class="astat"><span class="big">247</span><span class="sm">Total Bookings</span></div>
+            <div class="astat"><span class="big">51</span><span class="sm">Shakti Peethas</span></div>
+            <div class="astat"><span class="big">12</span><span class="sm">Jyotirlingas</span></div>
+            <div class="astat"><span class="big">38</span><span class="sm">Active Pandits</span></div>
+            <div class="astat"><span class="big">₹2.4L</span><span class="sm">Monthly Revenue</span></div>
+            <div class="astat"><span class="big">1,204</span><span class="sm">Registered Users</span></div>
+          </div>
+          <div style="background:linear-gradient(135deg,rgba(255,107,0,.06),rgba(19,136,8,.04));border:1px solid var(--border);border-radius:var(--r12);padding:16px;margin-top:16px;">
+            <strong style="color:var(--sf);">🌟 Sanskrit Discount Usage:</strong>
+            <span style="color:var(--text-m);font-size:.85rem;"> 68 users booked in Sanskrit mode this month — saved ₹42,840 collectively!</span>
+          </div>
+        </div>
+
+        <!-- FM Songs -->
+        <div class="asec" id="asec-songs">
+          <h3 style="font-family:'Cinzel',serif;color:var(--text);margin-bottom:16px;">Upload FM Radio Songs</h3>
+          <div class="afg"><label>Song Title (Sanskrit/Devotional)</label><input type="text" placeholder="e.g. OM Namah Shivaya — Classical Version"></div>
+          <div class="afg"><label>Artist / Singer Name</label><input type="text" placeholder="Singer name"></div>
+          <div class="afg"><label>Upload Audio File (MP3/WAV)</label><input type="file" accept="audio/*"></div>
+          <div class="afg"><label>Language</label><select><option>Sanskrit</option><option>Hindi</option><option>Tamil</option><option>Telugu</option><option>Bengali</option></select></div>
+          <div class="afg"><label>Category</label><select><option>Hanuman Chalisa</option><option>Shiva Stotra</option><option>Devi Bhajan</option><option>Vishnu Stotra</option><option>General Sanskrit</option></select></div>
+          <button class="a-save-btn" onclick="adminSave('✅ Song uploaded to Sanatani FM Radio!')">Upload Song</button>
+        </div>
+
+        <!-- Temples -->
+        <div class="asec" id="asec-temples">
+          <h3 style="font-family:'Cinzel',serif;color:var(--text);margin-bottom:16px;">Add / Manage Temples</h3>
+          <div class="afg"><label>Temple Full Name</label><input type="text" placeholder="Temple name in full"></div>
+          <div class="afg"><label>Location (City, State)</label><input type="text" placeholder="City, State"></div>
+          <div class="afg"><label>Category</label><select><option>Shakti Peetha</option><option>Jyotirlinga</option><option>Char Dham</option><option>Divya Desam</option><option>Local Temple</option><option>Other</option></select></div>
+          <div class="afg"><label>Temple Description</label><textarea rows="3" placeholder="History, significance, deity..."></textarea></div>
+          <div class="afg"><label>CCTV Live Stream URL</label><input type="url" placeholder="https://..."></div>
+          <div class="afg"><label>Package Price (₹)</label><input type="number" placeholder="e.g. 5999"></div>
+          <button class="a-save-btn" onclick="adminSave('✅ Temple added to platform!')">Add Temple</button>
+        </div>
+
+        <!-- Packages -->
+        <div class="asec" id="asec-packages">
+          <h3 style="font-family:'Cinzel',serif;color:var(--text);margin-bottom:16px;">Manage Yatra Packages</h3>
+          <div class="afg"><label>Package Name</label><input type="text" placeholder="e.g. Kedarnath Premium 3N Package"></div>
+          <div class="afg"><label>Base Price (₹)</label><input type="number" placeholder="e.g. 12999"></div>
+          <div class="afg"><label>Duration (Nights)</label><input type="number" placeholder="3"></div>
+          <div class="afg"><label>Includes (comma separated)</label><textarea rows="2" placeholder="Flight, Hotel, Transfer, Meals, VIP Darshan..."></textarea></div>
+          <div class="afg"><label>Sanskrit Discount (%)</label><input type="number" value="10"></div>
+          <button class="a-save-btn" onclick="adminSave('✅ Package saved successfully!')">Save Package</button>
+        </div>
+
+        <!-- Sanskrit -->
+        <div class="asec" id="asec-sanskrit">
+          <h3 style="font-family:'Cinzel',serif;color:var(--text);margin-bottom:16px;">Upload Sanskrit Lessons</h3>
+          <div class="afg"><label>Lesson Title</label><input type="text" placeholder="e.g. Lesson 4 — Basic Sentences"></div>
+          <div class="afg"><label>Level</label><select><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select></div>
+          <div class="afg"><label>Lesson Content (Sanskrit + Meaning)</label><textarea rows="5" placeholder="Lesson content..."></textarea></div>
+          <div class="afg"><label>Audio Pronunciation File</label><input type="file" accept="audio/*"></div>
+          <button class="a-save-btn" onclick="adminSave('✅ Sanskrit lesson uploaded!')">Add Lesson</button>
+        </div>
+
+        <!-- Pandits -->
+        <div class="asec" id="asec-pandits">
+          <h3 style="font-family:'Cinzel',serif;color:var(--text);margin-bottom:16px;">Manage Verified Pandits</h3>
+          <div class="afg"><label>Pandit Name</label><input type="text" placeholder="Full name"></div>
+          <div class="afg"><label>City</label><input type="text" placeholder="City where available"></div>
+          <div class="afg"><label>Specialization</label><input type="text" placeholder="e.g. Vedic, Shaiva, Vaishnava..."></div>
+          <div class="afg"><label>Languages Known</label><input type="text" placeholder="Sanskrit, Hindi, Bengali..."></div>
+          <div class="afg"><label>Phone / WhatsApp</label><input type="tel" placeholder="+91..."></div>
+          <div class="afg"><label>Daily Rate (₹)</label><input type="number" placeholder="e.g. 2100"></div>
+          <button class="a-save-btn" onclick="adminSave('✅ Pandit profile added!')">Add Pandit</button>
+        </div>
+
+        <!-- Bookings Table -->
+        <div class="asec" id="asec-bookings">
+          <h3 style="font-family:'Cinzel',serif;color:var(--text);margin-bottom:16px;">Recent Bookings</h3>
+          <div style="overflow-x:auto;">
+            <table class="bookings-table">
+              <thead><tr>
+                <th>Booking ID</th><th>Destination</th>
+                <th>Amount</th><th>Language</th><th>Status</th>
+              </tr></thead>
+              <tbody id="bookTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<!-- ══════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════ -->
+<script>
+/* ── PARTICLES ── */
+const pts = document.getElementById('heroPts');
+for(let i=0;i<18;i++){
+  const p = document.createElement('div'); p.className='pt';
+  p.style.cssText=`--d:${8+Math.random()*9}s;--dl:${Math.random()*12}s;--s:${2+Math.random()*3}px;--x:${Math.random()*100}%;`;
+  pts.appendChild(p);
+}
+
+/* ── LANGUAGE ── */
+let lang='en';
+function toggleSanskrit(){
+  const isSa = document.documentElement.getAttribute('data-lang') === 'sa';
+  setLang(isSa ? 'en' : 'sa');
+}
+function setLang(l){
+  lang=l;
+  // Sync toggle UI
+  const toggle = document.getElementById('langToggle');
+  if(toggle) toggle.classList.toggle('sa-on', l==='sa');
+  // Set data-lang
+  document.documentElement.setAttribute('data-lang', l==='sa' ? 'sa' : 'en');
+  // show/hide lang spans
+  document.querySelectorAll('.lang-en').forEach(e=>e.style.display = l!=='sa' ? '' : 'none');
+  document.querySelectorAll('.lang-sa').forEach(e=>e.style.display = l==='sa' ? '' : 'none');
+  if(l==='sa'){
+    document.getElementById('saDiscBadge').style.display='flex';
+    toast('🌟 संस्कृतम् — 10% extra discount on all bookings!');
+  } else {
+    document.getElementById('saDiscBadge').style.display='none';
+    toast('🌏 English selected');
+  }
+}
+
+
+/* ── PRAYERS ── */
+const prayerData={
+  hc:{
+    text:'Jai Hanuman Gyan Gun Sagar. Jai Kapeesh Tihun Lok Ujagar. Ramadoot Atulit Bal Dhama. Anjani putra Pavansut Naama.',
+    prog:'progHC',sub:'subHC',btn:'playHC'
+  },
+  sb:{
+    text:'Sarve Bhavantu Sukhinah. Sarve Santu Niramayaah. Sarve Bhadrani Pashyantu. Ma Kashchid Dukha Bhag Bhavet. Om Shantih Shantih Shantih.',
+    prog:'progSB',sub:'subSB',btn:'playSB'
+  }
+};
+let playingPrayer=null;let progTimer=null;
+function togglePrayer(id){
+  const d=prayerData[id];
+  if(playingPrayer===id){
+    window.speechSynthesis.cancel();
+    clearInterval(progTimer);
+    document.getElementById(d.btn).textContent='▶';
+    document.getElementById(d.sub).textContent='Click to begin recitation';
+    document.getElementById(d.prog).style.width='0%';
+    playingPrayer=null;
+  } else {
+    if(playingPrayer){togglePrayer(playingPrayer);}
+    playingPrayer=id;
+    document.getElementById(d.btn).textContent='⏸';
+    document.getElementById(d.sub).textContent='Playing...';
+    let w=0;
+    progTimer=setInterval(()=>{
+      w=Math.min(w+0.5,100);
+      document.getElementById(d.prog).style.width=w+'%';
+      if(w>=100){clearInterval(progTimer);document.getElementById(d.btn).textContent='▶';document.getElementById(d.sub).textContent='Complete 🙏';playingPrayer=null;}
+    },150);
+    speak(d.text);
+  }
+}
+
+function speak(text){
+  if('speechSynthesis' in window){
+    window.speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(text);
+    u.lang='hi-IN';u.rate=0.72;u.pitch=0.88;
+    window.speechSynthesis.speak(u);
+  }
+}
+
+/* ── FM ── */
+let fmOn=false;
+function toggleFM(){
+  fmOn=!fmOn;
+  document.getElementById('fmBtn').textContent=fmOn?'⏸':'▶';
+  document.getElementById('fmWaves').style.display=fmOn?'flex':'none';
+  document.getElementById('fmNow').style.display=fmOn?'block':'none';
+  if(fmOn){
+    speak('Om Namah Shivaya. Sanatani FM Radio. Jai Shri Ram. The divine Sanskrit devotional stream is now playing.');
+    toast('📻 Sanatani FM Radio started! 🎵 Sanskrit songs are live!');
+  }
+}
+
+/* ── ALPHABET ── */
+function sayIt(text){
+  speak(text);
+  toast('🔊 '+text.split('—')[0].trim());
+}
+
+/* ── BOOKING ── */
+function setBTab(el,type){
+  document.querySelectorAll('.btab').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('routeBox').classList.remove('on');
+}
+const pkgPrices={
+  'Varanasi — Kashi Vishwanath Jyotirlinga':8499,
+  'Kedarnath — Himalayan Jyotirlinga':14999,
+  'Tirupati — Venkateshwara Divya Desam':7499,
+  'Vrindavan & Mathura — Krishna Dham':4299,
+  'Puri — Jagannath Char Dham':6499,
+  'Somnath — First Jyotirlinga':7999,
+  'Rameshwaram — Ramanathaswamy Jyotirlinga':6999,
+  'Badrinath — Char Dham':10999,
+  'Vaishno Devi — Shakti Peetha':8999,
+  'Kamakhya — Shakti Peetha, Guwahati':6999,
+  'Shirdi — Sai Baba':4999,
+  'Ayodhya — Ram Janmabhoomi':3999,
+  'Ujjain — Mahakaleshwar Jyotirlinga':5499,
+  'Char Dham Yatra (All 4)':39999
+};
+function searchRoute(){
+  const from=document.getElementById('fromCity').value.trim()||'Your City';
+  const to=document.getElementById('toTemple').value;
+  if(!to){toast('⚠ Please select a destination temple!');return;}
+  const base=pkgPrices[to]||5999;
+  const amt=lang==='sa'?Math.round(base*.9):base;
+  const toName=to.split('—')[0].trim();
+  document.getElementById('rbRoute').textContent=from+' → '+toName;
+  document.getElementById('rbAmt').textContent='₹'+amt.toLocaleString('en-IN');
+  if(lang==='sa'){
+    const b=document.getElementById('saDiscBadge');
+    b.style.display='flex';
+    b.textContent='✅ Sanskrit Discount 10% applied! You save ₹'+Math.round(base*.1).toLocaleString('en-IN');
+  }
+  document.getElementById('rbGrid').innerHTML=`
+    <div class="rb-item"><div class="ico">🚂</div><div class="lbl">Best Train</div><div class="val">Rajdhani Express</div><div class="sub">Dep 06:00 AM · AC 2-Tier</div></div>
+    <div class="rb-item"><div class="ico">⏱</div><div class="lbl">Travel Time</div><div class="val">8h–14h</div><div class="sub">Direct route</div></div>
+    <div class="rb-item"><div class="ico">🏨</div><div class="lbl">Hotel Included</div><div class="val">3★ Dharamshala</div><div class="sub">2 nights</div></div>
+    <div class="rb-item"><div class="ico">🚗</div><div class="lbl">AC Cab</div><div class="val">Station → Temple</div><div class="sub">Both ways</div></div>
+    <div class="rb-item"><div class="ico">🍽</div><div class="lbl">Sattvic Meals</div><div class="val">Breakfast + Dinner</div><div class="sub">All days</div></div>
+    <div class="rb-item"><div class="ico">🛕</div><div class="lbl">VIP Darshan</div><div class="val">Skip-the-queue</div><div class="sub">Pass included</div></div>
+  `;
+  document.getElementById('routeBox').classList.add('on');
+  setTimeout(()=>document.getElementById('routeBox').scrollIntoView({behavior:'smooth',block:'nearest'}),100);
+}
+function confirmBook(){
+  toast('✅ Booking confirmed! Jai Shri Ram 🙏 You will receive WhatsApp confirmation shortly!');
+  document.getElementById('routeBox').classList.remove('on');
+}
+function bookIt(name,price){
+  toast('🙏 Initiating booking for '+name+' — '+price+'. Scroll to Travel section to complete.');
+  document.getElementById('travel').scrollIntoView({behavior:'smooth'});
+}
+
+/* ── PILGRIMAGE TABS ── */
+function setPTab(el,id){
+  document.querySelectorAll('.ptab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.pcontent').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('pc-'+id).classList.add('on');
+}
+
+/* ── MAP TABS ── */
+function setMTab(el,id){
+  document.querySelectorAll('.mtab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.mcontent').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('mc-'+id).classList.add('on');
+}
+
+/* ── PUJA MODAL ── */
+function openPujaModal(){document.getElementById('pujaOverlay').classList.add('open');}
+function closePujaModal(){document.getElementById('pujaOverlay').classList.remove('open');}
+function submitPuja(){
+  toast('🙏 Puja booking submitted! Our pandit will WhatsApp you within 2 hours. Jai Shri Ram!');
+  closePujaModal();
+}
+
+/* ── FIND NEARBY ── */
+function findNearby(){
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(
+      ()=>toast('📍 Location detected! Found 7 temples within 5km. Showing nearest: Shiv Mandir (0.8km), Durga Mata (1.2km), Hanuman Mandir (2.1km)'),
+      ()=>toast('📍 Enable location access to find nearby temples. Or search your city above!')
+    );
+  } else {
+    toast('📍 Nearest temples: Hanuman Mandir (0.8km), Shiv Mandir (1.2km), Durga Mata (2.1km)');
+  }
+}
+
+/* ── ADMIN ── */
+function openAdmin(){document.getElementById('adminOverlay').classList.add('open');}
+function closeAdmin(){document.getElementById('adminOverlay').classList.remove('open');}
+function doLogin(){
+  const id=document.getElementById('aId').value.trim();
+  const pw=document.getElementById('aPass').value;
+  if(id==='abcdefgh'&&pw==='123456789'){
+    document.getElementById('adminLoginDiv').style.display='none';
+    const dash=document.getElementById('adminDashDiv');
+    dash.style.display='flex';
+    // Populate bookings table
+    const data=[
+      ['#B1042','Kedarnath','₹14,999','Sanskrit','Confirmed'],
+      ['#B1041','Vaishno Devi','₹8,999','English','Pending'],
+      ['#B1040','Tirupati','₹7,499','Sanskrit','Confirmed'],
+      ['#B1039','Kamakhya Devi','₹6,999','English','Confirmed'],
+      ['#B1038','Char Dham (Full)','₹39,999','Sanskrit','Processing'],
+      ['#B1037','Kashi Vishwanath','₹5,999','English','Confirmed'],
+    ];
+    document.getElementById('bookTbody').innerHTML=data.map(r=>`
+      <tr>
+        <td style="font-weight:600;">${r[0]}</td>
+        <td>${r[1]}</td>
+        <td style="font-weight:700;color:var(--sf);">${r[2]}</td>
+        <td><span style="${r[3]==='Sanskrit'?'color:var(--green);font-weight:700;':'color:var(--text-m);'}">${r[3]}</span></td>
+        <td><span class="${r[4]==='Confirmed'?'badge-confirm':'badge-pend'}">${r[4]}</span></td>
+      </tr>
+    `).join('');
+  } else {
+    document.getElementById('loginErr').style.display='block';
+  }
+}
+function setATab(el,id){
+  document.querySelectorAll('.atab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.asec').forEach(s=>s.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('asec-'+id).classList.add('on');
+}
+function adminSave(msg){toast(msg);}
+
+/* ── SEARCH ── */
+function doSearch(){
+  const q=document.getElementById('heroInput').value.toLowerCase();
+  if(!q){toast('Please enter a search term!');return;}
+  const map={
+    'kedarnath':'#pilgrimage','varanasi':'#pilgrimage','tirupati':'#pilgrimage',
+    'shakti':'#pilgrimage','jyotirlinga':'#pilgrimage','char dham':'#pilgrimage',
+    'ramayana':'#maps','mahabharata':'#maps','ram':'#maps','krishna':'#maps',
+    'sanskrit':'#sanskrit','chalisa':'#anthem','sarve':'#anthem',
+    'puja':'#puja','pandit':'#puja','prasad':'#puja',
+    'bhajan':'#bhajan','modi':'#bhajan',
+    'book':'#puja','yatra':'#puja','train':'#puja'
+  };
+  let dest='#pilgrimage';
+  for(const[k,v] of Object.entries(map)){if(q.includes(k)){dest=v;break;}}
+  document.querySelector(dest).scrollIntoView({behavior:'smooth'});
+  toast('🔍 Showing results for "'+q+'"');
+}
+document.getElementById('heroInput').addEventListener('keypress',e=>{if(e.key==='Enter')doSearch();});
+
+/* ── TOAST ── */
+let toastTimer;
+function toast(msg){
+  const el=document.getElementById('toast');
+  el.textContent=msg;el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>el.classList.remove('show'),4000);
+}
+
+/* ── SCROLL REVEAL ── */
+// Make elements already in viewport visible immediately
+document.querySelectorAll('.reveal').forEach(el=>{
+  const rect=el.getBoundingClientRect();
+  if(rect.top < window.innerHeight){el.classList.add('vis');}
+});
+// Observer for elements below fold
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting){
+      setTimeout(()=>e.target.classList.add('vis'),i*55);
+      obs.unobserve(e.target);
+    }
+  });
+},{threshold:0,rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('.reveal:not(.vis)').forEach(el=>obs.observe(el));
+
+/* ── INIT ── */
+// Set default lang-en visible
+document.querySelectorAll('.lang-sa').forEach(e=>e.style.display='none');
+
+
+
+function showBookingOptions(from,to){
+  const dest=to.split('—')[0].trim().split('&')[0].trim();
+  const slug=encodeURIComponent(dest.toLowerCase().replace(/\s+/g,'-'));
+  const enc=encodeURIComponent(dest);
+  const U={
+    irctc:'https://www.irctc.co.in/nget/train-search',
+    mmt:'https://www.makemytrip.com/trains/',
+    hotels:'https://www.makemytrip.com/hotels/'+slug+'-hotels.html',
+    booking:'https://www.booking.com/searchresults.html?ss='+enc,
+    goibibo:'https://www.goibibo.com/hotels/hotels-in-'+slug+'/'
+  };
+  let ov=document.getElementById('bkOv');if(ov)ov.remove();
+  ov=document.createElement('div');ov.id='bkOv';
+  ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:7000;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(14px);';
+  ov.onclick=e=>{if(e.target===ov)ov.remove();};
+  const row=(ic,ti,su,url,c)=>`<a href="${url}" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:14px;border:2px solid ${c}44;text-decoration:none;background:${c}0a;transition:all .2s;margin-bottom:10px;" onmouseover="this.style.borderColor='${c}';this.style.background='${c}18'" onmouseout="this.style.borderColor='${c}44';this.style.background='${c}0a'"><span style="font-size:1.9rem;flex-shrink:0">${ic}</span><div style="flex:1"><div style="font-weight:700;color:#1C0D00;font-size:.9rem">${ti}</div><div style="font-size:.7rem;color:#A07040;margin-top:1px">${su}</div></div><span style="color:${c};font-weight:700">→</span></a>`;
+  ov.innerHTML=`<div style="background:#fff;border-radius:24px;padding:32px 28px;max-width:500px;width:100%;position:relative;box-shadow:0 24px 80px rgba(0,0,0,.5);max-height:90vh;overflow-y:auto;"><button onclick="document.getElementById('bkOv').remove()" style="position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;border:none;background:#f5f5f5;cursor:pointer;font-size:1rem;">✕</button><div style="text-align:center;margin-bottom:22px;"><div style="font-size:2rem">🙏</div><h3 style="font-family:Cinzel,serif;color:#FF6B00;font-size:1.2rem;margin:8px 0 4px">Complete Your Yatra Booking</h3><p style="color:#9B7040;font-size:.8rem">${from} → <strong>${dest}</strong></p></div>${row('🚂','IRCTC — Official Train Booking','irctc.co.in · Government of India · Real trains',U.irctc,'#FF6B00')}${row('✈','MakeMyTrip — Train + Flight','makemytrip.com · Live prices',U.mmt,'#138808')}${row('🏨','Hotels near '+dest,'makemytrip.com · Real hotels near temple',U.hotels,'#000080')}${row('🌐','Booking.com Hotels','Best rates worldwide',U.booking,'#C8890A')}${row('🏠','Goibibo Hotels','Indian hotel specialist',U.goibibo,'#9C27B0')}<p style="text-align:center;margin-top:14px;font-size:.68rem;color:#bbb">Real sites — actual trains & hotels 🙏 Shubh Yatra!</p></div>`;
+  document.body.appendChild(ov);
+}
+
+/* ════════ PANJIKA JS ════════ */
+/* ── PANJIKA DATA ── */
+const TITHIS = [
+  'প্রতিপদ','দ্বিতীয়া','তৃতীয়া','চতুর্থী','পঞ্চমী','ষষ্ঠী','সপ্তমী','অষ্টমী',
+  'নবমী','দশমী','একাদশী','দ্বাদশী','ত্রয়োদশী','চতুর্দশী','পূর্ণিমা / অমাবস্যা'
+];
+const NAKSHATRAS = [
+  'অশ্বিনী','ভরণী','কৃত্তিকা','রোহিণী','মৃগশিরা','আর্দ্রা','পুনর্বসু',
+  'পুষ্যা','আশ্লেষা','মঘা','পূর্বাফাল্গুনী','উত্তরাফাল্গুনী','হস্তা',
+  'চিত্রা','স্বাতী','বিশাখা','অনুরাধা','জ্যেষ্ঠা','মূলা','পূর্বাষাঢ়া',
+  'উত্তরাষাঢ়া','শ্রবণা','ধনিষ্ঠা','শতভিষা','পূর্বভাদ্রপদ','উত্তরভাদ্রপদ','রেবতী'
+];
+const YOGAS = ['বিষ্কুম্ভ','প্রীতি','আয়ুষ্মান','সৌভাগ্য','শোভন','অতিগণ্ড','সুকর্মা','ধৃতি','শূল','গণ্ড','বৃদ্ধি','ধ্রুব','ব্যাঘাত','হর্ষণ','বজ্র','সিদ্ধি','ব্যতীপাত','বরীয়ান','পরিঘ','শিব','সিদ্ধ','সাধ্য','শুভ','শুক্ল','ব্রহ্ম','ঐন্দ্র','বৈধৃতি'];
+const WEEKDAYS_BN = ['রবিবার','সোমবার','মঙ্গলবার','বুধবার','বৃহস্পতিবার','শুক্রবার','শনিবার'];
+const WEEKDAYS_EN = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const MONTHS_BN = ['বৈশাখ','জ্যৈষ্ঠ','আষাঢ়','শ্রাবণ','ভাদ্র','আশ্বিন','কার্তিক','অগ্রহায়ণ','পৌষ','মাঘ','ফাল্গুন','চৈত্র'];
+const MONTHS_EN = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const PAKSHA = ['শুক্লপক্ষ','কৃষ্ণপক্ষ'];
+const BANGLA_DIGITS = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+const RASHI_DATA = [
+  {name:'মেষ',en:'Aries',symbol:'♈',msg:'আজ কাজে সাফল্য। নতুন সূচনার জন্য শুভ।',mood:'শুভ'},
+  {name:'বৃষ',en:'Taurus',symbol:'♉',msg:'অর্থলাভের সম্ভাবনা। পরিবারের সাথে সময় কাটান।',mood:'মধ্যম'},
+  {name:'মিথুন',en:'Gemini',symbol:'♊',msg:'যোগাযোগে সতর্ক থাকুন। বন্ধুদের সাহায্য পাবেন।',mood:'শুভ'},
+  {name:'কর্কট',en:'Cancer',symbol:'♋',msg:'স্বাস্থ্যের প্রতি যত্নশীল হোন। মানসিক শান্তি বিরাজ করবে।',mood:'মধ্যম'},
+  {name:'সিংহ',en:'Leo',symbol:'♌',msg:'নেতৃত্বের সুযোগ আসবে। আত্মবিশ্বাস রাখুন।',mood:'উত্তম'},
+  {name:'কন্যা',en:'Virgo',symbol:'♍',msg:'বিশ্লেষণী কাজে সাফল্য। স্বাস্থ্য ভালো থাকবে।',mood:'শুভ'},
+  {name:'তুলা',en:'Libra',symbol:'♎',msg:'সম্পর্কে সৌহার্দ্য বজায় রাখুন। শিল্পকাজে উন্নতি।',mood:'উত্তম'},
+  {name:'বৃশ্চিক',en:'Scorpio',symbol:'♏',msg:'গুপ্ত বিষয়ে সতর্ক থাকুন। আধ্যাত্মিক উন্নতি হবে।',mood:'মধ্যম'},
+  {name:'ধনু',en:'Sagittarius',symbol:'♐',msg:'দূরযাত্রায় সাফল্য। জ্ঞান অর্জনের শুভ দিন।',mood:'শুভ'},
+  {name:'মকর',en:'Capricorn',symbol:'♑',msg:'পরিশ্রমের ফল পাবেন। সরকারি কাজে সাফল্য।',mood:'উত্তম'},
+  {name:'কুম্ভ',en:'Aquarius',symbol:'♒',msg:'উদ্ভাবনী চিন্তায় সাফল্য। মিত্রতা বৃদ্ধি পাবে।',mood:'শুভ'},
+  {name:'মীন',en:'Pisces',symbol:'♓',msg:'আধ্যাত্মিক সাধনায় মনোযোগ দিন। কল্পনাশক্তি প্রখর।',mood:'উত্তম'}
+];
+const SURYA_EVENTS = {
+  1:'মহাশিবরাত্রি বিশেষ প্রস্তুতি দিন।',
+  6:'শ্রীচৈতন্যদেবের আগমন উৎসব (হালিশহর)। কৌল সাধক সদানন্দের প্রয়াণ তিথি।',
+  14:'হোলিকা দহনের প্রস্তুতি।',
+  15:'দোলযাত্রা / হোলি উৎসব — রঙের উৎসব।',
+  21:'বিষুব দিবস — দিনরাত সমান।',
+};
+
+/* ── CONVERT TO BENGALI DIGITS ── */
+function toBn(n) {
+  return String(n).split('').map(c=>BANGLA_DIGITS[+c]||c).join('');
+}
+
+/* ── GET APPROX BENGALI DATE ── */
+function getBengaliDate(date) {
+  const d = date.getDate(), m = date.getMonth(), y = date.getFullYear();
+  // Approximate conversion (Gregorian → Bengali Bangabda)
+  // Bengali year starts mid-April; rough offset
+  let bYear = y - 593;
+  let bMonth, bDay;
+  // Approximate month mapping
+  const gToBn = [9,10,11,0,1,2,3,4,5,6,7,8]; // Jan=Poush(9), Feb=Magh(10)...
+  bMonth = gToBn[m];
+  // Approximate day (Bengali months start ~14-16 of Gregorian)
+  bDay = d >= 15 ? d - 14 : d + 16;
+  if(d < 15) bMonth = (bMonth - 1 + 12) % 12;
+  if(m === 3 && d >= 15) { bYear++; } // New year in mid-April
+  return { day: bDay, month: bMonth, year: bYear, monthName: MONTHS_BN[bMonth] };
+}
+
+/* ── COMPUTE TITHI (approximate) ── */
+function getTithi(date) {
+  // Use day of lunar month approximation
+  // New moon ≈ every 29.5 days from a known reference
+  const refNewMoon = new Date('2026-02-20T00:00:00').getTime();
+  const msPerDay = 86400000;
+  const lunarDay = ((date.getTime() - refNewMoon) / msPerDay) % 29.53;
+  const tNum = Math.floor(lunarDay);
+  const paksha = tNum < 15 ? 'শুক্লপক্ষ' : 'কৃষ্ণপক্ষ';
+  const tithiIdx = tNum < 15 ? tNum : tNum - 15;
+  const tithiName = TITHIS[Math.min(tithiIdx, 14)];
+  return { name: tithiName, paksha };
+}
+
+/* ── COMPUTE NAKSHATRA (approximate) ── */
+function getNakshatra(date) {
+  // Moon moves ~13.2° per day through 27 nakshatras
+  const refDate = new Date('2026-01-01').getTime();
+  const daysSince = (date.getTime() - refDate) / 86400000;
+  const idx = Math.floor((daysSince * 0.9 + 12) % 27);
+  return NAKSHATRAS[idx];
+}
+
+/* ── COMPUTE YOGA ── */
+function getYoga(date) {
+  const d = date.getDate() + date.getMonth() * 3;
+  return YOGAS[d % 27];
+}
+
+/* ── SUNRISE / SUNSET (approximate by lat/date) ── */
+function getSunTimes(date) {
+  // Very rough approximation for India (lat ~22°)
+  const dayOfYear = Math.floor((date - new Date(date.getFullYear(),0,0)) / 86400000);
+  // Sunrise varies from ~5:30 (summer) to ~7:00 (winter)
+  const srBase = 5 * 60 + 58; // minutes from midnight
+  const srOffset = Math.round(30 * Math.sin((dayOfYear - 80) * 2 * Math.PI / 365));
+  const sunrise = srBase - srOffset;
+  const sunset = (17 * 60 + 38) + srOffset;
+  const toTimeStr = m => {
+    const h = Math.floor(m/60), min = m%60, sec = Math.floor(Math.random()*59)+1;
+    return `${toBn(h)}|${toBn(String(min).padStart(2,'0'))}|${toBn(String(sec).padStart(2,'0'))}`;
+  };
+  return { sunrise: toTimeStr(sunrise), sunset: toTimeStr(sunset) };
+}
+
+/* ── RAHUKAAL by weekday ── */
+function getRahukaal(dayOfWeek) {
+  const rahu = [
+    '৪:৩০ – ৬:০০','৭:৩০ – ৯:০০','৩:০০ – ৪:৩০',
+    '১২:০০ – ১:৩০','১:৩০ – ৩:০০','১০:৩০ – ১২:০০','৯:০০ – ১০:৩০'
+  ];
+  return rahu[dayOfWeek];
+}
+
+/* ── POPULATE PANJIKA ── */
+function populatePanjika() {
+  const now = new Date();
+  const dow = now.getDay(); // 0=Sun
+  const bd = getBengaliDate(now);
+  const tithi = getTithi(now);
+  const nakshatra = getNakshatra(now);
+  const yoga = getYoga(now);
+  const { sunrise, sunset } = getSunTimes(now);
+
+  // Greeting based on time
+  const h = now.getHours();
+  let greeting = 'সুপ্রভাত — দিনপঞ্জী';
+  if(h >= 12 && h < 17) greeting = 'শুভ অপরাহ্ন — দিনপঞ্জী';
+  else if(h >= 17) greeting = 'শুভ সন্ধ্যা — দিনপঞ্জী';
+  document.getElementById('greetingText').textContent = greeting;
+
+  document.getElementById('pkWeekday').textContent = WEEKDAYS_BN[dow];
+  document.getElementById('pkBengaliDate').textContent = `${toBn(bd.day)} ${bd.monthName}, ${toBn(bd.year)} বঙ্গাব্দ`;
+  document.getElementById('pkEngDate').textContent = `${now.getDate()} ${MONTHS_EN[now.getMonth()]}, ${now.getFullYear()}`;
+  document.getElementById('pkYear').textContent = `শক ${toBn(now.getFullYear()-78)} · Shaka Era`;
+  document.getElementById('pkSunrise').textContent = `সকাল ${sunrise}`;
+  document.getElementById('pkSunset').textContent = `বিকাল ${sunset}`;
+  document.getElementById('pkMoonrise').textContent = `রাত ${toBn(20+dow%3)}|${toBn((12+dow*7)%60)}`;
+  document.getElementById('pkTithi').innerHTML = `<span class="highlight">(${tithi.paksha}) ${tithi.name}</span> — শুভ তিথি`;
+  document.getElementById('pkNakshatra').innerHTML = `<span class="highlight">${nakshatra}</span> — চন্দ্রের অবস্থান`;
+  document.getElementById('pkYoga').innerHTML = `<span class="highlight">${yoga} যোগ</span>`;
+  document.getElementById('pkRahu').innerHTML = `বিকাল <span style="color:#ef5350;font-weight:600;">${getRahukaal(dow)}</span> — এই সময় এড়িয়ে চলুন`;
+
+  // Special events
+  const evKey = now.getDate();
+  const evText = SURYA_EVENTS[evKey] || `${tithi.name} — ${tithi.paksha} দিন। শিব স্মরণ করুন। ধর্ম আচরণ করুন।`;
+  document.getElementById('pkEvents').innerHTML = evText.split('.').filter(s=>s.trim()).map(e=>`<div class="pk-event-item">${e.trim()}।</div>`).join('');
+
+  // Rashi grid — pick 6 to show (rotate by day)
+  const rashiStart = dow * 2;
+  const toShow = [...Array(12)].map((_,i)=>RASHI_DATA[(rashiStart+i)%12]);
+  document.getElementById('rashiGrid').innerHTML = toShow.map((r,i)=>`
+    <div class="rashi-card ${i===0?'today-special':''}">
+      <span class="rashi-name-bn">${r.symbol} ${r.name}</span>
+      <span class="rashi-name-en">${r.en}</span>
+      <span class="rashi-msg">${r.msg}</span>
+      ${r.mood==='উত্তম'?'<span class="rashi-tag">✨ উত্তম</span>':r.mood==='শুভ'?'<span class="rashi-tag" style="background:rgba(19,136,8,.12);color:#66BB6A;border-color:rgba(19,136,8,.2);">✅ শুভ</span>':''}
+    </div>
+  `).join('');
+
+  // Update WA preview
+  document.getElementById('waPreviewText').textContent =
+`🕉 *সুপ্রভাত - দিনপঞ্জী* (বিশুদ্ধ সিদ্ধান্ত)
+~~~~~~~
+📅 *আজ:* ${WEEKDAYS_BN[dow]}, ${toBn(bd.day)} ${bd.monthName}, ${toBn(bd.year)} বঙ্গাব্দ
+📆 ${now.getDate()} ${MONTHS_EN[now.getMonth()]}, ${now.getFullYear()} খ্রীষ্টাব্দ
+
+🌅 *সূর্যোদয়:* সকাল ${sunrise}
+🌇 *সূর্যাস্ত:* বিকাল ${sunset}
+
+🔱 *তিথি:* ${tithi.paksha} ${tithi.name}
+⭐ *নক্ষত্র:* ${nakshatra}
+🧿 *যোগ:* ${yoga} যোগ
+
+✅ *শুভ সময়:* সকাল ৮:০০–১০:৩০
+⚠️ *রাহুকাল:* ${getRahukaal(dow)}
+
+🌸 *বিশেষ:* ${evText.split('.')[0]}
+
+🙏 *হরে কৃষ্ণ · জয় শ্রীরাম*
+~~~~~~~
+_— SanataniAnthem_`;
+
+  document.getElementById('waTime').textContent = `Today, ${sunrise.replace('সকাল','').trim()} ✓✓`;
+  
+  // Success preview
+  document.getElementById('successMsgPreview').textContent =
+`🕉 সুপ্রভাত - দিনপঞ্জী
+~~~~~~~
+আজ: ${WEEKDAYS_BN[dow]}, ${toBn(bd.day)} ${bd.monthName}
+তিথি: ${tithi.paksha} ${tithi.name}
+নক্ষত্র: ${nakshatra}
+শুভ: সকাল ৮–১০:৩০
+রাহু: ${getRahukaal(dow)}
+🙏 জয় শ্রীরাম
+— SanataniAnthem`;
+}
+
+/* ── DELIVERY OPT TOGGLE ── */
+function toggleOpt(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('selected');
+}
+function selLang(el) {
+  document.querySelectorAll('.lang-opt').forEach(l=>l.classList.remove('sel'));
+  el.classList.add('sel');
+}
+
+/* ── SUBSCRIBE ── */
+function doSubscribe() {
+  const name = document.getElementById('subName').value.trim();
+  const phone = document.getElementById('subPhone').value.trim();
+  const email = document.getElementById('subEmail').value.trim();
+  const city = document.getElementById('subCity').value.trim();
+  if(!name) { toast('⚠ Please enter your name!'); return; }
+  if(!phone || phone.replace(/\D/g,'').length < 8) { toast('⚠ Please enter a valid phone / WhatsApp number!'); return; }
+
+  // Animate button
+  const btn = document.querySelector('.sub-btn');
+  btn.textContent = '⏳ Subscribing...';
+  btn.style.opacity = '.7';
+
+  setTimeout(() => {
+    document.getElementById('subFormCard').style.display = 'none';
+    const s = document.getElementById('subSuccess');
+    s.classList.add('show');
+    document.getElementById('successName').textContent = name;
+    s.scrollIntoView({ behavior:'smooth', block:'center' });
+    toast(`✅ ${name} — aap successfully subscribe ho gaye! 🙏`);
+  }, 1400);
+}
+
+/* toast: handled by main */
+
+/* ── SCROLL REVEAL ── */
+
+
+/* ── INIT ── */
+/* ══════════════════════════════════════════
+   REALISTIC SVG CLOUDS WITH feTurbulence
+══════════════════════════════════════════ */
+(function buildClouds(){
+  const container = document.getElementById('skyClouds');
+  if(!container) return;
+
+  // SVG filter defs — feTurbulence warps edges to look organic
+  const defs = `<svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;">
+    <defs>
+      <filter id="cf1" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
+        <feTurbulence type="fractalNoise" baseFrequency="0.012 0.008" numOctaves="4" seed="2" result="noise"/>
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="28" xChannelSelector="R" yChannelSelector="G" result="displaced"/>
+        <feGaussianBlur in="displaced" stdDeviation="5" result="blurred"/>
+        <feComposite in="blurred" in2="SourceGraphic" operator="over"/>
+      </filter>
+      <filter id="cf2" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
+        <feTurbulence type="fractalNoise" baseFrequency="0.015 0.010" numOctaves="4" seed="7" result="noise"/>
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="22" xChannelSelector="R" yChannelSelector="G" result="displaced"/>
+        <feGaussianBlur in="displaced" stdDeviation="4" result="blurred"/>
+        <feComposite in="blurred" in2="SourceGraphic" operator="over"/>
+      </filter>
+      <filter id="cf3" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
+        <feTurbulence type="fractalNoise" baseFrequency="0.018 0.012" numOctaves="3" seed="14" result="noise"/>
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="18" xChannelSelector="R" yChannelSelector="G" result="displaced"/>
+        <feGaussianBlur in="displaced" stdDeviation="3.5" result="blurred"/>
+        <feComposite in="blurred" in2="SourceGraphic" operator="over"/>
+      </filter>
+    </defs>
+  </svg>`;
+  container.insertAdjacentHTML('beforeend', defs);
+
+  // Cloud definitions: [topPct, startX(neg=left, pos=right-edge), driftDir, durationS, delayS, opacity, filter, puffs]
+  // Each puff: [cx, cy, rx, ry] — ellipse coords within SVG viewBox
+  const clouds = [
+    // Large cumulus, drifts left→right
+    { top:'8%',  x:-750, dir:1, dur:78, del:0,  op:0.97, filt:'cf1', w:680, h:220,
+      puffs:[[180,190,180,85],[290,145,130,100],[390,140,120,95],[480,158,100,80],[545,172,80,65],[120,195,95,55],[330,195,110,50]] },
+    // Medium cloud
+    { top:'20%', x:-520, dir:1, dur:55, del:14, op:0.90, filt:'cf2', w:480, h:180,
+      puffs:[[130,155,130,72],[220,115,105,85],[320,120,95,80],[400,138,80,65],[160,158,90,45]] },
+    // Small wispy
+    { top:'5%',  x:-380, dir:1, dur:38, del:28, op:0.78, filt:'cf3', w:360, h:140,
+      puffs:[[100,118,100,55],[175,90,82,65],[255,95,72,60],[320,110,60,48]] },
+    // Large cloud right→left
+    { top:'26%', x:-720, dir:2, dur:88, del:6,  op:0.93, filt:'cf1', w:650, h:215,
+      puffs:[[170,182,170,82],[275,138,128,98],[375,135,115,92],[465,155,96,78],[530,168,78,63],[115,188,90,52],[315,188,106,48]] },
+    // Medium right→left
+    { top:'13%', x:-500, dir:2, dur:60, del:32, op:0.82, filt:'cf2', w:460, h:172,
+      puffs:[[120,148,120,70],[205,110,100,82],[300,115,90,77],[382,132,76,62],[150,152,85,43]] },
+    // Tiny puff
+    { top:'38%', x:-300, dir:1, dur:46, del:44, op:0.65, filt:'cf3', w:280, h:120,
+      puffs:[[90,100,90,48],[155,72,70,58],[220,78,62,52],[265,92,50,40]] },
+    // High cirrus wisp
+    { top:'2%',  x:-650, dir:1, dur:105,del:60, op:0.38, filt:'cf3', w:600, h:80,
+      puffs:[[160,60,160,22],[300,50,130,18],[420,54,110,16],[520,58,90,14]] },
+  ];
+
+  clouds.forEach((c, i) => {
+    // Build SVG with ellipses forming the cloud body
+    const ellipses = c.puffs.map(p => {
+      // Light gradient: bright white top, slight blue-grey shadow bottom
+      const gid = `cg${i}_${p[0]}`;
+      return `<defs>
+        <radialGradient id="${gid}" cx="45%" cy="32%" r="58%" fx="45%" fy="28%">
+          <stop offset="0%"   stop-color="#ffffff" stop-opacity="1"/>
+          <stop offset="38%"  stop-color="#f4f9ff" stop-opacity="1"/>
+          <stop offset="72%"  stop-color="#deeaf5" stop-opacity="1"/>
+          <stop offset="100%" stop-color="#c8dced" stop-opacity="0.85"/>
+        </radialGradient>
+      </defs>
+      <ellipse cx="${p[0]}" cy="${p[1]}" rx="${p[2]}" ry="${p[3]}" fill="url(#${gid})"/>`;
+    }).join('');
+
+    // Shadow layer: darker ellipses at bottom for depth
+    const shadows = c.puffs.map(p =>
+      `<ellipse cx="${p[0]}" cy="${p[1]+p[3]*0.55}" rx="${p[2]*0.75}" ry="${p[3]*0.22}"
+        fill="rgba(140,180,215,0.18)"/>`
+    ).join('');
+
+    const svg = `<svg class="cloud-svg ${c.dir===1?'d'+(i+1):'d'+(i+1)}" 
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 ${c.w} ${c.h}" 
+      width="${c.w}" height="${c.h}"
+      style="position:absolute;top:${c.top};${c.dir===1?'left:'+c.x+'px':'right:'+c.x+'px'};
+             opacity:${c.op};
+             filter:url(#${c.filt});
+             animation:${c.dir===1?'drift1':'drift2'} ${c.dur}s linear infinite ${c.del}s;">
+      ${shadows}
+      ${ellipses}
+    </svg>`;
+
+    container.insertAdjacentHTML('beforeend', svg);
+  });
+})();
+
+populatePanjika();
+// Refresh panjika every 60s
+setInterval(populatePanjika, 60000);
+</script>
+
+<!-- Brand Tooltip -->
+<div id="sa-tooltip">
+  <button id="tip-close" aria-label="Close">✕</button>
+  🌏 Unite NOW with All Sanatani Minds around the world<br>
+  <span style="opacity:.75;font-size:.72rem;">(for Universal and Individual Faith)</span><br>
+  <span style="font-family:'Tiro Devanagari Sanskrit',serif;font-size:.85rem;color:#FFD700;letter-spacing:1px;">वसुधैव कुटुम्बकम्</span>
+  <button id="tip-enter-btn">⚛ Enter the Quantum Field</button>
+</div>
+<script>
+(function(){
+  const tip = document.getElementById('sa-tooltip');
+  let hideTimer = null;
+
+  function showTip(anchorEl) {
+    clearTimeout(hideTimer);
+    tip.classList.add('show');
+    const r = anchorEl.getBoundingClientRect();
+    tip.style.top = (r.bottom + 10) + 'px';
+    // position horizontally
+    setTimeout(() => {
+      const tw = tip.offsetWidth;
+      let left = r.left + r.width/2 - tw/2;
+      left = Math.max(8, Math.min(left, window.innerWidth - tw - 8));
+      tip.style.left = left + 'px';
+    }, 0);
+    // Auto-hide after 1 second if user doesn't interact
+    hideTimer = setTimeout(() => {
+      if(!tip.matches(':hover')) tip.classList.remove('show');
+    }, 1000);
+  }
+
+  function hideTip() {
+    clearTimeout(hideTimer);
+    tip.classList.remove('show');
+  }
+
+  document.querySelectorAll('.brand-tip').forEach(el => {
+    el.addEventListener('mouseenter', () => showTip(el));
+    el.addEventListener('click', () => showTip(el));
+  });
+
+  // Close button
+  document.getElementById('tip-close').addEventListener('click', (e) => {
+    e.stopPropagation();
+    hideTip();
+  });
+
+  // Keep visible while hovering the tooltip itself
+  tip.addEventListener('mouseenter', () => clearTimeout(hideTimer));
+  tip.addEventListener('mouseleave', hideTip);
+
+  // Enter the Quantum Field button
+  document.getElementById('tip-enter-btn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    hideTip();
+    window.open('quantum-field.html', '_blank');
+  });
+})();
+</script>
+<script type="module" src="header.js">
+// ── Live Panchang ────────────────────────────────────
+(function() {
+  const tithis = ['Pratipada','Dwitiya','Tritiya','Chaturthi','Panchami','Shashthi','Saptami','Ashtami','Navami','Dashami','Ekadashi','Dwadashi','Trayodashi','Chaturdashi','Purnima/Amavasya'];
+  const nakshatras = ['Ashwini','Bharani','Krittika','Rohini','Mrigashira','Ardra','Punarvasu','Pushya','Ashlesha','Magha','Purva Phalguni','Uttara Phalguni','Hasta','Chitra','Swati','Vishakha','Anuradha','Jyeshtha','Mula','Purva Ashadha','Uttara Ashadha','Shravana','Dhanishta','Shatabhisha','Purva Bhadrapada','Uttara Bhadrapada','Revati'];
+  const yogas = ['Vishkamba','Priti','Ayushman','Saubhagya','Shobhana','Atiganda','Sukarma','Dhriti','Shula','Ganda','Vriddhi','Dhruva','Vyaghata','Harshana','Vajra','Siddhi','Vyatipata','Variyana','Parigha','Shiva','Siddha','Sadhya','Shubha','Shukla','Brahma','Indra','Vaidhriti'];
+  const vrats = ['Ekadashi Vrat','Pradosh Vrat','Chaturthi Vrat','Ashtami Vrat','Purnima Vrat','Sankashti Chaturthi','Amavasya Vrat','Navratri','No special vrat'];
+  const d = new Date();
+  const day = d.getDate(); const month = d.getMonth();
+  const srEl = document.getElementById('pc-sunrise');
+  const ssEl = document.getElementById('pc-sunset');
+  const tiEl = document.getElementById('pc-tithi');
+  const naEl = document.getElementById('pc-nakshatra');
+  const yogEl = document.getElementById('pc-yoga');
+  const vrEl = document.getElementById('pc-vrat');
+  const muEl = document.getElementById('pc-muhurat');
+  if(srEl) srEl.textContent = (5 + Math.floor(month/3)) + ':' + (20 + (day%10)).toString().padStart(2,'0') + ' AM';
+  if(ssEl) ssEl.textContent = (6 + Math.floor(month/6)) + ':' + (10 + (day%12)).toString().padStart(2,'0') + ' PM';
+  if(tiEl) tiEl.textContent = tithis[day % 15];
+  if(naEl) naEl.textContent = nakshatras[day % 27];
+  if(yogEl) yogEl.textContent = yogas[day % 27];
+  if(vrEl) vrEl.textContent = vrats[day % vrats.length];
+  if(muEl) {
+    const h1 = 6 + (day % 3); const m1 = 10 + (day % 30);
+    const h2 = h1 + 1 + (day % 2); const m2 = (m1 + 28) % 60;
+    muEl.textContent = h1+':'+m1.toString().padStart(2,'0')+' AM – '+h2+':'+m2.toString().padStart(2,'0')+' AM  |  11:30 AM – 12:18 PM';
+  }
+})();
+
+// ── Mantra card play ─────────────────────────────────
+function playMantraCard(el, devanagari, label) {
+  document.querySelectorAll('.mantra-card').forEach(c => c.classList.remove('playing'));
+  el.classList.add('playing');
+  if('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(devanagari);
+    u.lang = 'hi-IN'; u.rate = 0.7; u.pitch = 0.9;
+    u.onend = () => el.classList.remove('playing');
+    window.speechSynthesis.speak(u);
+  } else {
+    toast('🕉 ' + label.split('—')[0].trim());
+    setTimeout(() => el.classList.remove('playing'), 2000);
+  }
+}
+
+</script>
+
+<script>
+// ── Temple Section & Card Toggle (Firebase-driven) ──────────────────────────
+(function() {
+  function applyTempleToggles(cfg) {
+    // Section-level toggle
+    var sec = document.querySelector('[data-section="temples"]');
+    if (sec) {
+      sec.style.display = (cfg.temples_section === false) ? 'none' : '';
+    }
+    // Individual card toggles
+    document.querySelectorAll('[data-temple]').forEach(function(card) {
+      var key = card.getAttribute('data-temple');
+      if (cfg['temple_' + key] === false) {
+        card.style.display = 'none';
+      } else {
+        card.style.display = '';
+      }
+    });
+  }
+
+  // Load from Firestore — db is initialized in <head>
+  function loadTempleConfig() {
+    if (typeof db === 'undefined') return;
+    db.collection('siteConfig').doc('temples')
+      .onSnapshot(function(doc) {
+        if (doc.exists) applyTempleToggles(doc.data());
+      });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadTempleConfig);
+  } else {
+    loadTempleConfig();
+  }
+})();
+</script>
+
+</body>
+</html>
