@@ -637,27 +637,12 @@ nav{
 /* ══════════════════════════════════════════
    TRAVEL / BOOKING
 ══════════════════════════════════════════ */
-.discount-strip{
-  background:linear-gradient(135deg,var(--green),#0A6C05);
-  color:#fff;padding:12px 24px;border-radius:var(--r12);
-  font-size:.82rem;font-weight:600;
-  display:flex;align-items:center;justify-content:center;gap:10px;
-  margin-bottom:28px;
-}
-.btabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;}
-.btab{
-  padding:9px 22px;border-radius:30px;
-  border:1.5px solid var(--border);background:#fff;
-  font-size:.8rem;font-weight:600;cursor:pointer;
-  color:var(--text-m);transition:all .2s;font-family:'DM Sans',sans-serif;
-}
-.btab.on,.btab:hover{background:var(--sf);border-color:var(--sf);color:#fff;}
 
-.bform{
-  background:#fff;border-radius:var(--r24);padding:32px;
-  border:1px solid var(--border);
-  box-shadow:0 8px 40px rgba(255,107,0,.08);
-}
+
+
+
+
+
 .fgrid{
   display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
   gap:16px;margin-bottom:20px;
@@ -1235,8 +1220,8 @@ footer{
 
   /* SANSKRIT */
   .rb-grid{grid-template-columns:1fr 1fr;}
-  .btabs{gap:6px;}
-  .btab{font-size:.7rem;padding:7px 12px;}
+  
+  
 
   /* SERVICES */
   .svc-grid{grid-template-columns:1fr;}
@@ -2105,56 +2090,6 @@ function sayIt(text){
 }
 
 /* ── BOOKING ── */
-function setBTab(el,type){
-  document.querySelectorAll('.btab').forEach(b=>b.classList.remove('on'));
-  el.classList.add('on');
-  document.getElementById('routeBox').classList.remove('on');
-}
-const pkgPrices={
-  'Varanasi — Kashi Vishwanath Jyotirlinga':8499,
-  'Kedarnath — Himalayan Jyotirlinga':14999,
-  'Tirupati — Venkateshwara Divya Desam':7499,
-  'Vrindavan & Mathura — Krishna Dham':4299,
-  'Puri — Jagannath Char Dham':6499,
-  'Somnath — First Jyotirlinga':7999,
-  'Rameshwaram — Ramanathaswamy Jyotirlinga':6999,
-  'Badrinath — Char Dham':10999,
-  'Vaishno Devi — Shakti Peetha':8999,
-  'Kamakhya — Shakti Peetha, Guwahati':6999,
-  'Shirdi — Sai Baba':4999,
-  'Ayodhya — Ram Janmabhoomi':3999,
-  'Ujjain — Mahakaleshwar Jyotirlinga':5499,
-  'Char Dham Yatra (All 4)':39999
-};
-function searchRoute(){
-  const from=document.getElementById('fromCity').value.trim()||'Your City';
-  const to=document.getElementById('toTemple').value;
-  if(!to){toast('⚠ Please select a destination temple!');return;}
-  const base=pkgPrices[to]||5999;
-  const amt=lang==='sa'?Math.round(base*.9):base;
-  const toName=to.split('—')[0].trim();
-  document.getElementById('rbRoute').textContent=from+' → '+toName;
-  document.getElementById('rbAmt').textContent='₹'+amt.toLocaleString('en-IN');
-  if(lang==='sa'){
-    const b=document.getElementById('saDiscBadge');
-    b.style.display='flex';
-    b.textContent='✅ Sanskrit Discount 10% applied! You save ₹'+Math.round(base*.1).toLocaleString('en-IN');
-  }
-  document.getElementById('rbGrid').innerHTML=`
-    <div class="rb-item"><div class="ico">🚂</div><div class="lbl">Best Train</div><div class="val">Rajdhani Express</div><div class="sub">Dep 06:00 AM · AC 2-Tier</div></div>
-    <div class="rb-item"><div class="ico">⏱</div><div class="lbl">Travel Time</div><div class="val">8h–14h</div><div class="sub">Direct route</div></div>
-    <div class="rb-item"><div class="ico">🏨</div><div class="lbl">Hotel Included</div><div class="val">3★ Dharamshala</div><div class="sub">2 nights</div></div>
-    <div class="rb-item"><div class="ico">🚗</div><div class="lbl">AC Cab</div><div class="val">Station → Temple</div><div class="sub">Both ways</div></div>
-    <div class="rb-item"><div class="ico">🍽</div><div class="lbl">Sattvic Meals</div><div class="val">Breakfast + Dinner</div><div class="sub">All days</div></div>
-    <div class="rb-item"><div class="ico">🛕</div><div class="lbl">VIP Darshan</div><div class="val">Skip-the-queue</div><div class="sub">Pass included</div></div>
-  `;
-  document.getElementById('routeBox').classList.add('on');
-  setTimeout(()=>document.getElementById('routeBox').scrollIntoView({behavior:'smooth',block:'nearest'}),100);
-}
-function confirmBook(){
-  toast('✅ Booking confirmed! Jai Shri Ram 🙏 You will receive WhatsApp confirmation shortly!');
-  document.getElementById('routeBox').classList.remove('on');
-}
 function bookIt(name,price){
   toast('🙏 Initiating booking for '+name+' — '+price+'. Scroll to Travel section to complete.');
   document.getElementById('travel').scrollIntoView({behavior:'smooth'});
