@@ -52,7 +52,7 @@ body{
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);}
 .reveal{opacity:0;transform:translateY(22px);transition:opacity .55s cubic-bezier(.16,1,.3,1),transform .55s cubic-bezier(.16,1,.3,1);}
 .reveal.vis{opacity:1;transform:translateY(0);}
-.d1{transition-delay:.05s;}.d2{transition-delay:.1s;}.d3{transition-delay:.15s;}.d4{transition-delay:.2s;}.d5{transition-delay:.25s;}
+
 
 /* ─── INDIA FLAG STRIPE ─── */
 .flag-top{
@@ -336,11 +336,11 @@ nav{
   position:absolute;
   pointer-events:none;
 }
-.cloud-svg.d1{ top:7%;  left:-700px; animation:drift1 75s linear infinite 0s;   }
-.cloud-svg.d2{ top:19%; left:-500px; animation:drift1 55s linear infinite 12s;  }
-.cloud-svg.d3{ top:4%;  left:-400px; animation:drift1 40s linear infinite 25s;  }
-.cloud-svg.d4{ top:28%; right:-650px;animation:drift2 85s linear infinite 5s;   }
-.cloud-svg.d5{ top:12%; right:-480px;animation:drift2 58s linear infinite 30s;  }
+.cloud-svg
+.cloud-svg
+.cloud-svg
+.cloud-svg
+.cloud-svg
 .cloud-svg.d6{ top:38%; left:-350px; animation:drift1 50s linear infinite 42s;  }
 .cloud-svg.d7{ top:2%;  left:-600px; animation:drift1 100s linear infinite 55s; opacity:.5; }
 
@@ -641,34 +641,14 @@ nav{
 }
 .fm-btn:hover{transform:scale(1.1);}
 
-/* ══════════════════════════════════════════
-   TRAVEL / BOOKING
-══════════════════════════════════════════ */
-.discount-strip{
-  background:linear-gradient(135deg,var(--green),#0A6C05);
-  color:#fff;padding:12px 24px;border-radius:var(--r12);
-  font-size:.82rem;font-weight:600;
-  display:flex;align-items:center;justify-content:center;gap:10px;
-  margin-bottom:28px;
-}
-.btabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;}
-.btab{
-  padding:9px 22px;border-radius:30px;
-  border:1.5px solid var(--border);background:#fff;
-  font-size:.8rem;font-weight:600;cursor:pointer;
-  color:var(--text-m);transition:all .2s;font-family:'DM Sans',sans-serif;
-}
-.btab.on,.btab:hover{background:var(--sf);border-color:var(--sf);color:#fff;}
 
-.bform{
-  background:#fff;border-radius:var(--r24);padding:32px;
-  border:1px solid var(--border);
-  box-shadow:0 8px 40px rgba(255,107,0,.08);
-}
-.fgrid{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
-  gap:16px;margin-bottom:20px;
-}
+
+
+
+.btab.on,
+
+
+
 .fg label{
   display:block;font-size:.68rem;font-weight:700;
   letter-spacing:1.5px;text-transform:uppercase;
@@ -692,48 +672,23 @@ nav{
 .big-btn:hover{transform:translateY(-2px);box-shadow:0 14px 32px rgba(255,107,0,.5);}
 
 /* Route Result */
-.route-box{
-  margin-top:24px;background:var(--cream2);
-  border:1px solid var(--border);border-radius:var(--r16);
-  padding:26px;display:none;animation:fadeIn .4s ease;
-}
-.route-box.on{display:block;}
+
+
 @keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
-.rb-head{
-  display:flex;justify-content:space-between;align-items:flex-start;
-  margin-bottom:20px;flex-wrap:wrap;gap:10px;
-}
-.rb-route{font-family:'Cinzel',serif;font-size:1.25rem;color:var(--text);}
-.rb-price{
-  text-align:right;
-}
-.rb-price .amount{
-  font-family:'Cinzel',serif;font-size:2rem;color:var(--sf);
-  font-weight:900;display:block;line-height:1;
-}
-.rb-price .psub{font-size:.7rem;color:var(--text-l);}
-.rb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:12px;}
-.rb-item{
-  background:#fff;border-radius:var(--r12);padding:16px;
-  border:1px solid var(--border);
-}
-.rb-item .ico{font-size:1.4rem;margin-bottom:5px;}
-.rb-item .lbl{font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--text-l);margin-bottom:2px;}
-.rb-item .val{font-size:.85rem;font-weight:600;color:var(--text);}
-.rb-item .sub{font-size:.7rem;color:var(--text-l);}
-.confirm-btn{
-  margin-top:18px;width:100%;padding:14px;border-radius:50px;border:none;cursor:pointer;
-  background:linear-gradient(135deg,var(--green),#0A6C05);color:#fff;
-  font-family:'DM Sans',sans-serif;font-weight:700;font-size:.9rem;
-  box-shadow:0 6px 20px rgba(0,77,0,.4);transition:all .3s;
-}
-.confirm-btn:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(19,136,8,.45);}
-.sa-disc-badge{
-  display:none;align-items:center;gap:6px;
-  background:rgba(19,136,8,.1);border:1px solid rgba(19,136,8,.2);
-  color:var(--green);padding:6px 14px;border-radius:20px;
-  font-size:.72rem;font-weight:700;margin-top:8px;
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* ══════════════════════════════════════════
    SANSKRIT SIKHO
@@ -781,86 +736,44 @@ nav{
 }
 .w-play:hover{background:var(--sf);color:#fff;}
 
-/* ══════════════════════════════════════════
-   PILGRIMAGE TABS
-══════════════════════════════════════════ */
-.ptabs{
-  display:flex;gap:6px;flex-wrap:wrap;
-  margin-bottom:28px;
-  border-bottom:2px solid var(--border);padding-bottom:0;
-}
-.ptab{
-  padding:10px 22px;border:none;border-radius:10px 10px 0 0;
-  background:transparent;font-family:'DM Sans',sans-serif;
-  font-weight:600;font-size:.8rem;color:var(--text-m);
-  cursor:pointer;transition:all .2s;
-  border:1px solid transparent;border-bottom:none;
-  position:relative;bottom:-2px;
-}
-.ptab.on{
-  background:#fff;border-color:var(--border);
-  color:var(--sf);border-bottom:2px solid #fff;
-}
-.pcontent{display:none;}
-.pcontent.on{display:block;}
 
-.temple-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;}
-.tcard{
-  background:#fff;border-radius:var(--r20);overflow:hidden;
-  border:1px solid var(--border);transition:all .35s;
-}
-.tcard:hover{transform:translateY(-7px);box-shadow:0 20px 50px rgba(255,107,0,.12);}
-.tcard-img{
-  height:150px;display:flex;align-items:center;justify-content:center;
-  font-size:4.5rem;position:relative;
-}
-.ti1{background:linear-gradient(145deg,#FFF3E0,#FFE0B2);}
-.ti2{background:linear-gradient(145deg,#F8E8FF,#E0B8FF);}
-.ti3{background:linear-gradient(145deg,#E8F5E9,#A5D6A7);}
-.ti4{background:linear-gradient(145deg,#FBE9E7,#FFAB91);}
-.ti5{background:linear-gradient(145deg,#E0F2F1,#80CBC4);}
-.tcard-body{padding:18px 20px;}
-.tc-state{font-size:.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--sf);margin-bottom:4px;}
-.tc-name{font-family:'Cinzel',serif;font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:7px;line-height:1.3;}
-.tc-desc{font-size:.77rem;color:var(--text-m);line-height:1.55;margin-bottom:14px;}
-.tc-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px;}
-.tc-tag{
-  padding:3px 10px;border-radius:20px;font-size:.62rem;font-weight:600;
-  background:rgba(255,107,0,.07);color:var(--sf);border:1px solid rgba(255,107,0,.15);
-}
-.tc-foot{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
-.tc-price{font-family:'Cinzel',serif;font-size:1.3rem;color:var(--sf);font-weight:700;line-height:1;}
-.tc-price small{font-size:.65rem;color:var(--text-l);font-family:'DM Sans',sans-serif;font-weight:400;}
-.tc-btn{
-  padding:9px 18px;border-radius:25px;border:none;cursor:pointer;
-  background:linear-gradient(135deg,var(--sf),#C85000);
-  color:#fff;font-family:'DM Sans',sans-serif;
-  font-weight:700;font-size:.75rem;transition:all .3s;
-}
-.tc-btn:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(255,107,0,.35);}
 
-/* ══════════════════════════════════════════
-   MAPS
-══════════════════════════════════════════ */
-.map-tabs{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;}
-.mtab{
-  padding:10px 22px;border-radius:30px;
-  border:1.5px solid var(--border);background:#fff;
-  font-size:.8rem;font-weight:600;cursor:pointer;
-  color:var(--text-m);transition:all .2s;font-family:'DM Sans',sans-serif;
-}
-.mtab.on{background:var(--sf);border-color:var(--sf);color:#fff;}
-.mcontent{display:none;}
-.mcontent.on{display:block;}
-.map-wrap{
-  background:linear-gradient(145deg,#0D1825,#061220);
-  border-radius:var(--r24);padding:28px;
-  border:1px solid rgba(255,255,255,.06);
-  position:relative;overflow:hidden;min-height:380px;
-}
-.map-location-btn{cursor:pointer;transition:all .2s;}
-.map-location-btn:hover circle:first-child{r:10;fill:var(--sf);}
-.map-route-dash{stroke-dasharray:8,5;animation:dash 2s linear infinite;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @keyframes dash{to{stroke-dashoffset:-26;}}
 .places-grid{
   display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));
@@ -1138,7 +1051,7 @@ footer{
   .hstat{padding:14px 18px;}
   .fm-card{flex-direction:column;text-align:center;}
   .fm-controls{margin-left:0;}
-  .temple-grid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr));}
+  
   .svc-grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));}
   .bj-grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));}
 }
@@ -1174,13 +1087,9 @@ footer{
   .sec-dark .sec-inner,.sec-light .sec-inner{padding:0 16px;}
 
   /* TEMPLE CARDS */
-  .temple-grid{grid-template-columns:1fr;gap:16px;}
-  .tcard{border-radius:14px;}
-  .tcard-img{height:160px;}
-
-  /* PILGRIMAGE TABS */
-  .ptab{font-size:.7rem;padding:8px 14px;}
-  .map-tabs .mtab{font-size:.7rem;padding:8px 12px;}
+  
+  
+  
 
   /* BHAJAN / MUSIC */
   .bhajan-sec{padding:40px 16px;}
@@ -1188,7 +1097,7 @@ footer{
   .bj-card{padding:14px;}
 
   /* SANSKRIT */
-  .rb-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;}
+  
   .w-card{padding:12px 14px;}
 
   /* SERVICES */
@@ -1231,30 +1140,22 @@ footer{
   .sec-label{font-size:.6rem;letter-spacing:2px;}
 
   /* CARDS */
-  .tcard-img{height:140px;font-size:2.2rem;}
-  .tcard-body{padding:14px;}
-  .tc-name{font-size:.95rem;}
-  .tc-desc{font-size:.78rem;}
+  
+  
+  
+  
 
   /* BHAJAN */
   .bj-grid{grid-template-columns:1fr;}
   .fm-top{flex-direction:column;gap:8px;text-align:center;}
 
   /* SANSKRIT */
-  .rb-grid{grid-template-columns:1fr 1fr;}
-  .btabs{gap:6px;}
-  .btab{font-size:.7rem;padding:7px 12px;}
+  
+  
+  
 
   /* SERVICES */
   .svc-grid{grid-template-columns:1fr;}
-
-  /* PILGRIMAGE */
-  .ptabs{flex-wrap:wrap;gap:6px;}
-  .ptab{font-size:.68rem;padding:7px 12px;}
-
-  /* TRAVEL FORM */
-  .form-row{grid-template-columns:1fr;}
-  .form-row.single{grid-template-columns:1fr;}
 
   /* MODALS */
   .modal-box{border-radius:var(--r16);margin:10px;}
@@ -1341,8 +1242,8 @@ footer{
 .sub-desc{font-family:'Noto Sans Bengali',sans-serif;font-size:.9rem;color:rgba(255,255,255,.35);line-height:1.8;margin-bottom:32px;max-width:580px;}
 .sub-form-card{background:rgba(255,255,255,.04);border:1px solid rgba(200,137,10,.2);border-radius:20px;padding:32px 28px;position:relative;overflow:hidden;}
 .sub-form-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,transparent,#FF6B00,#F2C94C,#FF6B00,transparent);}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
-.form-row.single{grid-template-columns:1fr;}
+
+
 .fld label{display:block;font-size:.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.28);margin-bottom:7px;}
 .fld input{width:100%;padding:13px 16px;background:rgba(255,255,255,.06);border:1.5px solid rgba(200,137,10,.18);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:.9rem;color:#fff;outline:none;transition:all .3s;}
 .fld input::placeholder{color:rgba(255,255,255,.2);}
@@ -1396,7 +1297,7 @@ footer{
 .mf-brand .nb-s{color:#ffffff;}
 .mf-brand .nb-a{color:#ffffff;}
 @media(max-width:600px){
-  .form-row{grid-template-columns:1fr;}
+  
   .pk-surya-strip{flex-direction:column;}
   .pk-surya-item{border-right:none;border-bottom:1px solid rgba(255,255,255,.04);}
   .pk-key{min-width:90px;font-size:.62rem;}
@@ -1417,10 +1318,10 @@ footer{
     <div class="nav-links" id="navLinks">
       <a href="#home">Home</a>
       <a href="sanatani-anthem-mantras.html">🎵 Anthem</a>
-      <a href="yatra.html#booking">✈ Book Yatra</a>
+      
       <a href="sanskrit.html">📚 Sanskrit Sikho</a>
-      <a href="yatra.html#pilgrimage">⛩ Pilgrimage</a>
-      <a href="yatra.html#maps">🗺 Maps</a>
+      
+      
       <a href="#puja">🪔 Puja</a>
       <a href="#bhajan">🎶 Bhajan Club</a>
     </div>
@@ -1473,10 +1374,10 @@ footer{
   </div>
 
   <div class="hero-chips reveal d4">
-    <a class="chip" href="yatra.html#pilgrimage">🔱 51 Shakti Peetha</a>
-    <a class="chip" href="yatra.html#pilgrimage">🕌 12 Jyotirlinga</a>
-    <a class="chip" href="yatra.html#maps">🏹 Ramayana Route</a>
-    <a class="chip" href="yatra.html#maps">⚔ Mahabharata Kings</a>
+    
+    
+    
+    
     <a class="chip" href="sanatani-anthem-mantras.html">🎵 Hanuman Chalisa</a>
     <a class="chip" href="sanskrit.html">📖 Sanskrit Sikho</a>
   </div>
@@ -1581,11 +1482,11 @@ footer{
       <div class="foot-col">
         <div class="foot-col-h">Yatra</div>
         <ul>
-          <li><a href="yatra.html#pilgrimage">51 Shakti Peetha</a></li>
-          <li><a href="yatra.html#pilgrimage">12 Jyotirlinga</a></li>
-          <li><a href="yatra.html#pilgrimage">Char Dham Yatra</a></li>
-          <li><a href="yatra.html#maps">Ramayana Route</a></li>
-          <li><a href="yatra.html#maps">Mahabharata Map</a></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
         </ul>
       </div>
       <div class="foot-col">
@@ -1605,7 +1506,7 @@ footer{
           <li><a href="sanatani-anthem-mantras.html">Hanuman Chalisa</a></li>
           <li><a href="sanatani-anthem-mantras.html">Sarve Bhavantu</a></li>
           <li><a href="#bhajan">Bhajan Clubbing</a></li>
-          <li><a href="yatra.html#booking">Book Yatra</a></li>
+          <li></li>
         </ul>
       </div>
     </div>
@@ -2036,7 +1937,7 @@ function doSearch(){
     'sanskrit':'#sanskrit','chalisa':'#anthem','sarve':'#anthem',
     'puja':'#puja','pandit':'#puja','prasad':'#puja',
     'bhajan':'#bhajan','modi':'#bhajan',
-    'book':'#travel','yatra':'#travel','train':'#travel'
+    'book':'#puja','yatra':'#puja','train':'#puja'
   };
   let dest='#pilgrimage';
   for(const[k,v] of Object.entries(map)){if(q.includes(k)){dest=v;break;}}
@@ -2075,7 +1976,7 @@ document.querySelectorAll('.reveal:not(.vis)').forEach(el=>obs.observe(el));
 // Set default lang-en visible
 document.querySelectorAll('.lang-sa').forEach(e=>e.style.display='none');
 
-/* ════════ TRAVEL REDIRECT ════════ */
+
 
 function showBookingOptions(from,to){
   const dest=to.split('—')[0].trim().split('&')[0].trim();

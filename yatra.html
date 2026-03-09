@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book Yatra & Pilgrimage — SanataniAnthem</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cinzel+Decorative:wght@700&family=DM+Sans:wght@300;400;500;600;700&family=Raleway:wght@700;900&family=Tiro+Devanagari+Sanskrit&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sf:#FF6B00;--sf-l:#FF9A3C;--sf-pale:#FFF3E0;--sf-xpale:#FFFBF4;
+  --gold:#C8890A;--gold-l:#F2C94C;
+  --green:#138808;--green-l:#1EA80A;--navy:#000080;
+  --cream:#FFFDF8;--cream2:#FFF7ED;
+  --text:#1C0D00;--text-m:#5C3A18;--text-l:#A07040;
+  --border:rgba(200,137,10,.15);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;}
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:var(--cream);}
+::-webkit-scrollbar-thumb{background:linear-gradient(var(--sf),var(--green));border-radius:5px;}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .55s cubic-bezier(.16,1,.3,1),transform .55s cubic-bezier(.16,1,.3,1);}
+.reveal.vis{opacity:1;transform:translateY(0);}
+
+/* ── HERO ── */
+.yatra-hero{
+  background:linear-gradient(160deg,#0D0702 0%,#1C0A00 40%,#0D0702 100%);
+  padding:80px 24px 60px;text-align:center;position:relative;overflow:hidden;
+}
+.yatra-hero::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 30% 50%,rgba(255,107,0,.08),transparent 60%),
+             radial-gradient(ellipse at 70% 30%,rgba(19,136,8,.06),transparent 60%);
+  pointer-events:none;}
+.yatra-hero::after{content:'🕉';position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);font-size:28rem;opacity:.025;
+  pointer-events:none;user-select:none;line-height:1;}
+.hero-label{display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,107,0,.12);border:1px solid rgba(255,107,0,.25);
+  color:var(--sf-l);font-size:.65rem;font-weight:700;
+  letter-spacing:3px;text-transform:uppercase;
+  padding:6px 16px;border-radius:30px;margin-bottom:20px;position:relative;z-index:1;}
+.hero-h1{font-family:'Cinzel',serif;font-size:clamp(2.2rem,6vw,4rem);font-weight:700;
+  color:#fff;line-height:1.15;margin-bottom:14px;position:relative;z-index:1;}
+.hero-h1 .ita{color:var(--sf-l);font-family:'Cinzel Decorative',serif;font-style:italic;}
+.hero-sub{color:rgba(255,255,255,.35);font-size:clamp(.82rem,2vw,.95rem);
+  max-width:560px;margin:0 auto 32px;line-height:1.7;position:relative;z-index:1;}
+.hero-stats{display:flex;align-items:center;justify-content:center;gap:36px;flex-wrap:wrap;position:relative;z-index:1;}
+.hs-item{text-align:center;}
+.hs-num{font-family:'Cinzel',serif;font-size:1.5rem;font-weight:700;color:var(--sf-l);line-height:1;}
+.hs-lbl{font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:3px;}
+.hs-div{width:1px;height:28px;background:rgba(255,255,255,.1);}
+
+/* ── PAGE NAV TABS ── */
+.page-tabs{
+  background:#fff;border-bottom:2px solid var(--border);
+  position:sticky;top:68px;z-index:999;
+}
+.page-tabs-inner{max-width:1100px;margin:0 auto;padding:0 24px;
+  display:flex;gap:0;overflow-x:auto;scrollbar-width:none;}
+.page-tabs-inner::-webkit-scrollbar{display:none;}
+.ptab-link{
+  padding:16px 22px;border-bottom:3px solid transparent;
+  text-decoration:none;color:var(--text-m);
+  font-size:.82rem;font-weight:600;white-space:nowrap;
+  transition:all .2s;display:flex;align-items:center;gap:6px;
+  margin-bottom:-2px;
+}
+.ptab-link:hover{color:var(--sf);border-bottom-color:rgba(255,107,0,.3);}
+.ptab-link.active{color:var(--sf);border-bottom-color:var(--sf);}
+
+/* ── SECTION WRAPPERS ── */
+.yt-section{padding:56px 24px;}
+.yt-section.light{background:var(--cream);}
+.yt-section.pale{background:var(--sf-xpale);}
+.yt-section.dark-bg{background:#f5f0e8;}
+.sec-inner{max-width:1100px;margin:0 auto;}
+.sec-label{display:block;font-size:.62rem;font-weight:700;
+  letter-spacing:3px;text-transform:uppercase;color:var(--sf);margin-bottom:10px;}
+.sec-h2{font-family:'Cinzel',serif;font-size:clamp(1.8rem,4vw,2.6rem);
+  font-weight:700;color:var(--text);margin-bottom:6px;line-height:1.2;}
+.sec-h2 .ita{color:var(--sf);font-family:'Cinzel Decorative',serif;}
+.sec-rule{display:flex;align-items:center;gap:10px;margin-bottom:32px;}
+.sec-rule-bar{width:40px;height:2px;background:var(--gold);}
+.sec-rule-dot{width:6px;height:6px;border-radius:50%;background:var(--sf);}
+.ita{font-style:italic;}
+.lang-sa{display:none;}
+
+/* ── BOOKING FORM ── */
+.disc-strip,.discount-strip{
+  background:var(--green);color:#fff;border-radius:12px;
+  padding:14px 20px;font-size:.85rem;font-weight:600;
+  text-align:center;margin-bottom:28px;
+  display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;
+}
+.btabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;}
+.btab{padding:10px 20px;border-radius:30px;border:2px solid var(--border);
+  background:#fff;color:var(--text-m);font-family:'DM Sans',sans-serif;
+  font-size:.82rem;font-weight:600;cursor:pointer;transition:all .2s;}
+.btab.on,.btab:hover{background:var(--sf);border-color:var(--sf);color:#fff;
+  box-shadow:0 4px 14px rgba(255,107,0,.3);}
+.bform{background:#fff;border-radius:20px;border:1px solid var(--border);
+  padding:28px;box-shadow:0 4px 24px rgba(255,107,0,.06);}
+.fgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px;}
+.fg label{display:block;font-size:.65rem;font-weight:700;letter-spacing:1.5px;
+  text-transform:uppercase;color:var(--text-l);margin-bottom:8px;}
+.fg input,.fg select{width:100%;padding:12px 14px;border:1.5px solid rgba(200,137,10,.2);
+  border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.88rem;
+  color:var(--text);background:#fff;outline:none;transition:border-color .2s;
+  appearance:none;-webkit-appearance:none;}
+.fg select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23FF6B00' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;padding-right:36px;}
+.fg input:focus,.fg select:focus{border-color:var(--sf);box-shadow:0 0 0 3px rgba(255,107,0,.08);}
+.big-btn{width:100%;padding:18px;border-radius:14px;
+  background:linear-gradient(135deg,var(--sf),#C85000);color:#fff;
+  border:none;cursor:pointer;font-family:'DM Sans',sans-serif;
+  font-size:1rem;font-weight:700;letter-spacing:.5px;
+  box-shadow:0 6px 20px rgba(255,107,0,.35);transition:all .3s;}
+.big-btn:hover{transform:translateY(-2px);box-shadow:0 14px 32px rgba(255,107,0,.5);}
+.route-box{display:none;margin-top:24px;border-top:1px solid var(--border);padding-top:24px;}
+.route-box.on{display:block;}
+.rb-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:12px;}
+.rb-route{font-family:'Cinzel',serif;font-size:1.2rem;color:var(--text);}
+.sa-disc-badge{display:none;background:rgba(19,136,8,.1);border:1px solid rgba(19,136,8,.2);color:var(--green);font-size:.72rem;font-weight:700;padding:4px 12px;border-radius:20px;margin-top:6px;}
+.rb-price{text-align:right;}
+.rb-price .amount{font-family:'Cinzel',serif;font-size:1.6rem;font-weight:700;color:var(--sf);}
+.rb-price .psub{font-size:.7rem;color:var(--text-l);display:block;margin-top:2px;}
+.rb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:12px;margin-bottom:18px;}
+.rb-item{background:var(--sf-xpale);border:1px solid var(--border);border-radius:12px;padding:14px;}
+.rb-item .ico{font-size:1.4rem;margin-bottom:5px;}
+.rb-item .lbl{font-size:.58rem;letter-spacing:2px;text-transform:uppercase;color:var(--text-l);margin-bottom:2px;}
+.rb-item .val{font-size:.85rem;font-weight:600;color:var(--text);}
+.rb-item .sub{font-size:.7rem;color:var(--text-l);}
+.confirm-btn{width:100%;padding:16px;border-radius:12px;
+  background:linear-gradient(135deg,var(--green),#0d6b05);color:#fff;
+  border:none;cursor:pointer;font-size:.9rem;font-weight:700;
+  box-shadow:0 4px 18px rgba(19,136,8,.3);transition:all .2s;}
+.confirm-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(19,136,8,.45);}
+
+/* ── PILGRIMAGE ── */
+.ptabs{
+  display:flex;gap:6px;flex-wrap:wrap;
+  margin-bottom:28px;
+  border-bottom:2px solid var(--border);padding-bottom:0;
+}
+.ptab{
+  padding:10px 22px;border:none;border-radius:10px 10px 0 0;
+  background:transparent;font-family:'DM Sans',sans-serif;
+  font-weight:600;font-size:.8rem;color:var(--text-m);
+  cursor:pointer;transition:all .2s;
+  border:1px solid transparent;border-bottom:none;
+  position:relative;bottom:-2px;
+}
+.ptab.on{
+  background:#fff;border-color:var(--border);
+  color:var(--sf);border-bottom:2px solid #fff;
+}
+.ptab{font-size:.7rem;padding:8px 14px;}
+.ptabs{flex-wrap:wrap;gap:6px;}
+.ptab{font-size:.68rem;padding:7px 12px;}
+.pcontent{display:none;}
+.pcontent.on{display:block;}
+.tcard{
+  background:#fff;border-radius:var(--r20);overflow:hidden;
+  border:1px solid var(--border);transition:all .35s;
+}
+.tcard:hover{transform:translateY(-7px);box-shadow:0 20px 50px rgba(255,107,0,.12);}
+.tcard-img{
+  height:150px;display:flex;align-items:center;justify-content:center;
+  font-size:4.5rem;position:relative;
+}
+.tcard-body{padding:18px 20px;}
+.tcard{border-radius:14px;}
+.tcard-img{height:160px;}
+.tcard-img{height:140px;font-size:2.2rem;}
+.tcard-body{padding:14px;}
+.temple-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;}
+.temple-grid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr));}
+.temple-grid{grid-template-columns:1fr;gap:16px;}
+.tc-state{font-size:.6rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--sf);margin-bottom:4px;}
+.tc-name{font-family:'Cinzel',serif;font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:7px;line-height:1.3;}
+.tc-desc{font-size:.77rem;color:var(--text-m);line-height:1.55;margin-bottom:14px;}
+.tc-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px;}
+.tc-tag{
+  padding:3px 10px;border-radius:20px;font-size:.62rem;font-weight:600;
+  background:rgba(255,107,0,.07);color:var(--sf);border:1px solid rgba(255,107,0,.15);
+}
+.tc-foot{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.tc-price{font-family:'Cinzel',serif;font-size:1.3rem;color:var(--sf);font-weight:700;line-height:1;}
+.tc-price small{font-size:.65rem;color:var(--text-l);font-family:'DM Sans',sans-serif;font-weight:400;}
+.tc-btn{
+  padding:9px 18px;border-radius:25px;border:none;cursor:pointer;
+  background:linear-gradient(135deg,var(--sf),#C85000);
+  color:#fff;font-family:'DM Sans',sans-serif;
+  font-weight:700;font-size:.75rem;transition:all .3s;
+}
+.tc-btn:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(255,107,0,.35);}
+.tc-name{font-size:.95rem;}
+.tc-desc{font-size:.78rem;}
+.ti1{background:linear-gradient(145deg,#FFF3E0,#FFE0B2);}
+.ti2{background:linear-gradient(145deg,#F8E8FF,#E0B8FF);}
+.ti3{background:linear-gradient(145deg,#E8F5E9,#A5D6A7);}
+.ti4{background:linear-gradient(145deg,#FBE9E7,#FFAB91);}
+.ti5{background:linear-gradient(145deg,#E0F2F1,#80CBC4);}
+.discount-strip{
+  background:linear-gradient(135deg,var(--green),#0A6C05);
+  color:#fff;padding:12px 24px;border-radius:var(--r12);
+  font-size:.82rem;font-weight:600;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  margin-bottom:28px;
+}
+.btabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;}
+.btab{
+  padding:9px 22px;border-radius:30px;
+  border:1.5px solid var(--border);background:#fff;
+  font-size:.8rem;font-weight:600;cursor:pointer;
+  color:var(--text-m);transition:all .2s;font-family:'DM Sans',sans-serif;
+}
+.btab:hover{background:var(--sf);border-color:var(--sf);color:#fff;}
+.btabs{gap:6px;}
+.btab{font-size:.7rem;padding:7px 12px;}
+.bform{
+  background:#fff;border-radius:var(--r24);padding:32px;
+  border:1px solid var(--border);
+  box-shadow:0 8px 40px rgba(255,107,0,.08);
+}
+.fgrid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+  gap:16px;margin-bottom:20px;
+}
+.route-box{
+  margin-top:24px;background:var(--cream2);
+  border:1px solid var(--border);border-radius:var(--r16);
+  padding:26px;display:none;animation:fadeIn .4s ease;
+}
+.route-box.on{display:block;}
+.rb-head{
+  display:flex;justify-content:space-between;align-items:flex-start;
+  margin-bottom:20px;flex-wrap:wrap;gap:10px;
+}
+.rb-route{font-family:'Cinzel',serif;font-size:1.25rem;color:var(--text);}
+.rb-price{
+  text-align:right;
+}
+.rb-price .amount{
+  font-family:'Cinzel',serif;font-size:2rem;color:var(--sf);
+  font-weight:900;display:block;line-height:1;
+}
+.rb-price .psub{font-size:.7rem;color:var(--text-l);}
+.rb-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:12px;}
+.rb-item{
+  background:#fff;border-radius:var(--r12);padding:16px;
+  border:1px solid var(--border);
+}
+.rb-item .ico{font-size:1.4rem;margin-bottom:5px;}
+.rb-item .lbl{font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--text-l);margin-bottom:2px;}
+.rb-item .val{font-size:.85rem;font-weight:600;color:var(--text);}
+.rb-item .sub{font-size:.7rem;color:var(--text-l);}
+.rb-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;}
+.rb-grid{grid-template-columns:1fr 1fr;}
+.confirm-btn{
+  margin-top:18px;width:100%;padding:14px;border-radius:50px;border:none;cursor:pointer;
+  background:linear-gradient(135deg,var(--green),#0A6C05);color:#fff;
+  font-family:'DM Sans',sans-serif;font-weight:700;font-size:.9rem;
+  box-shadow:0 6px 20px rgba(0,77,0,.4);transition:all .3s;
+}
+.confirm-btn:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(19,136,8,.45);}
+.sa-disc-badge{
+  display:none;align-items:center;gap:6px;
+  background:rgba(19,136,8,.1);border:1px solid rgba(19,136,8,.2);
+  color:var(--green);padding:6px 14px;border-radius:20px;
+  font-size:.72rem;font-weight:700;margin-top:8px;
+}
+.mtab{
+  padding:10px 22px;border-radius:30px;
+  border:1.5px solid var(--border);background:#fff;
+  font-size:.8rem;font-weight:600;cursor:pointer;
+  color:var(--text-m);transition:all .2s;font-family:'DM Sans',sans-serif;
+}
+.mtab.on{background:var(--sf);border-color:var(--sf);color:#fff;}
+.mtab{font-size:.7rem;padding:8px 12px;}
+.mcontent{display:none;}
+.mcontent.on{display:block;}
+.map-tabs{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;}
+.map-wrap{
+  background:linear-gradient(145deg,#0D1825,#061220);
+  border-radius:var(--r24);padding:28px;
+  border:1px solid rgba(255,255,255,.06);
+  position:relative;overflow:hidden;min-height:380px;
+}
+.map-location-btn{cursor:pointer;transition:all .2s;}
+.map-location-btn:hover circle:first-child{r:10;fill:var(--sf);}
+.map-route-dash{stroke-dasharray:8,5;animation:dash 2s linear infinite;}
+.map-tabs .mtab{font-size:.7rem;padding:8px 12px;}
+
+/* ── PACKAGES ── */
+.pkg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;margin-top:32px;}
+.pkg-card{background:#fff;border-radius:20px;border:1px solid var(--border);overflow:hidden;transition:all .25s;}
+.pkg-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(255,107,0,.12);}
+.pkg-top{background:linear-gradient(135deg,#0D0702,#1C0A00);padding:22px;position:relative;overflow:hidden;}
+.pkg-top::after{content:attr(data-emoji);position:absolute;right:-10px;top:50%;transform:translateY(-50%);font-size:4rem;opacity:.15;}
+.pkg-badge{display:inline-block;background:rgba(255,107,0,.2);border:1px solid rgba(255,107,0,.3);color:var(--sf-l);font-size:.6rem;font-weight:700;letter-spacing:2px;padding:3px 10px;border-radius:20px;margin-bottom:10px;text-transform:uppercase;}
+.pkg-name{font-family:'Cinzel',serif;font-size:1.1rem;font-weight:700;color:#fff;margin-bottom:4px;}
+.pkg-nights{font-size:.75rem;color:rgba(255,255,255,.4);}
+.pkg-body{padding:18px 22px;}
+.pkg-includes{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;}
+.pkg-inc-tag{background:var(--sf-pale);color:var(--sf);font-size:.65rem;font-weight:600;padding:3px 9px;border-radius:8px;}
+.pkg-price-row{display:flex;align-items:center;justify-content:space-between;margin-top:12px;}
+.pkg-price{font-family:'Cinzel',serif;font-size:1.3rem;font-weight:700;color:var(--sf);}
+.pkg-price span{font-size:.7rem;color:var(--text-l);font-family:'DM Sans',sans-serif;font-weight:400;}
+.pkg-btn{padding:9px 20px;border-radius:10px;background:linear-gradient(135deg,var(--sf),#C85000);color:#fff;border:none;cursor:pointer;font-size:.8rem;font-weight:700;transition:all .2s;}
+.pkg-btn:hover{transform:scale(1.04);box-shadow:0 4px 14px rgba(255,107,0,.4);}
+
+/* ── TIPS ── */
+.tips-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin-top:32px;}
+.tip-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:20px;}
+.tip-icon{font-size:1.8rem;margin-bottom:10px;}
+.tip-title{font-family:'Cinzel',serif;font-size:.9rem;font-weight:600;color:var(--text);margin-bottom:6px;}
+.tip-text{font-size:.78rem;color:var(--text-l);line-height:1.65;}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:28px;left:50%;
+  transform:translateX(-50%) translateY(80px);
+  background:var(--text);color:#fff;font-size:.82rem;font-weight:600;
+  padding:12px 24px;border-radius:30px;
+  box-shadow:0 8px 28px rgba(0,0,0,.25);z-index:9999;
+  transition:transform .35s cubic-bezier(.16,1,.3,1);
+  white-space:nowrap;max-width:90vw;overflow:hidden;text-overflow:ellipsis;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+
+/* ── RESPONSIVE ── */
+@media(max-width:960px){
+  .fgrid{grid-template-columns:1fr 1fr;}
+  .pkg-grid{grid-template-columns:1fr;}
+  .page-tabs{top:64px;}
+}
+@media(max-width:600px){
+  .yatra-hero{padding:70px 16px 48px;}
+  .hero-stats{gap:20px;} .hs-div{display:none;}
+  .yt-section{padding:40px 16px;}
+  .fgrid{grid-template-columns:1fr;}
+  .bform{padding:18px;}
+  .btab{font-size:.75rem;padding:8px 14px;}
+  .tips-grid{grid-template-columns:1fr;}
+  .rb-grid{grid-template-columns:1fr 1fr;}
+  .page-tabs{top:56px;}
+  .ptab-link{padding:12px 14px;font-size:.75rem;}
+}
+@media(max-width:380px){
+  .rb-grid{grid-template-columns:1fr;}
+  .hero-h1{font-size:2rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- UNIVERSAL HEADER -->
+<div id="sa-header-root"></div>
+
+<!-- ════════ HERO ════════ -->
+<section class="yatra-hero">
+  <div class="hero-label reveal">✈ Sacred Pilgrimage & Travel</div>
+  <h1 class="hero-h1 reveal">Book & Explore <span class="ita">Yatra</span></h1>
+  <p class="hero-sub reveal">Book trains & hotels · Explore 51 Shakti Peetha, 12 Jyotirlinga & Char Dham · Sacred Heritage Maps · Jai Shri Ram 🙏</p>
+  <div class="hero-stats reveal">
+    <div class="hs-item"><div class="hs-num">1,200+</div><div class="hs-lbl">Temple Routes</div></div>
+    <div class="hs-div"></div>
+    <div class="hs-item"><div class="hs-num">51</div><div class="hs-lbl">Shakti Peetha</div></div>
+    <div class="hs-div"></div>
+    <div class="hs-item"><div class="hs-num">12</div><div class="hs-lbl">Jyotirlinga</div></div>
+    <div class="hs-div"></div>
+    <div class="hs-item"><div class="hs-num">4</div><div class="hs-lbl">Char Dham</div></div>
+    <div class="hs-div"></div>
+    <div class="hs-item"><div class="hs-num">10%</div><div class="hs-lbl">Sanskrit Discount</div></div>
+  </div>
+</section>
+
+<!-- ════════ PAGE NAV TABS ════════ -->
+<nav class="page-tabs">
+  <div class="page-tabs-inner">
+    <a class="ptab-link active" href="#yatra">✈ Yatra & Pilgrimage</a>
+    <a class="ptab-link" href="#packages">📦 Packages</a>
+    <a class="ptab-link" href="#tips">💡 Travel Tips</a>
+  </div>
+</nav>
+
+<!-- ════════ YATRA & PILGRIMAGE (merged) ════════ -->
+<div id="yatra">
+
+<!-- ── BOOKING ENGINE ── -->
+<section class="yt-section pale">
+  <div class="sec-inner">
+    
+  <div class="sec-inner">
+    <span class="sec-label reveal">✈ Sacred Travel Booking</span>
+    <h2 class="sec-h2 reveal">
+      <span class="lang-en">Book Your <span class="ita">Yatra</span></span>
+      <span class="lang-sa">अपनी <span class="ita">यात्रा</span> बुक करें</span>
+    </h2>
+    <div class="sec-rule reveal"><div class="sec-rule-bar"></div><div class="sec-rule-dot"></div></div>
+
+    <div class="discount-strip reveal">
+      🌟 <strong>Sanskrit mein book karo → 10% EXTRA discount!</strong>
+      &nbsp;|&nbsp; Toggle → संस्कृत → Discount auto-applied
+    </div>
+
+    <div class="btabs reveal">
+      <button class="btab on" onclick="setBTab(this,'train')">🚂 Train</button>
+      <button class="btab" onclick="setBTab(this,'flight')">✈ Flight</button>
+      <button class="btab" onclick="setBTab(this,'hotel')">🏨 Hotel</button>
+      <button class="btab" onclick="setBTab(this,'package')">📦 Yatra Package</button>
+    </div>
+
+    <div class="bform reveal">
+      <div class="fgrid">
+        <div class="fg">
+          <label>
+            <span class="lang-en">From — Your Home Address / City</span>
+            <span class="lang-sa">प्रस्थान — आपका नगर</span>
+          </label>
+          <input id="fromCity" type="text" placeholder="e.g. Delhi, Mumbai, Kolkata, Balaramdihi...">
+        </div>
+        <div class="fg">
+          <label>
+            <span class="lang-en">Destination — Temple / Pilgrimage</span>
+            <span class="lang-sa">गन्तव्य तीर्थस्थान</span>
+          </label>
+          <select id="toTemple">
+            <option value="">Select destination...</option>
+            <option>Varanasi — Kashi Vishwanath Jyotirlinga</option>
+            <option>Kedarnath — Himalayan Jyotirlinga</option>
+            <option>Tirupati — Venkateshwara Divya Desam</option>
+            <option>Vrindavan &amp; Mathura — Krishna Dham</option>
+            <option>Puri — Jagannath Char Dham</option>
+            <option>Somnath — First Jyotirlinga</option>
+            <option>Rameshwaram — Ramanathaswamy Jyotirlinga</option>
+            <option>Badrinath — Char Dham</option>
+            <option>Vaishno Devi — Shakti Peetha</option>
+            <option>Kamakhya — Shakti Peetha, Guwahati</option>
+            <option>Shirdi — Sai Baba</option>
+            <option>Ayodhya — Ram Janmabhoomi</option>
+            <option>Ujjain — Mahakaleshwar Jyotirlinga</option>
+            <option>Char Dham Yatra (All 4)</option>
+          </select>
+        </div>
+        <div class="fg">
+          <label>
+            <span class="lang-en">Journey Date</span>
+            <span class="lang-sa">यात्रा दिनांक</span>
+          </label>
+          <input id="jDate" type="date">
+        </div>
+        <div class="fg">
+          <label>
+            <span class="lang-en">Passengers</span>
+            <span class="lang-sa">यात्री संख्या</span>
+          </label>
+          <select id="pCount">
+            <option>1 Person</option><option>2 People</option>
+            <option>3 People</option><option>4 People</option>
+            <option>5+ Group</option>
+          </select>
+        </div>
+      </div>
+      <button class="big-btn" onclick="searchRoute()">
+        🔍 <span class="lang-en">Find Best Route, Train & Hotel Package</span>
+        <span class="lang-sa">सर्वोत्तम यात्रा मार्ग खोजें</span>
+      </button>
+
+      <!-- Result -->
+      <div class="route-box" id="routeBox">
+        <div class="rb-head">
+          <div>
+            <div class="rb-route" id="rbRoute">Delhi → Varanasi</div>
+            <div class="sa-disc-badge" id="saDiscBadge">✅ Sanskrit Discount: −10% Applied!</div>
+          </div>
+          <div class="rb-price">
+            <span class="amount" id="rbAmt">₹8,499</span>
+            <span class="psub">per person · all-inclusive</span>
+          </div>
+        </div>
+        <div class="rb-grid" id="rbGrid"></div>
+        <button class="confirm-btn" onclick="confirmBook()">
+          ✅ Confirm &amp; Book Now &nbsp;—&nbsp; Jai Shri Ram 🙏
+        </button>
+      </div>
+    </div>
+  </div>
+
+  </div>
+</section>
+
+<!-- ── PILGRIMAGE ── -->
+<section class="yt-section light">
+  <div class="sec-inner">
+    
+  <div class="sec-inner">
+    <span class="sec-label reveal">⛩ Sacred Pilgrimage</span>
+    <h2 class="sec-h2 reveal">
+      <span class="lang-en">Explore <span class="ita">Holy Yatras</span></span>
+      <span class="lang-sa">पवित्र <span class="ita">तीर्थयात्रा</span> अन्वेषण</span>
+    </h2>
+    <div class="sec-rule reveal"><div class="sec-rule-bar"></div><div class="sec-rule-dot"></div></div>
+
+    <div class="ptabs reveal">
+      <button class="ptab on" onclick="setPTab(this,'shakti')">🔱 51 Shakti Peetha</button>
+      <button class="ptab" onclick="setPTab(this,'jyoti')">🕌 12 Jyotirlinga</button>
+      <button class="ptab" onclick="setPTab(this,'char')">🏔 Char Dham</button>
+      <button class="ptab" onclick="setPTab(this,'divya')">🛕 Divya Desam</button>
+    </div>
+
+    <!-- Shakti Peetha -->
+    <div class="pcontent on" id="pc-shakti">
+      <div style="background:rgba(255,107,0,.05);border:1px solid rgba(255,107,0,.12);border-radius:var(--r12);padding:16px 20px;margin-bottom:24px;font-size:.84rem;color:var(--text-m);line-height:1.7;">
+        🌺 <strong>51 Shakti Peetha</strong> — Sacred sites where parts of Goddess Sati's body fell. Each has a presiding Devi, a Bhairava, and immense spiritual power. Spread across India, Nepal, Bangladesh & Sri Lanka.
+      </div>
+      <div class="temple-grid">
+        <div class="tcard reveal d1">
+          <div class="tcard-img ti2">🌺</div>
+          <div class="tcard-body">
+            <div class="tc-state">📍 Guwahati, Assam</div>
+            <div class="tc-name">Kamakhya Devi</div>
+            <div class="tc-desc">Most powerful of all 51 Shakti Peethas. The divine womb of Maa Sati. Ambubachi Mela attracts millions.</div>
+            <div class="tc-tags"><span class="tc-tag">Shakti Peetha</span><span class="tc-tag">✈ Flight Available</span></div>
+            <div class="tc-foot">
+              <div class="tc-price">₹6,999<br><small>/ person</small></div>
+              <button class="tc-btn" onclick="bookIt('Kamakhya Devi, Guwahati','₹6,999')">Book 🙏</button>
+            </div>
+          </div>
+        </div>
+        <div class="tcard reveal d2">
+          <div class="tcard-img ti1">🔱</div>
+          <div class="tcard-body">
+            <div class="tc-state">📍 Kolkata, West Bengal</div>
+            <div class="tc-name">Kalighat — Maa Kali</div>
+            <div class="tc-desc">One of the most revered Shakti Peethas in India. Right toes of Sati fell here. Ancient temple in heart of Kolkata.</div>
+            <div class="tc-tags"><span class="tc-tag">Shakti Peetha</span><span class="tc-tag">🚂 Train</span></div>
+            <div class="tc-foot">
+              <div class="tc-price">₹3,499<br><small>/ person</small></div>
+              <button class="tc-btn" onclick="bookIt('Kalighat Kolkata','₹3,499')">Book 🙏</button>
+            </div>
+          </div>
+        </div>
+        <div class="tcard reveal d3">
+          <div class="tcard-img ti4">🌸</div>
+          <div class="tcard-body">
+            <div class="tc-state">📍 Varanasi, Uttar Pradesh</div>
+            <div class="tc-name">Vishalakshi Varanasi</div>
+            <div class="tc-desc">Devi Sati's earrings fell here. Near Manikarnika Ghat. Combined with Kashi Vishwanath darshan.</div>
+            <div class="tc-tags"><span class="tc-tag">Shakti Peetha</span><span class="tc-tag">Ganga Aarti</span></div>
+            <div class="tc-foot">
+              <div class="tc-price">₹5,499<br><small>/ person</small></div>
+              <button class="tc-btn" onclick="bookIt('Vishalakshi Varanasi','₹5,499')">Book 🙏</button>
+            </div>
+          </div>
+        </div>
+        <div class="tcard reveal d4">
+          <div class="tcard-img ti5">🏔</div>
+          <div class="tcard-body">
+            <div class="tc-state">📍 Jammu & Kashmir</div>
+            <div class="tc-name">Vaishno Devi</div>
+            <div class="tc-desc">Right arm of Sati fell here. Cave shrine at Trikuta hills. Millions visit annually. Ropeway + trek options.</div>
+            <div class="tc-tags"><span class="tc-tag">Shakti Peetha</span><span class="tc-tag">✈ + Trek</span></div>
+            <div class="tc-foot">
+              <div class="tc-price">₹8,999<br><small>/ person</small></div>
+              <button class="tc-btn" onclick="bookIt('Vaishno Devi','₹8,999')">Book 🙏</button>
+            </div>
+          </div>
+        </div>
+        <div class="tcard reveal d1">
+          <div class="tcard-img ti3">✨</div>
+          <div class="tcard-body">
+            <div class="tc-state">📍 Haridwar, Uttarakhand</div>
+            <div class="tc-name">Maya Devi Peetha</div>
+            <div class="tc-desc">Heart and navel of Sati fell here. Near sacred Har Ki Pauri. One of the oldest Shakti shrines.</div>
+            <div class="tc-tags"><span class="tc-tag">Shakti Peetha</span><span class="tc-tag">Ganga Aarti</span></div>
+            <div class="tc-foot">
+              <div class="tc-price">₹4,499<br><small>/ person</small></div>
+              <button class="tc-btn" onclick="bookIt('Maya Devi Haridwar','₹4,499')">Book 🙏</button>
+            </div>
+          </div>
+        </div>
+        <div class="tcard reveal d2">
+          <div class="tcard-img ti2">🌊</div>
+          <div class="tcard-body">
+            <div class="tc-state">📍 Ujjain, Madhya Pradesh</div>
+            <div class="tc-name">Harsiddhi Shakti Peetha</div>
+            <div class="tc-desc">Elbow of Sati fell here. Near Mahakaleshwar. Combine with Bhasma Aarti for a complete experience.</div>
+            <div class="tc-tags"><span class="tc-tag">Shakti Peetha</span><span class="tc-tag">Mahakal combo</span></div>
+            <div class="tc-foot">
+              <div class="tc-price">₹5,999<br><small>/ person</small></div>
+              <button class="tc-btn" onclick="bookIt('Harsiddhi Ujjain','₹5,999')">Book 🙏</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Jyotirlinga -->
+    <div class="pcontent" id="pc-jyoti">
+      <div class="temple-grid">
+        <div class="tcard reveal d1"><div class="tcard-img ti1">🕌</div><div class="tcard-body"><div class="tc-state">📍 Varanasi, UP</div><div class="tc-name">Kashi Vishwanath</div><div class="tc-desc">One of the 12 Jyotirlingas. The eternal city of Lord Shiva. New grand corridor darshan. Ganga Aarti included.</div><div class="tc-tags"><span class="tc-tag">Jyotirlinga</span><span class="tc-tag">Ganga Aarti</span></div><div class="tc-foot"><div class="tc-price">₹5,999<br><small>/ person</small></div><button class="tc-btn" onclick="bookIt('Kashi Vishwanath','₹5,999')">Book 🙏</button></div></div></div>
+        <div class="tcard reveal d2"><div class="tcard-img ti3">🏔</div><div class="tcard-body"><div class="tc-state">📍 Rudraprayag, Uttarakhand</div><div class="tc-name">Kedarnath</div><div class="tc-desc">Himalayan Shiva shrine at 3,583m altitude. Helicopter or 18km trek. Most powerful Jyotirlinga.</div><div class="tc-tags"><span class="tc-tag">Jyotirlinga</span><span class="tc-tag">Heli Available</span></div><div class="tc-foot"><div class="tc-price">₹14,999<br><small>/ person</small></div><button class="tc-btn" onclick="bookIt('Kedarnath','₹14,999')">Book 🙏</button></div></div></div>
+        <div class="tcard reveal d3"><div class="tcard-img ti5">🌊</div><div class="tcard-body"><div class="tc-state">📍 Somnath, Gujarat</div><div class="tc-name">Somnath — First Jyotirlinga</div><div class="tc-desc">The eternal first Jyotirlinga on the Arabian Sea coast. Rebuilt 7 times, stands eternal. Sound & Light show.</div><div class="tc-tags"><span class="tc-tag">Jyotirlinga</span><span class="tc-tag">Arabian Sea</span></div><div class="tc-foot"><div class="tc-price">₹7,999<br><small>/ person</small></div><button class="tc-btn" onclick="bookIt('Somnath','₹7,999')">Book 🙏</button></div></div></div>
+        <div class="tcard reveal d4"><div class="tcard-img ti4">🔱</div><div class="tcard-body"><div class="tc-state">📍 Ujjain, Madhya Pradesh</div><div class="tc-name">Mahakaleshwar</div><div class="tc-desc">The only south-facing Jyotirlinga. World-famous Bhasma Aarti at 4 AM with sacred ash ritual from cremation ground.</div><div class="tc-tags"><span class="tc-tag">Jyotirlinga</span><span class="tc-tag">Bhasma Aarti</span></div><div class="tc-foot"><div class="tc-price">₹5,499<br><small>/ person</small></div><button class="tc-btn" onclick="bookIt('Mahakaleshwar Ujjain','₹5,499')">Book 🙏</button></div></div></div>
+        <div class="tcard reveal d1"><div class="tcard-img ti2">🌺</div><div class="tcard-body"><div class="tc-state">📍 Rameshwaram, Tamil Nadu</div><div class="tc-name">Ramanathaswamy</div><div class="tc-desc">Where Lord Rama installed a Shivalinga. 22 sacred theerthams. Longest corridor in any Indian temple.</div><div class="tc-tags"><span class="tc-tag">Jyotirlinga</span><span class="tc-tag">Ram Setu</span></div><div class="tc-foot"><div class="tc-price">₹6,999<br><small>/ person</small></div><button class="tc-btn" onclick="bookIt('Rameshwaram','₹6,999')">Book 🙏</button></div></div></div>
+        <div class="tcard reveal d2"><div class="tcard-img ti1">⛰</div><div class="tcard-body"><div class="tc-state">📍 Trimbak, Maharashtra</div><div class="tc-name">Trimbakeshwar</div><div class="tc-desc">Source of River Godavari. Unique three-faced Shivalinga representing Brahma, Vishnu, and Mahesh.</div><div class="tc-tags"><span class="tc-tag">Jyotirlinga</span><span class="tc-tag">Godavari source</span></div><div class="tc-foot"><div class="tc-price">₹4,999<br><small>/ person</small></div><button class="tc-btn" onclick="bookIt('Trimbakeshwar','₹4,999')">Book 🙏</button></div></div></div>
+      </div>
+    </div>
+
+    <!-- Char Dham -->
+    <div class="pcontent" id="pc-char">
+      <div class="temple-grid">
+        <div class="tcard reveal d1"><div class="tcard-img ti3">🏔</div><div class="tcard-body"><div class="tc-state">📍 All Uttarakhand</div><div class="tc-name">Char Dham Complete Package</div><div class="tc-desc">All four in one yatra: Yamunotri • Gangotri • Kedarnath • Badrinath. The ultimate spiritual circuit.</div><div class="tc-tags"><span class="tc-tag">Char Dham</span><span class="tc-tag">10 Nights</span></div><div class="tc-foot"><div class="tc-price">₹39,999<br><small>/ person</small></div><button class="tc-btn" onclick="bookIt('Full Char Dham Yatra','₹39,999')">Book 🙏</button></div></div></div>
+        <div class="tcard reveal d2"><div class="tcard-img ti5">🌊</div><div class="tcard-body"><div class="tc-state">📍 Uttarkashi, UK</div><div class="tc-name">Gangotri — Ganga Origin</div><div class="tc-desc">Source of the holy River Ganga. Goddess Ganga descended here. Sacred bathing in Bhagirathi river.</div><div class="tc-tags"><span class="tc-tag">Char Dham</span><span class="tc-tag">Ganga source</span></div><div class="tc-foot"><div class="tc-price">₹8,999<br><small>/ person</small></div><button class="tc-btn" onclick="bookIt('Gangotri','₹8,999')">Book 🙏</button></div></div></div>
+        <div class="tcard reveal d3"><div class="tcard-img ti1">✨</div><div class="tcard-body"><div class="tc-state">📍 Chamoli, Uttarakhand</div><div class="tc-name">Badrinath Dham</div><div class="tc-desc">Lord Vishnu's eternal abode. Tapt Kund hot spring. Flanked by Nar and Narayan peaks. Open May–Nov only.</div><div class="tc-tags"><span class="tc-tag">Char Dham</span><span class="tc-tag">Vishnu</span></div><div class="tc-foot"><div class="tc-price">₹10,999<br><small>/ person</small></div><button class="tc-btn" onclick="bookIt('Badrinath','₹10,999')">Book 🙏</button></div></div></div>
+      </div>
+    </div>
+
+    <!-- Divya Desam -->
+    <div class="pcontent" id="pc-divya">
+      <div class="temple-grid">
+        <div class="tcard reveal d1"><div class="tcard-img ti2">🛕</div><div class="tcard-body"><div class="tc-state">📍 Tirupati, Andhra Pradesh</div><div class="tc-name">Tirupati Venkateshwara</div><div class="tc-desc">Most visited temple on Earth. Richest temple. Special darshan + famous Laddu prasadam included.</div><div class="tc-tags"><span class="tc-tag">Divya Desam</span><span class="tc-tag">Special Darshan</span></div><div class="tc-foot"><div class="tc-price">₹7,499<br><small>/ person</small></div><button class="tc-btn" onclick="bookIt('Tirupati Balaji','₹7,499')">Book 🙏</button></div></div></div>
+        <div class="tcard reveal d2"><div class="tcard-img ti4">🌺</div><div class="tcard-body"><div class="tc-state">📍 Puri, Odisha</div><div class="tc-name">Jagannath Puri</div><div class="tc-desc">Lord of the Universe. One of the four sacred Dhams. World-famous Rath Yatra with massive chariots.</div><div class="tc-tags"><span class="tc-tag">Char Dham</span><span class="tc-tag">Rath Yatra</span></div><div class="tc-foot"><div class="tc-price">₹6,499<br><small>/ person</small></div><button class="tc-btn" onclick="bookIt('Jagannath Puri','₹6,499')">Book 🙏</button></div></div></div>
+        <div class="tcard reveal d3"><div class="tcard-img ti5">🌊</div><div class="tcard-body"><div class="tc-state">📍 Srirangam, Tamil Nadu</div><div class="tc-name">Srirangam Ranganatha</div><div class="tc-desc">Largest functioning Hindu temple. First of the 108 Divya Desams. Island temple in River Kaveri.</div><div class="tc-tags"><span class="tc-tag">Divya Desam</span><span class="tc-tag">Largest Temple</span></div><div class="tc-foot"><div class="tc-price">₹8,999<br><small>/ person</small></div><button class="tc-btn" onclick="bookIt('Srirangam','₹8,999')">Book 🙏</button></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  </div>
+</section>
+
+<!-- ── SACRED MAPS ── -->
+<section class="yt-section pale">
+  <div class="sec-inner">
+    
+  <div class="sec-inner">
+    <span class="sec-label reveal">🗺 Heritage Maps</span>
+    <h2 class="sec-h2 reveal">Sacred <span class="ita">Journey Maps</span></h2>
+    <div class="sec-rule reveal"><div class="sec-rule-bar"></div><div class="sec-rule-dot"></div></div>
+
+    <div class="map-tabs reveal">
+      <button class="mtab on" onclick="setMTab(this,'rama')">🏹 Ramayana Route</button>
+      <button class="mtab" onclick="setMTab(this,'maha')">⚔ Mahabharata Kingdoms</button>
+    </div>
+
+    <!-- Ramayana -->
+    <div class="mcontent on" id="mc-rama">
+      <div class="map-wrap reveal">
+        <h3 style="color:var(--gold-l);font-family:'Cinzel',serif;text-align:center;margin-bottom:18px;font-size:1rem;">
+          🏹 Lord Ram's Sacred Journey — Ayodhya to Lanka
+        </h3>
+        <svg viewBox="0 0 640 520" style="width:100%;max-width:600px;margin:0 auto;display:block;">
+          <!-- India silhouette simplified -->
+          <path d="M160,35 Q210,22 290,28 Q370,22 420,45 Q470,58 475,90 Q495,125 485,165 Q505,200 495,245 Q515,285 505,325 Q515,365 495,398 Q472,432 448,455 Q415,482 380,494 Q345,508 310,498 Q275,488 248,470 Q205,448 182,408 Q152,368 142,328 Q118,285 130,245 Q115,200 128,162 Q142,118 162,78 Q165,52 160,35Z"
+            fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.12)" stroke-width="1.5"/>
+
+          <!-- Route -->
+          <polyline points="292,108 270,152 258,195 248,232 238,265 248,295 236,332 258,360 278,382 308,402 330,425 352,455"
+            fill="none" stroke="#FF6B00" stroke-width="3" class="map-route-dash" opacity=".9"/>
+
+          <!-- Locations -->
+          <g class="map-location-btn" onclick="toast('🏹 Ayodhya — Ram Janmabhoomi. Sarayu river banks. New Ram Mandir. Hotel from ₹1,200/night')">
+            <circle cx="292" cy="108" r="9" fill="var(--sf)" opacity=".9"/>
+            <circle cx="292" cy="108" r="16" fill="rgba(255,107,0,.18)"/>
+            <text x="306" y="113" font-size="11" fill="white" font-family="sans-serif" font-weight="600">Ayodhya 🏹</text>
+          </g>
+          <g class="map-location-btn" onclick="toast('🌿 Chitrakoot — Ram, Sita, Laxman spent 11 years here. Hotel from ₹900/night')">
+            <circle cx="258" cy="195" r="7" fill="#FFB300"/>
+            <circle cx="258" cy="195" r="12" fill="rgba(255,179,0,.15)"/>
+            <text x="270" y="199" font-size="10" fill="rgba(255,255,255,.8)" font-family="sans-serif">Chitrakoot</text>
+          </g>
+          <g class="map-location-btn" onclick="toast('🌺 Panchavati (Nashik) — Sita was abducted by Ravana from here. Hotel from ₹1,100/night')">
+            <circle cx="238" cy="272" r="7" fill="#FF8C00"/>
+            <text x="190" y="276" font-size="10" fill="rgba(255,255,255,.75)" font-family="sans-serif">Panchavati (Nashik)</text>
+          </g>
+          <g class="map-location-btn" onclick="toast('🏔 Kishkindha (Hampi) — Ram met Hanuman here. Kingdom of Sugriva. Vali vadh. Hotel from ₹1,500/night')">
+            <circle cx="270" cy="350" r="7" fill="#FFB300"/>
+            <text x="278" y="354" font-size="10" fill="rgba(255,255,255,.75)" font-family="sans-serif">Kishkindha (Hampi)</text>
+          </g>
+          <g class="map-location-btn" onclick="toast('🌊 Rameshwaram — Ram built the Setu bridge to Lanka. Ramanathaswamy Jyotirlinga. Hotel from ₹1,800/night')">
+            <circle cx="308" cy="402" r="9" fill="var(--sf)" opacity=".9"/>
+            <circle cx="308" cy="402" r="16" fill="rgba(255,107,0,.18)"/>
+            <text x="320" y="407" font-size="11" fill="white" font-family="sans-serif" font-weight="600">Rameshwaram 🌊</text>
+          </g>
+          <g class="map-location-btn" onclick="toast('🔥 Lanka (Sri Lanka) — The golden city of Ravana. Ram defeated Ravana and rescued Sita here.')">
+            <circle cx="344" cy="465" r="9" fill="#E53935" opacity=".9"/>
+            <text x="354" y="469" font-size="11" fill="rgba(255,200,200,.9)" font-family="sans-serif" font-weight="600">Lanka 🔥</text>
+          </g>
+
+          <!-- Legend -->
+          <line x1="30" y1="485" x2="65" y2="485" stroke="#FF6B00" stroke-width="2.5" stroke-dasharray="7,4"/>
+          <text x="72" y="489" font-size="9" fill="rgba(255,255,255,.4)" font-family="sans-serif">Ram's route</text>
+          <circle cx="38" cy="500" r="5" fill="var(--sf)" opacity=".8"/>
+          <text x="48" y="504" font-size="9" fill="rgba(255,255,255,.4)" font-family="sans-serif">Click for hotel info</text>
+        </svg>
+      </div>
+      <div class="places-grid">
+        <div class="pcard reveal d1"><div class="pcard-ico">🏹</div><div class="pcard-name">Ayodhya</div><div class="pcard-sub">Ram Janmabhoomi • New Ram Mandir</div><div class="pcard-price">Package ₹3,999</div><button class="tc-btn" style="margin-top:10px;padding:8px 14px;" onclick="bookIt('Ayodhya','₹3,999')">Book</button></div>
+        <div class="pcard reveal d2"><div class="pcard-ico">🌿</div><div class="pcard-name">Chitrakoot</div><div class="pcard-sub">Ram Vanvas site • Kamadgiri</div><div class="pcard-price">Package ₹3,299</div><button class="tc-btn" style="margin-top:10px;padding:8px 14px;" onclick="bookIt('Chitrakoot','₹3,299')">Book</button></div>
+        <div class="pcard reveal d3"><div class="pcard-ico">🌺</div><div class="pcard-name">Nashik / Panchavati</div><div class="pcard-sub">Sita's abduction site</div><div class="pcard-price">Package ₹4,499</div><button class="tc-btn" style="margin-top:10px;padding:8px 14px;" onclick="bookIt('Nashik Panchavati','₹4,499')">Book</button></div>
+        <div class="pcard reveal d4"><div class="pcard-ico">🏔</div><div class="pcard-name">Hampi — Kishkindha</div><div class="pcard-sub">Sugriva's kingdom • Hanuman</div><div class="pcard-price">Package ₹5,499</div><button class="tc-btn" style="margin-top:10px;padding:8px 14px;" onclick="bookIt('Hampi Kishkindha','₹5,499')">Book</button></div>
+        <div class="pcard reveal d1"><div class="pcard-ico">🌊</div><div class="pcard-name">Rameshwaram</div><div class="pcard-sub">Ram Setu • Jyotirlinga</div><div class="pcard-price">Package ₹6,999</div><button class="tc-btn" style="margin-top:10px;padding:8px 14px;" onclick="bookIt('Rameshwaram','₹6,999')">Book</button></div>
+      </div>
+    </div>
+
+    <!-- Mahabharata -->
+    <div class="mcontent" id="mc-maha">
+      <div class="map-wrap reveal">
+        <h3 style="color:var(--gold-l);font-family:'Cinzel',serif;text-align:center;margin-bottom:20px;font-size:1rem;">
+          ⚔ Kings Who Came to Kurukshetra — Their Kingdoms
+        </h3>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:12px;">
+          <div class="mkcard" onclick="bookIt('Hastinapur — Pandava capital','₹2,999')"><div class="mkcard-ico">👑</div><div class="mkcard-name">Hastinapur</div><div class="mkcard-detail">Raja Dhritarashtra • Duryodhana's capital</div><div class="mkcard-price">Package ₹2,999 →</div></div>
+          <div class="mkcard" onclick="bookIt('Kurukshetra','₹2,499')"><div class="mkcard-ico">⚔</div><div class="mkcard-name">Kurukshetra</div><div class="mkcard-detail">Dharmakshetra where Gita was spoken</div><div class="mkcard-price">Package ₹2,499 →</div></div>
+          <div class="mkcard" onclick="bookIt('Dwarka — Krishna kingdom','₹6,999')"><div class="mkcard-ico">🌊</div><div class="mkcard-name">Dwarka</div><div class="mkcard-detail">Shri Krishna's Yadava kingdom. Submerged city.</div><div class="mkcard-price">Package ₹6,999 →</div></div>
+          <div class="mkcard" onclick="bookIt('Indraprastha — Pandava palace','₹1,999')"><div class="mkcard-ico">🏛</div><div class="mkcard-name">Indraprastha (Delhi)</div><div class="mkcard-detail">Yudhishthira's capital — Maya Sabha</div><div class="mkcard-price">Package ₹1,999 →</div></div>
+          <div class="mkcard" onclick="bookIt('Mathura — Kamsa kingdom','₹3,499')"><div class="mkcard-ico">🌺</div><div class="mkcard-name">Mathura</div><div class="mkcard-detail">Krishna Janmabhoomi • King Kamsa's city</div><div class="mkcard-price">Package ₹3,499 →</div></div>
+          <div class="mkcard" onclick="bookIt('Magadha Rajgir — Jarasandha','₹4,499')"><div class="mkcard-ico">🏰</div><div class="mkcard-name">Magadha — Rajgir</div><div class="mkcard-detail">King Jarasandha. Bihar. Hot springs & ruins.</div><div class="mkcard-price">Package ₹4,499 →</div></div>
+          <div class="mkcard" onclick="bookIt('Kashi — Karna connection','₹5,999')"><div class="mkcard-ico">🔱</div><div class="mkcard-name">Anga Kingdom (Bhagalpur)</div><div class="mkcard-detail">King Karna's kingdom gifted by Duryodhana</div><div class="mkcard-price">Package ₹3,999 →</div></div>
+          <div class="mkcard" onclick="bookIt('Kurukshetra — Dronacharya','₹2,499')"><div class="mkcard-ico">🎯</div><div class="mkcard-name">Panchal Kingdom</div><div class="mkcard-detail">Raja Drupada • Draupadi's father • Haryana</div><div class="mkcard-price">Package ₹2,999 →</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  </div>
+</section>
+
+</div><!-- end #yatra -->
+
+<!-- ════════ PACKAGES ════════ -->
+<section class="yt-section light" id="packages">
+  <div class="sec-inner">
+    <span class="sec-label reveal">📦 Curated Packages</span>
+    <h2 class="sec-h2 reveal">All-Inclusive <span class="ita">Yatra Packages</span></h2>
+    <div class="sec-rule reveal"><div class="sec-rule-bar"></div><div class="sec-rule-dot"></div></div>
+    <div class="pkg-grid">
+      <div class="pkg-card reveal">
+        <div class="pkg-top" data-emoji="🏔">
+          <div class="pkg-badge">Most Popular</div>
+          <div class="pkg-name">Char Dham Yatra</div>
+          <div class="pkg-nights">12 Nights · 13 Days · Badrinath · Kedarnath · Gangotri · Yamunotri</div>
+        </div>
+        <div class="pkg-body">
+          <div class="pkg-includes">
+            <span class="pkg-inc-tag">✈ Flight</span><span class="pkg-inc-tag">🏨 Hotel</span>
+            <span class="pkg-inc-tag">🚌 Transport</span><span class="pkg-inc-tag">🍱 Meals</span><span class="pkg-inc-tag">🙏 Puja</span>
+          </div>
+          <div class="pkg-price-row">
+            <div class="pkg-price">₹39,999 <span>per person</span></div>
+            <button class="pkg-btn" onclick="bookPackage('Char Dham Yatra (All 4)')">Book Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="pkg-card reveal">
+        <div class="pkg-top" data-emoji="🕉">
+          <div class="pkg-badge">Best Value</div>
+          <div class="pkg-name">Kashi — Prayagraj — Ayodhya</div>
+          <div class="pkg-nights">4 Nights · 5 Days · Complete Spiritual Circuit</div>
+        </div>
+        <div class="pkg-body">
+          <div class="pkg-includes">
+            <span class="pkg-inc-tag">🚂 Train</span><span class="pkg-inc-tag">🏨 Hotel</span>
+            <span class="pkg-inc-tag">🚌 Transfer</span><span class="pkg-inc-tag">🙏 VIP Darshan</span>
+          </div>
+          <div class="pkg-price-row">
+            <div class="pkg-price">₹9,999 <span>per person</span></div>
+            <button class="pkg-btn" onclick="bookPackage('Varanasi — Kashi Vishwanath Jyotirlinga')">Book Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="pkg-card reveal">
+        <div class="pkg-top" data-emoji="🔱">
+          <div class="pkg-badge">Premium</div>
+          <div class="pkg-name">12 Jyotirlinga Yatra</div>
+          <div class="pkg-nights">18 Nights · 19 Days · All Jyotirlinga</div>
+        </div>
+        <div class="pkg-body">
+          <div class="pkg-includes">
+            <span class="pkg-inc-tag">✈ Flight</span><span class="pkg-inc-tag">🏨 3★ Hotel</span>
+            <span class="pkg-inc-tag">🚌 AC Bus</span><span class="pkg-inc-tag">🍱 All Meals</span><span class="pkg-inc-tag">🙏 Pandit</span>
+          </div>
+          <div class="pkg-price-row">
+            <div class="pkg-price">₹64,999 <span>per person</span></div>
+            <button class="pkg-btn" onclick="bookPackage('Somnath — First Jyotirlinga')">Book Now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ TRAVEL TIPS ════════ -->
+<section class="yt-section pale" id="tips">
+  <div class="sec-inner">
+    <span class="sec-label reveal">💡 Travel Wisdom</span>
+    <h2 class="sec-h2 reveal">Yatra <span class="ita">Tips</span></h2>
+    <div class="sec-rule reveal"><div class="sec-rule-bar"></div><div class="sec-rule-dot"></div></div>
+    <div class="tips-grid">
+      <div class="tip-card reveal"><div class="tip-icon">📅</div><div class="tip-title">Best Time to Visit</div><div class="tip-text">Oct–March is ideal for most temples. Kedarnath is open May–Nov only. Avoid peak summer for South India temples.</div></div>
+      <div class="tip-card reveal"><div class="tip-icon">🚂</div><div class="tip-title">Book Trains Early</div><div class="tip-text">Book IRCTC trains 60–90 days in advance, especially for Tatkal. Rajdhani and Duronto are most comfortable.</div></div>
+      <div class="tip-card reveal"><div class="tip-icon">🙏</div><div class="tip-title">VIP Darshan</div><div class="tip-text">Most temples offer VIP/paid darshan. Book online for Tirupati, Kedarnath, Vaishno Devi to skip long queues.</div></div>
+      <div class="tip-card reveal"><div class="tip-icon">🌿</div><div class="tip-title">Pack Light & Sacred</div><div class="tip-text">Carry prasad, yellow/white/orange clothes, chunni for ladies. Leave leather and non-veg food at home.</div></div>
+      <div class="tip-card reveal"><div class="tip-icon">💊</div><div class="tip-title">Health & Altitude</div><div class="tip-text">For Kedarnath/Char Dham, acclimatize for 2 days. Carry Diamox, warm clothes and basic medicines.</div></div>
+      <div class="tip-card reveal"><div class="tip-icon">📱</div><div class="tip-title">Offline Maps</div><div class="tip-text">Download Google Maps offline for Uttarakhand — network is unreliable in the Himalayas.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- UNIVERSAL FOOTER -->
+<div id="sa-footer-root"></div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+/* ── REVEAL ── */
+document.querySelectorAll('.reveal').forEach(el=>{
+  if(el.getBoundingClientRect().top < window.innerHeight) el.classList.add('vis');
+});
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting){setTimeout(()=>e.target.classList.add('vis'),i*50);obs.unobserve(e.target);}
+  });
+},{threshold:0,rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('.reveal:not(.vis)').forEach(el=>obs.observe(el));
+
+/* ── PAGE NAV ACTIVE STATE ── */
+const ptabLinks = document.querySelectorAll('.ptab-link');
+const sections  = document.querySelectorAll('section[id]');
+window.addEventListener('scroll',()=>{
+  let cur='';
+  sections.forEach(s=>{ if(window.scrollY>=s.offsetTop-120) cur=s.id; });
+  ptabLinks.forEach(a=>a.classList.toggle('active', a.getAttribute('href')==='#'+cur));
+});
+
+/* ── TOAST ── */
+let toastTimer;
+function toast(msg){
+  const el=document.getElementById('toast');
+  el.textContent=msg;el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>el.classList.remove('show'),4000);
+}
+
+/* ── SPEAK ── */
+function speak(text){
+  if('speechSynthesis' in window){
+    window.speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(text);
+    u.lang='hi-IN';u.rate=0.72;u.pitch=0.88;
+    window.speechSynthesis.speak(u);
+  }
+}
+
+/* ── BOOKING ── */
+const pkgPrices={
+  'Varanasi — Kashi Vishwanath Jyotirlinga':8499,
+  'Kedarnath — Himalayan Jyotirlinga':14999,
+  'Tirupati — Venkateshwara Divya Desam':7499,
+  'Vrindavan & Mathura — Krishna Dham':4299,
+  'Puri — Jagannath Char Dham':6499,
+  'Somnath — First Jyotirlinga':7999,
+  'Rameshwaram — Ramanathaswamy Jyotirlinga':6999,
+  'Badrinath — Char Dham':10999,
+  'Vaishno Devi — Shakti Peetha':8999,
+  'Kamakhya — Shakti Peetha, Guwahati':6999,
+  'Shirdi — Sai Baba':4999,
+  'Ayodhya — Ram Janmabhoomi':3999,
+  'Ujjain — Mahakaleshwar Jyotirlinga':5499,
+  'Char Dham Yatra (All 4)':39999
+};
+function searchRoute(){
+  const from=document.getElementById('fromCity').value.trim()||'Your City';
+  const to=document.getElementById('toTemple').value;
+  if(!to){toast('⚠ Please select a destination temple!');return;}
+  const base=pkgPrices[to]||5999;
+  const amt=lang==='sa'?Math.round(base*.9):base;
+  const toName=to.split('—')[0].trim();
+  document.getElementById('rbRoute').textContent=from+' → '+toName;
+  document.getElementById('rbAmt').textContent='₹'+amt.toLocaleString('en-IN');
+  if(lang==='sa'){
+    const b=document.getElementById('saDiscBadge');
+    b.style.display='flex';
+    b.textContent='✅ Sanskrit Discount 10% applied! You save ₹'+Math.round(base*.1).toLocaleString('en-IN');
+  }
+  document.getElementById('rbGrid').innerHTML=`
+    <div class="rb-item"><div class="ico">🚂</div><div class="lbl">Best Train</div><div class="val">Rajdhani Express</div><div class="sub">Dep 06:00 AM · AC 2-Tier</div></div>
+    <div class="rb-item"><div class="ico">⏱</div><div class="lbl">Travel Time</div><div class="val">8h–14h</div><div class="sub">Direct route</div></div>
+    <div class="rb-item"><div class="ico">🏨</div><div class="lbl">Hotel Included</div><div class="val">3★ Dharamshala</div><div class="sub">2 nights</div></div>
+    <div class="rb-item"><div class="ico">🚗</div><div class="lbl">AC Cab</div><div class="val">Station → Temple</div><div class="sub">Both ways</div></div>
+    <div class="rb-item"><div class="ico">🍽</div><div class="lbl">Sattvic Meals</div><div class="val">Breakfast + Dinner</div><div class="sub">All days</div></div>
+    <div class="rb-item"><div class="ico">🛕</div><div class="lbl">VIP Darshan</div><div class="val">Skip-the-queue</div><div class="sub">Pass included</div></div>
+  `;
+  document.getElementById('routeBox').classList.add('on');
+  setTimeout(()=>document.getElementById('routeBox').scrollIntoView({behavior:'smooth',block:'nearest'}),100);
+}
+function confirmBook(){
+  toast('✅ Booking confirmed! Jai Shri Ram 🙏 You will receive WhatsApp confirmation shortly!');
+  document.getElementById('routeBox').classList.remove('on');
+}
+function setBTab(el,type){
+  document.querySelectorAll('.btab').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('routeBox').classList.remove('on');
+}
+const pkgPrices={
+  'Varanasi — Kashi Vishwanath Jyotirlinga':8499,
+  'Kedarnath — Himalayan Jyotirlinga':14999,
+  'Tirupati — Venkateshwara Divya Desam':7499,
+  'Vrindavan & Mathura — Krishna Dham':4299,
+  'Puri — Jagannath Char Dham':6499,
+  'Somnath — First Jyotirlinga':7999,
+  'Rameshwaram — Ramanathaswamy Jyotirlinga':6999,
+  'Badrinath — Char Dham':10999,
+  'Vaishno Devi — Shakti Peetha':8999,
+  'Kamakhya — Shakti Peetha, Guwahati':6999,
+  'Shirdi — Sai Baba':4999,
+  'Ayodhya — Ram Janmabhoomi':3999,
+  'Ujjain — Mahakaleshwar Jyotirlinga':5499,
+  'Char Dham Yatra (All 4)':39999
+};
+function searchRoute(){
+  const from=document.getElementById('fromCity').value.trim()||'Your City';
+  const to=document.getElementById('toTemple').value;
+  if(!to){toast('⚠ Please select a destination temple!');return;}
+  const base=pkgPrices[to]||5999;
+  const amt=lang==='sa'?Math.round(base*.9):base;
+  const toName=to.split('—')[0].trim();
+  document.getElementById('rbRoute').textContent=from+' → '+toName;
+  document.getElementById('rbAmt').textContent='₹'+amt.toLocaleString('en-IN');
+  if(lang==='sa'){
+    const b=document.getElementById('saDiscBadge');
+    b.style.display='flex';
+    b.textContent='✅ Sanskrit Discount 10% applied! You save ₹'+Math.round(base*.1).toLocaleString('en-IN');
+  }
+  document.getElementById('rbGrid').innerHTML=`
+    <div class="rb-item"><div class="ico">🚂</div><div class="lbl">Best Train</div><div class="val">Rajdhani Express</div><div class="sub">Dep 06:00 AM · AC 2-Tier</div></div>
+    <div class="rb-item"><div class="ico">⏱</div><div class="lbl">Travel Time</div><div class="val">8h–14h</div><div class="sub">Direct route</div></div>
+    <div class="rb-item"><div class="ico">🏨</div><div class="lbl">Hotel Included</div><div class="val">3★ Dharamshala</div><div class="sub">2 nights</div></div>
+    <div class="rb-item"><div class="ico">🚗</div><div class="lbl">AC Cab</div><div class="val">Station → Temple</div><div class="sub">Both ways</div></div>
+    <div class="rb-item"><div class="ico">🍽</div><div class="lbl">Sattvic Meals</div><div class="val">Breakfast + Dinner</div><div class="sub">All days</div></div>
+    <div class="rb-item"><div class="ico">🛕</div><div class="lbl">VIP Darshan</div><div class="val">Skip-the-queue</div><div class="sub">Pass included</div></div>
+  `;
+  document.getElementById('routeBox').classList.add('on');
+  setTimeout(()=>document.getElementById('routeBox').scrollIntoView({behavior:'smooth',block:'nearest'}),100);
+}
+function bookIt(name,price){
+  toast('🙏 Initiating booking for '+name+' — '+price+'. Scroll to Travel section to complete.');
+  document.getElementById('travel').scrollIntoView({behavior:'smooth'});
+}
+function setPTab(el,id){
+  document.querySelectorAll('.ptab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.pcontent').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('pc-'+id).classList.add('on');
+}
+function setMTab(el,id){
+  document.querySelectorAll('.mtab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.mcontent').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('mc-'+id).classList.add('on');
+}
+function showBookingOptions(from,to){
+  const dest=to.split('—')[0].trim().split('&')[0].trim();
+  const slug=encodeURIComponent(dest.toLowerCase().replace(/\s+/g,'-'));
+  const enc=encodeURIComponent(dest);
+  const U={
+    irctc:'https://www.irctc.co.in/nget/train-search',
+    mmt:'https://www.makemytrip.com/trains/',
+    hotels:'https://www.makemytrip.com/hotels/'+slug+'-hotels.html',
+    booking:'https://www.booking.com/searchresults.html?ss='+enc,
+    goibibo:'https://www.goibibo.com/hotels/hotels-in-'+slug+'/'
+  };
+  let ov=document.getElementById('bkOv');if(ov)ov.remove();
+  ov=document.createElement('div');ov.id='bkOv';
+  ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:7000;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(14px);';
+  ov.onclick=e=>{if(e.target===ov)ov.remove();};
+  const row=(ic,ti,su,url,c)=>`<a href="${url}" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:14px;border:2px solid ${c}44;text-decoration:none;background:${c}0a;transition:all .2s;margin-bottom:10px;" onmouseover="this.style.borderColor='${c}';this.style.background='${c}18'" onmouseout="this.style.borderColor='${c}44';this.style.background='${c}0a'"><span style="font-size:1.9rem;flex-shrink:0">${ic}</span><div style="flex:1"><div style="font-weight:700;color:#1C0D00;font-size:.9rem">${ti}</div><div style="font-size:.7rem;color:#A07040;margin-top:1px">${su}</div></div><span style="color:${c};font-weight:700">→</span></a>`;
+  ov.innerHTML=`<div style="background:#fff;border-radius:24px;padding:32px 28px;max-width:500px;width:100%;position:relative;box-shadow:0 24px 80px rgba(0,0,0,.5);max-height:90vh;overflow-y:auto;"><button onclick="document.getElementById('bkOv').remove()" style="position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;border:none;background:#f5f5f5;cursor:pointer;font-size:1rem;">✕</button><div style="text-align:center;margin-bottom:22px;"><div style="font-size:2rem">🙏</div><h3 style="font-family:Cinzel,serif;color:#FF6B00;font-size:1.2rem;margin:8px 0 4px">Complete Your Yatra Booking</h3><p style="color:#9B7040;font-size:.8rem">${from} → <strong>${dest}</strong></p></div>${row('🚂','IRCTC — Official Train Booking','irctc.co.in · Government of India · Real trains',U.irctc,'#FF6B00')}${row('✈','MakeMyTrip — Train + Flight','makemytrip.com · Live prices',U.mmt,'#138808')}${row('🏨','Hotels near '+dest,'makemytrip.com · Real hotels near temple',U.hotels,'#000080')}${row('🌐','Booking.com Hotels','Best rates worldwide',U.booking,'#C8890A')}${row('🏠','Goibibo Hotels','Indian hotel specialist',U.goibibo,'#9C27B0')}<p style="text-align:center;margin-top:14px;font-size:.68rem;color:#bbb">Real sites — actual trains & hotels 🙏 Shubh Yatra!</p></div>`;
+  document.body.appendChild(ov);
+}
+function speak(text){
+  if('speechSynthesis' in window){
+    window.speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(text);
+    u.lang='hi-IN';u.rate=0.72;u.pitch=0.88;
+    window.speechSynthesis.speak(u);
+  }
+}
+function toast(msg){
+  const el=document.getElementById('toast');
+  el.textContent=msg;el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>el.classList.remove('show'),4000);
+}
+
+function bookPackage(dest){
+  document.getElementById('toTemple').value=dest;
+  const pkgTab=document.querySelectorAll('.btab')[3];
+  setBTab(pkgTab,'package');
+  document.getElementById('booking').scrollIntoView({behavior:'smooth'});
+  toast('📦 Package selected! Enter your city & date');
+}
+
+function bookIt(name,price){
+  toast('🙏 Booking for '+name+' — '+price+'. Fill form below!');
+  document.getElementById('booking').scrollIntoView({behavior:'smooth'});
+}
+
+/* ── LANG ── */
+document.querySelectorAll('.lang-sa').forEach(e=>e.style.display='none');
+if(localStorage.getItem('sa-lang')==='sa'){
+  document.querySelectorAll('.lang-en').forEach(e=>e.style.display='none');
+  document.querySelectorAll('.lang-sa').forEach(e=>e.style.display='');
+}
+</script>
+
+<script type="module" src="header.js"></script>
+<script type="module" src="footer.js"></script>
+</body>
+</html>

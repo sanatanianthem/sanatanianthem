@@ -21,13 +21,6 @@ const firebaseConfig = {
 
 /* ── DEFAULT FOOTER DATA ── */
 const DEFAULT = {
-  yatra: [
-    { label:'51 Shakti Peetha', url:'index.html#pilgrimage', visible:true },
-    { label:'12 Jyotirlinga',   url:'index.html#pilgrimage', visible:true },
-    { label:'Char Dham Yatra',  url:'index.html#pilgrimage', visible:true },
-    { label:'Ramayana Route',   url:'index.html#maps',       visible:true },
-    { label:'Mahabharata Map',  url:'index.html#maps',       visible:true },
-  ],
   services: [
     { label:'Book Puja',          url:'index.html#puja',     visible:true },
     { label:'Book Pandit',        url:'index.html#puja',     visible:true },
@@ -40,7 +33,6 @@ const DEFAULT = {
     { label:'Hanuman Chalisa',    url:'sanatani-anthem-mantras.html', visible:true },
     { label:'Sarve Bhavantu',     url:'sanatani-anthem-mantras.html', visible:true },
     { label:'Bhajan Clubbing',    url:'index.html#bhajan',   visible:true },
-    { label:'Book Yatra',         url:'index.html#travel',   visible:true },
   ],
 };
 
@@ -151,8 +143,6 @@ function fixUrl(url) {
 function renderFooter(data) {
   const root = document.getElementById('sa-footer-root');
   if (!root) return;
-
-  const yatra    = (data.yatra    || DEFAULT.yatra   ).filter(x => x.visible !== false);
   const services = (data.services || DEFAULT.services).filter(x => x.visible !== false);
   const learn    = (data.learn    || DEFAULT.learn   ).filter(x => x.visible !== false);
 
@@ -178,25 +168,7 @@ function renderFooter(data) {
           <div class="uf-sanskrit">वसुधैव कुटुम्बकम्</div>
         </div>
 
-        <!-- Yatra -->
-        <div class="uf-col">
-          <div class="uf-col-h">Yatra</div>
-          <ul>${colHTML(yatra)}</ul>
-        </div>
-
-        <!-- Services -->
-        <div class="uf-col">
-          <div class="uf-col-h">Services</div>
-          <ul>${colHTML(services)}</ul>
-        </div>
-
-        <!-- Learn -->
-        <div class="uf-col">
-          <div class="uf-col-h">Learn</div>
-          <ul>${colHTML(learn)}</ul>
-        </div>
-
-      </div>
+        
       <hr class="uf-hr">
       <div class="uf-bottom">
         <div class="uf-copy">© ${year} SanataniAnthem — All Rights Reserved 🕉 Sarve Bhavantu Sukhinah</div>
@@ -216,7 +188,6 @@ try {
     if (!snap.exists()) return;
     const d = snap.data();
     renderFooter({
-      yatra:    d.yatra    || DEFAULT.yatra,
       services: d.services || DEFAULT.services,
       learn:    d.learn    || DEFAULT.learn,
     });
