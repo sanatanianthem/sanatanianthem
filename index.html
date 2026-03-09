@@ -55,7 +55,14 @@ body{
 .d1{transition-delay:.05s;}.d2{transition-delay:.1s;}.d3{transition-delay:.15s;}.d4{transition-delay:.2s;}.d5{transition-delay:.25s;}
 
 /* ─── INDIA FLAG STRIPE ─── */
-
+.flag-top{
+  height:6px;
+  background:linear-gradient(to right,
+    var(--sf) 0%,var(--sf) 33.33%,
+    #fff 33.33%,#fff 66.66%,
+    var(--green) 66.66%,var(--green) 100%);
+  position:relative;
+}
 .flag-top::after{
   content:'';position:absolute;left:50%;top:50%;
   transform:translate(-50%,-50%);
@@ -1400,9 +1407,8 @@ footer{
 
 </head>
 <body>
-<!-- UNIVERSAL HEADER -->
 <div id="sa-header-root"></div>
-
+<!-- FLAG + NAV -->
 <!-- ══════════════════════════════════════════
      HERO
 ══════════════════════════════════════════ -->
@@ -1453,106 +1459,11 @@ footer{
 </section>
 
 <!-- ══════════════════════════════════════════
+     SANATANI ANTHEM
+══════════════════════════════════════════ -->
+<!-- ══════════════════════════════════════════
      TRAVEL BOOKING
 ══════════════════════════════════════════ -->
-<section class="sec" id="travel" style="background:var(--sf-xpale);">
-  <div class="sec-inner">
-    <span class="sec-label reveal">✈ Sacred Travel Booking</span>
-    <h2 class="sec-h2 reveal">
-      <span class="lang-en">Book Your <span class="ita">Yatra</span></span>
-      <span class="lang-sa">अपनी <span class="ita">यात्रा</span> बुक करें</span>
-    </h2>
-    <div class="sec-rule reveal"><div class="sec-rule-bar"></div><div class="sec-rule-dot"></div></div>
-
-    <div class="discount-strip reveal">
-      🌟 <strong>Sanskrit mein book karo → 10% EXTRA discount!</strong>
-      &nbsp;|&nbsp; Toggle → संस्कृत → Discount auto-applied
-    </div>
-
-    <div class="btabs reveal">
-      <button class="btab on" onclick="setBTab(this,'train')">🚂 Train</button>
-      <button class="btab" onclick="setBTab(this,'flight')">✈ Flight</button>
-      <button class="btab" onclick="setBTab(this,'hotel')">🏨 Hotel</button>
-      <button class="btab" onclick="setBTab(this,'package')">📦 Yatra Package</button>
-    </div>
-
-    <div class="bform reveal">
-      <div class="fgrid">
-        <div class="fg">
-          <label>
-            <span class="lang-en">From — Your Home Address / City</span>
-            <span class="lang-sa">प्रस्थान — आपका नगर</span>
-          </label>
-          <input id="fromCity" type="text" placeholder="e.g. Delhi, Mumbai, Kolkata, Balaramdihi...">
-        </div>
-        <div class="fg">
-          <label>
-            <span class="lang-en">Destination — Temple / Pilgrimage</span>
-            <span class="lang-sa">गन्तव्य तीर्थस्थान</span>
-          </label>
-          <select id="toTemple">
-            <option value="">Select destination...</option>
-            <option>Varanasi — Kashi Vishwanath Jyotirlinga</option>
-            <option>Kedarnath — Himalayan Jyotirlinga</option>
-            <option>Tirupati — Venkateshwara Divya Desam</option>
-            <option>Vrindavan &amp; Mathura — Krishna Dham</option>
-            <option>Puri — Jagannath Char Dham</option>
-            <option>Somnath — First Jyotirlinga</option>
-            <option>Rameshwaram — Ramanathaswamy Jyotirlinga</option>
-            <option>Badrinath — Char Dham</option>
-            <option>Vaishno Devi — Shakti Peetha</option>
-            <option>Kamakhya — Shakti Peetha, Guwahati</option>
-            <option>Shirdi — Sai Baba</option>
-            <option>Ayodhya — Ram Janmabhoomi</option>
-            <option>Ujjain — Mahakaleshwar Jyotirlinga</option>
-            <option>Char Dham Yatra (All 4)</option>
-          </select>
-        </div>
-        <div class="fg">
-          <label>
-            <span class="lang-en">Journey Date</span>
-            <span class="lang-sa">यात्रा दिनांक</span>
-          </label>
-          <input id="jDate" type="date">
-        </div>
-        <div class="fg">
-          <label>
-            <span class="lang-en">Passengers</span>
-            <span class="lang-sa">यात्री संख्या</span>
-          </label>
-          <select id="pCount">
-            <option>1 Person</option><option>2 People</option>
-            <option>3 People</option><option>4 People</option>
-            <option>5+ Group</option>
-          </select>
-        </div>
-      </div>
-      <button class="big-btn" onclick="searchRoute()">
-        🔍 <span class="lang-en">Find Best Route, Train & Hotel Package</span>
-        <span class="lang-sa">सर्वोत्तम यात्रा मार्ग खोजें</span>
-      </button>
-
-      <!-- Result -->
-      <div class="route-box" id="routeBox">
-        <div class="rb-head">
-          <div>
-            <div class="rb-route" id="rbRoute">Delhi → Varanasi</div>
-            <div class="sa-disc-badge" id="saDiscBadge">✅ Sanskrit Discount: −10% Applied!</div>
-          </div>
-          <div class="rb-price">
-            <span class="amount" id="rbAmt">₹8,499</span>
-            <span class="psub">per person · all-inclusive</span>
-          </div>
-        </div>
-        <div class="rb-grid" id="rbGrid"></div>
-        <button class="confirm-btn" onclick="confirmBook()">
-          ✅ Confirm &amp; Book Now &nbsp;—&nbsp; Jai Shri Ram 🙏
-        </button>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- ══════════════════════════════════════════
      SANSKRIT SIKHO
 ══════════════════════════════════════════ -->
@@ -2806,7 +2717,7 @@ setInterval(populatePanjika, 60000);
   document.getElementById('tip-enter-btn').addEventListener('click', (e) => {
     e.stopPropagation();
     hideTip();
-    window.open('sanatani-anthem-mantras.html', '_blank');
+    window.open('quantum-field.html', '_blank');
   });
 })();
 </script>
