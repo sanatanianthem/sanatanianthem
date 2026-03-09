@@ -9,9 +9,11 @@
 // No Firebase needed — nav is hardcoded for reliability
 
 const DEFAULT_NAV = [
-  { emoji:'',   label:'Home',           url:'index.html',            visible:true },
+  { emoji:'',   label:'Home',           url:'index.html',                   visible:true },
   { emoji:'🎵', label:'Anthem',         url:'sanatani-anthem-mantras.html', visible:true },
-  { emoji:'🪔', label:'Puja',           url:'index.html#puja',       visible:true },
+  { emoji:'📅', label:'Panchang',       url:'index.html#panchang',          visible:true },
+  { emoji:'🪔', label:'Puja',           url:'index.html#puja',              visible:true },
+  { emoji:'🕌', label:'Temples',        url:'index.html#temples',           visible:true },
 ];
 
 /* ── CSS ── */

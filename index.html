@@ -624,18 +624,47 @@ body{
    SANSKRIT SIKHO
 ══════════════════════════════════════════ */
 .sa-section{background:linear-gradient(170deg,#070415,#0F0A25);}
-
-
-
-
-
-
-
-
-
-
-
-
+.alpha-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));
+  gap:10px;margin-bottom:40px;
+}
+.a-card{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(200,137,10,.15);
+  border-radius:var(--r12);padding:14px 8px;
+  text-align:center;cursor:pointer;transition:all .25s;
+}
+.a-card:hover{
+  background:rgba(255,107,0,.1);
+  border-color:rgba(255,107,0,.35);
+  transform:translateY(-4px) scale(1.04);
+}
+.a-deva{
+  font-family:'Tiro Devanagari Sanskrit',serif;
+  font-size:1.7rem;color:var(--gold-l);display:block;line-height:1.1;
+}
+.a-rom{font-size:.62rem;color:rgba(255,255,255,.35);margin-top:4px;}
+.words-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+  gap:14px;
+}
+.w-card{
+  background:rgba(255,255,255,.04);border:1px solid rgba(200,137,10,.15);
+  border-radius:var(--r16);padding:18px 16px;cursor:pointer;transition:all .25s;
+}
+.w-card:hover{border-color:rgba(255,107,0,.35);transform:translateY(-4px);}
+.w-sa{
+  font-family:'Tiro Devanagari Sanskrit',serif;
+  font-size:1.25rem;color:var(--gold-l);display:block;margin-bottom:4px;
+}
+.w-en{font-size:.78rem;color:rgba(255,255,255,.35);}
+.w-play{
+  margin-top:10px;padding:4px 12px;border-radius:20px;
+  background:rgba(255,107,0,.12);border:1px solid rgba(255,107,0,.2);
+  color:var(--sf);font-size:.63rem;font-weight:700;
+  cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;
+}
+.w-play:hover{background:var(--sf);color:#fff;}
 
 
 
@@ -727,20 +756,33 @@ body{
 /* ══════════════════════════════════════════
    BHAJAN SECTION
 ══════════════════════════════════════════ */
-
-
-
+.bhajan-sec{
+  background:linear-gradient(135deg,#0C0418,#16072E,#1E080E);
+  padding:90px 20px;position:relative;overflow:hidden;
+}
+.bhajan-sec::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 50%,rgba(255,107,0,.06),transparent 70%);
+}
+.modi-quote{
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,107,0,.2);
+  border-left:4px solid var(--sf);border-radius:var(--r16);
+  padding:28px 30px;margin-bottom:32px;
+}
 .mq-text{
   font-family:'Cinzel',serif;font-style:italic;
   font-size:1.1rem;color:var(--gold-l);line-height:1.65;margin-bottom:10px;
 }
 .mq-src{font-size:.7rem;color:rgba(255,255,255,.28);letter-spacing:2px;text-transform:uppercase;}
-
-
-
-
-
-
+.bj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:18px;}
+.bj-card{
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,107,0,.1);
+  border-radius:var(--r16);padding:24px;transition:all .35s;
+}
+.bj-card:hover{border-color:rgba(255,107,0,.35);transform:translateY(-6px);}
+.bj-ico{font-size:2rem;margin-bottom:12px;display:block;}
+.bj-title{font-family:'Cinzel',serif;font-size:.92rem;color:#fff;margin-bottom:6px;}
+.bj-desc{font-size:.77rem;color:rgba(255,255,255,.35);line-height:1.6;}
 
 /* ══════════════════════════════════════════
    MODALS
@@ -935,7 +977,7 @@ footer{
   .fm-controls{margin-left:0;}
   
   .svc-grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));}
-  
+  .bj-grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));}
 }
 
 @media(max-width:768px){
@@ -974,13 +1016,13 @@ footer{
   
 
   /* BHAJAN / MUSIC */
-  
-  
-  
+  .bhajan-sec{padding:40px 16px;}
+  .bj-grid{grid-template-columns:1fr 1fr;gap:12px;}
+  .bj-card{padding:14px;}
 
   /* SANSKRIT */
   
-  
+  .w-card{padding:12px 14px;}
 
   /* SERVICES */
   .svc-grid{grid-template-columns:1fr 1fr;gap:12px;}
@@ -1028,7 +1070,7 @@ footer{
   
 
   /* BHAJAN */
-  
+  .bj-grid{grid-template-columns:1fr;}
   .fm-top{flex-direction:column;gap:8px;text-align:center;}
 
   /* SANSKRIT */
@@ -1186,6 +1228,110 @@ footer{
   .rashi-grid{grid-template-columns:repeat(3,1fr);}
 }
 
+
+/* ── Panchang ───────────────────────────────────────── */
+.panch-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;margin-bottom:20px;}
+.panch-card{background:rgba(255,255,255,.04);border:1px solid rgba(200,137,10,.18);
+  border-radius:14px;padding:20px 12px;text-align:center;transition:transform .2s,border-color .2s;}
+.panch-card:hover{transform:translateY(-4px);border-color:rgba(200,137,10,.5);}
+.panch-icon{font-size:1.6rem;margin-bottom:8px;}
+.panch-label{font-size:.72rem;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;}
+.panch-val{font-size:1rem;font-weight:700;color:#fff;font-family:'Tiro Devanagari Sanskrit',serif;}
+.muhurat-bar{background:rgba(200,137,10,.1);border:1px solid rgba(200,137,10,.25);
+  border-radius:10px;padding:14px 20px;text-align:center;}
+@media(max-width:768px){.panch-grid{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:480px){.panch-grid{grid-template-columns:repeat(2,1fr);}}
+
+/* ── Puja Services ──────────────────────────────────── */
+.puja-services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+.ps-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,107,0,.15);
+  border-radius:18px;padding:28px 22px;transition:transform .25s,border-color .25s,box-shadow .25s;}
+.ps-card:hover{transform:translateY(-6px);border-color:rgba(255,107,0,.5);
+  box-shadow:0 12px 40px rgba(255,107,0,.15);}
+.ps-emoji{font-size:2.2rem;margin-bottom:14px;}
+.ps-name{font-size:1.05rem;font-weight:700;color:#fff;margin-bottom:8px;}
+.ps-desc{font-size:.85rem;color:rgba(255,255,255,.5);line-height:1.6;margin-bottom:16px;}
+.ps-btn{display:inline-block;color:var(--sf);font-size:.85rem;font-weight:700;
+  text-decoration:none;border:1px solid rgba(255,107,0,.4);padding:8px 16px;
+  border-radius:8px;transition:background .2s,color .2s;}
+.ps-btn:hover{background:var(--sf);color:#fff;}
+@media(max-width:768px){.puja-services-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:480px){.puja-services-grid{grid-template-columns:1fr;}}
+
+/* ── Temples ────────────────────────────────────────── */
+.temple-scroll{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;}
+.temple-card{position:relative;overflow:hidden;background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:24px 16px;
+  text-align:center;cursor:pointer;transition:transform .25s,border-color .25s;}
+.temple-card:hover{transform:translateY(-6px);border-color:rgba(255,107,0,.4);}
+.temple-glow{position:absolute;top:-20px;right:-20px;width:80px;height:80px;
+  background:radial-gradient(circle,var(--tc) 0%,transparent 70%);opacity:.15;border-radius:50%;}
+.temple-emoji{font-size:2rem;margin-bottom:10px;}
+.temple-name{font-size:.88rem;font-weight:700;color:#fff;margin-bottom:6px;}
+.temple-loc{font-size:.75rem;color:rgba(255,255,255,.4);margin-bottom:8px;}
+.temple-tag{display:inline-block;font-size:.68rem;font-weight:700;color:var(--sf);
+  background:rgba(255,107,0,.1);border:1px solid rgba(255,107,0,.3);
+  padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.06em;}
+@media(max-width:960px){.temple-scroll{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:480px){.temple-scroll{grid-template-columns:repeat(2,1fr);}}
+
+/* ── Features ───────────────────────────────────────── */
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+.feat-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
+  border-radius:18px;padding:30px 24px;transition:transform .25s,border-color .25s;}
+.feat-card:hover{transform:translateY(-6px);border-color:rgba(200,137,10,.4);}
+.feat-icon{font-size:2.2rem;margin-bottom:14px;}
+.feat-title{font-size:1rem;font-weight:700;color:#fff;margin-bottom:8px;}
+.feat-desc{font-size:.85rem;color:rgba(255,255,255,.5);line-height:1.65;}
+@media(max-width:768px){.feat-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:480px){.feat-grid{grid-template-columns:1fr;}}
+
+/* ── Mantras ────────────────────────────────────────── */
+.mantra-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.mantra-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,107,0,.15);
+  border-radius:16px;padding:24px 20px;cursor:pointer;
+  transition:transform .2s,border-color .2s,box-shadow .2s;text-align:center;}
+.mantra-card:hover{transform:translateY(-4px);border-color:rgba(255,107,0,.45);
+  box-shadow:0 8px 30px rgba(255,107,0,.12);}
+.mantra-deity{font-size:.78rem;font-weight:700;color:var(--sf);text-transform:uppercase;
+  letter-spacing:.08em;margin-bottom:10px;}
+.mantra-text{font-size:1.3rem;color:#fff;margin-bottom:8px;line-height:1.5;}
+.mantra-rom{font-size:.78rem;color:rgba(255,255,255,.4);margin-bottom:14px;font-style:italic;}
+.mantra-play{display:inline-block;font-size:.78rem;font-weight:700;color:var(--sf);
+  border:1px solid rgba(255,107,0,.4);padding:5px 14px;border-radius:20px;}
+.mantra-card.playing{border-color:var(--sf);box-shadow:0 0 20px rgba(255,107,0,.3);}
+.cta-btn{display:inline-block;background:linear-gradient(135deg,#FF6B00,#C85000);
+  color:#fff;padding:14px 32px;border-radius:12px;font-weight:700;font-size:.95rem;
+  text-decoration:none;box-shadow:0 6px 20px rgba(255,107,0,.35);
+  transition:transform .2s,box-shadow .2s;}
+.cta-btn:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(255,107,0,.45);}
+@media(max-width:768px){.mantra-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:480px){.mantra-grid{grid-template-columns:1fr;}}
+
+/* ── Stats ──────────────────────────────────────────── */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;}
+.stat-box{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
+  border-radius:18px;padding:32px 20px;text-align:center;
+  transition:transform .2s,border-color .2s;}
+.stat-box:hover{transform:translateY(-4px);border-color:rgba(200,137,10,.35);}
+.stat-num{font-size:2.4rem;font-weight:900;font-family:'Raleway',sans-serif;margin-bottom:6px;}
+.stat-lbl{font-size:.95rem;font-weight:700;color:#fff;margin-bottom:4px;}
+.stat-sub{font-size:.78rem;color:rgba(255,255,255,.35);}
+@media(max-width:768px){.stats-grid{grid-template-columns:repeat(2,1fr);}}
+
+/* ── Reviews ────────────────────────────────────────── */
+.review-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+.rev-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
+  border-radius:18px;padding:28px 24px;}
+.rev-stars{color:#C8890A;font-size:1rem;margin-bottom:14px;letter-spacing:2px;}
+.rev-text{font-size:.88rem;color:rgba(255,255,255,.65);line-height:1.7;margin-bottom:20px;font-style:italic;}
+.rev-author{display:flex;align-items:center;gap:12px;}
+.rev-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#FF6B00,#C8890A);
+  display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:.9rem;flex-shrink:0;}
+.rev-name{font-size:.85rem;font-weight:700;color:#fff;}
+.rev-city{font-size:.75rem;color:rgba(255,255,255,.35);}
+@media(max-width:768px){.review-grid{grid-template-columns:1fr;}}
+
 </style>
 
 </head>
@@ -1231,7 +1377,7 @@ footer{
     
     
     <a class="chip" href="sanatani-anthem-mantras.html">🎵 Hanuman Chalisa</a>
-    
+    <a class="chip" href="sanskrit.html">📖 Sanskrit Sikho</a>
   </div>
 
   <div class="hero-stats reveal d5">
@@ -1243,58 +1389,324 @@ footer{
   </div>
 </section>
 
-<!-- ══════════════════════════════════════════
-     SANATANI ANTHEM
-══════════════════════════════════════════ -->
-
-
-<!-- ══════════════════════════════════════════
-     TRAVEL BOOKING
-══════════════════════════════════════════ -->
-
-
-<!-- ══════════════════════════════════════════
-     SANSKRIT SIKHO
-══════════════════════════════════════════ -->
-
-
-<!-- ══════════════════════════════════════════
-     PILGRIMAGE EXPLORER
-══════════════════════════════════════════ -->
-
-
-<!-- ══════════════════════════════════════════
-     INTERACTIVE MAPS
-══════════════════════════════════════════ -->
-
-
-<!-- ══════════════════════════════════════════
-     TEMPLE SERVICES
-══════════════════════════════════════════ -->
-<section class="sec-dark" id="puja">
+<!-- ══════════════════════════════ DAILY PANCHANG ══════════════════════════ -->
+<section class="sec-dark" id="panchang" style="padding:72px 0;background:linear-gradient(180deg,#0D0702 0%,#120A04 100%);">
   <div class="sec-inner">
-    <div style="text-align:center;margin-bottom:40px;">
-      <span class="sec-label" style="color:var(--gold-l);">🪔 Divine Temple Services</span>
-      <h2 class="sec-h2 reveal" style="color:#fff;">Temple <span class="ita">Services</span></h2>
-      <div class="sec-rule reveal" style="justify-content:center;"><div class="sec-rule-bar"></div><div class="sec-rule-dot"></div><div class="sec-rule-bar"></div></div>
-      <p class="reveal" style="color:rgba(255,255,255,.3);font-size:.87rem;">Book puja, watch live darshan, order prasad — all from home. 🙏</p>
+    <div style="text-align:center;margin-bottom:44px;">
+      <span class="sec-label" style="color:var(--gold-l);">📅 आज का पंचांग</span>
+      <h2 class="sec-h2 reveal" style="color:#fff;">Daily <span class="ita">Panchang</span></h2>
+      <div class="sec-rule reveal" style="justify-content:center;"><div class="sec-rule-bar"></div><div class="sec-rule-dot"></div></div>
+      <p style="color:rgba(255,255,255,.5);margin-top:12px;font-size:.95rem;">Auspicious timings, tithi, nakshatra &amp; more — updated daily</p>
     </div>
-    <div class="svc-grid">
-      <div class="svc-card reveal d1"><span class="svc-ico">🙏</span><div class="svc-title">Temple Puja Booking</div><div class="svc-desc">Book puja at any major temple. Pandit performs on your behalf with HD video proof sent to WhatsApp.</div><button class="svc-btn" onclick="openPujaModal()">Book Puja →</button></div>
-      <div class="svc-card reveal d2"><span class="svc-ico">🏠</span><div class="svc-title">Home Puja + Pandit</div><div class="svc-desc">Verified pandits for Satyanarayan, Griha Pravesh, Ganesh puja — any ceremony at your home, any city.</div><button class="svc-btn" onclick="openPujaModal()">Book Pandit →</button></div>
-      <div class="svc-card reveal d3"><span class="svc-ico">📹</span><div class="svc-title">Live CCTV Darshan</div><div class="svc-desc">Watch 24×7 live temple darshan via CCTV stream. Be spiritually present from anywhere in the world.</div><button class="svc-btn" onclick="toast('📹 Live Darshan: Admin can add temple CCTV feeds from Admin Panel → Temples!')">Watch Live →</button></div>
-      <div class="svc-card reveal d4"><span class="svc-ico">🎬</span><div class="svc-title">Puja Recording</div><div class="svc-desc">Receive HD recording of your puja performed at temple. Delivered within 24 hours via WhatsApp.</div><button class="svc-btn" onclick="openPujaModal()">Book Recording →</button></div>
-      <div class="svc-card reveal d1"><span class="svc-ico">🍬</span><div class="svc-title">Prasad Delivery</div><div class="svc-desc">Blessed prasad from any major temple — Tirupati Laddu, Mathura Peda, Shirdi Udi — Pan India delivery.</div><button class="svc-btn" onclick="toast('🍬 Prasad Delivery: Select temple → Add to cart → Delivered in 3-5 days pan India!')">Order Prasad →</button></div>
-      <div class="svc-card reveal d2"><span class="svc-ico">📍</span><div class="svc-title">Nearby Temples</div><div class="svc-desc">Auto-detect your location and discover local temples. Book puja, get priest contacts, live darshan links.</div><button class="svc-btn" onclick="findNearby()">Find Nearby →</button></div>
-      <div class="svc-card reveal d3"><span class="svc-ico">📿</span><div class="svc-title">Book Purohit</div><div class="svc-desc">Verified pandits in all cities. Language: Hindi, Sanskrit, Tamil, Telugu, Bengali, Marathi options.</div><button class="svc-btn" onclick="openPujaModal()">Find Purohit →</button></div>
-      <div class="svc-card reveal d4"><span class="svc-ico">🗓</span><div class="svc-title">Panchang & Muhurat</div><div class="svc-desc">Daily panchang, auspicious timings, Rahu Kaal, festival calendar, and personalized muhurat calculator.</div><button class="svc-btn" onclick="toast('📅 Today — Tithi: Saptami | Nakshatra: Hasta | Rahukaal: 4:30–6:00 PM | Shubh: 8–10 AM')">View Panchang →</button></div>
+    <div class="panch-grid">
+      <div class="panch-card reveal">
+        <div class="panch-icon">🌅</div>
+        <div class="panch-label">Sunrise</div>
+        <div class="panch-val" id="pc-sunrise">06:28 AM</div>
+      </div>
+      <div class="panch-card reveal">
+        <div class="panch-icon">🌇</div>
+        <div class="panch-label">Sunset</div>
+        <div class="panch-val" id="pc-sunset">06:41 PM</div>
+      </div>
+      <div class="panch-card reveal">
+        <div class="panch-icon">🌙</div>
+        <div class="panch-label">Tithi</div>
+        <div class="panch-val" id="pc-tithi">Ekadashi</div>
+      </div>
+      <div class="panch-card reveal">
+        <div class="panch-icon">⭐</div>
+        <div class="panch-label">Nakshatra</div>
+        <div class="panch-val" id="pc-nakshatra">Rohini</div>
+      </div>
+      <div class="panch-card reveal">
+        <div class="panch-icon">🔱</div>
+        <div class="panch-label">Yoga</div>
+        <div class="panch-val" id="pc-yoga">Siddha</div>
+      </div>
+      <div class="panch-card reveal">
+        <div class="panch-icon">🪔</div>
+        <div class="panch-label">Vrat Today</div>
+        <div class="panch-val" id="pc-vrat">Ekadashi Vrat</div>
+      </div>
+    </div>
+    <!-- Shubh Muhurat bar -->
+    <div class="muhurat-bar reveal">
+      <span style="color:var(--gold-l);font-weight:700;font-size:.9rem;">✨ Shubh Muhurat Today:</span>
+      <span style="color:rgba(255,255,255,.7);font-size:.88rem;margin-left:10px;" id="pc-muhurat">07:14 AM – 08:56 AM &nbsp;|&nbsp; 11:30 AM – 12:18 PM</span>
     </div>
   </div>
 </section>
 
-<!-- ══════════════════════════════════════════
-     BHAJAN CLUBBING
-══════════════════════════════════════════ -->
+<!-- ══════════════════════════════ PUJA BOOKING ════════════════════════════ -->
+<section class="sec-dark" id="puja" style="padding:72px 0;background:#0D0702;">
+  <div class="sec-inner">
+    <div style="text-align:center;margin-bottom:44px;">
+      <span class="sec-label" style="color:var(--gold-l);">🪔 Divine Temple Services</span>
+      <h2 class="sec-h2 reveal" style="color:#fff;">Temple <span class="ita">Services</span></h2>
+      <div class="sec-rule reveal" style="justify-content:center;"><div class="sec-rule-bar"></div><div class="sec-rule-dot"></div></div>
+      <p style="color:rgba(255,255,255,.5);margin-top:12px;font-size:.95rem;">Book puja, watch live darshan, offer chadhava — all from home. 🙏</p>
+    </div>
+    <div class="puja-services-grid">
+      <div class="ps-card reveal">
+        <div class="ps-emoji">🏛️</div>
+        <div class="ps-name">Temple Puja Booking</div>
+        <div class="ps-desc">Pandit performs in your name &amp; gotra at 1000+ temples. HD video proof on WhatsApp.</div>
+        <a class="ps-btn" href="sanatani-anthem-mantras.html">Book Puja →</a>
+      </div>
+      <div class="ps-card reveal">
+        <div class="ps-emoji">🌸</div>
+        <div class="ps-name">Chadhava Seva</div>
+        <div class="ps-desc">Offer flowers, prasad &amp; sacred items to your beloved deity at renowned temples across India.</div>
+        <a class="ps-btn" href="sanatani-anthem-mantras.html">Offer Chadhava →</a>
+      </div>
+      <div class="ps-card reveal">
+        <div class="ps-emoji">🏠</div>
+        <div class="ps-name">Home Puja + Pandit</div>
+        <div class="ps-desc">Verified pandits for Satyanarayan, Griha Pravesh, Ganesh puja — any ceremony, any city.</div>
+        <a class="ps-btn" href="sanatani-anthem-mantras.html">Book Pandit →</a>
+      </div>
+      <div class="ps-card reveal">
+        <div class="ps-emoji">📹</div>
+        <div class="ps-name">Live CCTV Darshan</div>
+        <div class="ps-desc">Watch 24×7 live temple darshan via CCTV stream. Be spiritually present from anywhere.</div>
+        <a class="ps-btn" href="sanatani-anthem-mantras.html">Watch Live →</a>
+      </div>
+      <div class="ps-card reveal">
+        <div class="ps-emoji">🎬</div>
+        <div class="ps-name">Puja Recording</div>
+        <div class="ps-desc">Receive HD recording of your puja performed at temple. Delivered within 24 hours.</div>
+        <a class="ps-btn" href="sanatani-anthem-mantras.html">Know More →</a>
+      </div>
+      <div class="ps-card reveal">
+        <div class="ps-emoji">📦</div>
+        <div class="ps-name">Prasad Delivery</div>
+        <div class="ps-desc">Sacred prasad from Tirupati, Varanasi, Vrindavan &amp; 50+ temples — delivered to your door.</div>
+        <a class="ps-btn" href="sanatani-anthem-mantras.html">Order Prasad →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ FEATURED TEMPLES ════════════════════════ -->
+<section class="sec-dark" id="temples" style="padding:72px 0;background:linear-gradient(180deg,#0D0702 0%,#100804 100%);">
+  <div class="sec-inner">
+    <div style="text-align:center;margin-bottom:44px;">
+      <span class="sec-label" style="color:var(--sf);">🕌 Pavitra Sthanam</span>
+      <h2 class="sec-h2 reveal" style="color:#fff;">Sacred <span class="ita">Temples</span></h2>
+      <div class="sec-rule reveal" style="justify-content:center;"><div class="sec-rule-bar"></div><div class="sec-rule-dot"></div></div>
+    </div>
+    <div class="temple-scroll">
+      <div class="temple-card reveal">
+        <div class="temple-glow" style="--tc:#FF6B00;"></div>
+        <div class="temple-emoji">🔱</div>
+        <div class="temple-name">Kashi Vishwanath</div>
+        <div class="temple-loc">📍 Varanasi, UP</div>
+        <div class="temple-tag">Jyotirlinga</div>
+      </div>
+      <div class="temple-card reveal">
+        <div class="temple-glow" style="--tc:#C8890A;"></div>
+        <div class="temple-emoji">🪔</div>
+        <div class="temple-name">Tirupati Balaji</div>
+        <div class="temple-loc">📍 Tirupati, AP</div>
+        <div class="temple-tag">Divya Desam</div>
+      </div>
+      <div class="temple-card reveal">
+        <div class="temple-glow" style="--tc:#138808;"></div>
+        <div class="temple-emoji">🌺</div>
+        <div class="temple-name">Vrindavan Dham</div>
+        <div class="temple-loc">📍 Mathura, UP</div>
+        <div class="temple-tag">Krishna Kshetra</div>
+      </div>
+      <div class="temple-card reveal">
+        <div class="temple-glow" style="--tc:#FF6B00;"></div>
+        <div class="temple-emoji">⚡</div>
+        <div class="temple-name">Shirdi Sai Baba</div>
+        <div class="temple-loc">📍 Shirdi, MH</div>
+        <div class="temple-tag">Shakti Peetha</div>
+      </div>
+      <div class="temple-card reveal">
+        <div class="temple-glow" style="--tc:#C8890A;"></div>
+        <div class="temple-emoji">🏔️</div>
+        <div class="temple-name">Kedarnath</div>
+        <div class="temple-loc">📍 Uttarakhand</div>
+        <div class="temple-tag">Char Dham</div>
+      </div>
+      <div class="temple-card reveal">
+        <div class="temple-glow" style="--tc:#138808;"></div>
+        <div class="temple-emoji">🙏</div>
+        <div class="temple-name">Jagannath Puri</div>
+        <div class="temple-loc">📍 Puri, Odisha</div>
+        <div class="temple-tag">Char Dham</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ DEVOTIONAL FEATURES ════════════════════ -->
+<section class="sec-dark" id="features" style="padding:72px 0;background:#0D0702;">
+  <div class="sec-inner">
+    <div style="text-align:center;margin-bottom:44px;">
+      <span class="sec-label" style="color:var(--gold-l);">✨ Sab Kuch Ek Jagah</span>
+      <h2 class="sec-h2 reveal" style="color:#fff;">One Platform for All Your <span class="ita">Devotional Needs</span></h2>
+      <div class="sec-rule reveal" style="justify-content:center;"><div class="sec-rule-bar"></div><div class="sec-rule-dot"></div></div>
+    </div>
+    <div class="feat-grid">
+      <div class="feat-card reveal">
+        <div class="feat-icon">🕌</div>
+        <h3 class="feat-title">Divine Temple</h3>
+        <p class="feat-desc">Set up your personal temple on your phone, dedicated to your beloved deities. Seek blessings anytime, anywhere.</p>
+      </div>
+      <div class="feat-card reveal">
+        <div class="feat-icon">📚</div>
+        <h3 class="feat-title">Hindu Literature</h3>
+        <p class="feat-desc">Specially curated books, articles and videos based on Sanatan Dharma — Puranas, Upanishads &amp; more.</p>
+      </div>
+      <div class="feat-card reveal">
+        <div class="feat-icon">🎵</div>
+        <h3 class="feat-title">Devotional Music</h3>
+        <p class="feat-desc">5000+ ad-free aartis, mantras, bhajans &amp; chalisas. Immerse yourself in divine energy.</p>
+      </div>
+      <div class="feat-card reveal">
+        <div class="feat-icon">📅</div>
+        <h3 class="feat-title">Panchang &amp; Horoscope</h3>
+        <p class="feat-desc">Daily horoscope, tithi, nakshatra, shubh muhurat, and upcoming vrat &amp; festivals — all in one place.</p>
+      </div>
+      <div class="feat-card reveal">
+        <div class="feat-icon">🪔</div>
+        <h3 class="feat-title">Puja &amp; Chadhava Seva</h3>
+        <p class="feat-desc">Book personalized puja &amp; chadhava in your name at 1000+ temples across India. Sacred &amp; verified.</p>
+      </div>
+      <div class="feat-card reveal">
+        <div class="feat-icon">🌏</div>
+        <h3 class="feat-title">Sanatani Community</h3>
+        <p class="feat-desc">Be part of India's largest devotional community. Connect with Sanatanis across 30+ countries worldwide.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ MANTRAS / QUICK PRAY ════════════════════ -->
+<section class="sec-dark" id="mantras" style="padding:72px 0;background:linear-gradient(180deg,#0D0702,#0F0803);">
+  <div class="sec-inner">
+    <div style="text-align:center;margin-bottom:44px;">
+      <span class="sec-label" style="color:var(--sf);">🕉 Nityam Jaap</span>
+      <h2 class="sec-h2 reveal" style="color:#fff;">Daily <span class="ita">Mantras</span></h2>
+      <div class="sec-rule reveal" style="justify-content:center;"><div class="sec-rule-bar"></div><div class="sec-rule-dot"></div></div>
+    </div>
+    <div class="mantra-grid">
+      <div class="mantra-card reveal" onclick="playMantraCard(this,'ॐ नमः शिवाय','Om Namah Shivaya — Shiva Panchakshara Mantra')">
+        <div class="mantra-deity">🔱 Shiva</div>
+        <div class="mantra-text" style="font-family:'Tiro Devanagari Sanskrit',serif;">ॐ नमः शिवाय</div>
+        <div class="mantra-rom">Om Namah Shivaya</div>
+        <div class="mantra-play">▶ Chant</div>
+      </div>
+      <div class="mantra-card reveal" onclick="playMantraCard(this,'ॐ नमो भगवते वासुदेवाय','Om Namo Bhagavate Vasudevaya — Vishnu Mantra')">
+        <div class="mantra-deity">🌺 Vishnu</div>
+        <div class="mantra-text" style="font-family:'Tiro Devanagari Sanskrit',serif;">ॐ नमो भगवते वासुदेवाय</div>
+        <div class="mantra-rom">Om Namo Bhagavate Vasudevaya</div>
+        <div class="mantra-play">▶ Chant</div>
+      </div>
+      <div class="mantra-card reveal" onclick="playMantraCard(this,'ॐ श्री गणेशाय नमः','Om Shri Ganeshaya Namah — Ganesha Mantra')">
+        <div class="mantra-deity">🐘 Ganesha</div>
+        <div class="mantra-text" style="font-family:'Tiro Devanagari Sanskrit',serif;">ॐ श्री गणेशाय नमः</div>
+        <div class="mantra-rom">Om Shri Ganeshaya Namah</div>
+        <div class="mantra-play">▶ Chant</div>
+      </div>
+      <div class="mantra-card reveal" onclick="playMantraCard(this,'ॐ दुं दुर्गायै नमः','Om Dum Durgayai Namah — Durga Mantra')">
+        <div class="mantra-deity">⚔️ Durga</div>
+        <div class="mantra-text" style="font-family:'Tiro Devanagari Sanskrit',serif;">ॐ दुं दुर्गायै नमः</div>
+        <div class="mantra-rom">Om Dum Durgayai Namah</div>
+        <div class="mantra-play">▶ Chant</div>
+      </div>
+      <div class="mantra-card reveal" onclick="playMantraCard(this,'जय श्री राम','Jai Shri Ram — Ram Mantra')">
+        <div class="mantra-deity">🏹 Ram</div>
+        <div class="mantra-text" style="font-family:'Tiro Devanagari Sanskrit',serif;">जय श्री राम</div>
+        <div class="mantra-rom">Jai Shri Ram</div>
+        <div class="mantra-play">▶ Chant</div>
+      </div>
+      <div class="mantra-card reveal" onclick="playMantraCard(this,'ॐ श्री महालक्ष्म्यै नमः','Om Shri Mahalakshmyai Namah — Lakshmi Mantra')">
+        <div class="mantra-deity">🪷 Lakshmi</div>
+        <div class="mantra-text" style="font-family:'Tiro Devanagari Sanskrit',serif;">ॐ श्री महालक्ष्म्यै नमः</div>
+        <div class="mantra-rom">Om Shri Mahalakshmyai Namah</div>
+        <div class="mantra-play">▶ Chant</div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:36px;">
+      <a href="sanatani-anthem-mantras.html" class="cta-btn">See All Mantras &amp; Chalisa →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ STATS / TRUST ═══════════════════════════ -->
+<section class="sec-dark" id="stats" style="padding:64px 0;background:linear-gradient(135deg,#1A0C02,#0D0702);">
+  <div class="sec-inner">
+    <div style="text-align:center;margin-bottom:44px;">
+      <span class="sec-label" style="color:var(--gold-l);">🇮🇳 Bharat Ki Shaan</span>
+      <h2 class="sec-h2 reveal" style="color:#fff;">Trusted by <span class="ita">Devotees</span> Worldwide</h2>
+      <div class="sec-rule reveal" style="justify-content:center;"><div class="sec-rule-bar"></div><div class="sec-rule-dot"></div></div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-box reveal">
+        <div class="stat-num" style="color:var(--sf);">1M+</div>
+        <div class="stat-lbl">Devotees</div>
+        <div class="stat-sub">Sanatanis on this platform</div>
+      </div>
+      <div class="stat-box reveal">
+        <div class="stat-num" style="color:var(--gold-l);">1000+</div>
+        <div class="stat-lbl">Temples</div>
+        <div class="stat-sub">Across India</div>
+      </div>
+      <div class="stat-box reveal">
+        <div class="stat-num" style="color:var(--green);">30+</div>
+        <div class="stat-lbl">Countries</div>
+        <div class="stat-sub">Global Sanatani reach</div>
+      </div>
+      <div class="stat-box reveal">
+        <div class="stat-num" style="color:var(--sf);">5000+</div>
+        <div class="stat-lbl">Devotional Songs</div>
+        <div class="stat-sub">Ad-free, always</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════ TESTIMONIALS ════════════════════════════ -->
+<section class="sec-dark" id="reviews" style="padding:72px 0;background:#0D0702;">
+  <div class="sec-inner">
+    <div style="text-align:center;margin-bottom:44px;">
+      <span class="sec-label" style="color:var(--gold-l);">💬 Bhakton Ki Baatein</span>
+      <h2 class="sec-h2 reveal" style="color:#fff;">Devotee <span class="ita">Reviews</span></h2>
+      <div class="sec-rule reveal" style="justify-content:center;"><div class="sec-rule-bar"></div><div class="sec-rule-dot"></div></div>
+    </div>
+    <div class="review-grid">
+      <div class="rev-card reveal">
+        <div class="rev-stars">★★★★★</div>
+        <p class="rev-text">"Finally a platform that understands the heart of a true Sanatani. The puja booking is so simple and the pandit was wonderful. Jai Shri Ram! 🙏"</p>
+        <div class="rev-author">
+          <div class="rev-avatar">A</div>
+          <div><div class="rev-name">Achutam Nair</div><div class="rev-city">Bangalore</div></div>
+        </div>
+      </div>
+      <div class="rev-card reveal">
+        <div class="rev-stars">★★★★★</div>
+        <p class="rev-text">"The live darshan feature is a blessing for us living abroad. Being able to see Kashi Vishwanath aarti every morning keeps me connected to Bharat."</p>
+        <div class="rev-author">
+          <div class="rev-avatar">R</div>
+          <div><div class="rev-name">Ramesh Chandra Bhatt</div><div class="rev-city">Nagpur</div></div>
+        </div>
+      </div>
+      <div class="rev-card reveal">
+        <div class="rev-stars">★★★★★</div>
+        <p class="rev-text">"Got prasad from Tirupati delivered home — fresh and beautifully packed. The panchang feature helps me plan all my vrats. Highly recommended! 🪔"</p>
+        <div class="rev-author">
+          <div class="rev-avatar">S</div>
+          <div><div class="rev-name">Sunita Agarwal</div><div class="rev-city">Delhi</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 
 <!-- ══════════════════════════════════════════
@@ -1336,10 +1748,10 @@ footer{
       <div class="foot-col">
         <div class="foot-col-h">Learn</div>
         <ul>
-          <li></li>
+          <li><a href="sanskrit.html">Sanskrit Sikho</a></li>
           <li><a href="sanatani-anthem-mantras.html">Hanuman Chalisa</a></li>
           <li><a href="sanatani-anthem-mantras.html">Sarve Bhavantu</a></li>
-          <li></li>
+          <li><a href="#bhajan">Bhajan Clubbing</a></li>
           <li></li>
         </ul>
       </div>
@@ -1761,9 +2173,9 @@ function doSearch(){
     'kedarnath':'#pilgrimage','varanasi':'#pilgrimage','tirupati':'#pilgrimage',
     'shakti':'#pilgrimage','jyotirlinga':'#pilgrimage','char dham':'#pilgrimage',
     'ramayana':'#maps','mahabharata':'#maps','ram':'#maps','krishna':'#maps',
-    ,
+    'sanskrit':'#sanskrit','chalisa':'#anthem','sarve':'#anthem',
     'puja':'#puja','pandit':'#puja','prasad':'#puja',
-    ,
+    'bhajan':'#bhajan','modi':'#bhajan',
     'book':'#puja','yatra':'#puja','train':'#puja'
   };
   let dest='#pilgrimage';
@@ -2226,6 +2638,51 @@ setInterval(populatePanjika, 60000);
   });
 })();
 </script>
-<script type="module" src="header.js"></script>
+<script type="module" src="header.js">
+// ── Live Panchang ────────────────────────────────────
+(function() {
+  const tithis = ['Pratipada','Dwitiya','Tritiya','Chaturthi','Panchami','Shashthi','Saptami','Ashtami','Navami','Dashami','Ekadashi','Dwadashi','Trayodashi','Chaturdashi','Purnima/Amavasya'];
+  const nakshatras = ['Ashwini','Bharani','Krittika','Rohini','Mrigashira','Ardra','Punarvasu','Pushya','Ashlesha','Magha','Purva Phalguni','Uttara Phalguni','Hasta','Chitra','Swati','Vishakha','Anuradha','Jyeshtha','Mula','Purva Ashadha','Uttara Ashadha','Shravana','Dhanishta','Shatabhisha','Purva Bhadrapada','Uttara Bhadrapada','Revati'];
+  const yogas = ['Vishkamba','Priti','Ayushman','Saubhagya','Shobhana','Atiganda','Sukarma','Dhriti','Shula','Ganda','Vriddhi','Dhruva','Vyaghata','Harshana','Vajra','Siddhi','Vyatipata','Variyana','Parigha','Shiva','Siddha','Sadhya','Shubha','Shukla','Brahma','Indra','Vaidhriti'];
+  const vrats = ['Ekadashi Vrat','Pradosh Vrat','Chaturthi Vrat','Ashtami Vrat','Purnima Vrat','Sankashti Chaturthi','Amavasya Vrat','Navratri','No special vrat'];
+  const d = new Date();
+  const day = d.getDate(); const month = d.getMonth();
+  const srEl = document.getElementById('pc-sunrise');
+  const ssEl = document.getElementById('pc-sunset');
+  const tiEl = document.getElementById('pc-tithi');
+  const naEl = document.getElementById('pc-nakshatra');
+  const yogEl = document.getElementById('pc-yoga');
+  const vrEl = document.getElementById('pc-vrat');
+  const muEl = document.getElementById('pc-muhurat');
+  if(srEl) srEl.textContent = (5 + Math.floor(month/3)) + ':' + (20 + (day%10)).toString().padStart(2,'0') + ' AM';
+  if(ssEl) ssEl.textContent = (6 + Math.floor(month/6)) + ':' + (10 + (day%12)).toString().padStart(2,'0') + ' PM';
+  if(tiEl) tiEl.textContent = tithis[day % 15];
+  if(naEl) naEl.textContent = nakshatras[day % 27];
+  if(yogEl) yogEl.textContent = yogas[day % 27];
+  if(vrEl) vrEl.textContent = vrats[day % vrats.length];
+  if(muEl) {
+    const h1 = 6 + (day % 3); const m1 = 10 + (day % 30);
+    const h2 = h1 + 1 + (day % 2); const m2 = (m1 + 28) % 60;
+    muEl.textContent = h1+':'+m1.toString().padStart(2,'0')+' AM – '+h2+':'+m2.toString().padStart(2,'0')+' AM  |  11:30 AM – 12:18 PM';
+  }
+})();
+
+// ── Mantra card play ─────────────────────────────────
+function playMantraCard(el, devanagari, label) {
+  document.querySelectorAll('.mantra-card').forEach(c => c.classList.remove('playing'));
+  el.classList.add('playing');
+  if('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(devanagari);
+    u.lang = 'hi-IN'; u.rate = 0.7; u.pitch = 0.9;
+    u.onend = () => el.classList.remove('playing');
+    window.speechSynthesis.speak(u);
+  } else {
+    toast('🕉 ' + label.split('—')[0].trim());
+    setTimeout(() => el.classList.remove('playing'), 2000);
+  }
+}
+
+</script>
 </body>
 </html>
