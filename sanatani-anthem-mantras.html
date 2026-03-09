@@ -340,43 +340,6 @@ flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding
 }
 .chalisa-verse:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
 
-/* ── AUDIO PLAYER STRIP ── */
-.audio-strip{
-  display:flex;align-items:center;gap:12px;
-  background:linear-gradient(135deg,#1a0800,#2d1000);
-  border-radius:14px;padding:14px 18px;
-  margin-bottom:20px;color:#FFE57A;
-}
-.play-btn{
-  width:42px;height:42px;border-radius:50%;
-  background:linear-gradient(135deg,var(--sf),var(--sf-light));
-  border:none;cursor:pointer;color:#fff;
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.1rem;flex-shrink:0;
-  box-shadow:0 2px 10px rgba(255,107,0,.4);
-  transition:transform .15s;
-}
-.play-btn:hover{transform:scale(1.08);}
-.audio-info{flex:1;}
-.audio-title{font-family:'Raleway',sans-serif;font-weight:700;font-size:.8rem;letter-spacing:.5px;}
-.audio-note{font-size:.68rem;opacity:.6;margin-top:2px;font-family:'DM Sans',sans-serif;}
-.audio-bars{display:flex;align-items:center;gap:3px;height:22px;}
-.audio-bars span{
-  display:inline-block;width:3px;border-radius:2px;
-  background:var(--sf-light);
-  animation:barAnim 1.2s ease-in-out infinite;
-}
-.audio-bars span:nth-child(1){height:8px;animation-delay:0s;}
-.audio-bars span:nth-child(2){height:18px;animation-delay:.15s;}
-.audio-bars span:nth-child(3){height:12px;animation-delay:.3s;}
-.audio-bars span:nth-child(4){height:20px;animation-delay:.1s;}
-.audio-bars span:nth-child(5){height:10px;animation-delay:.25s;}
-.audio-bars.paused span{animation-play-state:paused;}
-@keyframes barAnim{
-  0%,100%{transform:scaleY(.4);}
-  50%{transform:scaleY(1);}
-}
-
 /* ── MANTRA HIGHLIGHT BOX ── */
 .mantra-box{
   text-align:center;
@@ -443,7 +406,6 @@ body.hide-meaning .mantra-meaning,
 body.hide-meaning .sh-desc,
 body.hide-meaning .word-line,
 body.hide-meaning .line-meaning,
-body.hide-meaning .audio-strip,
 body.hide-meaning .section-hero,
 body.hide-meaning .verse-label,
 body.hide-meaning .ftb-title{
@@ -526,8 +488,15 @@ body:not(.hide-meaning) .mantra-only-box{ display:none !important; }
 }
 .qf-footer a{color:var(--sf);text-decoration:none;}
 </style>
+
+<script>
+// Initialize meaning as visible (ON by default)
+document.addEventListener('DOMContentLoaded', function() {
+  document.body.classList.remove('hide-meaning');
+});
+</script>
 </head>
-<body class="hide-meaning">
+<body>
 <!-- UNIVERSAL HEADER -->
 <div id="sa-header-root"></div>
 
@@ -548,9 +517,9 @@ body:not(.hide-meaning) .mantra-only-box{ display:none !important; }
   <button class="tab-btn" onclick="switchTab('durga',this)">
     <span class="tab-icon">🔱</span> Country / Group / Individual Protection
   </button>
-  <div class="meaning-toggle-wrap">
+  <div class="meaning-toggle-wrap on">
     <span class="mt-label">Mantra (Affirmation) Only</span>
-    <div class="mt-track" id="meaningTrack" onclick="toggleMeaning()">
+    <div class="mt-track" id="meaningTrack" onclick="toggleMeaning()" class="on">
       <div class="mt-thumb" id="meaningThumb"></div>
     </div>
     <span class="mt-label">With Meaning</span>
@@ -573,15 +542,7 @@ body:not(.hide-meaning) .mantra-only-box{ display:none !important; }
     <div class="sh-name">Hanuman Chalisa</div>
     <div class="sh-desc">Forty divine verses composed by Goswami Tulsidas in the 16th century in praise of Lord Hanuman — the embodiment of devotion, strength, and selfless service.</div>
   </div>
-
-  <div class="audio-strip reveal d1">
-    <button class="play-btn" id="playBtn1" onclick="toggleBars('bars1')">▶</button>
-    <div class="audio-info">
-      <div class="audio-title">HANUMAN CHALISA — FULL RECITATION</div>
-      <div class="audio-note">40 Chaupais · Composed by Tulsidas Ji</div>
-    </div>
-    <div class="audio-bars paused" id="bars1">
-      <span></span><span></span><span></span><span></span><span></span>
+<div class="audio-note">40 Chaupais · Composed by Tulsidas Ji</div>
     </div>
   </div>
 
@@ -1106,15 +1067,7 @@ body:not(.hide-meaning) .mantra-only-box{ display:none !important; }
     <div class="sh-name">Sarve Bhavantu Sukhinaḥ</div>
     <div class="sh-desc">The universal prayer of peace — a profound Shanti mantra from the Brihadaranyaka Upanishad, offering wellbeing to all living beings without exception.</div>
   </div>
-
-  <div class="audio-strip reveal d1">
-    <button class="play-btn" id="playBtn2" onclick="toggleBars('bars2')">▶</button>
-    <div class="audio-info">
-      <div class="audio-title">SHANTI MANTRA — UNIVERSAL PRAYER</div>
-      <div class="audio-note">From Brihadaranyaka Upanishad · Yajurveda</div>
-    </div>
-    <div class="audio-bars paused" id="bars2">
-      <span></span><span></span><span></span><span></span><span></span>
+<div class="audio-note">From Brihadaranyaka Upanishad · Yajurveda</div>
     </div>
   </div>
 
@@ -1262,15 +1215,7 @@ body:not(.hide-meaning) .mantra-only-box{ display:none !important; }
     <div class="sh-name">Durga Mantra</div>
     <div class="sh-desc">Sacred mantras of Maa Durga — the supreme feminine divine force who vanquishes darkness, destroys evil, and blesses her devotees with courage, protection, and liberation.</div>
   </div>
-
-  <div class="audio-strip reveal d1">
-    <button class="play-btn" id="playBtn3" onclick="toggleBars('bars3')">▶</button>
-    <div class="audio-info">
-      <div class="audio-title">DURGA MANTRAS — DIVINE FEMININE</div>
-      <div class="audio-note">Devi Mahatmyam · Markandeya Purana</div>
-    </div>
-    <div class="audio-bars paused" id="bars3">
-      <span></span><span></span><span></span><span></span><span></span>
+<div class="audio-note">Devi Mahatmyam · Markandeya Purana</div>
     </div>
   </div>
 
@@ -1496,14 +1441,6 @@ function switchTabByHash(id, e) {
   // find matching tab-btn
   const btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.getAttribute('onclick').includes("'"+id+"'"));
   switchTab(id, btn);
-}
-
-/* ── AUDIO BAR ANIMATION ── */
-function toggleBars(id) {
-  const bars = document.getElementById(id);
-  bars.classList.toggle('paused');
-  const playBtn = bars.previousElementSibling.previousElementSibling;
-  playBtn.textContent = bars.classList.contains('paused') ? '▶' : '⏸';
 }
 
 /* ── SCROLL REVEAL ── */
