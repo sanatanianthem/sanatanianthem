@@ -423,103 +423,6 @@ body{
   </div>
 </section>
 
-<!-- ════════ BOOKING ENGINE ════════ -->
-<section class="booking-section">
-  <div class="sec-inner">
-    <span class="sec-label reveal">✈ Sacred Travel Booking</span>
-    <h2 class="sec-h2 reveal">Book Your <span class="ita">Yatra</span></h2>
-    <div class="sec-rule reveal"><div class="sec-rule-bar"></div><div class="sec-rule-dot"></div></div>
-
-    <div class="disc-strip reveal">
-      🌟 <strong>Sanskrit mein book karo → 10% EXTRA discount!</strong>
-      &nbsp;|&nbsp; Toggle → संस्कृत → Discount auto-applied
-    </div>
-
-    <div class="btabs reveal">
-      <button class="btab on" onclick="setBTab(this,'train')">🚂 Train</button>
-      <button class="btab"    onclick="setBTab(this,'flight')">✈ Flight</button>
-      <button class="btab"    onclick="setBTab(this,'hotel')">🏨 Hotel</button>
-      <button class="btab"    onclick="setBTab(this,'package')">📦 Yatra Package</button>
-    </div>
-
-    <div class="bform reveal">
-      <div class="fgrid">
-        <div class="fg">
-          <label>From — Your City</label>
-          <input id="fromCity" type="text" placeholder="e.g. Delhi, Mumbai, Kolkata...">
-        </div>
-        <div class="fg">
-          <label>Destination — Temple / Pilgrimage</label>
-          <select id="toTemple">
-            <option value="">Select destination...</option>
-            <optgroup label="🔱 Jyotirlinga">
-              <option>Varanasi — Kashi Vishwanath</option>
-              <option>Kedarnath — Himalayan Jyotirlinga</option>
-              <option>Somnath — First Jyotirlinga</option>
-              <option>Rameshwaram — Ramanathaswamy</option>
-              <option>Ujjain — Mahakaleshwar</option>
-              <option>Nashik — Trimbakeshwar</option>
-            </optgroup>
-            <optgroup label="🕉 Char Dham">
-              <option>Badrinath — Char Dham</option>
-              <option>Kedarnath — Char Dham</option>
-              <option>Gangotri — Char Dham</option>
-              <option>Yamunotri — Char Dham</option>
-              <option>Char Dham Yatra (All 4)</option>
-            </optgroup>
-            <optgroup label="🙏 Shakti Peetha">
-              <option>Vaishno Devi — Shakti Peetha</option>
-              <option>Kamakhya — Shakti Peetha, Guwahati</option>
-              <option>Kolkata — Kalighat</option>
-              <option>Vrindavan &amp; Mathura — Krishna Dham</option>
-            </optgroup>
-            <optgroup label="⛩ Famous Temples">
-              <option>Tirupati — Venkateshwara</option>
-              <option>Puri — Jagannath Char Dham</option>
-              <option>Shirdi — Sai Baba</option>
-              <option>Ayodhya — Ram Janmabhoomi</option>
-              <option>Dwarka — Dwarkadhish</option>
-            </optgroup>
-          </select>
-        </div>
-        <div class="fg">
-          <label>Journey Date</label>
-          <input id="jDate" type="date">
-        </div>
-        <div class="fg">
-          <label>Passengers</label>
-          <select id="pCount">
-            <option>1 Person</option><option>2 People</option>
-            <option>3 People</option><option>4 People</option>
-            <option>Family of 5</option><option>Group 6-10</option><option>10+ Group</option>
-          </select>
-        </div>
-      </div>
-      <button class="big-btn" onclick="searchRoute()">
-        🔍 Find Best Route, Train &amp; Hotel Package
-      </button>
-
-      <!-- Result -->
-      <div class="route-box" id="routeBox">
-        <div class="rb-head">
-          <div>
-            <div class="rb-route" id="rbRoute">Delhi → Varanasi</div>
-            <div class="sa-disc-badge" id="saDiscBadge">✅ Sanskrit Discount: −10% Applied!</div>
-          </div>
-          <div class="rb-price">
-            <span class="amount" id="rbAmt">₹8,499</span>
-            <span class="psub">per person · all-inclusive</span>
-          </div>
-        </div>
-        <div class="rb-grid" id="rbGrid"></div>
-        <button class="confirm-btn" onclick="confirmBook()">
-          ✅ Confirm &amp; Book Now — Jai Shri Ram 🙏
-        </button>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- ════════ POPULAR DESTINATIONS ════════ -->
 <section class="dest-section">
   <div class="sec-inner">
@@ -796,7 +699,7 @@ function confirmBook() {
 /* ── QUICK BOOK (destination card) ── */
 function quickBook(dest) {
   document.getElementById('toTemple').value = dest;
-  document.querySelector('.booking-section').scrollIntoView({ behavior:'smooth' });
+  document.querySelector('.dest-section').scrollIntoView({ behavior:'smooth' });
   setTimeout(() => toast('✅ ' + dest.split('—')[0].trim() + ' selected! Fill form & search'), 500);
 }
 
@@ -805,7 +708,7 @@ function bookPackage(dest) {
   document.getElementById('toTemple').value = dest;
   const pkgTab = document.querySelectorAll('.btab')[3];
   setBTab(pkgTab, 'package');
-  document.querySelector('.booking-section').scrollIntoView({ behavior:'smooth' });
+  document.querySelector('.dest-section').scrollIntoView({ behavior:'smooth' });
   toast('📦 Package selected! Enter your city & date');
 }
 
