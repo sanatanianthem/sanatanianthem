@@ -925,11 +925,40 @@ const DEFAULT = {
   marqueeItems:["🕉 जय श्री राम","🔱 हर हर महादेव","🌺 जय माता दी","🐘 गणपति बप्पा मोरया","🦚 राधे राधे","🌸 जय श्री कृष्ण"],
 };
 
+/* ── IN-MEMORY DB (synced from Firebase) ── */
+let _memDB = null;
+
 function getDB(){
-  try{const s=localStorage.getItem('sanatani_cms');return s?JSON.parse(s):DEFAULT;}
-  catch(e){return DEFAULT;}
+  return _memDB || JSON.parse(localStorage.getItem('sanatani_cms') || 'null') || DEFAULT;
 }
-function saveDB(db){localStorage.setItem('sanatani_cms',JSON.stringify(db));}
+
+function saveDB(db){
+  _memDB = db;
+  // Save locally for instant UI response
+  localStorage.setItem('sanatani_cms', JSON.stringify(db));
+  // Save to Firebase — syncs to ALL devices
+  adminRTDB.ref('cms').set(db).catch(e => console.error('Firebase save error:', e));
+}
+
+function initFirebaseSync(){
+  // Listen to Firebase CMS data — load on startup
+  adminRTDB.ref('cms').on('value', snapshot => {
+    const data = snapshot.val();
+    if(data){
+      _memDB = data;
+      localStorage.setItem('sanatani_cms', JSON.stringify(data));
+      // Re-render current page with fresh data
+      const activePage = document.querySelector('.page.active');
+      if(activePage){
+        const pageId = activePage.id.replace('page-','');
+        renderPage(pageId);
+      }
+    } else {
+      // Firebase empty — push DEFAULT data up
+      adminRTDB.ref('cms').set(DEFAULT);
+    }
+  });
+}
 function genId(){return Math.random().toString(36).slice(2,9);}
 
 /* ── NAVIGATION ── */
@@ -1882,6 +1911,8 @@ const firebaseConfig = {
 };
 if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 const adminRTDB = firebase.database();
+// Start Firebase sync immediately
+setTimeout(initFirebaseSync, 100);
 
 /* ── Listen for new recordings in Firebase ── */
 adminRTDB.ref('pujaRecordings').on('value', snapshot => {
