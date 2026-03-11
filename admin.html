@@ -216,6 +216,9 @@ textarea.form-input{resize:vertical;min-height:80px}
 .sidebar::-webkit-scrollbar,.main::-webkit-scrollbar{width:4px}
 .sidebar::-webkit-scrollbar-thumb,.main::-webkit-scrollbar-thumb{background:rgba(212,175,55,.15);border-radius:2px}
 </style>
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 </head>
 <body>
 <div class="app">
@@ -1863,6 +1866,92 @@ setInterval(() => {
   const badge = document.getElementById('rec-pending-badge');
   if(badge) { badge.textContent = pending; badge.style.display = pending > 0 ? 'inline-flex' : 'none'; }
 }, 5000);
+
+
+/* ════════════════════════════════════════
+   FIREBASE INIT — ADMIN PANEL
+════════════════════════════════════════ */
+const firebaseConfig = {
+  apiKey: "AIzaSyBC1yt-YE74pKCKMfukmc7_3vicM49h6vE",
+  authDomain: "sanatanianthem-652a3.firebaseapp.com",
+  databaseURL: "https://sanatanianthem-652a3-default-rtdb.firebaseio.com",
+  projectId: "sanatanianthem-652a3",
+  storageBucket: "sanatanianthem-652a3.firebasestorage.app",
+  messagingSenderId: "1031082702558",
+  appId: "1:1031082702558:web:744ffa9cfa54ff838db44f"
+};
+if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const adminRTDB = firebase.database();
+
+/* ── Listen for new recordings in Firebase ── */
+adminRTDB.ref('pujaRecordings').on('value', snapshot => {
+  const data = snapshot.val() || {};
+  const recs = Object.values(data).sort((a,b) => new Date(b.recordedAt) - new Date(a.recordedAt));
+
+  // Sync to localStorage so existing renderRecordingsPage works
+  const db = getDB();
+  db.pujaRecordings = recs;
+  saveDB(db);
+
+  // Update pending badge
+  const pending = recs.filter(r => r.status === 'pending').length;
+  const badge = document.getElementById('rec-pending-badge');
+  if(badge) {
+    badge.textContent = pending;
+    badge.style.display = pending > 0 ? 'inline-flex' : 'none';
+  }
+
+  // Re-render if on recordings page
+  const recPage = document.getElementById('page-recordings');
+  if(recPage && recPage.style.display !== 'none') {
+    renderRecordingsPage(getDB());
+  }
+
+  // Show toast for new pending recordings
+  if(pending > 0 && document.getElementById('page-recordings') &&
+     document.getElementById('page-recordings').style.display === 'none') {
+    // only notify if not already on recordings page
+  }
+});
+
+/* ── Listen for live streams ── */
+adminRTDB.ref('liveStreams').on('value', snapshot => {
+  const data = snapshot.val() || {};
+  const liveList = Object.values(data).filter(s => s && s.isLive);
+  const liveIndicator = document.getElementById('live-indicator');
+  if(liveIndicator) {
+    if(liveList.length > 0) {
+      liveIndicator.textContent = '🔴 ' + liveList[0].mandirName + ' LIVE';
+      liveIndicator.style.display = 'inline-flex';
+    } else {
+      liveIndicator.style.display = 'none';
+    }
+  }
+});
+
+/* ── Override approveRecording to also update Firebase ── */
+const _origApprove = approveRecording;
+approveRecording = function(recId) {
+  // Call original (handles email sending)
+  _origApprove(recId);
+  // Also update Firebase status
+  adminRTDB.ref('pujaRecordings/' + recId + '/status').set('approved');
+  adminRTDB.ref('pujaRecordings/' + recId + '/approvedAt').set(new Date().toISOString());
+};
+
+/* ── Override rejectRecording to also delete from Firebase ── */
+const _origReject = rejectRecording;
+rejectRecording = function(recId) {
+  if(!confirm('Is recording ko delete karein?')) return;
+  // Delete from Firebase
+  adminRTDB.ref('pujaRecordings/' + recId).remove();
+  // Delete from localStorage
+  const db = getDB();
+  db.pujaRecordings = (db.pujaRecordings || []).filter(r => r.id !== recId);
+  saveDB(db);
+  renderRecordingsPage(db);
+  adminToast('Recording delete ho gayi.');
+};
 
 </script>
 </body>
