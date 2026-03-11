@@ -6,6 +6,7 @@
 <title>SanataniAnthem – Purohit Portal</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Noto+Sans+Devanagari:wght@400;600&family=Lora:wght@400;600&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
 <style>
 :root{--saffron:#FF6B00;--saffron-d:#C95000;--gold:#D4AF37;--gold-h:#E8CC6A;--maroon:#5A0E0E;--cream:#FFF6E5;--bg-dark:#140800;--green:#16A34A;}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -73,6 +74,8 @@ textarea.input{resize:vertical;min-height:80px}
 .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
 @keyframes spin{to{transform:rotate(360deg)}}
 .spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
 @media(max-width:480px){.main{padding:16px 12px}.card{padding:16px}.input.code-input{font-size:18px;letter-spacing:4px}}
 </style>
 </head>
@@ -151,6 +154,33 @@ textarea.input{resize:vertical;min-height:80px}
         <span>&#x1FA54; Upload Video &amp; Email Subscriber</span>
       </button>
     </div>
+    <!-- LIVE STREAMING CARD -->
+    <div class="card" id="live-card" style="border-color:rgba(229,62,62,.3)">
+      <div class="card-title" style="color:#FC8181">&#x1F534; Live Puja Streaming</div>
+      <div id="live-offline">
+        <p style="font-size:13px;color:rgba(255,246,229,.5);margin-bottom:16px;line-height:1.6">
+          "Start Live" dabao - tumhara camera seedha website pe live ho jaayega. Koi ID share nahi karni, automatic! &#x2705;
+        </p>
+        <button class="btn" onclick="startLive()" id="start-live-btn" style="background:linear-gradient(135deg,#E53E3E,#C53030);color:#fff;box-shadow:0 4px 20px rgba(229,62,62,.3)">
+          <span>&#x1F534; Start Live Puja</span>
+        </button>
+      </div>
+      <div id="live-active" style="display:none">
+        <div style="position:relative;border-radius:10px;overflow:hidden;background:#000;margin-bottom:14px">
+          <video id="local-video" autoplay muted playsinline style="width:100%;display:block;max-height:260px;object-fit:cover"></video>
+          <div style="position:absolute;top:10px;left:10px;background:rgba(229,62,62,.9);color:#fff;font-family:'Cinzel',serif;font-size:11px;letter-spacing:1px;padding:4px 10px;border-radius:20px;display:flex;align-items:center;gap:6px">
+            <span style="width:7px;height:7px;background:#fff;border-radius:50%;animation:blink 1s infinite"></span> LIVE
+          </div>
+          <div style="position:absolute;bottom:10px;right:10px;background:rgba(0,0,0,.6);color:rgba(255,255,255,.7);font-family:'Cinzel',serif;font-size:10px;padding:3px 8px;border-radius:4px" id="viewer-count">&#x1F441; 0 viewers</div>
+        </div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-ghost" onclick="toggleCamera()" id="cam-btn" style="flex:1;font-size:10px;padding:10px">&#x1F4F7; Camera Off</button>
+          <button class="btn btn-ghost" onclick="stopLive()" style="flex:1;font-size:10px;padding:10px;border-color:rgba(229,62,62,.4);color:#FC8181">&#x23F9; Stop Live</button>
+        </div>
+      </div>
+      <div id="live-error" style="display:none;background:rgba(229,62,62,.08);border:1px solid rgba(229,62,62,.3);border-radius:8px;padding:14px;font-size:12px;color:#FC8181;font-family:Cinzel,serif;margin-top:12px"></div>
+    </div>
+
     <div class="card">
       <div class="card-title">&#x1F4CB; Is Temple Ke Subscribers (<span id="sub-count">0</span>)</div>
       <div id="subs-list"><div style="color:rgba(255,246,229,.3);font-size:13px;text-align:center;padding:20px">Loading...</div></div>
@@ -196,11 +226,11 @@ textarea.input{resize:vertical;min-height:80px}
    5. Account > Public Key copy karo
 ================================================================ */
 const CONFIG = {
-  CLOUDINARY_CLOUD_NAME:    'dfx2veoqn',
-  CLOUDINARY_UPLOAD_PRESET: 'SanataniAnthem',
-  EMAILJS_PUBLIC_KEY:       'KbAWcBNxayfWnSH4R',
-  EMAILJS_SERVICE_ID:       'service_mw59a1f',
-  EMAILJS_TEMPLATE_ID:      'template_4y3hreg',
+  CLOUDINARY_CLOUD_NAME:    'YOUR_CLOUD_NAME',
+  CLOUDINARY_UPLOAD_PRESET: 'YOUR_UPLOAD_PRESET',
+  EMAILJS_PUBLIC_KEY:       'YOUR_EMAILJS_PUBLIC_KEY',
+  EMAILJS_SERVICE_ID:       'YOUR_SERVICE_ID',
+  EMAILJS_TEMPLATE_ID:      'YOUR_TEMPLATE_ID',
 };
 
 let currentMandir=null,selectedSubscriber=null,selectedFile=null;
@@ -394,6 +424,164 @@ function doLogout(){
   window.scrollTo({top:0,behavior:'smooth'});
   showToast('Logout. Jai Shri Ram! 🙏');
 }
+
+/* ════════════════════════════════════════
+   LIVE STREAMING — WebRTC via PeerJS
+════════════════════════════════════════ */
+let livePeer = null;
+let localStream = null;
+let activeConnections = [];
+let viewerCountInterval = null;
+let camOn = true;
+
+function getLivePeerId() {
+  // Fixed peer ID based on mandir code — always same, no sharing needed
+  return 'sanatani-live-' + (currentMandir ? currentMandir.code.toLowerCase() : 'default');
+}
+
+async function startLive() {
+  const btn = document.getElementById('start-live-btn');
+  btn.innerHTML = '<div class="spinner"></div><span>Camera starting...</span>';
+  btn.disabled = true;
+  document.getElementById('live-error').style.display = 'none';
+
+  try {
+    // Get camera stream
+    localStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'environment', width: {ideal:1280}, height: {ideal:720} },
+      audio: true
+    });
+
+    // Show local preview
+    document.getElementById('local-video').srcObject = localStream;
+
+    // Create PeerJS instance with fixed ID
+    const peerId = getLivePeerId();
+    livePeer = new Peer(peerId, {
+      host: '0.peerjs.com',
+      port: 443,
+      path: '/',
+      secure: true,
+      debug: 0
+    });
+
+    livePeer.on('open', (id) => {
+      // Mark as live in localStorage — index.html will detect this
+      const db = getDB();
+      if (!db.liveStreams) db.liveStreams = {};
+      db.liveStreams[currentMandir.id] = {
+        peerId: id,
+        mandirId: currentMandir.id,
+        mandirName: currentMandir.name,
+        mandirEmoji: currentMandir.emoji || '🛕',
+        startTime: new Date().toISOString(),
+        isLive: true
+      };
+      saveDB(db);
+
+      // Show live UI
+      document.getElementById('live-offline').style.display = 'none';
+      document.getElementById('live-active').style.display = 'block';
+      showToast('🔴 Live shuru! Website pe dikhe laga');
+
+      // Count viewers every 3s
+      viewerCountInterval = setInterval(updateViewerCount, 3000);
+    });
+
+    // When viewer connects, send them the stream
+    livePeer.on('call', (call) => {
+      call.answer(localStream);
+      activeConnections.push(call);
+      updateViewerCount();
+
+      call.on('close', () => {
+        activeConnections = activeConnections.filter(c => c !== call);
+        updateViewerCount();
+      });
+      call.on('error', () => {
+        activeConnections = activeConnections.filter(c => c !== call);
+      });
+    });
+
+    livePeer.on('error', (err) => {
+      if (err.type === 'unavailable-id') {
+        // ID already taken — another stream is live, use unique fallback
+        const fallbackId = getLivePeerId() + '-' + Date.now();
+        showLiveError('Ek aur stream already chal rahi hai. Pehli band karo.');
+        stopLive();
+      } else {
+        showLiveError('Connection error: ' + err.message);
+      }
+    });
+
+  } catch(err) {
+    btn.innerHTML = '<span>&#x1F534; Start Live Puja</span>';
+    btn.disabled = false;
+    if (err.name === 'NotAllowedError') {
+      showLiveError('Camera permission denied. Browser settings mein allow karo.');
+    } else {
+      showLiveError('Camera start nahi hua: ' + err.message);
+    }
+  }
+}
+
+function stopLive() {
+  // Stop all tracks
+  if (localStream) {
+    localStream.getTracks().forEach(t => t.stop());
+    localStream = null;
+  }
+  // Close peer
+  if (livePeer) {
+    livePeer.destroy();
+    livePeer = null;
+  }
+  // Clear connections
+  activeConnections = [];
+  if (viewerCountInterval) clearInterval(viewerCountInterval);
+
+  // Remove from localStorage
+  const db = getDB();
+  if (db.liveStreams && currentMandir) {
+    delete db.liveStreams[currentMandir.id];
+    saveDB(db);
+  }
+
+  // Reset UI
+  document.getElementById('live-offline').style.display = 'block';
+  document.getElementById('live-active').style.display = 'none';
+  document.getElementById('start-live-btn').innerHTML = '<span>&#x1F534; Start Live Puja</span>';
+  document.getElementById('start-live-btn').disabled = false;
+  document.getElementById('local-video').srcObject = null;
+  showToast('Live stream band ho gayi.');
+}
+
+function toggleCamera() {
+  if (!localStream) return;
+  const videoTrack = localStream.getVideoTracks()[0];
+  if (!videoTrack) return;
+  camOn = !camOn;
+  videoTrack.enabled = camOn;
+  document.getElementById('cam-btn').textContent = camOn ? '📷 Camera Off' : '📷 Camera On';
+}
+
+function updateViewerCount() {
+  const count = activeConnections.length;
+  document.getElementById('viewer-count').textContent = '👁 ' + count + ' viewer' + (count !== 1 ? 's' : '');
+}
+
+function showLiveError(msg) {
+  const el = document.getElementById('live-error');
+  el.textContent = '⚠️ ' + msg;
+  el.style.display = 'block';
+}
+
+// Stop live when purohit logs out
+const _origLogout = doLogout;
+doLogout = function() {
+  if (livePeer) stopLive();
+  _origLogout();
+};
 
 function showToast(msg){
   const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
