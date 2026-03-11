@@ -283,9 +283,18 @@ async function startLive(){
   try{
     // Get camera + mic
     localStream = await navigator.mediaDevices.getUserMedia({
-      video:{facingMode:'environment',width:{ideal:1280},height:{ideal:720}},
-      audio:true
+      video:{
+        facingMode:{ideal:'environment'},
+        width:{ideal:1280},
+        height:{ideal:720},
+        frameRate:{ideal:30}
+      },
+      audio:{
+        echoCancellation:true,
+        noiseSuppression:true
+      }
     });
+    console.log('Stream tracks:', localStream.getTracks().map(t=>t.kind+':'+t.label));
 
     document.getElementById('prepare-text').textContent='Live connect ho raha hai...';
 
@@ -324,10 +333,15 @@ async function startLive(){
     });
 
     livePeer.on('call', call=>{
-      call.answer(localStream);
-      activeConnections.push(call);
-      updateViewerCount();
-      call.on('close',()=>{activeConnections=activeConnections.filter(c=>c!==call);updateViewerCount()});
+      // Answer with full stream (video+audio)
+      if(localStream) {
+        call.answer(localStream);
+        activeConnections.push(call);
+        updateViewerCount();
+        call.on('close',()=>{activeConnections=activeConnections.filter(c=>c!==call);updateViewerCount()});
+        call.on('error', ()=>{activeConnections=activeConnections.filter(c=>c!==call);updateViewerCount()});
+        showToast('Ek viewer join kiya! 👁');
+      }
     });
 
     livePeer.on('error', err=>{
