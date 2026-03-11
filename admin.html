@@ -250,8 +250,19 @@ textarea.form-input{resize:vertical;min-height:80px}
   <div class="nav-item" onclick="showPage('festivals',this)"><span class="nav-icon">🎉</span>Festivals</div>
   <div class="nav-item" onclick="showPage('knowledge',this)"><span class="nav-icon">📖</span>Knowledge</div>
 
-  <div class="sidebar-section">Platform</div>
-  <div class="nav-item" onclick="showPage('users',this)"><span class="nav-icon">👥</span>Users</div>
+  <div class="sidebar-section">Puja Subscriptions</div>
+  <div class="nav-item" onclick="showPage('subscriptions',this)"><span class="nav-icon">🙏</span>Subscriptions<span class="nav-badge" id="sub-count-badge">0</span></div>
+  <div class="nav-item" onclick="showPage('mandirs',this)"><span class="nav-icon">🛕</span>Manage Mandirs</div>
+
+
+    <div class="sidebar-section">
+
+  <div class="sidebar-section">Puja Subscriptions</div>
+  <div class="nav-item" onclick="showPage('subscriptions',this)"><span class="nav-icon">🙏</span>Subscriptions<span class="nav-badge" id="sub-count-badge">0</span></div>
+  <div class="nav-item" onclick="showPage('mandirs',this)"><span class="nav-icon">🛕</span>Manage Mandirs</div>
+  <div class="nav-item" onclick="showPage('purohit',this)"><span class="nav-icon">👳</span>Purohit Portal</div>
+
+  <div class="sidebar-section <div class="nav-item" onclick="showPage('users',this)"><span class="nav-icon">👥</span>Users</div>
   <div class="nav-item" onclick="showPage('donations',this)"><span class="nav-icon">💛</span>Donations</div>
   <div class="nav-item" onclick="showPage('notifications',this)"><span class="nav-icon">🔔</span>Notifications</div>
   <div class="nav-item" onclick="showPage('settings',this)"><span class="nav-icon">⚙️</span>Settings</div>
@@ -499,6 +510,78 @@ textarea.form-input{resize:vertical;min-height:80px}
     <div class="card">
       <div class="card-header"><span class="card-title">💰 Recent Transactions</span></div>
       <div id="donations-table-wrap"></div>
+    </div>
+  </div>
+
+<!-- SUBSCRIPTIONS PAGE -->
+  <div class="page" id="page-subscriptions">
+    <div class="page-title">Puja Subscriptions</div>
+    <div class="page-sub">All active Rs.200/month subscribers. Each gets 4 pujas/month at their chosen temple.</div>
+    <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:24px">
+      <div class="stat-card"><div class="stat-header"><div class="stat-icon" style="background:rgba(255,107,0,.1)">🙏</div><span class="stat-trend up" id="sub-stat-trend">Live</span></div><div class="stat-value" id="sub-stat-active">0</div><div class="stat-label">Active Subscribers</div></div>
+      <div class="stat-card"><div class="stat-header"><div class="stat-icon" style="background:rgba(212,175,55,.1)">Rs</div></div><div class="stat-value" id="sub-stat-revenue">Rs.0</div><div class="stat-label">Monthly Revenue</div></div>
+      <div class="stat-card"><div class="stat-header"><div class="stat-icon" style="background:rgba(34,197,94,.1)">🎥</div></div><div class="stat-value" id="sub-stat-pujas">0</div><div class="stat-label">Pujas Performed</div></div>
+      <div class="stat-card"><div class="stat-header"><div class="stat-icon" style="background:rgba(59,130,246,.1)">📅</div></div><div class="stat-value" id="sub-stat-pending">0</div><div class="stat-label">Pending This Week</div></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">All Subscribers</span><div style="display:flex;gap:8px;align-items:center"><input style="background:rgba(255,255,255,.05);border:1px solid rgba(212,175,55,.2);color:var(--text);padding:6px 12px;border-radius:var(--r);font-size:12px;width:200px;outline:none" placeholder="Search by name..." id="sub-search" oninput="filterSubscriptions()"/><select style="background:var(--panel2);border:1px solid rgba(212,175,55,.2);color:var(--text);padding:6px 10px;border-radius:var(--r);font-size:12px;cursor:pointer" id="sub-filter" onchange="filterSubscriptions()"><option value="all">All Status</option><option value="active">Active</option><option value="paused">Paused</option><option value="cancelled">Cancelled</option></select></div></div>
+      <div id="subscriptions-table"></div>
+    </div>
+  </div>
+
+  <!-- MANDIRS MANAGER PAGE -->
+  <div class="page" id="page-mandirs">
+    <div class="page-title">Manage Mandirs</div>
+    <div class="page-sub">Add, edit or remove temples. Changes reflect instantly on the subscription form.</div>
+    <div style="display:flex;gap:12px;margin-bottom:24px"><button class="tb-btn tb-btn-primary" onclick="openAddMandir()">+ Add New Mandir</button><a href="puja-subscription.html" target="_blank" class="tb-btn tb-btn-ghost" style="text-decoration:none">Preview Subscription Form</a></div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">Active Mandirs</span><span style="font-size:12px;color:var(--text-l)" id="mandir-count">0 temples</span></div>
+      <div id="mandirs-list"></div>
+    </div>
+    <div id="add-mandir-form" style="display:none">
+      <div class="card" style="border-color:rgba(255,107,0,.3);margin-top:16px">
+        <div class="card-header"><span class="card-title">Add New Mandir</span><button onclick="closeAddMandir()" style="color:var(--text-l);font-size:18px;cursor:pointer;background:none;border:none">X</button></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div class="form-group"><label class="form-label">Mandir Name *</label><input class="form-input" id="nm-name" placeholder="e.g. Kashi Vishwanath"/></div>
+          <div class="form-group"><label class="form-label">Location *</label><input class="form-input" id="nm-loc" placeholder="e.g. Varanasi, UP"/></div>
+          <div class="form-group"><label class="form-label">Emoji Icon</label><input class="form-input" id="nm-emoji" placeholder="Temple emoji" style="font-size:20px"/></div>
+          <div class="form-group"><label class="form-label">Purohit Name</label><input class="form-input" id="nm-purohit" placeholder="e.g. Pandit Ramesh Sharma"/></div>
+          <div class="form-group"><label class="form-label">Purohit Phone</label><input class="form-input" id="nm-phone" placeholder="+91 98765 43210"/></div>
+          <div class="form-group"><label class="form-label">Upload Code</label><input class="form-input" id="nm-code" placeholder="e.g. KASHI7"/></div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:8px"><button class="tb-btn tb-btn-primary" onclick="saveMandir()">Save Mandir</button><button class="tb-btn tb-btn-ghost" onclick="closeAddMandir()">Cancel</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PUROHIT LINK PAGE -->
+  <div class="page" id="page-purohit">
+    <div class="page-title">Purohit Portal Link</div>
+    <div class="page-sub">Share this separate link with your purohits. They can ONLY upload puja videos — they cannot access admin panel.</div>
+    <div class="card" style="max-width:600px;border-color:rgba(34,197,94,.2)">
+      <div class="card-header"><span class="card-title" style="color:#22C55E">🔒 Secure Purohit Portal</span></div>
+      <p style="font-size:13px;color:var(--text-m);margin-bottom:20px;line-height:1.7">
+        Purohit portal is a <strong style="color:var(--text)">separate page</strong> from this admin panel. Purohits can only:<br>
+        ✅ Login with their secret code<br>
+        ✅ See subscribers at their temple<br>
+        ✅ Upload Google Drive video link<br>
+        ❌ Cannot access admin panel<br>
+        ❌ Cannot see other temples' data
+      </p>
+      <div class="form-group">
+        <label class="form-label">Purohit Portal URL</label>
+        <div style="display:flex;gap:8px;align-items:center">
+          <input class="form-input" id="purohit-url-display" value="purohit.html" readonly style="background:var(--panel3);cursor:text;letter-spacing:1px"/>
+          <button class="tb-btn tb-btn-primary" onclick="copyPurohitLink()" style="white-space:nowrap">Copy Link</button>
+          <a href="purohit.html" target="_blank" class="tb-btn tb-btn-ghost" style="text-decoration:none;white-space:nowrap">Open →</a>
+        </div>
+        <div style="font-size:11px;color:var(--text-l);margin-top:6px">In production, replace with your full domain URL: https://yourdomain.com/purohit.html</div>
+      </div>
+    </div>
+    <div class="card" style="max-width:600px">
+      <div class="card-header"><span class="card-title">👳 Purohit Upload Codes</span></div>
+      <p style="font-size:13px;color:var(--text-m);margin-bottom:16px">Each mandir has a unique secret code. Share ONLY that mandir's code with its purohit.</p>
+      <div id="purohit-codes-list">Loading...</div>
     </div>
   </div>
 
@@ -1243,6 +1326,344 @@ function showToast(msg){
 
 /* ── INIT ── */
 renderPage('dashboard');
+
+
+/* ═══════════════════════════════════════════
+   SUBSCRIPTION MANAGEMENT JS
+═══════════════════════════════════════════ */
+
+/* ── RENDER SUBSCRIPTIONS PAGE ── */
+function renderSubscriptionsPage(db) {
+  const subs = db.subscriptions || [];
+  const active = subs.filter(s => s.status === 'active');
+  const el = id => document.getElementById(id);
+
+  if(el('sub-stat-active')) el('sub-stat-active').textContent = active.length;
+  if(el('sub-stat-revenue')) el('sub-stat-revenue').textContent = 'Rs.' + (active.length * 200).toLocaleString('en-IN');
+  if(el('sub-stat-pujas')) el('sub-stat-pujas').textContent = subs.reduce((a,s) => a + (s.totalPujas||0), 0);
+  if(el('sub-stat-pending')) el('sub-stat-pending').textContent = countPendingThisWeek(subs);
+  if(el('sub-count-badge')) el('sub-count-badge').textContent = active.length;
+
+  renderSubscriptionsTable(subs);
+}
+
+function countPendingThisWeek(subs) {
+  const today = new Date().getDate();
+  const weekEnd = today + 7;
+  let count = 0;
+  subs.filter(s => s.status === 'active').forEach(s => {
+    (s.pujasDates || []).forEach(d => {
+      if (d >= today && d <= weekEnd) count++;
+    });
+  });
+  return count;
+}
+
+function renderSubscriptionsTable(subs) {
+  const wrap = document.getElementById('subscriptions-table');
+  if (!wrap) return;
+  if (!subs || subs.length === 0) {
+    wrap.innerHTML = '<div style="padding:40px;text-align:center;color:var(--text-l);font-family:Cinzel,serif;font-size:13px">No subscribers yet. Share your subscription form to get started!</div>';
+    return;
+  }
+
+  const tableStyle = 'width:100%;border-collapse:collapse;font-size:13px';
+  const thStyle = 'padding:10px 14px;text-align:left;font-family:Cinzel,serif;font-size:10px;letter-spacing:1px;color:var(--text-l);border-bottom:1px solid var(--border);white-space:nowrap';
+  const tdStyle = 'padding:12px 14px;border-bottom:1px solid rgba(212,175,55,.06);color:var(--text-m)';
+
+  const statusColor = { active: '#22C55E', paused: '#F59E0B', cancelled: '#EF4444' };
+
+  wrap.innerHTML = '<div style="overflow-x:auto"><table style="' + tableStyle + '"><thead><tr>' +
+    ['Name', 'Temple', 'Email', 'Puja Dates', 'Start Date', 'Pujas Done', 'Status', 'Actions'].map(h => '<th style="' + thStyle + '">' + h + '</th>').join('') +
+    '</tr></thead><tbody>' +
+    subs.map(s => '<tr>' +
+      '<td style="' + tdStyle + ';color:var(--text);font-weight:500">' + s.name + (s.gotra ? '<br><span style="font-size:11px;color:var(--text-l)">Gotra: ' + s.gotra + '</span>' : '') + '</td>' +
+      '<td style="' + tdStyle + '">' + (s.mandir ? s.mandir.name : '—') + '</td>' +
+      '<td style="' + tdStyle + '">' + s.email + '</td>' +
+      '<td style="' + tdStyle + '">' + (s.pujasDates || []).map(d => d + 'th').join(', ') + '</td>' +
+      '<td style="' + tdStyle + '">' + (s.startDate ? new Date(s.startDate).toLocaleDateString('en-IN') : '—') + '</td>' +
+      '<td style="' + tdStyle + ';text-align:center">' + (s.totalPujas || 0) + '</td>' +
+      '<td style="' + tdStyle + '"><span style="background:' + (statusColor[s.status]||'#888') + '22;color:' + (statusColor[s.status]||'#888') + ';padding:3px 10px;border-radius:20px;font-family:Cinzel,serif;font-size:10px;letter-spacing:1px">' + (s.status||'active').toUpperCase() + '</span></td>' +
+      '<td style="' + tdStyle + '"><div style="display:flex;gap:6px">' +
+        '<button onclick="toggleSubStatus(\'' + s.id + '\')" style="padding:4px 10px;border-radius:4px;border:1px solid rgba(212,175,55,.3);background:none;color:var(--text-m);font-size:11px;cursor:pointer">' + (s.status==='active'?'Pause':'Activate') + '</button>' +
+        '<button onclick="cancelSub(\'' + s.id + '\')" style="padding:4px 10px;border-radius:4px;border:1px solid rgba(239,68,68,.3);background:none;color:#EF4444;font-size:11px;cursor:pointer">Cancel</button>' +
+      '</div></td>' +
+    '</tr>').join('') +
+    '</tbody></table></div>';
+}
+
+function filterSubscriptions() {
+  const db = getDB();
+  let subs = db.subscriptions || [];
+  const search = (document.getElementById('sub-search')||{}).value?.toLowerCase() || '';
+  const filter = (document.getElementById('sub-filter')||{}).value || 'all';
+  if (search) subs = subs.filter(s => s.name.toLowerCase().includes(search) || (s.mandir && s.mandir.name.toLowerCase().includes(search)));
+  if (filter !== 'all') subs = subs.filter(s => s.status === filter);
+  renderSubscriptionsTable(subs);
+}
+
+function toggleSubStatus(id) {
+  const db = getDB();
+  const sub = (db.subscriptions || []).find(s => s.id === id);
+  if (!sub) return;
+  sub.status = sub.status === 'active' ? 'paused' : 'active';
+  saveDB(db);
+  renderPage('subscriptions');
+  adminToast('Subscription status updated');
+}
+
+function cancelSub(id) {
+  if (!confirm('Cancel this subscription? This cannot be undone.')) return;
+  const db = getDB();
+  const sub = (db.subscriptions || []).find(s => s.id === id);
+  if (!sub) return;
+  sub.status = 'cancelled';
+  saveDB(db);
+  renderPage('subscriptions');
+  adminToast('Subscription cancelled');
+}
+
+/* ── MANDIRS ── */
+function renderMandirAdmin(db) {
+  const mandirs = db.mandirs || getDefaultMandirs();
+  const list = document.getElementById('mandirs-list');
+  const count = document.getElementById('mandir-count');
+  if (!list) return;
+  if (count) count.textContent = mandirs.length + ' temples';
+
+  const rowStyle = 'display:flex;align-items:center;gap:14px;padding:14px 16px;border:1px solid var(--border);border-radius:var(--r);margin-bottom:8px;background:var(--panel2)';
+
+  list.innerHTML = mandirs.map(m => '<div style="' + rowStyle + '">' +
+    '<span style="font-size:28px">' + (m.emoji||'🛕') + '</span>' +
+    '<div style="flex:1">' +
+      '<div style="font-family:Cinzel,serif;font-size:13px;color:var(--text)">' + m.name + '</div>' +
+      '<div style="font-size:11px;color:var(--text-l);margin-top:2px">📍 ' + m.location + (m.purohit ? ' • Purohit: ' + m.purohit : '') + (m.code ? ' • Code: <strong style=color:var(--saffron)>' + m.code + '</strong>' : '') + '</div>' +
+    '</div>' +
+    '<div style="display:flex;align-items:center;gap:8px">' +
+      '<label class="toggle" title="Active/Inactive"><input type="checkbox" ' + (m.active!==false?'checked':'') + ' onchange="toggleMandirActive(\'' + m.id + '\',this.checked)"><span class="toggle-slider"></span></label>' +
+      '<button onclick="deleteMandir(\'' + m.id + '\')" style="padding:4px 10px;border-radius:4px;border:1px solid rgba(239,68,68,.3);background:none;color:#EF4444;font-size:11px;cursor:pointer">Remove</button>' +
+    '</div>' +
+  '</div>').join('');
+
+  if (mandirs.length === 0) list.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-l);font-size:13px">No mandirs added yet. Add your first temple above.</div>';
+}
+
+function getDefaultMandirs() {
+  return [
+    {id:'m1',name:'Kashi Vishwanath',location:'Varanasi, UP',emoji:'🛕',active:true},
+    {id:'m2',name:'Tirupati Balaji',location:'Tirupati, AP',emoji:'🙏',active:true},
+    {id:'m3',name:'Vaishno Devi',location:'Katra, J&K',emoji:'⛰️',active:true},
+    {id:'m4',name:'Jagannath Puri',location:'Puri, Odisha',emoji:'🌊',active:true},
+    {id:'m5',name:'Somnath Mandir',location:'Prabhas Patan, GJ',emoji:'🌙',active:true},
+    {id:'m6',name:'Shirdi Sai Baba',location:'Shirdi, MH',emoji:'🌹',active:true},
+  ];
+}
+
+function openAddMandir() { document.getElementById('add-mandir-form').style.display='block'; }
+function closeAddMandir() { document.getElementById('add-mandir-form').style.display='none'; }
+
+function saveMandir() {
+  const name = document.getElementById('nm-name').value.trim();
+  const loc = document.getElementById('nm-loc').value.trim();
+  if (!name || !loc) { adminToast('Name and location are required'); return; }
+  const db = getDB();
+  if (!db.mandirs) db.mandirs = getDefaultMandirs();
+  const code = document.getElementById('nm-code').value.trim().toUpperCase() || name.slice(0,5).toUpperCase() + Math.floor(Math.random()*9+1);
+  db.mandirs.push({
+    id: 'm' + Date.now(),
+    name, location: loc,
+    emoji: document.getElementById('nm-emoji').value.trim() || '🛕',
+    purohit: document.getElementById('nm-purohit').value.trim(),
+    phone: document.getElementById('nm-phone').value.trim(),
+    code, active: true
+  });
+  saveDB(db);
+  closeAddMandir();
+  ['nm-name','nm-loc','nm-emoji','nm-purohit','nm-phone','nm-code'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
+  renderPage('mandirs');
+  adminToast('Mandir added! Now visible on subscription form.');
+}
+
+function toggleMandirActive(id, val) {
+  const db = getDB();
+  if (!db.mandirs) db.mandirs = getDefaultMandirs();
+  const m = db.mandirs.find(m => m.id === id);
+  if (m) { m.active = val; saveDB(db); adminToast('Mandir ' + (val?'activated':'deactivated')); }
+}
+
+function deleteMandir(id) {
+  if (!confirm('Remove this mandir from subscriptions?')) return;
+  const db = getDB();
+  if (!db.mandirs) return;
+  db.mandirs = db.mandirs.filter(m => m.id !== id);
+  saveDB(db);
+  renderPage('mandirs');
+  adminToast('Mandir removed');
+}
+
+/* ── PUROHIT PORTAL ── */
+let currentPurohitMandir = null;
+
+function purohitLogin() {
+  const code = (document.getElementById('purohit-code').value||'').trim().toUpperCase();
+  if (!code) { adminToast('Enter your upload code'); return; }
+  const db = getDB();
+  const mandirs = db.mandirs || getDefaultMandirs();
+  const mandir = mandirs.find(m => m.code && m.code.toUpperCase() === code);
+  if (!mandir) { adminToast('Invalid code. Contact admin.'); return; }
+  currentPurohitMandir = mandir;
+  document.getElementById('purohit-temple-name').textContent = mandir.name + ' — ' + mandir.location;
+  document.getElementById('purohit-panel').style.display = 'block';
+
+  // Load subscribers for this temple
+  const subs = (db.subscriptions || []).filter(s => s.mandir && s.mandir.id === mandir.id && s.status === 'active');
+  const list = document.getElementById('purohit-pujas-list');
+  if (subs.length === 0) {
+    list.innerHTML = '<div style="padding:20px;color:var(--text-l);font-size:13px">No active subscribers at this temple yet.</div>';
+  } else {
+    list.innerHTML = subs.map(s => '<div style="display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--border);border-radius:var(--r);margin-bottom:8px;background:var(--panel2)">' +
+      '<span style="font-size:24px">🙏</span>' +
+      '<div style="flex:1"><div style="font-size:13px;color:var(--text)">' + s.name + (s.gotra ? ' (' + s.gotra + ')' : '') + '</div>' +
+      '<div style="font-size:11px;color:var(--text-l)">Puja dates: ' + (s.pujasDates||[]).map(d=>d+'th').join(', ') + ' • Total done: ' + (s.totalPujas||0) + '</div>' +
+      (s.sankalp ? '<div style="font-size:11px;color:var(--saffron);margin-top:2px">Sankalp: ' + s.sankalp + '</div>' : '') +
+      '</div></div>'
+    ).join('');
+  }
+
+  // Populate upload dropdown
+  const sel = document.getElementById('upload-subscriber');
+  sel.innerHTML = '<option value="">-- Select Subscriber --</option>' +
+    subs.map(s => '<option value="' + s.id + '">' + s.name + ' (' + s.email + ')</option>').join('');
+}
+
+function submitPujaUpload() {
+  const subId = (document.getElementById('upload-subscriber').value||'').trim();
+  const driveLink = (document.getElementById('upload-drive-link').value||'').trim();
+  const notes = (document.getElementById('upload-notes').value||'').trim();
+  const statusEl = document.getElementById('upload-status');
+
+  if (!subId) { statusEl.innerHTML = '<span style="color:#EF4444">Please select a subscriber</span>'; return; }
+  if (!driveLink || !driveLink.startsWith('http')) { statusEl.innerHTML = '<span style="color:#EF4444">Please enter a valid Google Drive link</span>'; return; }
+
+  const db = getDB();
+  const sub = (db.subscriptions||[]).find(s => s.id === subId);
+  if (!sub) { statusEl.innerHTML = '<span style="color:#EF4444">Subscriber not found</span>'; return; }
+
+  // Record the puja
+  if (!db.pujaHistory) db.pujaHistory = [];
+  const pujaRecord = {
+    id: 'puja_' + Date.now(),
+    subscriptionId: subId,
+    subscriberName: sub.name,
+    subscriberEmail: sub.email,
+    mandir: currentPurohitMandir ? currentPurohitMandir.name : '—',
+    driveLink, notes,
+    date: new Date().toISOString()
+  };
+  db.pujaHistory.push(pujaRecord);
+  sub.totalPujas = (sub.totalPujas || 0) + 1;
+  sub.lastPujaDate = new Date().toISOString();
+  saveDB(db);
+
+  // Show success + email preview
+  statusEl.innerHTML = '<span style="color:#22C55E">✓ Puja recorded! In production, email would auto-send to: ' + sub.email + '</span>';
+
+  const emailHtml = generateEmailPreview(sub, driveLink, notes, currentPurohitMandir);
+  document.getElementById('email-preview-content').innerHTML = emailHtml;
+  document.getElementById('email-preview-card').style.display = 'block';
+
+  document.getElementById('upload-drive-link').value = '';
+  document.getElementById('upload-notes').value = '';
+  adminToast('Puja uploaded! Subscriber notified.');
+}
+
+function generateEmailPreview(sub, driveLink, notes, mandir) {
+  const date = new Date().toLocaleDateString('en-IN', {day:'numeric',month:'long',year:'numeric'});
+  return '<div style="font-family:Georgia,serif;max-width:500px">' +
+    '<div style="font-size:18px;margin-bottom:8px">🪔 Your Puja at ' + (mandir?mandir.name:'the temple') + ' is Complete</div>' +
+    '<p style="margin:8px 0">Dear <strong>' + sub.name + ' Ji</strong>,</p>' +
+    '<p style="margin:8px 0">Namaste! Your monthly puja was performed today at <strong>' + (mandir?mandir.name:'your chosen temple') + '</strong>.</p>' +
+    '<p style="margin:8px 0"><strong>Date:</strong> ' + date + '</p>' +
+    (sub.gotra ? '<p style="margin:8px 0"><strong>Performed for:</strong> ' + sub.name + ' (Gotra: ' + sub.gotra + ')</p>' : '') +
+    (notes ? '<p style="margin:8px 0"><strong>Puja Details:</strong> ' + notes + '</p>' : '') +
+    '<p style="margin:16px 0"><a href="' + driveLink + '" style="background:#FF6B00;color:white;padding:10px 20px;border-radius:4px;text-decoration:none;font-family:Cinzel,serif;font-size:12px">🎥 Watch Your Puja Video</a></p>' +
+    '<p style="margin:8px 0;font-size:12px;color:#888">Jai Shri Ram • Your next puja is scheduled as per your chosen dates.</p>' +
+    '<p style="margin:8px 0;font-size:11px;color:#aaa">SanataniAnthem – Har Ghar Mandir 🕉</p>' +
+  '</div>';
+}
+
+/* ── EXTEND renderPage to include new pages ── */
+const _origRenderPage = renderPage;
+renderPage = function(id) {
+  const db = getDB();
+  if (id === 'subscriptions') { renderSubscriptionsPage(db); return; }
+  if (id === 'mandirs') { renderMandirAdmin(db); return; }
+  if (id === 'purohit') { /* Purohit page is interactive, no initial render needed */ return; }
+  _origRenderPage(id);
+};
+
+/* ── Helper toast (admin version) ── */
+function adminToast(msg) {
+  let t = document.getElementById('admin-toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'admin-toast';
+    t.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:9999;background:var(--panel);color:var(--gold-l,#E8CC6A);font-family:Cinzel,serif;font-size:12px;padding:12px 20px;border-radius:6px;border-left:3px solid var(--gold,#D4AF37);box-shadow:0 4px 24px rgba(0,0,0,.5);transform:translateX(120px);opacity:0;transition:all .35s;pointer-events:none';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.transform = 'translateX(0)';
+  t.style.opacity = '1';
+  setTimeout(() => { t.style.transform = 'translateX(120px)'; t.style.opacity = '0'; }, 3000);
+}
+
+/* ── Update subscription count badge on load ── */
+(function updateBadge() {
+  setInterval(() => {
+    const db = getDB();
+    const el = document.getElementById('sub-count-badge');
+    if (el) el.textContent = ((db.subscriptions||[]).filter(s=>s.status==='active')).length;
+  }, 2000);
+})();
+
+
+/* ── PUROHIT LINK PAGE ── */
+function copyPurohitLink() {
+  const url = window.location.href.replace('admin.html','purohit.html');
+  navigator.clipboard.writeText(url).then(()=>adminToast('Link copied! Send to purohit.')).catch(()=>{
+    document.getElementById('purohit-url-display').value = url;
+    adminToast('URL shown in box — copy manually');
+  });
+}
+
+function renderPurohitCodesPage(db) {
+  const mandirs = db.mandirs && db.mandirs.length > 0 ? db.mandirs : [
+    {id:'m1',name:'Kashi Vishwanath',emoji:'🛕',code:'KASHI7'},
+    {id:'m2',name:'Tirupati Balaji',emoji:'🙏',code:'TIRUPA7'},
+    {id:'m3',name:'Vaishno Devi',emoji:'⛰️',code:'VAISH7'},
+    {id:'m4',name:'Jagannath Puri',emoji:'🌊',code:'JAGANN7'},
+    {id:'m5',name:'Somnath Mandir',emoji:'🌙',code:'SOMNAT7'},
+    {id:'m6',name:'Shirdi Sai Baba',emoji:'🌹',code:'SHIRDI7'},
+  ];
+  const el = document.getElementById('purohit-codes-list');
+  if (!el) return;
+  el.innerHTML = mandirs.map(m =>
+    '<div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--border);border-radius:var(--r);margin-bottom:8px;background:var(--panel2)">' +
+    '<span style="font-size:20px">' + (m.emoji||'🛕') + '</span>' +
+    '<div style="flex:1"><div style="font-size:13px;color:var(--text)">' + m.name + '</div>' +
+    '<div style="font-size:11px;color:var(--text-l)">Purohit Upload Code: <strong style="color:var(--saffron);font-family:Cinzel,serif;letter-spacing:2px">' + (m.code||'—') + '</strong></div></div>' +
+    '<button onclick="navigator.clipboard.writeText(\'' + (m.code||'') + '\').then(()=>adminToast(\'Code copied!\'))" style="padding:4px 12px;border-radius:4px;border:1px solid rgba(212,175,55,.3);background:none;color:var(--gold);font-size:11px;cursor:pointer;font-family:Cinzel,serif">Copy</button>' +
+    '</div>'
+  ).join('');
+}
+
+/* ── Extend renderPage for purohit link page ── */
+const _origRender2 = renderPage;
+renderPage = function(id) {
+  if (id === 'purohit') { renderPurohitCodesPage(getDB()); return; }
+  _origRender2(id);
+};
+
 </script>
 </body>
 </html>
