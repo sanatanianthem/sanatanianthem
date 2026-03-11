@@ -944,31 +944,53 @@ function renderSections(db){
 
 function renderDarshan(db){
   const items = db.darshan || [];
-  const liveStreams = db.liveStreams || {};
 
-  // Check which mandirs are live by matching name
-  const liveNames = Object.values(liveStreams)
-    .filter(s=>s.isLive)
-    .map(s=>s.mandirName.toLowerCase());
+  // ALWAYS use activeLiveStreams from Firebase (real-time, works on all devices)
+  const liveNames = Object.values(activeLiveStreams || {})
+    .map(s => s.mandirName.toLowerCase());
 
   const html = items.map(d=>{
-    // Check if this darshan card's mandir is live
-    const isLive = d.live || liveNames.some(n => d.name.toLowerCase().includes(n) || n.includes(d.name.toLowerCase().split(' ')[0]));
-    const clickAction = isLive ? `openLiveFromDarshan('${d.name}')` : `showToast('Opening ${d.name} darshan...')`;
+    const dName = d.name.toLowerCase();
+    const isLive = liveNames.some(n =>
+      dName.includes(n.split(' ')[0]) || n.includes(dName.split(' ')[0])
+    );
+    // ALL cards always clickable — live ones open video, others show toast
     return `
-    <div class="darshan-card" onclick="${clickAction}" style="${isLive?'border-color:rgba(229,62,62,.5);cursor:pointer':''}">
+    <div class="darshan-card" onclick="handleDarshanClick('${d.name.replace(/'/g,"\'")}',${isLive})"
+      style="${isLive ? 'border-color:rgba(229,62,62,.6);box-shadow:0 0 20px rgba(229,62,62,.2)' : ''}">
       <div class="darshan-thumb">
         <span class="darshan-emoji">${d.emoji}</span>
-        ${isLive?`<div class="darshan-badge-wrap"><span class="badge badge-live" style="animation:pulse-red 1.5s infinite"><span class="badge-dot"></span>LIVE</span></div>`:''}
+        ${isLive ? `<div class="darshan-badge-wrap">
+          <span class="badge badge-live" style="animation:pulse-red 1.5s infinite">
+            <span class="badge-dot"></span>LIVE
+          </span></div>` : ''}
       </div>
       <div class="darshan-info">
         <div class="darshan-name">${d.name}</div>
         <div class="darshan-loc">📍 ${d.location}</div>
-        <div class="darshan-time">${isLive?'<span style="color:#FC8181">🔴 Live Puja Chal Rahi Hai — Click Karein</span>':`🕐 ${d.time}`}</div>
+        <div class="darshan-time">
+          ${isLive
+            ? '<span style="color:#FC8181;font-weight:600">🔴 Live — Abhi Dekhen</span>'
+            : `🕐 ${d.time}`}
+        </div>
       </div>
     </div>`;
   }).join('');
   document.getElementById('darshan-container').innerHTML = html;
+}
+
+function handleDarshanClick(mandirName, isLive) {
+  if(isLive) {
+    openLiveFromDarshan(mandirName);
+  } else {
+    // Check again at click time (might have gone live since render)
+    const liveList = Object.values(activeLiveStreams || {});
+    if(liveList.length > 0) {
+      openLiveFromDarshan(mandirName);
+    } else {
+      showToast('🛕 ' + mandirName + ' — Darshan jald aayega!');
+    }
+  }
 }
 
 function openLiveFromDarshan(mandirName) {
@@ -1175,7 +1197,10 @@ rtdb.ref('liveStreams').on('value', snapshot => {
   Object.values(data).forEach(s => {
     if(s && s.isLive) activeLiveStreams[s.mandirId] = s;
   });
+  console.log('Firebase live update:', Object.keys(activeLiveStreams).length, 'live streams');
   updateLiveUI();
+  // Re-render darshan cards with latest live status
+  renderDarshan(getDB());
 });
 
 function updateLiveUI() {
@@ -1187,11 +1212,10 @@ function updateLiveUI() {
     document.getElementById('live-banner-text').textContent =
       (first.mandirEmoji||'🛕') + ' ' + first.mandirName + ' — Live Puja Dekhen';
     banner.style.display = 'flex';
+    banner.style.animation = 'slideUp .4s ease';
   } else {
     banner.style.display = 'none';
   }
-  // Re-render darshan with live badges
-  renderDarshan(getDB());
 }
 
 function checkForLiveStreams() { /* handled by Firebase listener */ }
