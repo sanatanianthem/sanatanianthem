@@ -495,6 +495,7 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
 .live-banner-dot{width:8px;height:8px;background:#fff;border-radius:50%;animation:blink 1s infinite;flex-shrink:0}
 @keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes pulse-red{0%,100%{box-shadow:0 0 0 0 rgba(229,62,62,.4)}70%{box-shadow:0 0 0 6px rgba(229,62,62,0)}}
 .live-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:1000;display:none;flex-direction:column;align-items:center;justify-content:center}
 .live-modal-header{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:640px;padding:16px 20px}
 .live-modal-title{font-family:'Cinzel',serif;font-size:16px;color:#FC8181;display:flex;align-items:center;gap:8px}
@@ -939,19 +940,44 @@ function renderSections(db){
 
 function renderDarshan(db){
   const items = db.darshan || [];
-  const html = items.map(d=>`
-    <div class="darshan-card" onclick="showToast('Opening ${d.name} darshan...')">
+  const liveStreams = db.liveStreams || {};
+
+  // Check which mandirs are live by matching name
+  const liveNames = Object.values(liveStreams)
+    .filter(s=>s.isLive)
+    .map(s=>s.mandirName.toLowerCase());
+
+  const html = items.map(d=>{
+    // Check if this darshan card's mandir is live
+    const isLive = d.live || liveNames.some(n => d.name.toLowerCase().includes(n) || n.includes(d.name.toLowerCase().split(' ')[0]));
+    const clickAction = isLive ? `openLiveFromDarshan('${d.name}')` : `showToast('Opening ${d.name} darshan...')`;
+    return `
+    <div class="darshan-card" onclick="${clickAction}" style="${isLive?'border-color:rgba(229,62,62,.5);cursor:pointer':''}">
       <div class="darshan-thumb">
         <span class="darshan-emoji">${d.emoji}</span>
-        ${d.live?`<div class="darshan-badge-wrap"><span class="badge badge-live"><span class="badge-dot"></span>LIVE</span></div>`:''}
+        ${isLive?`<div class="darshan-badge-wrap"><span class="badge badge-live" style="animation:pulse-red 1.5s infinite"><span class="badge-dot"></span>LIVE</span></div>`:''}
       </div>
       <div class="darshan-info">
         <div class="darshan-name">${d.name}</div>
         <div class="darshan-loc">📍 ${d.location}</div>
-        <div class="darshan-time">🕐 ${d.time}</div>
+        <div class="darshan-time">${isLive?'<span style="color:#FC8181">🔴 Live Puja Chal Rahi Hai — Click Karein</span>':`🕐 ${d.time}`}</div>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
   document.getElementById('darshan-container').innerHTML = html;
+}
+
+function openLiveFromDarshan(mandirName) {
+  const db = getDB();
+  const liveStreams = db.liveStreams || {};
+  const liveList = Object.values(liveStreams).filter(s=>s.isLive);
+  if(!liveList.length) { showToast('Abhi live nahi hai. Jald shuru hogi!'); return; }
+  // Find matching stream
+  const match = liveList.find(s=>
+    s.mandirName.toLowerCase().includes(mandirName.toLowerCase().split(' ')[0]) ||
+    mandirName.toLowerCase().includes(s.mandirName.toLowerCase().split(' ')[0])
+  ) || liveList[0];
+  openLiveModal(match);
 }
 
 function renderPujas(db){
@@ -1159,60 +1185,104 @@ function updateDarshanLiveBadge(mandirId, isLive) {
 
 function openLiveViewer() {
   const db = getDB();
-  const liveStreams = db.liveStreams || {};
-  const liveList = Object.values(liveStreams).filter(s => s.isLive);
-  if (!liveList.length) { showToast('Abhi koi live stream nahi hai.'); return; }
+  const liveList = Object.values(db.liveStreams||{}).filter(s=>s.isLive);
+  if(!liveList.length) { showToast('Abhi koi live stream nahi hai.'); return; }
+  openLiveModal(liveList[0]);
+}
 
-  const stream = liveList[0];
+function openLiveModal(stream) {
   document.getElementById('live-modal').style.display = 'flex';
   document.getElementById('live-modal-title-text').textContent =
-    (stream.mandirEmoji || '🛕') + ' ' + stream.mandirName + ' — LIVE';
-  document.getElementById('live-modal-info').textContent = stream.mandirName + ' se live puja';
+    (stream.mandirEmoji||'🛕') + ' ' + stream.mandirName + ' — LIVE';
+  document.getElementById('live-modal-info').textContent = stream.mandirName + ' • Live Puja';
   document.getElementById('live-connecting').style.display = 'flex';
+  document.getElementById('live-connecting').querySelector('.live-connecting-text').textContent = 'Live se connect ho raha hai...';
   document.getElementById('live-viewer-video').style.display = 'none';
-
-  // Connect as viewer via PeerJS
   connectToLiveStream(stream.peerId);
 }
 
 function connectToLiveStream(peerId) {
-  if (viewerPeer) { viewerPeer.destroy(); viewerPeer = null; }
+  if (viewerPeer) { try{viewerPeer.destroy()}catch(e){} viewerPeer = null; }
 
   viewerPeer = new Peer({
     host: '0.peerjs.com', port: 443, path: '/', secure: true, debug: 0
   });
 
-  viewerPeer.on('open', () => {
-    // Create a silent dummy stream to initiate the WebRTC handshake
-    const silentStream = new MediaStream();
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const dest = ctx.createMediaStreamDestination();
-    silentStream.addTrack(dest.stream.getAudioTracks()[0]);
+  viewerPeer.on('open', async () => {
+    try {
+      // Create a truly silent audio-only dummy stream for WebRTC handshake
+      // This is needed because PeerJS requires caller to provide a stream
+      let dummyStream;
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = ctx.createOscillator();
+        const dst = ctx.createMediaStreamDestination();
+        oscillator.connect(dst);
+        // DO NOT start oscillator — keeps it silent
+        dummyStream = dst.stream;
+      } catch(e) {
+        // Fallback: empty MediaStream
+        dummyStream = new MediaStream();
+      }
 
-    const call = viewerPeer.call(peerId, silentStream);
-    call.on('stream', (remoteStream) => {
-      const video = document.getElementById('live-viewer-video');
-      video.srcObject = remoteStream;
-      video.style.display = 'block';
-      document.getElementById('live-connecting').style.display = 'none';
-      currentLiveStream = call;
-    });
-    call.on('close', () => {
-      document.getElementById('live-connecting').style.display = 'flex';
-      document.getElementById('live-connecting').querySelector('.live-connecting-text').textContent =
-        'Stream band ho gayi. 🙏';
-      document.getElementById('live-viewer-video').style.display = 'none';
-    });
-    call.on('error', () => {
-      document.getElementById('live-connecting').querySelector('.live-connecting-text').textContent =
-        'Connection fail. Dobara try karein.';
-    });
+      const call = viewerPeer.call(peerId, dummyStream);
+      if(!call) {
+        setConnectingText('Purohit abhi live nahi hai. Thodi der baad try karein.');
+        return;
+      }
+
+      call.on('stream', (remoteStream) => {
+        const video = document.getElementById('live-viewer-video');
+        // Ensure video tracks exist
+        const videoTracks = remoteStream.getVideoTracks();
+        const audioTracks = remoteStream.getAudioTracks();
+        console.log('Remote stream:', videoTracks.length, 'video tracks,', audioTracks.length, 'audio tracks');
+
+        video.srcObject = remoteStream;
+        video.style.display = 'block';
+        document.getElementById('live-connecting').style.display = 'none';
+        currentLiveStream = call;
+
+        // Force play (some browsers block autoplay)
+        video.play().catch(e => {
+          // Show unmute button if autoplay blocked
+          document.getElementById('live-modal-info').innerHTML =
+            '<button onclick="document.getElementById(\'live-viewer-video\').play()" style="background:var(--saffron);color:#fff;border:none;padding:8px 18px;border-radius:6px;font-family:Cinzel,serif;font-size:12px;cursor:pointer;margin-top:8px">▶ Play Video</button>';
+        });
+      });
+
+      call.on('close', () => {
+        setConnectingText('Stream band ho gayi. 🙏');
+        document.getElementById('live-viewer-video').style.display = 'none';
+        document.getElementById('live-connecting').style.display = 'flex';
+      });
+      call.on('error', (err) => {
+        setConnectingText('Connection error. Dobara try karein.');
+        console.error('Call error:', err);
+      });
+
+    } catch(err) {
+      setConnectingText('Error: ' + err.message);
+    }
   });
 
-  viewerPeer.on('error', () => {
-    document.getElementById('live-connecting').querySelector('.live-connecting-text').textContent =
-      'Connect nahi hua. Live band ho gayi ya internet issue.';
+  viewerPeer.on('error', (err) => {
+    console.error('Peer error:', err);
+    if(err.type === 'peer-unavailable') {
+      setConnectingText('Purohit abhi live nahi hai.');
+    } else {
+      setConnectingText('Connect nahi hua: ' + err.type);
+    }
   });
+}
+
+function setConnectingText(msg) {
+  const el = document.getElementById('live-connecting');
+  if(el) {
+    el.style.display = 'flex';
+    const t = el.querySelector('.live-connecting-text');
+    if(t) t.textContent = msg;
+  }
 }
 
 function closeLiveViewer() {
