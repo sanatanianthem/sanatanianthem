@@ -507,6 +507,10 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
 .live-connecting-text{font-family:'Cinzel',serif;font-size:13px;color:rgba(255,255,255,.5)}
 
 </style>
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+<!-- PeerJS -->
 <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
 </head>
 <body>
@@ -968,11 +972,8 @@ function renderDarshan(db){
 }
 
 function openLiveFromDarshan(mandirName) {
-  const db = getDB();
-  const liveStreams = db.liveStreams || {};
-  const liveList = Object.values(liveStreams).filter(s=>s.isLive);
+  const liveList = Object.values(activeLiveStreams);
   if(!liveList.length) { showToast('Abhi live nahi hai. Jald shuru hogi!'); return; }
-  // Find matching stream
   const match = liveList.find(s=>
     s.mandirName.toLowerCase().includes(mandirName.toLowerCase().split(' ')[0]) ||
     mandirName.toLowerCase().includes(s.mandirName.toLowerCase().split(' ')[0])
@@ -1150,42 +1151,53 @@ setInterval(()=>{
 renderAll();
 spawnParticles();
 
-/* ══ LIVE STREAM DETECTION & VIEWER ══ */
+/* ══ FIREBASE CONFIG + LIVE STREAM DETECTION ══ */
+const firebaseConfig = {
+  apiKey: "AIzaSyBC1yt-YE74pKCKMfukmc7_3vicM49h6vE",
+  authDomain: "sanatanianthem-652a3.firebaseapp.com",
+  databaseURL: "https://sanatanianthem-652a3-default-rtdb.firebaseio.com",
+  projectId: "sanatanianthem-652a3",
+  storageBucket: "sanatanianthem-652a3.firebasestorage.app",
+  messagingSenderId: "1031082702558",
+  appId: "1:1031082702558:web:744ffa9cfa54ff838db44f"
+};
+if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const rtdb = firebase.database();
+
 let viewerPeer = null;
 let currentLiveStream = null;
-let liveCheckInterval = null;
+let activeLiveStreams = {}; // Kept in sync by Firebase listener
 
-function checkForLiveStreams() {
-  const db = getDB();
-  const liveStreams = db.liveStreams || {};
-  const liveList = Object.values(liveStreams).filter(s => s.isLive);
+/* ── Firebase realtime listener — instant update on ALL devices ── */
+rtdb.ref('liveStreams').on('value', snapshot => {
+  const data = snapshot.val() || {};
+  activeLiveStreams = {};
+  Object.values(data).forEach(s => {
+    if(s && s.isLive) activeLiveStreams[s.mandirId] = s;
+  });
+  updateLiveUI();
+});
+
+function updateLiveUI() {
+  const liveList = Object.values(activeLiveStreams);
   const banner = document.getElementById('live-banner');
-  if (liveList.length > 0) {
+
+  if(liveList.length > 0) {
     const first = liveList[0];
     document.getElementById('live-banner-text').textContent =
-      (first.mandirEmoji || '🛕') + ' ' + first.mandirName + ' — Live Puja Dekhen';
+      (first.mandirEmoji||'🛕') + ' ' + first.mandirName + ' — Live Puja Dekhen';
     banner.style.display = 'flex';
-    // Also update darshan card
-    updateDarshanLiveBadge(first.mandirId, true);
   } else {
     banner.style.display = 'none';
   }
+  // Re-render darshan with live badges
+  renderDarshan(getDB());
 }
 
-function updateDarshanLiveBadge(mandirId, isLive) {
-  // Re-render darshan to show live badge if mandir matches
-  const db = getDB();
-  if (db.darshan) {
-    db.darshan.forEach(d => {
-      if (d.id === mandirId) d.live = isLive;
-    });
-    renderDarshan(db);
-  }
-}
+function checkForLiveStreams() { /* handled by Firebase listener */ }
 
 function openLiveViewer() {
-  const db = getDB();
-  const liveList = Object.values(db.liveStreams||{}).filter(s=>s.isLive);
+  const liveList = Object.values(activeLiveStreams);
   if(!liveList.length) { showToast('Abhi koi live stream nahi hai.'); return; }
   openLiveModal(liveList[0]);
 }
@@ -1293,9 +1305,7 @@ function closeLiveViewer() {
   video.style.display = 'none';
 }
 
-// Start checking for live every 3 seconds
-liveCheckInterval = setInterval(checkForLiveStreams, 3000);
-checkForLiveStreams(); // Check immediately on load
+// Firebase listener handles real-time updates automatically
 
 </script>
 
