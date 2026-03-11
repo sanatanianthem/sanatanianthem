@@ -489,7 +489,24 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
 #mobile-nav.open{transform:translateX(0)}
 #mobile-nav .nav-link{color:var(--gold-h);font-size:16px;padding:14px 0;border-bottom:1px solid rgba(212,175,55,.1)}
 #mobile-close{position:absolute;top:20px;right:24px;font-size:28px;color:var(--gold);cursor:pointer;background:none;border:none}
+
+/* ── LIVE VIEWER ── */
+.live-banner{position:fixed;bottom:20px;right:20px;background:linear-gradient(135deg,#E53E3E,#C53030);color:#fff;font-family:'Cinzel',serif;font-size:12px;padding:12px 18px;border-radius:10px;box-shadow:0 8px 24px rgba(229,62,62,.4);cursor:pointer;z-index:900;display:none;align-items:center;gap:8px;letter-spacing:.5px;animation:slideUp .4s ease}
+.live-banner-dot{width:8px;height:8px;background:#fff;border-radius:50%;animation:blink 1s infinite;flex-shrink:0}
+@keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.live-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:1000;display:none;flex-direction:column;align-items:center;justify-content:center}
+.live-modal-header{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:640px;padding:16px 20px}
+.live-modal-title{font-family:'Cinzel',serif;font-size:16px;color:#FC8181;display:flex;align-items:center;gap:8px}
+.live-modal-close{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.1);border:none;color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.live-modal-video{width:100%;max-width:640px;border-radius:12px;overflow:hidden;background:#000;position:relative}
+#live-viewer-video{width:100%;display:block;max-height:70vh;object-fit:contain}
+.live-modal-info{padding:14px 20px;width:100%;max-width:640px;text-align:center;font-family:'Cinzel',serif;font-size:13px;color:rgba(255,255,255,.6)}
+.live-connecting{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#000;gap:12px}
+.live-connecting-text{font-family:'Cinzel',serif;font-size:13px;color:rgba(255,255,255,.5)}
+
 </style>
+<script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
 </head>
 <body>
 
@@ -1106,6 +1123,136 @@ setInterval(()=>{
 /* ── INIT ── */
 renderAll();
 spawnParticles();
+
+/* ══ LIVE STREAM DETECTION & VIEWER ══ */
+let viewerPeer = null;
+let currentLiveStream = null;
+let liveCheckInterval = null;
+
+function checkForLiveStreams() {
+  const db = getDB();
+  const liveStreams = db.liveStreams || {};
+  const liveList = Object.values(liveStreams).filter(s => s.isLive);
+  const banner = document.getElementById('live-banner');
+  if (liveList.length > 0) {
+    const first = liveList[0];
+    document.getElementById('live-banner-text').textContent =
+      (first.mandirEmoji || '🛕') + ' ' + first.mandirName + ' — Live Puja Dekhen';
+    banner.style.display = 'flex';
+    // Also update darshan card
+    updateDarshanLiveBadge(first.mandirId, true);
+  } else {
+    banner.style.display = 'none';
+  }
+}
+
+function updateDarshanLiveBadge(mandirId, isLive) {
+  // Re-render darshan to show live badge if mandir matches
+  const db = getDB();
+  if (db.darshan) {
+    db.darshan.forEach(d => {
+      if (d.id === mandirId) d.live = isLive;
+    });
+    renderDarshan(db);
+  }
+}
+
+function openLiveViewer() {
+  const db = getDB();
+  const liveStreams = db.liveStreams || {};
+  const liveList = Object.values(liveStreams).filter(s => s.isLive);
+  if (!liveList.length) { showToast('Abhi koi live stream nahi hai.'); return; }
+
+  const stream = liveList[0];
+  document.getElementById('live-modal').style.display = 'flex';
+  document.getElementById('live-modal-title-text').textContent =
+    (stream.mandirEmoji || '🛕') + ' ' + stream.mandirName + ' — LIVE';
+  document.getElementById('live-modal-info').textContent = stream.mandirName + ' se live puja';
+  document.getElementById('live-connecting').style.display = 'flex';
+  document.getElementById('live-viewer-video').style.display = 'none';
+
+  // Connect as viewer via PeerJS
+  connectToLiveStream(stream.peerId);
+}
+
+function connectToLiveStream(peerId) {
+  if (viewerPeer) { viewerPeer.destroy(); viewerPeer = null; }
+
+  viewerPeer = new Peer({
+    host: '0.peerjs.com', port: 443, path: '/', secure: true, debug: 0
+  });
+
+  viewerPeer.on('open', () => {
+    // Create a silent dummy stream to initiate the WebRTC handshake
+    const silentStream = new MediaStream();
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const dest = ctx.createMediaStreamDestination();
+    silentStream.addTrack(dest.stream.getAudioTracks()[0]);
+
+    const call = viewerPeer.call(peerId, silentStream);
+    call.on('stream', (remoteStream) => {
+      const video = document.getElementById('live-viewer-video');
+      video.srcObject = remoteStream;
+      video.style.display = 'block';
+      document.getElementById('live-connecting').style.display = 'none';
+      currentLiveStream = call;
+    });
+    call.on('close', () => {
+      document.getElementById('live-connecting').style.display = 'flex';
+      document.getElementById('live-connecting').querySelector('.live-connecting-text').textContent =
+        'Stream band ho gayi. 🙏';
+      document.getElementById('live-viewer-video').style.display = 'none';
+    });
+    call.on('error', () => {
+      document.getElementById('live-connecting').querySelector('.live-connecting-text').textContent =
+        'Connection fail. Dobara try karein.';
+    });
+  });
+
+  viewerPeer.on('error', () => {
+    document.getElementById('live-connecting').querySelector('.live-connecting-text').textContent =
+      'Connect nahi hua. Live band ho gayi ya internet issue.';
+  });
+}
+
+function closeLiveViewer() {
+  document.getElementById('live-modal').style.display = 'none';
+  if (viewerPeer) { viewerPeer.destroy(); viewerPeer = null; }
+  const video = document.getElementById('live-viewer-video');
+  video.srcObject = null;
+  video.style.display = 'none';
+}
+
+// Start checking for live every 3 seconds
+liveCheckInterval = setInterval(checkForLiveStreams, 3000);
+checkForLiveStreams(); // Check immediately on load
+
 </script>
+
+<!-- LIVE BANNER -->
+<div class="live-banner" id="live-banner" onclick="openLiveViewer()">
+  <span class="live-banner-dot"></span>
+  <span id="live-banner-text">🛕 Live Puja Chal Rahi Hai — Dekhen</span>
+</div>
+
+<!-- LIVE VIEWER MODAL -->
+<div class="live-modal-overlay" id="live-modal">
+  <div class="live-modal-header">
+    <div class="live-modal-title">
+      <span class="live-banner-dot"></span>
+      <span id="live-modal-title-text">Live Puja</span>
+    </div>
+    <button class="live-modal-close" onclick="closeLiveViewer()">✕</button>
+  </div>
+  <div class="live-modal-video">
+    <div class="live-connecting" id="live-connecting">
+      <div style="font-size:40px">🛕</div>
+      <div class="live-connecting-text">Live se connect ho raha hai...</div>
+    </div>
+    <video id="live-viewer-video" autoplay playsinline style="display:none"></video>
+  </div>
+  <div class="live-modal-info" id="live-modal-info">Connecting...</div>
+</div>
+
 </body>
 </html>
