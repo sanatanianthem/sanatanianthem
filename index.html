@@ -899,6 +899,34 @@ function getDB(){
   }catch(e){ return DEFAULT_DB; }
 }
 
+/* ══ FIREBASE INIT — must be early so live status ready before render ══ */
+const firebaseConfig = {
+  apiKey: "AIzaSyBC1yt-YE74pKCKMfukmc7_3vicM49h6vE",
+  authDomain: "sanatanianthem-652a3.firebaseapp.com",
+  databaseURL: "https://sanatanianthem-652a3-default-rtdb.firebaseio.com",
+  projectId: "sanatanianthem-652a3",
+  storageBucket: "sanatanianthem-652a3.firebasestorage.app",
+  messagingSenderId: "1031082702558",
+  appId: "1:1031082702558:web:744ffa9cfa54ff838db44f"
+};
+if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const rtdb = firebase.database();
+
+let viewerPeer = null;
+let currentLiveStream = null;
+let activeLiveStreams = {};
+
+/* ── Firebase realtime listener — instant, works on ALL devices ── */
+rtdb.ref('liveStreams').on('value', snapshot => {
+  const data = snapshot.val() || {};
+  activeLiveStreams = {};
+  Object.values(data).forEach(s => {
+    if(s && s.isLive) activeLiveStreams[s.mandirId] = s;
+  });
+  updateLiveUI();
+  renderDarshan(getDB());
+});
+
 /* ── RENDER ENGINE ── */
 function renderAll(){
   const db = getDB();
@@ -1159,49 +1187,30 @@ window.addEventListener('scroll',()=>{
   }
 });
 
-/* ── LIVE SYNC (poll localStorage every 2s, simulating Firestore listener) ── */
+/* ── LIVE SYNC (poll localStorage every 2s) ── */
 let _lastHash = '';
 setInterval(()=>{
   const raw = localStorage.getItem('sanatani_cms') || '';
-  if(raw !== _lastHash){
+  if(raw && raw !== _lastHash){
     _lastHash = raw;
     renderAll();
   }
 },2000);
 
 /* ── INIT ── */
+// Seed DEFAULT_DB if localStorage empty — cards always show on fresh browser
+(function seedDB(){
+  try {
+    const existing = localStorage.getItem('sanatani_cms');
+    if(!existing || existing === '{}' || existing === 'null') {
+      localStorage.setItem('sanatani_cms', JSON.stringify(DEFAULT_DB));
+    }
+  } catch(e) {}
+})();
 renderAll();
 spawnParticles();
 
-/* ══ FIREBASE CONFIG + LIVE STREAM DETECTION ══ */
-const firebaseConfig = {
-  apiKey: "AIzaSyBC1yt-YE74pKCKMfukmc7_3vicM49h6vE",
-  authDomain: "sanatanianthem-652a3.firebaseapp.com",
-  databaseURL: "https://sanatanianthem-652a3-default-rtdb.firebaseio.com",
-  projectId: "sanatanianthem-652a3",
-  storageBucket: "sanatanianthem-652a3.firebasestorage.app",
-  messagingSenderId: "1031082702558",
-  appId: "1:1031082702558:web:744ffa9cfa54ff838db44f"
-};
-if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-const rtdb = firebase.database();
-
-let viewerPeer = null;
-let currentLiveStream = null;
-let activeLiveStreams = {}; // Kept in sync by Firebase listener
-
-/* ── Firebase realtime listener — instant update on ALL devices ── */
-rtdb.ref('liveStreams').on('value', snapshot => {
-  const data = snapshot.val() || {};
-  activeLiveStreams = {};
-  Object.values(data).forEach(s => {
-    if(s && s.isLive) activeLiveStreams[s.mandirId] = s;
-  });
-  console.log('Firebase live update:', Object.keys(activeLiveStreams).length, 'live streams');
-  updateLiveUI();
-  // Re-render darshan cards with latest live status
-  renderDarshan(getDB());
-});
+/* Firebase moved to top */
 
 function updateLiveUI() {
   const liveList = Object.values(activeLiveStreams);
