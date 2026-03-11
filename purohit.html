@@ -339,12 +339,12 @@ async function startLive(){
     mediaRecorder.ondataavailable = e => { if(e.data.size>0) recordedChunks.push(e.data); };
     mediaRecorder.start(1000); // collect every 1s
 
-    // PeerJS for live viewers
-    const peerId = 'sanatani-live-'+currentMandir.code.toLowerCase();
-    livePeer = new Peer(peerId, {host:'0.peerjs.com',port:443,path:'/',secure:true,debug:0});
+    // PeerJS — auto random ID (no conflict issues)
+    livePeer = new Peer({host:'0.peerjs.com',port:443,path:'/',secure:true,debug:0});
 
     livePeer.on('open', id=>{
-      // Mark live in Firebase Realtime DB — visible to ALL visitors instantly!
+      console.log('PeerJS connected, ID:', id);
+      // Mark live in Firebase — ALL visitors instantly dekh sakte hain
       setLiveSignal(currentMandir.id, {
         peerId: id,
         mandirId: currentMandir.id,
@@ -353,7 +353,6 @@ async function startLive(){
         startTime: new Date().toISOString(),
         isLive: true
       });
-
       setState('live');
       startTimer();
       showToast('🔴 Live shuru! Recording bhi chal rahi hai.');
@@ -372,12 +371,9 @@ async function startLive(){
     });
 
     livePeer.on('error', err=>{
-      if(err.type==='unavailable-id'){
-        showToast('Ek stream already live hai. Dobara try karein.');
-        cleanupLive();setState('offline');
-      } else {
-        showToast('Connection error. Internet check karein.');
-      }
+      console.error('PeerJS error:', err.type, err.message);
+      showToast('Connection error: ' + err.type + '. Internet check karein.');
+      // Don't stop live just because of peer error — recording still works
     });
 
   } catch(err){
@@ -400,22 +396,27 @@ function stopLive(){
   if(livePeer){ livePeer.destroy(); livePeer=null; }
   activeConnections=[];
 
-  // Stop recording
+  // Stop camera first (but keep stream data for upload)
+  document.getElementById('local-video').srcObject=null;
+
+  // Stop recording — onstop must be set BEFORE calling stop()
   if(mediaRecorder && mediaRecorder.state!=='inactive'){
-    mediaRecorder.onstop = () => uploadRecording();
+    mediaRecorder.onstop = () => {
+      // Now stop camera tracks
+      if(localStream){ localStream.getTracks().forEach(t=>t.stop()); localStream=null; }
+      uploadRecording();
+    };
     mediaRecorder.stop();
   } else {
+    if(localStream){ localStream.getTracks().forEach(t=>t.stop()); localStream=null; }
     uploadRecording();
   }
-
-  // Stop camera
-  if(localStream){ localStream.getTracks().forEach(t=>t.stop()); localStream=null; }
-  document.getElementById('local-video').srcObject=null;
 }
 
 async function uploadRecording(){
+  console.log('Upload starting. Chunks:', recordedChunks.length);
   if(recordedChunks.length===0){
-    showToast('Koi recording nahi mili.');
+    showToast('Koi recording nahi mili. Dobara try karein.');
     setState('offline');
     return;
   }
@@ -448,7 +449,8 @@ async function uploadRecording(){
       throw new Error(data.error?.message || 'Upload failed');
     }
   } catch(err){
-    showToast('Upload error: '+err.message);
+    console.error('Upload error:', err);
+    showToast('Upload error: '+err.message+'. Internet check karo.');
     setState('offline');
   }
 }
