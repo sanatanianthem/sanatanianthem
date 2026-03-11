@@ -340,7 +340,31 @@ async function startLive(){
     mediaRecorder.start(1000); // collect every 1s
 
     // PeerJS — auto random ID (no conflict issues)
-    livePeer = new Peer({host:'0.peerjs.com',port:443,path:'/',secure:true,debug:0});
+    livePeer = new Peer({
+      config: {
+        iceServers: [
+          {urls: 'stun:stun.l.google.com:19302'},
+          {urls: 'stun:stun1.l.google.com:19302'},
+          // Free TURN servers — relay karta hai jab direct connect fail ho
+          {
+            urls: 'turn:openrelay.metered.ca:80',
+            username: 'openrelayproject',
+            credential: 'openrelayproject'
+          },
+          {
+            urls: 'turn:openrelay.metered.ca:443',
+            username: 'openrelayproject',
+            credential: 'openrelayproject'
+          },
+          {
+            urls: 'turn:openrelay.metered.ca:443?transport=tcp',
+            username: 'openrelayproject',
+            credential: 'openrelayproject'
+          }
+        ]
+      },
+      debug: 0
+    });
 
     livePeer.on('open', id=>{
       console.log('PeerJS connected, ID:', id);
