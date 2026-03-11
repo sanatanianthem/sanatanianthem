@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>SanataniAnthem – Purohit Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Noto+Sans+Devanagari:wght@400;600&family=Lora:wght@400;600&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+:root{--saffron:#FF6B00;--saffron-d:#C95000;--gold:#D4AF37;--gold-h:#E8CC6A;--maroon:#5A0E0E;--cream:#FFF6E5;--bg-dark:#140800;--green:#16A34A;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Lora',serif;background:var(--bg-dark);color:var(--cream);min-height:100vh;display:flex;flex-direction:column}
+button{cursor:pointer;font-family:inherit;border:none}
+.topbar{background:var(--maroon);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid rgba(212,175,55,.3)}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-icon{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--saffron),var(--gold));display:flex;align-items:center;justify-content:center;font-size:18px}
+.logo-name{font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:var(--gold)}
+.logo-sub{font-family:'Noto Sans Devanagari',sans-serif;font-size:10px;color:rgba(255,246,229,.5);letter-spacing:1px}
+.topbar-badge{font-family:'Cinzel',serif;font-size:10px;color:var(--saffron);background:rgba(255,107,0,.1);border:1px solid rgba(255,107,0,.3);padding:4px 12px;border-radius:20px;letter-spacing:1px}
+.main{flex:1;padding:28px 20px;max-width:520px;width:100%;margin:0 auto}
+.card{background:rgba(255,246,229,.05);border:1px solid rgba(212,175,55,.18);border-radius:14px;padding:24px;margin-bottom:20px}
+.card-title{font-family:'Cinzel',serif;font-size:14px;color:var(--gold-h);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.login-header{text-align:center;padding:20px 0 32px}
+.login-om{font-family:'Noto Sans Devanagari',sans-serif;font-size:64px;color:var(--gold);line-height:1;margin-bottom:12px;animation:glow 3s ease-in-out infinite}
+@keyframes glow{0%,100%{text-shadow:0 0 20px rgba(212,175,55,.4)}50%{text-shadow:0 0 50px rgba(212,175,55,.8)}}
+.login-title{font-family:'Cinzel',serif;font-size:20px;color:var(--gold);margin-bottom:6px}
+.login-sub{font-family:'Noto Sans Devanagari',sans-serif;font-size:13px;color:rgba(255,246,229,.5);letter-spacing:1px}
+.field{margin-bottom:18px}
+.label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,246,229,.5);margin-bottom:8px;display:block}
+.input{width:100%;padding:13px 16px;background:rgba(255,246,229,.07);border:1.5px solid rgba(212,175,55,.2);border-radius:8px;color:var(--cream);font-family:'Lora',serif;font-size:15px;outline:none;transition:all .25s}
+.input:focus{border-color:var(--saffron);background:rgba(255,107,0,.06)}
+.input.code-input{font-family:'Cinzel',serif;font-size:22px;letter-spacing:6px;text-transform:uppercase;text-align:center}
+.input.error{border-color:#EF4444}
+select.input{cursor:pointer}
+textarea.input{resize:vertical;min-height:80px}
+.err{font-size:12px;color:#EF4444;margin-top:5px;font-family:'Cinzel',serif;display:none}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px 24px;border-radius:6px;font-family:'Cinzel',serif;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;transition:all .3s;width:100%}
+.btn-primary{background:linear-gradient(135deg,var(--saffron),var(--saffron-d));color:#fff;box-shadow:0 4px 20px rgba(255,107,0,.3)}
+.btn-primary:hover:not(:disabled){transform:translateY(-2px)}
+.btn-primary:disabled,.btn-success:disabled{opacity:.5;cursor:not-allowed}
+.btn-success{background:linear-gradient(135deg,#16A34A,#15803D);color:#fff;box-shadow:0 4px 16px rgba(22,163,74,.3)}
+.btn-ghost{background:rgba(255,246,229,.07);color:rgba(255,246,229,.6);border:1px solid rgba(212,175,55,.2);font-size:11px;padding:10px 18px}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+.upload-zone{border:2px dashed rgba(212,175,55,.3);border-radius:12px;padding:32px 20px;text-align:center;cursor:pointer;transition:all .3s;position:relative;margin-bottom:6px}
+.upload-zone:hover,.upload-zone.dragover{border-color:var(--saffron);background:rgba(255,107,0,.05)}
+.upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-icon{font-size:40px;margin-bottom:10px}
+.upload-title{font-family:'Cinzel',serif;font-size:13px;color:rgba(255,246,229,.7);margin-bottom:4px}
+.upload-sub{font-size:12px;color:rgba(255,246,229,.35)}
+.file-selected{background:rgba(255,107,0,.08);border-color:var(--saffron)}
+.file-name{font-family:'Cinzel',serif;font-size:12px;color:var(--saffron);margin-top:8px}
+.progress-wrap{margin-top:16px;display:none}
+.progress-label{display:flex;justify-content:space-between;font-family:'Cinzel',serif;font-size:11px;color:rgba(255,246,229,.5);margin-bottom:6px}
+.progress-track{height:8px;background:rgba(255,246,229,.08);border-radius:4px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--saffron),var(--gold));border-radius:4px;width:0%;transition:width .3s}
+.progress-status{font-size:12px;color:rgba(255,246,229,.5);text-align:center;margin-top:8px;font-family:'Cinzel',serif}
+.sub-card{background:rgba(255,246,229,.04);border:1px solid rgba(212,175,55,.12);border-radius:10px;padding:14px;margin-bottom:8px}
+.sub-name{font-family:'Cinzel',serif;font-size:13px;color:var(--gold-h);margin-bottom:3px}
+.sub-detail{font-size:12px;color:rgba(255,246,229,.45);line-height:1.6}
+.sub-sankalp{font-size:12px;color:rgba(255,140,53,.7);margin-top:4px}
+.badge{display:inline-flex;align-items:center;gap:4px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:1px;padding:2px 8px;border-radius:12px;margin-top:6px}
+.badge-active{background:rgba(22,163,74,.1);color:#22C55E;border:1px solid rgba(22,163,74,.3)}
+.badge-today{background:rgba(255,107,0,.1);color:var(--saffron);border:1px solid rgba(255,107,0,.3)}
+.success-box{background:rgba(22,163,74,.08);border:1px solid rgba(22,163,74,.3);border-radius:12px;padding:24px;text-align:center}
+.success-icon{font-size:48px;margin-bottom:12px}
+.success-title{font-family:'Cinzel',serif;font-size:18px;color:#22C55E;margin-bottom:8px}
+.success-desc{font-size:13px;color:rgba(255,246,229,.6);line-height:1.7}
+.success-email{font-family:'Cinzel',serif;font-size:12px;color:var(--saffron);margin-top:8px}
+.config-warn{background:rgba(245,158,11,.08);border:2px solid rgba(245,158,11,.4);border-radius:10px;padding:16px;margin-bottom:20px;font-size:13px;color:rgba(245,158,11,.95);line-height:1.8;display:none}
+.footer{padding:20px;text-align:center;border-top:1px solid rgba(212,175,55,.08);margin-top:auto}
+.footer-text{font-family:'Cinzel',serif;font-size:10px;color:rgba(255,246,229,.15);letter-spacing:1px}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#1E0C00;color:var(--gold-h);font-family:'Cinzel',serif;font-size:12px;padding:12px 24px;border-radius:8px;border:1px solid rgba(212,175,55,.3);box-shadow:0 8px 24px rgba(0,0,0,.6);opacity:0;transition:all .35s;pointer-events:none;z-index:999;max-width:90vw;text-align:center}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+@media(max-width:480px){.main{padding:16px 12px}.card{padding:16px}.input.code-input{font-size:18px;letter-spacing:4px}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="logo">
+    <div class="logo-icon">&#x1F549;</div>
+    <div><div class="logo-name">SanataniAnthem</div><div class="logo-sub">&#x939;&#x930; &#x918;&#x930; &#x92E;&#x902;&#x926;&#x93F;&#x930;</div></div>
+  </div>
+  <div class="topbar-badge">PUROHIT PORTAL</div>
+</div>
+<div class="main">
+  <div class="config-warn" id="config-warn">
+    Setup Required: Cloudinary aur EmailJS keys set nahi hain. purohit.html ke CONFIG section mein apni keys daalo.
+  </div>
+  <!-- LOGIN -->
+  <div id="view-login">
+    <div class="login-header">
+      <div class="login-om">&#x950;</div>
+      <div class="login-title">Purohit Portal</div>
+      <div class="login-sub">&#x92A;&#x941;&#x930;&#x94B;&#x939;&#x93F;&#x924; &#x905;&#x92A;&#x932;&#x94B;&#x921; &#x92A;&#x94B;&#x930;&#x94D;&#x91F;&#x932;</div>
+    </div>
+    <div class="card">
+      <div class="card-title">&#x1F511; Apna Code Enter Karein</div>
+      <div class="field">
+        <label class="label">Secret Upload Code</label>
+        <input class="input code-input" id="code-input" type="text" placeholder="KASHI7" maxlength="10" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')doLogin()"/>
+        <div class="err" id="login-err">Invalid code. Admin se contact karein.</div>
+      </div>
+      <button class="btn btn-primary" id="login-btn" onclick="doLogin()"><span>Login as Purohit</span></button>
+      <p style="text-align:center;font-size:12px;color:rgba(255,246,229,.25);margin-top:16px;font-family:'Cinzel',serif">Code nahi pata? Admin se WhatsApp karein.</p>
+    </div>
+  </div>
+  <!-- PORTAL -->
+  <div id="view-portal" style="display:none">
+    <div style="text-align:center;margin-bottom:24px">
+      <div style="font-size:40px;margin-bottom:8px" id="mandir-emoji">&#x1F6D5;</div>
+      <div style="font-family:'Cinzel',serif;font-size:18px;color:var(--gold)" id="mandir-name">-</div>
+      <div style="font-size:12px;color:rgba(255,246,229,.4);margin-top:3px" id="mandir-loc">-</div>
+      <div style="font-family:'Noto Sans Devanagari',sans-serif;font-size:13px;color:var(--saffron);margin-top:6px">&#x928;&#x92E;&#x938;&#x94D;&#x924;&#x947; &#x92A;&#x902;&#x921;&#x93F;&#x924; &#x91C;&#x940; &#x1F64F;</div>
+    </div>
+    <div class="card">
+      <div class="card-title">&#x1F64F; Subscriber Chunein</div>
+      <div class="field">
+        <label class="label">Kiska Puja Upload Karna Hai?</label>
+        <select class="input" id="sel-subscriber" onchange="onSubChange()">
+          <option value="">-- Subscriber chunein --</option>
+        </select>
+      </div>
+      <div id="sel-sub-info" style="display:none;background:rgba(255,107,0,.06);border:1px solid rgba(255,107,0,.2);border-radius:8px;padding:14px;font-size:13px;color:rgba(255,246,229,.7);line-height:1.8"></div>
+      <div class="err" id="err-subscriber">Subscriber select karein</div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:#22C55E">&#x1F3A5; Puja Video Upload Karein</div>
+      <div class="field">
+        <label class="label">Video File Select Karein *</label>
+        <div class="upload-zone" id="upload-zone">
+          <input type="file" id="video-file" accept="video/*" onchange="onFileSelect(this)"/>
+          <div class="upload-icon">&#x1F4F9;</div>
+          <div class="upload-title">Video select karein ya yahan drop karein</div>
+          <div class="upload-sub">MP4, MOV, AVI • Max 500MB</div>
+          <div class="file-name" id="file-name" style="display:none"></div>
+        </div>
+        <div class="err" id="err-file">Video file select karein</div>
+      </div>
+      <div class="field">
+        <label class="label">Puja Notes (Optional)</label>
+        <textarea class="input" id="puja-notes" placeholder="e.g. Rudrabhishek, 108 bilva patra se kiya..."></textarea>
+      </div>
+      <div class="progress-wrap" id="progress-wrap">
+        <div class="progress-label"><span id="progress-step">Uploading...</span><span id="progress-pct">0%</span></div>
+        <div class="progress-track"><div class="progress-bar" id="progress-bar"></div></div>
+        <div class="progress-status" id="progress-status">Please wait...</div>
+      </div>
+      <button class="btn btn-success" id="upload-btn" onclick="doUpload()" style="margin-top:8px">
+        <span>&#x1FA54; Upload Video &amp; Email Subscriber</span>
+      </button>
+    </div>
+    <div class="card">
+      <div class="card-title">&#x1F4CB; Is Temple Ke Subscribers (<span id="sub-count">0</span>)</div>
+      <div id="subs-list"><div style="color:rgba(255,246,229,.3);font-size:13px;text-align:center;padding:20px">Loading...</div></div>
+    </div>
+    <div style="text-align:center;margin-bottom:20px">
+      <button class="btn btn-ghost" onclick="doLogout()" style="width:auto;padding:8px 22px;font-size:10px">&#x1F6AA; Logout</button>
+    </div>
+  </div>
+  <!-- SUCCESS -->
+  <div id="view-success" style="display:none">
+    <div style="text-align:center;margin-bottom:24px"><div style="font-size:36px;margin-bottom:8px" id="s-emoji">&#x1F6D5;</div></div>
+    <div class="success-box">
+      <div class="success-icon">&#x1FA54;</div>
+      <div class="success-title">Puja Upload Ho Gaya!</div>
+      <div class="success-desc">Video cloud mein save ho gayi.<br/>Subscriber ko email bhej di gayi.</div>
+      <div class="success-email" id="success-email-sent">&#x1F4E7; Sent to: -</div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px">
+      <button class="btn btn-ghost" onclick="resetForNext()" style="flex:1">Another Upload</button>
+      <button class="btn btn-ghost" onclick="doLogout()" style="flex:1">Logout</button>
+    </div>
+  </div>
+</div>
+<div class="footer"><div class="footer-text">SanataniAnthem Purohit Portal • Confidential</div></div>
+<div class="toast" id="toast"></div>
+<script>
+/* ================================================================
+   CONFIG - APNI KEYS YAHAN DAALO
+   
+   CLOUDINARY SETUP (cloudinary.com - FREE):
+   1. Account banao
+   2. Settings > Upload > Add Upload Preset
+   3. Signing Mode: "Unsigned" karo
+   4. Preset name niche daalo
+   
+   EMAILJS SETUP (emailjs.com - FREE 200 emails/month):
+   1. Account banao
+   2. Email Services > Add Service > Gmail select karo
+   3. Email Templates > Create Template
+   4. Template mein ye variables use karo:
+      {{subscriber_name}}, {{mandir_name}}, {{puja_date}},
+      {{puja_notes}}, {{video_url}}, {{subscriber_gotra}}
+   5. Account > Public Key copy karo
+================================================================ */
+const CONFIG = {
+  CLOUDINARY_CLOUD_NAME:    'dfx2veoqn',
+  CLOUDINARY_UPLOAD_PRESET: 'SanataniAnthem',
+  EMAILJS_PUBLIC_KEY:       'KbAWcBNxayfWnSH4R',
+  EMAILJS_SERVICE_ID:       'service_mw59a1f',
+  EMAILJS_TEMPLATE_ID:      'template_4y3hreg',
+};
+
+let currentMandir=null,selectedSubscriber=null,selectedFile=null;
+
+(function init(){
+  if(CONFIG.CLOUDINARY_CLOUD_NAME==='YOUR_CLOUD_NAME'){
+    document.getElementById('config-warn').style.display='block';
+  }
+  if(CONFIG.EMAILJS_PUBLIC_KEY!=='YOUR_EMAILJS_PUBLIC_KEY'){
+    emailjs.init(CONFIG.EMAILJS_PUBLIC_KEY);
+  }
+})();
+
+function getDB(){try{return JSON.parse(localStorage.getItem('sanatani_cms')||'{}')}catch(e){return{}}}
+function saveDB(db){localStorage.setItem('sanatani_cms',JSON.stringify(db))}
+function getDefaultMandirs(){return[
+  {id:'m1',name:'Kashi Vishwanath',location:'Varanasi, UP',emoji:'🛕',code:'KASHI7',active:true},
+  {id:'m2',name:'Tirupati Balaji',location:'Tirupati, AP',emoji:'🙏',code:'TIRUPA7',active:true},
+  {id:'m3',name:'Vaishno Devi',location:'Katra, J&K',emoji:'⛰️',code:'VAISH7',active:true},
+  {id:'m4',name:'Jagannath Puri',location:'Puri, Odisha',emoji:'🌊',code:'JAGANN7',active:true},
+  {id:'m5',name:'Somnath Mandir',location:'Prabhas Patan',emoji:'🌙',code:'SOMNAT7',active:true},
+  {id:'m6',name:'Shirdi Sai Baba',location:'Shirdi, MH',emoji:'🌹',code:'SHIRDI7',active:true},
+]}
+
+function doLogin(){
+  const code=(document.getElementById('code-input').value||'').trim().toUpperCase();
+  if(!code){showToast('Code enter karein');return}
+  const btn=document.getElementById('login-btn');
+  btn.innerHTML='<div class="spinner"></div><span>Checking...</span>';btn.disabled=true;
+  setTimeout(()=>{
+    const db=getDB();
+    const mandirs=(db.mandirs&&db.mandirs.length>0)?db.mandirs:getDefaultMandirs();
+    const mandir=mandirs.find(m=>m.code&&m.code.toUpperCase()===code);
+    btn.innerHTML='<span>Login as Purohit</span>';btn.disabled=false;
+    if(!mandir){document.getElementById('login-err').style.display='block';document.getElementById('code-input').classList.add('error');return}
+    document.getElementById('login-err').style.display='none';document.getElementById('code-input').classList.remove('error');
+    currentMandir=mandir;showPortal(mandir);
+  },600);
+}
+
+function showPortal(m){
+  document.getElementById('view-login').style.display='none';
+  document.getElementById('view-portal').style.display='block';
+  document.getElementById('mandir-emoji').textContent=m.emoji||'🛕';
+  document.getElementById('mandir-name').textContent=m.name;
+  document.getElementById('mandir-loc').textContent='📍 '+m.location+(m.purohit?' • '+m.purohit:'');
+  loadSubscribers(m);
+}
+
+function loadSubscribers(mandir){
+  const db=getDB();
+  const subs=(db.subscriptions||[]).filter(s=>s.mandir&&s.mandir.id===mandir.id&&s.status==='active');
+  document.getElementById('sub-count').textContent=subs.length;
+  const sel=document.getElementById('sel-subscriber');
+  sel.innerHTML='<option value="">-- Subscriber chunein --</option>'+subs.map(s=>'<option value="'+s.id+'">'+s.name+' — '+s.email+'</option>').join('');
+  const list=document.getElementById('subs-list');
+  if(!subs.length){list.innerHTML='<div style="color:rgba(255,246,229,.3);font-size:13px;text-align:center;padding:24px">Is temple ke koi active subscriber nahi hain abhi.</div>';return}
+  const today=new Date().getDate();
+  list.innerHTML=subs.map(s=>{
+    const isToday=(s.pujasDates||[]).includes(today);
+    return '<div class="sub-card"><div class="sub-name">🙏 '+s.name+(s.gotra?' <span style="font-size:11px;opacity:.5">('+s.gotra+')</span>':'')+'</div>'+
+      '<div class="sub-detail">📧 '+s.email+'</div>'+
+      '<div class="sub-detail">📅 Puja dates: '+(s.pujasDates||[]).map(function(d){return d+'th'}).join(', ')+'</div>'+
+      '<div class="sub-detail">✅ Pujas done: '+(s.totalPujas||0)+'</div>'+
+      (s.sankalp?'<div class="sub-sankalp">🙏 '+s.sankalp+'</div>':'')+
+      '<div><span class="badge badge-active">Active</span>'+(isToday?' <span class="badge badge-today">Aaj Ka Din</span>':'')+'</div></div>';
+  }).join('');
+}
+
+function onFileSelect(input){
+  const file=input.files[0];if(!file)return;
+  if(file.size>500*1024*1024){showToast('Max 500MB allowed!');input.value='';return}
+  selectedFile=file;
+  document.getElementById('upload-zone').classList.add('file-selected');
+  const n=document.getElementById('file-name');
+  n.style.display='block';n.textContent='✅ '+file.name+' ('+(file.size/1024/1024).toFixed(1)+' MB)';
+  document.getElementById('err-file').style.display='none';
+}
+
+function onSubChange(){
+  const id=document.getElementById('sel-subscriber').value;
+  const db=getDB();
+  selectedSubscriber=(db.subscriptions||[]).find(function(s){return s.id===id})||null;
+  const info=document.getElementById('sel-sub-info');
+  document.getElementById('err-subscriber').style.display='none';
+  if(!selectedSubscriber){info.style.display='none';return}
+  info.style.display='block';
+  info.innerHTML='👤 <strong>'+selectedSubscriber.name+'</strong>'+(selectedSubscriber.gotra?' | Gotra: '+selectedSubscriber.gotra:'')+'<br>📧 '+selectedSubscriber.email+'<br>📅 Puja dates: '+(selectedSubscriber.pujasDates||[]).map(function(d){return d+'th'}).join(', ')+(selectedSubscriber.sankalp?'<br>🙏 '+selectedSubscriber.sankalp:'');
+}
+
+async function doUpload(){
+  let ok=true;
+  if(!selectedSubscriber){document.getElementById('err-subscriber').style.display='block';ok=false}
+  if(!selectedFile){document.getElementById('err-file').style.display='block';ok=false}
+  if(!ok)return;
+  if(CONFIG.CLOUDINARY_CLOUD_NAME==='YOUR_CLOUD_NAME'){showToast('⚠️ Cloudinary setup pehle karo!');return}
+  const btn=document.getElementById('upload-btn');
+  btn.disabled=true;btn.innerHTML='<div class="spinner"></div><span>Uploading...</span>';
+  const pw=document.getElementById('progress-wrap'),pb=document.getElementById('progress-bar'),pp=document.getElementById('progress-pct'),ps=document.getElementById('progress-status');
+  pw.style.display='block';
+  try{
+    document.getElementById('progress-step').textContent='Step 1/2: Video cloud mein ja rahi hai...';
+    ps.textContent='Please wait, upload ho rahi hai...';
+    const videoUrl=await uploadToCloudinary(selectedFile,function(pct){pb.style.width=pct+'%';pp.textContent=pct+'%'});
+    pb.style.width='85%';pp.textContent='85%';
+    document.getElementById('progress-step').textContent='Step 2/2: Email bhej raha hai...';
+    ps.textContent='Subscriber ko notify kar raha hai...';
+    await sendEmail(selectedSubscriber,videoUrl);
+    pb.style.width='100%';pp.textContent='100%';ps.textContent='Done!';
+    savePujaRecord(selectedSubscriber,videoUrl);
+    showSuccess(selectedSubscriber);
+  }catch(err){
+    console.error(err);
+    showToast('Error: '+(err.message||'Dobara try karein.'));
+    btn.disabled=false;btn.innerHTML='<span>🪔 Upload Video & Email Subscriber</span>';
+    ps.textContent='Failed. Please retry.';
+  }
+}
+
+function uploadToCloudinary(file,onProgress){
+  return new Promise(function(resolve,reject){
+    const fd=new FormData();
+    fd.append('file',file);
+    fd.append('upload_preset',CONFIG.CLOUDINARY_UPLOAD_PRESET);
+    fd.append('folder','sanatanianthem_pujas');
+    const xhr=new XMLHttpRequest();
+    xhr.upload.addEventListener('progress',function(e){if(e.lengthComputable)onProgress(Math.round(e.loaded/e.total*80))});
+    xhr.onload=function(){if(xhr.status===200)resolve(JSON.parse(xhr.responseText).secure_url);else reject(new Error('Cloudinary error: '+xhr.status))};
+    xhr.onerror=function(){reject(new Error('Network error'))};
+    xhr.open('POST','https://api.cloudinary.com/v1_1/'+CONFIG.CLOUDINARY_CLOUD_NAME+'/video/upload');
+    xhr.send(fd);
+  });
+}
+
+async function sendEmail(sub,videoUrl){
+  if(CONFIG.EMAILJS_SERVICE_ID==='YOUR_SERVICE_ID'){console.warn('EmailJS not configured');return}
+  const date=new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});
+  await emailjs.send(CONFIG.EMAILJS_SERVICE_ID,CONFIG.EMAILJS_TEMPLATE_ID,{
+    to_email:sub.email,
+    subscriber_name:sub.name,
+    subscriber_gotra:sub.gotra||'',
+    mandir_name:currentMandir?currentMandir.name:'—',
+    mandir_location:currentMandir?currentMandir.location:'—',
+    puja_date:date,
+    puja_notes:document.getElementById('puja-notes').value.trim()||'Puja safalata se sampann hua.',
+    video_url:videoUrl,
+  });
+}
+
+function savePujaRecord(sub,videoUrl){
+  const db=getDB();
+  if(!db.pujaHistory)db.pujaHistory=[];
+  db.pujaHistory.push({id:'puja_'+Date.now(),subscriptionId:sub.id,subscriberName:sub.name,subscriberEmail:sub.email,mandirName:currentMandir?currentMandir.name:'—',videoUrl,notes:document.getElementById('puja-notes').value.trim(),date:new Date().toISOString()});
+  const s=(db.subscriptions||[]).find(function(s){return s.id===sub.id});
+  if(s){s.totalPujas=(s.totalPujas||0)+1;s.lastPujaDate=new Date().toISOString();s.lastVideoUrl=videoUrl}
+  saveDB(db);
+}
+
+function showSuccess(sub){
+  document.getElementById('view-portal').style.display='none';
+  document.getElementById('view-success').style.display='block';
+  if(currentMandir)document.getElementById('s-emoji').textContent=currentMandir.emoji||'🛕';
+  document.getElementById('success-email-sent').textContent='📧 Sent to: '+sub.email;
+  window.scrollTo({top:0,behavior:'smooth'});
+  showToast('Puja recorded! Jai Shri Ram');
+}
+
+function resetForNext(){
+  selectedSubscriber=null;selectedFile=null;
+  document.getElementById('view-success').style.display='none';
+  document.getElementById('view-portal').style.display='block';
+  document.getElementById('sel-subscriber').value='';
+  document.getElementById('sel-sub-info').style.display='none';
+  document.getElementById('video-file').value='';
+  document.getElementById('upload-zone').classList.remove('file-selected');
+  document.getElementById('file-name').style.display='none';
+  document.getElementById('puja-notes').value='';
+  document.getElementById('progress-wrap').style.display='none';
+  document.getElementById('progress-bar').style.width='0%';
+  document.getElementById('upload-btn').disabled=false;
+  document.getElementById('upload-btn').innerHTML='<span>🪔 Upload Video & Email Subscriber</span>';
+  loadSubscribers(currentMandir);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function doLogout(){
+  currentMandir=null;selectedSubscriber=null;selectedFile=null;
+  ['view-portal','view-success'].forEach(function(id){document.getElementById(id).style.display='none'});
+  document.getElementById('view-login').style.display='block';
+  document.getElementById('code-input').value='';
+  window.scrollTo({top:0,behavior:'smooth'});
+  showToast('Logout. Jai Shri Ram! 🙏');
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show')},3200);
+}
+</script>
+</body>
+</html>
