@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>SanataniAnthem – Purohit Portal</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Noto+Sans+Devanagari:wght@400;600&family=Lora:wght@400;600&display=swap" rel="stylesheet"/>
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+<!-- PeerJS -->
 <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
 <style>
 :root{--saffron:#FF6B00;--saffron-d:#C95000;--gold:#D4AF37;--gold-h:#E8CC6A;--maroon:#5A0E0E;--cream:#FFF6E5;--bg-dark:#140800;--green:#16A34A;}
@@ -189,10 +193,22 @@ button{cursor:pointer;font-family:inherit;border:none}
 
 <script>
 /* ══════════════════════════════════════════
-   CONFIG — CLOUDINARY (video recording)
-   Cloud Name: dfx2veoqn
-   Upload Preset: SanataniAnthem
-   (Already set from your account)
+   FIREBASE CONFIG
+══════════════════════════════════════════ */
+const firebaseConfig = {
+  apiKey: "AIzaSyBC1yt-YE74pKCKMfukmc7_3vicM49h6vE",
+  authDomain: "sanatanianthem-652a3.firebaseapp.com",
+  databaseURL: "https://sanatanianthem-652a3-default-rtdb.firebaseio.com",
+  projectId: "sanatanianthem-652a3",
+  storageBucket: "sanatanianthem-652a3.firebasestorage.app",
+  messagingSenderId: "1031082702558",
+  appId: "1:1031082702558:web:744ffa9cfa54ff838db44f"
+};
+firebase.initializeApp(firebaseConfig);
+const db_rt = firebase.database();
+
+/* ══════════════════════════════════════════
+   CLOUDINARY CONFIG
 ══════════════════════════════════════════ */
 const CONFIG = {
   CLOUDINARY_CLOUD_NAME:    'dfx2veoqn',
@@ -211,9 +227,20 @@ let liveSeconds = 0;
 let camOn = true;
 let micOn = true;
 
-/* ── DB ── */
+/* ── LOCAL DB (for subscriber data) ── */
 function getDB(){try{return JSON.parse(localStorage.getItem('sanatani_cms')||'{}')}catch(e){return{}}}
 function saveDB(db){localStorage.setItem('sanatani_cms',JSON.stringify(db))}
+
+/* ── FIREBASE LIVE SIGNAL ── */
+function setLiveSignal(mandirId, data) {
+  db_rt.ref('liveStreams/' + mandirId).set(data);
+}
+function clearLiveSignal(mandirId) {
+  db_rt.ref('liveStreams/' + mandirId).remove();
+}
+function saveRecordingToFirebase(rec) {
+  db_rt.ref('pujaRecordings/' + rec.id).set(rec);
+}
 
 function getDefaultMandirs(){return[
   {id:'m1',name:'Kashi Vishwanath',location:'Varanasi, UP',emoji:'🛕',code:'KASHI7',active:true},
@@ -317,15 +344,15 @@ async function startLive(){
     livePeer = new Peer(peerId, {host:'0.peerjs.com',port:443,path:'/',secure:true,debug:0});
 
     livePeer.on('open', id=>{
-      // Mark live in localStorage
-      const db=getDB();
-      if(!db.liveStreams)db.liveStreams={};
-      db.liveStreams[currentMandir.id]={
-        peerId:id, mandirId:currentMandir.id,
-        mandirName:currentMandir.name, mandirEmoji:currentMandir.emoji||'🛕',
-        startTime:new Date().toISOString(), isLive:true
-      };
-      saveDB(db);
+      // Mark live in Firebase Realtime DB — visible to ALL visitors instantly!
+      setLiveSignal(currentMandir.id, {
+        peerId: id,
+        mandirId: currentMandir.id,
+        mandirName: currentMandir.name,
+        mandirEmoji: currentMandir.emoji || '🛕',
+        startTime: new Date().toISOString(),
+        isLive: true
+      });
 
       setState('live');
       startTimer();
@@ -366,9 +393,8 @@ function stopLive(){
   setState('saving');
   stopTimer();
 
-  // Remove from live registry
-  const db=getDB();
-  if(db.liveStreams&&currentMandir) { delete db.liveStreams[currentMandir.id]; saveDB(db); }
+  // Remove from Firebase live registry
+  if(currentMandir) clearLiveSignal(currentMandir.id);
 
   // Close peer connections
   if(livePeer){ livePeer.destroy(); livePeer=null; }
@@ -428,9 +454,7 @@ async function uploadRecording(){
 }
 
 function saveRecordingToDB(videoUrl, duration){
-  const db = getDB();
-  if(!db.pujaRecordings) db.pujaRecordings = [];
-  db.pujaRecordings.unshift({
+  const rec = {
     id: 'rec_'+Date.now(),
     mandirId: currentMandir.id,
     mandirName: currentMandir.name,
@@ -438,10 +462,16 @@ function saveRecordingToDB(videoUrl, duration){
     videoUrl,
     duration: Math.round(duration),
     recordedAt: new Date().toISOString(),
-    status: 'pending',   // pending → approved
+    status: 'pending',
     approvedAt: null,
     notifiedSubscribers: false,
-  });
+  };
+  // Save to Firebase — admin panel instantly dekh sakta hai
+  saveRecordingToFirebase(rec);
+  // Also save locally as backup
+  const db = getDB();
+  if(!db.pujaRecordings) db.pujaRecordings = [];
+  db.pujaRecordings.unshift(rec);
   saveDB(db);
 }
 
@@ -495,8 +525,7 @@ function resetForNext(){
 
 function doLogout(){
   cleanupLive();
-  const db=getDB();
-  if(db.liveStreams&&currentMandir){delete db.liveStreams[currentMandir.id];saveDB(db);}
+  if(currentMandir) clearLiveSignal(currentMandir.id);
   currentMandir=null;
   document.getElementById('view-portal').style.display='none';
   document.getElementById('view-login').style.display='block';
