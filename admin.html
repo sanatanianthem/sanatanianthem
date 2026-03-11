@@ -253,6 +253,7 @@ textarea.form-input{resize:vertical;min-height:80px}
   <div class="sidebar-section">Puja Subscriptions</div>
   <div class="nav-item" onclick="showPage('subscriptions',this)"><span class="nav-icon">🙏</span>Subscriptions<span class="nav-badge" id="sub-count-badge">0</span></div>
   <div class="nav-item" onclick="showPage('mandirs',this)"><span class="nav-icon">🛕</span>Manage Mandirs</div>
+  <div class="nav-item" onclick="showPage('recordings',this)"><span class="nav-icon">🎥</span>Puja Recordings<span class="nav-badge" id="rec-pending-badge" style="background:#E53E3E">0</span></div>
 
 
     <div class="sidebar-section">
@@ -554,7 +555,26 @@ textarea.form-input{resize:vertical;min-height:80px}
     </div>
   </div>
 
-  <!-- PUROHIT LINK PAGE -->
+    <!-- RECORDINGS PAGE -->
+  <div class="page" id="page-recordings">
+    <div class="page-title">Puja Recordings</div>
+    <div class="page-sub">Purohit ki live recordings yahan aayengi. Approve karo toh subscribers ko auto-email jaayega.</div>
+
+    <!-- Stats row -->
+    <div class="stats-row" id="rec-stats-row" style="display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap">
+      <div class="stat-card" style="flex:1;min-width:130px"><div class="stat-number" id="rec-stat-total">0</div><div class="stat-label">Total Recordings</div></div>
+      <div class="stat-card" style="flex:1;min-width:130px;border-color:rgba(229,62,62,.3)"><div class="stat-number" id="rec-stat-pending" style="color:#FC8181">0</div><div class="stat-label">Pending Approval</div></div>
+      <div class="stat-card" style="flex:1;min-width:130px;border-color:rgba(34,197,94,.3)"><div class="stat-number" id="rec-stat-approved" style="color:#22C55E">0</div><div class="stat-label">Approved</div></div>
+    </div>
+
+    <div id="recordings-list">
+      <div style="text-align:center;padding:40px;color:var(--text-l);font-family:Cinzel,serif;font-size:13px">
+        Abhi koi recording nahi hai.<br/>Purohit jab live kare aur stop kare toh yahan aayegi.
+      </div>
+    </div>
+  </div>
+
+<!-- PUROHIT LINK PAGE -->
   <div class="page" id="page-purohit">
     <div class="page-title">Purohit Portal Link</div>
     <div class="page-sub">Share this separate link with your purohits. They can ONLY upload puja videos — they cannot access admin panel.</div>
@@ -1663,6 +1683,186 @@ renderPage = function(id) {
   if (id === 'purohit') { renderPurohitCodesPage(getDB()); return; }
   _origRender2(id);
 };
+
+
+/* ════════════════════════════════════════
+   PUJA RECORDINGS — Approve & Email
+════════════════════════════════════════ */
+function renderRecordingsPage(db) {
+  const recs = db.pujaRecordings || [];
+  const pending = recs.filter(r => r.status === 'pending');
+  const approved = recs.filter(r => r.status === 'approved');
+
+  // Stats
+  const el = id => document.getElementById(id);
+  if(el('rec-stat-total')) el('rec-stat-total').textContent = recs.length;
+  if(el('rec-stat-pending')) el('rec-stat-pending').textContent = pending.length;
+  if(el('rec-stat-approved')) el('rec-stat-approved').textContent = approved.length;
+
+  // Badge in nav
+  const badge = document.getElementById('rec-pending-badge');
+  if(badge) { badge.textContent = pending.length; badge.style.display = pending.length > 0 ? 'inline-flex' : 'none'; }
+
+  const list = document.getElementById('recordings-list');
+  if(!list) return;
+
+  if(recs.length === 0) {
+    list.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-l);font-family:Cinzel,serif;font-size:13px">Abhi koi recording nahi hai.<br/>Purohit jab live kare aur stop kare toh yahan aayegi.</div>';
+    return;
+  }
+
+  list.innerHTML = recs.map(r => {
+    const date = new Date(r.recordedAt).toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+    const durText = r.duration > 0 ? Math.floor(r.duration/60)+'m '+Math.round(r.duration%60)+'s' : '—';
+    const isPending = r.status === 'pending';
+
+    return `<div style="background:var(--panel2);border:1px solid ${isPending ? 'rgba(229,62,62,.3)' : 'rgba(34,197,94,.2)'};border-radius:12px;padding:20px;margin-bottom:14px">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap">
+        <div>
+          <div style="font-family:Cinzel,serif;font-size:14px;color:var(--text);margin-bottom:6px">
+            ${r.mandirEmoji || '🛕'} ${r.mandirName}
+          </div>
+          <div style="font-size:12px;color:var(--text-l);line-height:1.8">
+            📅 ${date}<br/>
+            ⏱ Duration: ${durText}
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end">
+          <span style="font-family:Cinzel,serif;font-size:10px;letter-spacing:1px;padding:3px 10px;border-radius:12px;${isPending ? 'background:rgba(229,62,62,.1);color:#FC8181;border:1px solid rgba(229,62,62,.3)' : 'background:rgba(34,197,94,.1);color:#22C55E;border:1px solid rgba(34,197,94,.3)'}">
+            ${isPending ? '⏳ PENDING' : '✅ APPROVED'}
+          </span>
+        </div>
+      </div>
+
+      <!-- Video preview -->
+      <div style="margin:14px 0;background:#000;border-radius:8px;overflow:hidden">
+        <video src="${r.videoUrl}" controls style="width:100%;max-height:200px;display:block" preload="metadata"></video>
+      </div>
+
+      <!-- Action buttons -->
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <a href="${r.videoUrl}" target="_blank" class="tb-btn tb-btn-ghost" style="text-decoration:none;font-size:11px">🔗 Open Video</a>
+        ${isPending ? `
+        <button onclick="approveRecording('${r.id}')" class="tb-btn tb-btn-primary" style="background:linear-gradient(135deg,#16A34A,#15803D);font-size:11px">
+          ✅ Approve &amp; Email Subscribers
+        </button>
+        <button onclick="rejectRecording('${r.id}')" class="tb-btn tb-btn-ghost" style="font-size:11px;color:#FC8181;border-color:rgba(229,62,62,.3)">
+          ❌ Delete
+        </button>
+        ` : `
+        <button onclick="rejectRecording('${r.id}')" class="tb-btn tb-btn-ghost" style="font-size:11px;color:var(--text-l)">
+          🗑 Delete
+        </button>
+        `}
+      </div>
+      ${!isPending && r.notifiedSubscribers ? '<div style="font-size:11px;color:#22C55E;margin-top:8px;font-family:Cinzel,serif">📧 Subscribers ko email bheja ja chuka hai</div>' : ''}
+    </div>`;
+  }).join('');
+}
+
+function approveRecording(recId) {
+  const db = getDB();
+  const rec = (db.pujaRecordings || []).find(r => r.id === recId);
+  if(!rec) return;
+
+  if(!confirm('Approve karein? Is mandir ke sabhi active subscribers ko email jaayega.')) return;
+
+  rec.status = 'approved';
+  rec.approvedAt = new Date().toISOString();
+
+  // Get subscribers for this mandir
+  const subs = (db.subscriptions || []).filter(s =>
+    s.mandir && s.mandir.id === rec.mandirId && s.status === 'active'
+  );
+
+  saveDB(db);
+  renderRecordingsPage(getDB());
+  adminToast('✅ Approved! ' + subs.length + ' subscriber(s) ko email bheja ja raha hai...');
+
+  // Send emails via EmailJS if configured
+  sendApprovalEmails(rec, subs);
+}
+
+function sendApprovalEmails(rec, subs) {
+  // EmailJS keys — same as purohit portal
+  const EMAILJS_SERVICE_ID  = 'service_mw59a1f';
+  const EMAILJS_TEMPLATE_ID = 'template_4y3hreg';
+  const EMAILJS_PUBLIC_KEY  = 'YOUR_EMAILJS_PUBLIC_KEY'; // fill this
+
+  if(EMAILJS_PUBLIC_KEY === 'YOUR_EMAILJS_PUBLIC_KEY') {
+    adminToast('⚠️ EmailJS Public Key set nahi hai admin.html mein!');
+    markNotified(rec.id);
+    return;
+  }
+
+  if(typeof emailjs === 'undefined') {
+    // Load EmailJS dynamically
+    const s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
+    s.onload = () => { emailjs.init(EMAILJS_PUBLIC_KEY); doSendEmails(rec, subs, EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID); };
+    document.head.appendChild(s);
+  } else {
+    if(!window._ejsInited) { emailjs.init(EMAILJS_PUBLIC_KEY); window._ejsInited=true; }
+    doSendEmails(rec, subs, EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID);
+  }
+}
+
+async function doSendEmails(rec, subs, svcId, tplId) {
+  const date = new Date(rec.approvedAt || rec.recordedAt).toLocaleDateString('en-IN', {day:'numeric',month:'long',year:'numeric'});
+  let sent = 0;
+  for(const sub of subs) {
+    try {
+      await emailjs.send(svcId, tplId, {
+        to_email:        sub.email,
+        subscriber_name: sub.name,
+        subscriber_gotra: sub.gotra || '',
+        mandir_name:     rec.mandirName,
+        mandir_location: '',
+        puja_date:       date,
+        puja_notes:      'Aaj ki puja ka video recording yahan dekh sakte hain.',
+        video_url:       rec.videoUrl,
+      });
+      sent++;
+    } catch(e) { console.error('Email failed for', sub.email, e); }
+  }
+  markNotified(rec.id);
+  adminToast('📧 ' + sent + '/' + subs.length + ' emails bhej diye!');
+}
+
+function markNotified(recId) {
+  const db = getDB();
+  const rec = (db.pujaRecordings || []).find(r => r.id === recId);
+  if(rec) { rec.notifiedSubscribers = true; saveDB(db); renderRecordingsPage(getDB()); }
+}
+
+function rejectRecording(recId) {
+  if(!confirm('Is recording ko delete karein?')) return;
+  const db = getDB();
+  db.pujaRecordings = (db.pujaRecordings || []).filter(r => r.id !== recId);
+  saveDB(db);
+  renderRecordingsPage(db);
+  adminToast('Recording delete ho gayi.');
+}
+
+/* ── Update pending badge on every render ── */
+const _origRender3 = renderPage;
+renderPage = function(id) {
+  if(id === 'recordings') { renderRecordingsPage(getDB()); return; }
+  _origRender3(id);
+  // Always update pending badge
+  const db = getDB();
+  const pending = (db.pujaRecordings || []).filter(r => r.status === 'pending').length;
+  const badge = document.getElementById('rec-pending-badge');
+  if(badge) { badge.textContent = pending; badge.style.display = pending > 0 ? 'inline-flex' : 'none'; }
+};
+
+// Check for pending recordings every 5s
+setInterval(() => {
+  const db = getDB();
+  const pending = (db.pujaRecordings || []).filter(r => r.status === 'pending').length;
+  const badge = document.getElementById('rec-pending-badge');
+  if(badge) { badge.textContent = pending; badge.style.display = pending > 0 ? 'inline-flex' : 'none'; }
+}, 5000);
 
 </script>
 </body>
