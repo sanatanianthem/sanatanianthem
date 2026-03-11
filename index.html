@@ -895,7 +895,12 @@ const DEFAULT_DB = {
 function getDB(){
   try{
     const s = localStorage.getItem('sanatani_cms');
-    return s ? JSON.parse(s) : DEFAULT_DB;
+    if(s){
+      const parsed = JSON.parse(s);
+      // Merge with DEFAULT_DB to fill any missing keys
+      return Object.assign({}, DEFAULT_DB, parsed);
+    }
+    return DEFAULT_DB;
   }catch(e){ return DEFAULT_DB; }
 }
 
@@ -1187,26 +1192,21 @@ window.addEventListener('scroll',()=>{
   }
 });
 
-/* ── LIVE SYNC (poll localStorage every 2s) ── */
-let _lastHash = '';
-setInterval(()=>{
-  const raw = localStorage.getItem('sanatani_cms') || '';
-  if(raw && raw !== _lastHash){
-    _lastHash = raw;
+/* ── FIREBASE CMS SYNC — loads ALL data from Firebase ── */
+rtdb.ref('cms').on('value', snapshot => {
+  const data = snapshot.val();
+  if(data){
+    // Save to localStorage as cache
+    localStorage.setItem('sanatani_cms', JSON.stringify(data));
+    renderAll();
+  } else {
+    // Firebase empty — use DEFAULT_DB and render
     renderAll();
   }
-},2000);
+});
 
 /* ── INIT ── */
-// Seed DEFAULT_DB if localStorage empty — cards always show on fresh browser
-(function seedDB(){
-  try {
-    const existing = localStorage.getItem('sanatani_cms');
-    if(!existing || existing === '{}' || existing === 'null') {
-      localStorage.setItem('sanatani_cms', JSON.stringify(DEFAULT_DB));
-    }
-  } catch(e) {}
-})();
+// Render immediately with cached/default data (Firebase will update shortly)
 renderAll();
 spawnParticles();
 
