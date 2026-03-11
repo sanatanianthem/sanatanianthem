@@ -1250,76 +1250,104 @@ function connectToLiveStream(peerId) {
   if (viewerPeer) { try{viewerPeer.destroy()}catch(e){} viewerPeer = null; }
 
   viewerPeer = new Peer({
-    host: '0.peerjs.com', port: 443, path: '/', secure: true, debug: 0
+    config: {
+      iceServers: [
+        {urls: 'stun:stun.l.google.com:19302'},
+        {urls: 'stun:stun1.l.google.com:19302'},
+        {urls:'turn:openrelay.metered.ca:80',username:'openrelayproject',credential:'openrelayproject'},
+        {urls:'turn:openrelay.metered.ca:443',username:'openrelayproject',credential:'openrelayproject'},
+        {urls:'turn:openrelay.metered.ca:443?transport=tcp',username:'openrelayproject',credential:'openrelayproject'}
+      ]
+    },
+    debug: 0
   });
 
   viewerPeer.on('open', async () => {
+    console.log('Viewer peer open, calling:', peerId);
+    
+    // Create minimal silent stream for WebRTC handshake
+    let dummyStream;
     try {
-      // Create a truly silent audio-only dummy stream for WebRTC handshake
-      // This is needed because PeerJS requires caller to provide a stream
-      let dummyStream;
-      try {
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const oscillator = ctx.createOscillator();
-        const dst = ctx.createMediaStreamDestination();
-        oscillator.connect(dst);
-        // DO NOT start oscillator — keeps it silent
-        dummyStream = dst.stream;
-      } catch(e) {
-        // Fallback: empty MediaStream
-        dummyStream = new MediaStream();
-      }
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      const ctx = new AudioContext();
+      const dest = ctx.createMediaStreamDestination();
+      const osc = ctx.createOscillator();
+      osc.connect(dest);
+      // Don't start — just need the stream object
+      dummyStream = dest.stream;
+    } catch(e) {
+      dummyStream = new MediaStream();
+    }
 
-      const call = viewerPeer.call(peerId, dummyStream);
-      if(!call) {
-        setConnectingText('Purohit abhi live nahi hai. Thodi der baad try karein.');
-        return;
-      }
+    const call = viewerPeer.call(peerId, dummyStream);
+    
+    if(!call) {
+      setConnectingText('Purohit abhi live nahi hai.');
+      return;
+    }
 
-      call.on('stream', (remoteStream) => {
-        const video = document.getElementById('live-viewer-video');
-        // Ensure video tracks exist
-        const videoTracks = remoteStream.getVideoTracks();
-        const audioTracks = remoteStream.getAudioTracks();
-        console.log('Remote stream:', videoTracks.length, 'video tracks,', audioTracks.length, 'audio tracks');
-
-        video.srcObject = remoteStream;
+    let streamReceived = false;
+    
+    call.on('stream', (remoteStream) => {
+      streamReceived = true;
+      console.log('Got remote stream:', 
+        remoteStream.getVideoTracks().length, 'video,',
+        remoteStream.getAudioTracks().length, 'audio tracks');
+      
+      const video = document.getElementById('live-viewer-video');
+      video.srcObject = remoteStream;
+      video.muted = false;
+      
+      // Try to play
+      const playPromise = video.play();
+      if(playPromise) {
+        playPromise.then(() => {
+          video.style.display = 'block';
+          document.getElementById('live-connecting').style.display = 'none';
+        }).catch(() => {
+          // Autoplay blocked — show play button
+          video.style.display = 'block';
+          document.getElementById('live-connecting').style.display = 'none';
+          document.getElementById('live-modal-info').innerHTML = 
+            '<button onclick="document.getElementById(\'live-viewer-video\').play();this.style.display=\'none\'" ' +
+            'style="background:#FF6B00;color:#fff;border:none;padding:10px 24px;border-radius:6px;font-family:Cinzel,serif;font-size:13px;cursor:pointer;margin-top:8px">' +
+            '▶ Tap to Play</button>';
+        });
+      } else {
         video.style.display = 'block';
         document.getElementById('live-connecting').style.display = 'none';
-        currentLiveStream = call;
+      }
+    });
 
-        // Force play (some browsers block autoplay)
-        video.play().catch(e => {
-          // Show unmute button if autoplay blocked
-          document.getElementById('live-modal-info').innerHTML =
-            '<button onclick="document.getElementById(\'live-viewer-video\').play()" style="background:var(--saffron);color:#fff;border:none;padding:8px 18px;border-radius:6px;font-family:Cinzel,serif;font-size:12px;cursor:pointer;margin-top:8px">▶ Play Video</button>';
-        });
-      });
+    call.on('close', () => {
+      document.getElementById('live-viewer-video').style.display = 'none';
+      document.getElementById('live-connecting').style.display = 'flex';
+      setConnectingText('Stream band ho gayi. 🙏');
+    });
 
-      call.on('close', () => {
-        setConnectingText('Stream band ho gayi. 🙏');
-        document.getElementById('live-viewer-video').style.display = 'none';
-        document.getElementById('live-connecting').style.display = 'flex';
-      });
-      call.on('error', (err) => {
-        setConnectingText('Connection error. Dobara try karein.');
-        console.error('Call error:', err);
-      });
+    call.on('error', (err) => {
+      console.error('Call error:', err);
+      setConnectingText('Connection error. Dobara try karein.');
+    });
 
-    } catch(err) {
-      setConnectingText('Error: ' + err.message);
-    }
+    // Timeout — if no stream in 10s, show message
+    setTimeout(() => {
+      if(!streamReceived) {
+        setConnectingText('Stream nahi aa rahi. Purohit ka internet check karo ya dobara try karo.');
+      }
+    }, 10000);
   });
 
   viewerPeer.on('error', (err) => {
-    console.error('Peer error:', err);
+    console.error('Viewer peer error:', err.type);
     if(err.type === 'peer-unavailable') {
       setConnectingText('Purohit abhi live nahi hai.');
     } else {
-      setConnectingText('Connect nahi hua: ' + err.type);
+      setConnectingText('Connect nahi hua: ' + err.type + '. Dobara try karein.');
     }
   });
 }
+
 
 function setConnectingText(msg) {
   const el = document.getElementById('live-connecting');
