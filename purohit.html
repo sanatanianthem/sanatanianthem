@@ -8,8 +8,7 @@
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-<!-- PeerJS -->
-<script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+
 <style>
 :root{--saffron:#FF6B00;--saffron-d:#C95000;--gold:#D4AF37;--gold-h:#E8CC6A;--maroon:#5A0E0E;--cream:#FFF6E5;--bg-dark:#140800;--green:#16A34A;}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -220,8 +219,9 @@ let currentMandir = null;
 let localStream = null;
 let mediaRecorder = null;
 let recordedChunks = [];
-let livePeer = null;
-let activeConnections = [];
+// WebRTC native — no PeerJS needed
+let activeConnections = []; // {pc, id}
+let offerCheckInterval = null;
 let timerInterval = null;
 let liveSeconds = 0;
 let camOn = true;
@@ -339,65 +339,68 @@ async function startLive(){
     mediaRecorder.ondataavailable = e => { if(e.data.size>0) recordedChunks.push(e.data); };
     mediaRecorder.start(1000); // collect every 1s
 
-    // PeerJS — auto random ID (no conflict issues)
-    livePeer = new Peer({
-      config: {
-        iceServers: [
-          {urls: 'stun:stun.l.google.com:19302'},
-          {urls: 'stun:stun1.l.google.com:19302'},
-          // Free TURN servers — relay karta hai jab direct connect fail ho
-          {
-            urls: 'turn:openrelay.metered.ca:80',
-            username: 'openrelayproject',
-            credential: 'openrelayproject'
-          },
-          {
-            urls: 'turn:openrelay.metered.ca:443',
-            username: 'openrelayproject',
-            credential: 'openrelayproject'
-          },
-          {
-            urls: 'turn:openrelay.metered.ca:443?transport=tcp',
-            username: 'openrelayproject',
-            credential: 'openrelayproject'
-          }
-        ]
-      },
-      debug: 0
+    // Mark live in Firebase — visitors turant dekhenge
+    setLiveSignal(currentMandir.id, {
+      mandirId: currentMandir.id,
+      mandirName: currentMandir.name,
+      mandirEmoji: currentMandir.emoji || '🛕',
+      startTime: new Date().toISOString(),
+      isLive: true
     });
 
-    livePeer.on('open', id=>{
-      console.log('PeerJS connected, ID:', id);
-      // Mark live in Firebase — ALL visitors instantly dekh sakte hain
-      setLiveSignal(currentMandir.id, {
-        peerId: id,
-        mandirId: currentMandir.id,
-        mandirName: currentMandir.name,
-        mandirEmoji: currentMandir.emoji || '🛕',
-        startTime: new Date().toISOString(),
-        isLive: true
+    setState('live');
+    startTimer();
+    showToast('🔴 Live shuru! Recording bhi chal rahi hai.');
+
+    // Native WebRTC — Firebase signaling, no external server needed!
+    offerCheckInterval = db_rt.ref('webrtc/' + currentMandir.id + '/offers').on('child_added', async snap => {
+      const data = snap.val();
+      if(!data || !data.offer || !localStream) return;
+      const viewerId = data.viewerId;
+
+      const ICE_CONFIG = { iceServers:[
+        {urls:'stun:stun.l.google.com:19302'},
+        {urls:'stun:stun1.l.google.com:19302'},
+        {urls:'turn:openrelay.metered.ca:80',username:'openrelayproject',credential:'openrelayproject'},
+        {urls:'turn:openrelay.metered.ca:443',username:'openrelayproject',credential:'openrelayproject'}
+      ]};
+
+      const pc = new RTCPeerConnection(ICE_CONFIG);
+
+      // Send local stream to viewer
+      localStream.getTracks().forEach(track => pc.addTrack(track, localStream));
+
+      // Send ICE candidates to Firebase
+      pc.onicecandidate = e => {
+        if(e.candidate)
+          db_rt.ref('webrtc/'+currentMandir.id+'/purohitCandidates/'+viewerId).push(e.candidate.toJSON());
+      };
+
+      pc.onconnectionstatechange = () => {
+        if(pc.connectionState === 'connected'){
+          activeConnections.push({pc, id:viewerId});
+          updateViewerCount();
+          showToast('Ek viewer join kiya! 👁');
+        }
+        if(['disconnected','failed','closed'].includes(pc.connectionState)){
+          activeConnections = activeConnections.filter(c=>c.id!==viewerId);
+          updateViewerCount();
+        }
+      };
+
+      await pc.setRemoteDescription(new RTCSessionDescription(data.offer));
+      const answer = await pc.createAnswer();
+      await pc.setLocalDescription(answer);
+
+      // Send answer back
+      db_rt.ref('webrtc/'+currentMandir.id+'/answers/'+viewerId).set({answer: pc.localDescription.toJSON()});
+
+      // Receive viewer ICE candidates
+      db_rt.ref('webrtc/'+currentMandir.id+'/viewerCandidates/'+viewerId).on('child_added', candSnap => {
+        pc.addIceCandidate(new RTCIceCandidate(candSnap.val())).catch(()=>{});
       });
-      setState('live');
-      startTimer();
-      showToast('🔴 Live shuru! Recording bhi chal rahi hai.');
-    });
 
-    livePeer.on('call', call=>{
-      // Answer with full stream (video+audio)
-      if(localStream) {
-        call.answer(localStream);
-        activeConnections.push(call);
-        updateViewerCount();
-        call.on('close',()=>{activeConnections=activeConnections.filter(c=>c!==call);updateViewerCount()});
-        call.on('error', ()=>{activeConnections=activeConnections.filter(c=>c!==call);updateViewerCount()});
-        showToast('Ek viewer join kiya! 👁');
-      }
-    });
-
-    livePeer.on('error', err=>{
-      console.error('PeerJS error:', err.type, err.message);
-      showToast('Connection error: ' + err.type + '. Internet check karein.');
-      // Don't stop live just because of peer error — recording still works
+      snap.ref.remove(); // clean up offer
     });
 
   } catch(err){
@@ -416,9 +419,16 @@ function stopLive(){
   // Remove from Firebase live registry
   if(currentMandir) clearLiveSignal(currentMandir.id);
 
-  // Close peer connections
-  if(livePeer){ livePeer.destroy(); livePeer=null; }
-  activeConnections=[];
+  // Close all peer connections
+  activeConnections.forEach(c => { try{c.pc.close()}catch(e){} });
+  activeConnections = [];
+  // Stop listening for new offers
+  if(offerCheckInterval){
+    db_rt.ref('webrtc/'+currentMandir.id+'/offers').off('child_added', offerCheckInterval);
+    offerCheckInterval = null;
+  }
+  // Clean up WebRTC data from Firebase
+  if(currentMandir) db_rt.ref('webrtc/'+currentMandir.id).remove();
 
   // Stop camera first (but keep stream data for upload)
   document.getElementById('local-video').srcObject=null;
@@ -534,7 +544,12 @@ function updateViewerCount(){
 /* ── CLEANUP ── */
 function cleanupLive(){
   if(localStream){localStream.getTracks().forEach(t=>t.stop());localStream=null;}
-  if(livePeer){livePeer.destroy();livePeer=null;}
+  activeConnections.forEach(c=>{try{c.pc.close()}catch(e){}});
+  activeConnections=[];
+  if(offerCheckInterval && currentMandir){
+    db_rt.ref('webrtc/'+currentMandir.id+'/offers').off('child_added', offerCheckInterval);
+    offerCheckInterval=null;
+  }
   if(mediaRecorder&&mediaRecorder.state!=='inactive')mediaRecorder.stop();
   stopTimer(); activeConnections=[];
 }
