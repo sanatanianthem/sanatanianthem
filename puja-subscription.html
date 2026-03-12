@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Firebase — load first -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>SanataniAnthem – Online Puja Subscription</title>
@@ -308,9 +311,6 @@ textarea.field-input{resize:vertical;min-height:90px}
 #mobile-nav .nav-link{color:var(--gold-h);font-size:16px;padding:14px 0;border-bottom:1px solid rgba(212,175,55,.1)}
 #mobile-close{position:absolute;top:20px;right:24px;font-size:28px;color:var(--gold);cursor:pointer;background:none;border:none}
 </style>
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 </head>
 <body>
 
@@ -698,7 +698,7 @@ textarea.field-input{resize:vertical;min-height:90px}
 <button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 <div class="toast" id="toast"></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 /* ══════════════════════════════════════════
    STATE
 ══════════════════════════════════════════ */
@@ -722,17 +722,22 @@ const firebaseConfig = {
   messagingSenderId: "1031082702558",
   appId: "1:1031082702558:web:744ffa9cfa54ff838db44f"
 };
-if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-const subDB = firebase.database();
+let subDB = null;
+try {
+  if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+  subDB = firebase.database();
 
-// Load latest mandirs from Firebase
-subDB.ref('cms').once('value').then(snap => {
-  const data = snap.val();
-  if(data){
-    localStorage.setItem('sanatani_cms', JSON.stringify(data));
-    renderMandirGrid();
-  }
-});
+  // Load latest data from Firebase
+  subDB.ref('cms').once('value').then(snap => {
+    const data = snap.val();
+    if(data){
+      localStorage.setItem('sanatani_cms', JSON.stringify(data));
+      renderMandirGrid();
+    }
+  }).catch(e => console.warn('Firebase load error:', e));
+} catch(e) {
+  console.warn('Firebase init error:', e);
+}
 
 function getDB(){
   try{
@@ -952,9 +957,11 @@ function onPaymentSuccess(response){
   };
 
   // Save to Firebase — admin turant dekh sakta hai!
-  subDB.ref('subscriptions/' + subId).set(subscription)
-    .then(() => console.log('Saved to Firebase:', subId))
-    .catch(e => console.error('Firebase error:', e));
+  if(subDB) {
+    subDB.ref('subscriptions/' + subId).set(subscription)
+      .then(() => console.log('Saved to Firebase:', subId))
+      .catch(e => console.error('Firebase error:', e));
+  }
 
   // Local cache bhi update karo
   const db = getDB() || {};
@@ -1028,3 +1035,9 @@ window.addEventListener('scroll',()=>{
 });
 
 /* ════════════════════════════════�
+/* ══════════════════════════════════════════
+   END
+══════════════════════════════════════════ */
+</script>
+</body>
+</html>
