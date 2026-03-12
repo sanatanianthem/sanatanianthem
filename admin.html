@@ -219,6 +219,7 @@ textarea.form-input{resize:vertical;min-height:80px}
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
 <div class="app">
@@ -1819,24 +1820,10 @@ function sendApprovalEmails(rec, subs) {
   // EmailJS keys — same as purohit portal
   const EMAILJS_SERVICE_ID  = 'service_mw59a1f';
   const EMAILJS_TEMPLATE_ID = 'template_4y3hreg';
-  const EMAILJS_PUBLIC_KEY  = 'YOUR_EMAILJS_PUBLIC_KEY'; // fill this
+  const EMAILJS_PUBLIC_KEY  = 'KbAWcBNxayfWnSH4R';
 
-  if(EMAILJS_PUBLIC_KEY === 'YOUR_EMAILJS_PUBLIC_KEY') {
-    adminToast('⚠️ EmailJS Public Key set nahi hai admin.html mein!');
-    markNotified(rec.id);
-    return;
-  }
-
-  if(typeof emailjs === 'undefined') {
-    // Load EmailJS dynamically
-    const s = document.createElement('script');
-    s.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
-    s.onload = () => { emailjs.init(EMAILJS_PUBLIC_KEY); doSendEmails(rec, subs, EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID); };
-    document.head.appendChild(s);
-  } else {
-    if(!window._ejsInited) { emailjs.init(EMAILJS_PUBLIC_KEY); window._ejsInited=true; }
-    doSendEmails(rec, subs, EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID);
-  }
+  // EmailJS already initialized at page load
+  doSendEmails(rec, subs, EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID);
 }
 
 async function doSendEmails(rec, subs, svcId, tplId) {
@@ -1910,6 +1897,7 @@ const firebaseConfig = {
   appId: "1:1031082702558:web:744ffa9cfa54ff838db44f"
 };
 if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+emailjs.init("KbAWcBNxayfWnSH4R");window._ejsInited=true;
 const adminRTDB = firebase.database();
 // Start Firebase sync immediately
 setTimeout(initFirebaseSync, 100);
