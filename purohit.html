@@ -373,7 +373,7 @@ async function startLive(){
       // Send ICE candidates to Firebase
       pc.onicecandidate = e => {
         if(e.candidate)
-          db_rt.ref('webrtc/'+currentMandir.id+'/purohitCandidates/'+viewerId).push(e.candidate.toJSON());
+          db_rt.ref('webrtc/'+currentMandir.id+'/purohitCandidates/'+viewerId).push({candidate: e.candidate.candidate, sdpMid: e.candidate.sdpMid, sdpMLineIndex: e.candidate.sdpMLineIndex});
       };
 
       pc.onconnectionstatechange = () => {
@@ -393,7 +393,7 @@ async function startLive(){
       await pc.setLocalDescription(answer);
 
       // Send answer back
-      db_rt.ref('webrtc/'+currentMandir.id+'/answers/'+viewerId).set({answer: pc.localDescription.toJSON()});
+      db_rt.ref('webrtc/'+currentMandir.id+'/answers/'+viewerId).set({answer: {type: pc.localDescription.type, sdp: pc.localDescription.sdp}});
 
       // Receive viewer ICE candidates
       db_rt.ref('webrtc/'+currentMandir.id+'/viewerCandidates/'+viewerId).on('child_added', candSnap => {
