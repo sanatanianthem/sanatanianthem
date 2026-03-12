@@ -1281,7 +1281,7 @@ function connectToLiveStream(peerId) {
 
   viewerPC.onicecandidate = e => {
     if(e.candidate)
-      rtdb.ref('webrtc/'+mandirId+'/viewerCandidates/'+viewerId).push(e.candidate.toJSON());
+      rtdb.ref('webrtc/'+mandirId+'/viewerCandidates/'+viewerId).push({candidate: e.candidate.candidate, sdpMid: e.candidate.sdpMid, sdpMLineIndex: e.candidate.sdpMLineIndex});
   };
 
   viewerPC.onconnectionstatechange = () => {
@@ -1300,7 +1300,7 @@ function connectToLiveStream(peerId) {
   // Create offer → send to Firebase
   viewerPC.createOffer().then(offer => {
     viewerPC.setLocalDescription(offer);
-    rtdb.ref('webrtc/'+mandirId+'/offers').push({viewerId, offer: offer.toJSON()});
+    rtdb.ref('webrtc/'+mandirId+'/offers').push({viewerId, offer: {type: offer.type, sdp: offer.sdp}});
   });
 
   // Wait for purohit's answer
