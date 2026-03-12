@@ -463,8 +463,8 @@ textarea.field-input{resize:vertical;min-height:90px}
         <div class="form-steps-nav">
           <div class="form-step-tab active" id="tab-1">1. Your Details</div>
           <div class="form-step-tab" id="tab-2">2. Choose Temple</div>
-          <div class="form-step-tab" id="tab-3">3. Puja Dates</div>
-          <div class="form-step-tab" id="tab-4">4. Payment</div>
+          
+          <div class="form-step-tab" id="tab-3">3. Payment</div>
         </div>
 
         <!-- STEP 1: Personal Details -->
@@ -520,30 +520,12 @@ textarea.field-input{resize:vertical;min-height:90px}
           </div>
           <div class="form-nav">
             <button class="btn btn-outline" onclick="goToStep(1)" style="color:var(--ink-m);border-color:var(--cream-dd)">← Back</button>
-            <span class="step-indicator">Step 2 of 4</span>
-            <button class="btn btn-primary" onclick="goToStep(3)">Next: Puja Dates →</button>
-          </div>
-        </div>
-
-        <!-- STEP 3: Puja Dates -->
-        <div class="form-panel" id="panel-3">
-          <div class="field-group">
-            <div class="field-label">Choose Your Puja Days <span class="field-required">*</span></div>
-            <div class="field-hint" style="margin-bottom:12px">Select 4 dates each month when your puja will be performed</div>
-            <div class="date-options" id="date-options">
-              <!-- Populated by JS -->
-            </div>
-            <div class="field-error hidden" id="err-dates" style="margin-top:8px">Please select exactly 4 dates</div>
-          </div>
-          <div style="background:rgba(255,107,0,.06);border:1px solid rgba(255,107,0,.2);border-radius:var(--r-md);padding:16px;margin-top:8px;font-size:13px;color:var(--ink-m);line-height:1.6">
-            💡 <strong style="color:var(--maroon)">Tip:</strong> Choose days that hold significance for you — like Ekadashi, Mondays (Lord Shiva), Fridays (Goddess Lakshmi), or any special dates.
-          </div>
-          <div class="form-nav">
-            <button class="btn btn-outline" onclick="goToStep(2)" style="color:var(--ink-m);border-color:var(--cream-dd)">← Back</button>
-            <span class="step-indicator">Step 3 of 4</span>
+            <span class="step-indicator">Step 2 of 3</span>
             <button class="btn btn-primary" onclick="goToStep(4)">Next: Payment →</button>
           </div>
         </div>
+
+
 
         <!-- STEP 4: Payment -->
         <div class="form-panel" id="panel-4">
@@ -593,8 +575,8 @@ textarea.field-input{resize:vertical;min-height:90px}
           <div class="razorpay-note">🔒 Secured by Razorpay • Your data is safe</div>
 
           <div class="form-nav" style="border-top:none;padding-top:0;margin-top:12px">
-            <button class="btn btn-outline" onclick="goToStep(3)" style="color:var(--ink-m);border-color:var(--cream-dd);padding:8px 18px;font-size:10px">← Back</button>
-            <span class="step-indicator">Step 4 of 4</span>
+            <button class="btn btn-outline" onclick="goToStep(2)" style="color:var(--ink-m);border-color:var(--cream-dd);padding:8px 18px;font-size:10px">← Back</button>
+            <span class="step-indicator">Step 3 of 3</span>
             <span></span>
           </div>
         </div>
@@ -823,6 +805,10 @@ function toggleDate(d){
    STEP NAVIGATION
 ══════════════════════════════════════════ */
 function goToStep(n){
+  // Auto-assign 4 default puja dates (admin can override in future)
+  if(n === 4 && (!formState.selectedDates || formState.selectedDates.length === 0)){
+    formState.selectedDates = [1, 8, 15, 22]; // Default: 4 dates spread across month
+  }
   if(n > formState.step && !validateStep(formState.step)) return;
 
   // Update formState from inputs
@@ -839,7 +825,7 @@ function goToStep(n){
   if(n === 4){
     document.getElementById('pay-name').textContent = formState.name;
     document.getElementById('pay-mandir').textContent = formState.mandir?.name || '—';
-    document.getElementById('pay-dates').textContent = formState.selectedDates.map(d=>d+'th').join(', ');
+    document.getElementById('pay-dates').textContent = (formState.selectedDates.length ? formState.selectedDates.map(d=>d+'th').join(', ') : '1st, 8th, 15th, 22nd') + ' every month';
   }
 
   // Switch panels
@@ -880,7 +866,7 @@ function validateStep(step){
     return true;
   }
   if(step === 3){
-    if(formState.selectedDates.length !== 4){ document.getElementById('err-dates').classList.remove('hidden'); return false; }
+    // Dates auto-assigned — no validation needed
     return true;
   }
   return true;
