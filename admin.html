@@ -3,716 +3,1890 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>SanataniAnthem – Online Puja Subscription</title>
+<title>SanataniAnthem – Admin Control Panel</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=Lora:ital,wght@0,400;0,600;1,400&family=Noto+Sans+Devanagari:wght@300;400;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
 :root{
-  --saffron:#FF6B00;--saffron-h:#FF8C35;--saffron-d:#C95000;
-  --gold:#D4AF37;--gold-h:#E8CC6A;--gold-d:#A08828;
-  --cream:#FFF6E5;--cream-d:#F5E6C8;--cream-dd:#E8D0A8;
-  --maroon:#7A1E1E;--maroon-d:#5A0E0E;--maroon-l:#A83232;
-  --ink:#2C1A0E;--ink-m:#5C3A1E;--ink-l:#8B6040;
-  --white:#FFFDF5;--green:#16A34A;--green-l:rgba(22,163,74,.12);
-  --r-xs:4px;--r-sm:8px;--r-md:12px;--r-lg:20px;--r-xl:32px;
-  --sh-sm:0 2px 12px rgba(44,26,14,.1);
-  --sh-md:0 6px 28px rgba(122,30,30,.15);
-  --sh-lg:0 16px 56px rgba(122,30,30,.2);
+  --bg:#0F0A05;--bg2:#1A1108;--bg3:#251810;
+  --panel:#1E1510;--panel2:#2A1E12;--panel3:#342515;
+  --border:rgba(212,175,55,.12);--border-h:rgba(212,175,55,.3);
+  --saffron:#FF6B00;--saffron-d:#C95000;
+  --gold:#D4AF37;--gold-d:#A08828;--gold-l:#E8CC6A;
+  --maroon:#7A1E1E;--maroon-l:#A83232;
+  --cream:#FFF6E5;--white:#FFFDF5;
+  --text:#E8D5A8;--text-m:rgba(232,213,168,.65);--text-l:rgba(232,213,168,.35);
+  --green:#22C55E;--red:#EF4444;--blue:#3B82F6;--purple:#A855F7;
+  --r:6px;--r-lg:12px;
+  --sh:0 4px 24px rgba(0,0,0,.4);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;font-size:16px}
-body{font-family:'Lora',Georgia,serif;background:var(--cream);color:var(--ink);overflow-x:hidden}
-::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--cream-d)}::-webkit-scrollbar-thumb{background:var(--saffron);border-radius:3px}
-img{max-width:100%;display:block}
-a{text-decoration:none;color:inherit}
-button{cursor:pointer;font-family:inherit;border:none;background:none}
+html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:14px;overflow:hidden}
 
-/* TYPOGRAPHY */
-.font-display{font-family:'Cinzel Decorative',serif}
-.font-heading{font-family:'Cinzel',serif}
+/* ── LAYOUT ── */
+.app{display:grid;grid-template-columns:260px 1fr;grid-template-rows:56px 1fr;height:100vh}
+.topbar{grid-column:1/-1;grid-row:1;background:var(--panel);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:16px;z-index:100}
+.sidebar{grid-column:1;grid-row:2;background:var(--panel);border-right:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column}
+.main{grid-column:2;grid-row:2;overflow-y:auto;padding:28px}
 
-/* UTILITY */
-.container{max-width:1100px;margin:0 auto;padding:0 24px}
-.hidden{display:none!important}
-.text-center{text-align:center}
+/* ── TOPBAR ── */
+.tb-logo{font-family:'Cinzel Decorative',serif;font-size:15px;color:var(--gold);margin-right:auto;display:flex;align-items:center;gap:10px}
+.tb-logo-icon{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--saffron),var(--gold));display:flex;align-items:center;justify-content:center;font-size:14px}
+.tb-badge{display:flex;align-items:center;gap:6px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);color:var(--green);padding:4px 12px;border-radius:40px;font-size:11px;font-family:'Cinzel',serif;letter-spacing:1px}
+.tb-badge-dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite}
+.tb-btn{padding:7px 16px;border-radius:var(--r);font-family:'Cinzel',serif;font-size:10px;font-weight:700;letter-spacing:1px;cursor:pointer;transition:all .2s;border:none}
+.tb-btn-primary{background:linear-gradient(135deg,var(--saffron),var(--saffron-d));color:var(--white)}
+.tb-btn-ghost{background:rgba(255,255,255,.05);color:var(--text-m);border:1px solid var(--border)}
+.tb-btn-ghost:hover{border-color:var(--border-h);color:var(--text)}
+.tb-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--saffron),var(--gold));display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer}
 
-/* SECTION DECORATORS */
-.section-eyebrow{
-  font-family:'Cinzel',serif;font-size:10px;font-weight:700;
-  letter-spacing:4px;text-transform:uppercase;color:var(--saffron);
-  display:flex;align-items:center;gap:12px;justify-content:center;margin-bottom:10px
+/* ── SIDEBAR ── */
+.sidebar-section{padding:16px 12px 6px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:var(--text-l);text-transform:uppercase}
+.nav-item{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 14px;margin:1px 6px;border-radius:var(--r);
+  color:var(--text-m);cursor:pointer;transition:all .2s;font-size:13px
 }
-.section-eyebrow::before,.section-eyebrow::after{content:'';width:32px;height:1px;background:var(--gold)}
-.section-title{font-family:'Cinzel Decorative',serif;font-size:clamp(22px,3.5vw,38px);color:var(--maroon);line-height:1.2;margin-bottom:14px}
+.nav-item:hover{background:rgba(212,175,55,.06);color:var(--text)}
+.nav-item.active{background:rgba(255,107,0,.12);color:var(--saffron);border-left:2px solid var(--saffron);border-radius:0 var(--r) var(--r) 0;margin-left:4px}
+.nav-icon{width:20px;text-align:center;font-size:14px}
+.nav-badge{margin-left:auto;background:var(--saffron);color:var(--white);font-size:9px;padding:1px 6px;border-radius:10px;font-family:'Cinzel',serif}
+.sidebar-spacer{flex:1}
+.sidebar-footer{padding:14px;border-top:1px solid var(--border)}
+.sidebar-user{display:flex;align-items:center;gap:10px}
+.sidebar-user-info{display:flex;flex-direction:column}
+.sidebar-user-name{font-size:13px;font-weight:500;color:var(--text)}
+.sidebar-user-role{font-family:'Cinzel',serif;font-size:9px;color:var(--saffron);letter-spacing:1px}
 
-/* BUTTONS */
-.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 30px;border-radius:var(--r-xs);font-family:'Cinzel',serif;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;transition:all .3s;border:2px solid transparent;cursor:pointer}
-.btn-primary{background:linear-gradient(135deg,var(--saffron),var(--saffron-d));color:var(--white);box-shadow:0 4px 20px rgba(255,107,0,.35)}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(255,107,0,.5)}
-.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-d));color:var(--maroon-d);box-shadow:0 4px 20px rgba(212,175,55,.35)}
-.btn-gold:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(212,175,55,.5)}
-.btn-outline{border-color:var(--gold);color:var(--gold);background:transparent}
-.btn-outline:hover{background:var(--gold);color:var(--maroon-d)}
+/* ── PAGE SHELLS ── */
+.page{display:none}.page.active{display:block}
+.page-title{font-family:'Cinzel',serif;font-size:22px;color:var(--gold);margin-bottom:4px}
+.page-sub{font-size:13px;color:var(--text-m);margin-bottom:28px}
 
-/* HEADER */
-#site-header{position:fixed;top:0;left:0;right:0;z-index:1000}
-.topbar{background:var(--maroon-d);padding:6px 24px;display:flex;justify-content:space-between;align-items:center}
-.topbar-text{font-family:'Noto Sans Devanagari',sans-serif;font-size:12px;color:var(--gold-h);letter-spacing:1px}
-.topbar-links{display:flex;gap:20px}
-.topbar-links a{font-family:'Cinzel',serif;font-size:10px;color:rgba(255,246,229,.6);letter-spacing:1px;transition:color .2s}
-.topbar-links a:hover{color:var(--gold)}
-.navbar{background:rgba(255,246,229,.97);backdrop-filter:blur(16px);padding:0 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--gold);box-shadow:var(--sh-md)}
-.logo{display:flex;align-items:center;gap:12px;padding:12px 0}
-.logo-ring{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--saffron),var(--gold));display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--white);box-shadow:0 4px 16px rgba(255,107,0,.4)}
-.logo-words{display:flex;flex-direction:column;line-height:1.1}
-.logo-name{font-family:'Cinzel Decorative',serif;font-size:17px;font-weight:900;color:var(--maroon)}
-.logo-sub{font-family:'Noto Sans Devanagari',sans-serif;font-size:10px;color:var(--saffron);letter-spacing:2px;margin-top:1px}
-.nav-links{display:flex;align-items:center;gap:2px}
-.nav-link{font-family:'Cinzel',serif;font-size:11.5px;font-weight:600;letter-spacing:.8px;color:var(--ink);padding:10px 14px;border-radius:var(--r-xs);transition:all .25s;white-space:nowrap}
-.nav-link:hover,.nav-link.active{color:var(--saffron);background:rgba(255,107,0,.07)}
-.hamburger{display:none;flex-direction:column;gap:5px;padding:8px}
-.hamburger span{width:22px;height:2px;background:var(--ink);border-radius:1px}
+/* ── STAT CARDS ── */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
+.stat-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px;transition:all .25s;cursor:default}
+.stat-card:hover{border-color:var(--border-h);transform:translateY(-2px)}
+.stat-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px}
+.stat-icon{width:40px;height:40px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:18px}
+.stat-trend{font-size:11px;font-family:'Cinzel',serif;letter-spacing:.5px}
+.stat-trend.up{color:var(--green)}.stat-trend.down{color:var(--red)}
+.stat-value{font-family:'Cinzel',serif;font-size:28px;color:var(--text);margin-bottom:4px}
+.stat-label{font-size:12px;color:var(--text-m)}
 
-/* HERO */
-.puja-hero{
-  padding:140px 0 80px;
-  background:
-    radial-gradient(ellipse at 20% 50%,rgba(255,107,0,.18) 0%,transparent 55%),
-    radial-gradient(ellipse at 80% 20%,rgba(212,175,55,.12) 0%,transparent 50%),
-    linear-gradient(160deg,#1E0800 0%,#4A1200 40%,#2C0808 70%,#1A0505 100%);
-  position:relative;overflow:hidden
+/* ── CARDS & PANELS ── */
+.card{background:var(--panel);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px;margin-bottom:20px}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.card-title{font-family:'Cinzel',serif;font-size:14px;color:var(--gold);letter-spacing:.5px}
+.grid-2col{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.grid-3col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+
+/* ── TOGGLE SWITCH ── */
+.toggle-wrap{display:flex;align-items:center;gap:10px}
+.toggle{position:relative;width:40px;height:22px;cursor:pointer;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;inset:0;background:rgba(255,255,255,.1);border-radius:22px;transition:.3s}
+.toggle-slider::before{content:'';position:absolute;width:16px;height:16px;left:3px;top:3px;background:rgba(255,255,255,.4);border-radius:50%;transition:.3s}
+.toggle input:checked~.toggle-slider{background:var(--saffron)}
+.toggle input:checked~.toggle-slider::before{transform:translateX(18px);background:var(--white)}
+.toggle-label{font-size:13px;color:var(--text-m)}
+
+/* ── SECTION TOGGLE ROW ── */
+.section-row{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 16px;border-radius:var(--r);
+  border:1px solid var(--border);background:var(--panel2);
+  margin-bottom:8px;cursor:grab;transition:all .25s;position:relative
 }
-.puja-hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--saffron),var(--gold),var(--saffron))}
-.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.35);padding:6px 16px;border-radius:40px;font-family:'Cinzel',serif;font-size:10px;color:var(--gold-h);letter-spacing:2px;margin-bottom:20px}
-.hero-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 1.4s infinite}
-.hero-title{font-family:'Cinzel Decorative',serif;font-size:clamp(28px,4vw,52px);line-height:1.1;color:var(--white);margin-bottom:12px}
-.hero-title .accent{color:var(--gold)}
-.hero-shloka{font-family:'Noto Sans Devanagari',sans-serif;font-size:16px;color:var(--saffron-h);letter-spacing:2px;margin-bottom:18px;opacity:.9}
-.hero-desc{font-family:'Lora',serif;font-size:15px;color:rgba(255,246,229,.7);line-height:1.85;margin-bottom:32px}
+.section-row:hover{border-color:var(--border-h);background:var(--panel3)}
+.section-row.dragging{opacity:.5;cursor:grabbing}
+.drag-handle{color:var(--text-l);font-size:16px;cursor:grab;user-select:none;padding:0 4px}
+.section-row-icon{width:36px;height:36px;border-radius:var(--r);background:rgba(212,175,55,.08);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.section-row-info{flex:1}
+.section-row-name{font-size:13px;font-weight:500;color:var(--text);margin-bottom:1px}
+.section-row-sub{font-size:11px;color:var(--text-l)}
+.section-row-actions{display:flex;align-items:center;gap:8px}
+.row-btn{padding:5px 12px;border-radius:var(--r);font-size:10px;font-family:'Cinzel',serif;letter-spacing:.5px;cursor:pointer;border:1px solid;transition:all .2s}
+.row-btn-edit{border-color:rgba(212,175,55,.3);color:var(--gold);background:rgba(212,175,55,.06)}
+.row-btn-edit:hover{background:rgba(212,175,55,.15)}
+.row-btn-del{border-color:rgba(239,68,68,.3);color:var(--red);background:rgba(239,68,68,.06)}
+.row-btn-del:hover{background:rgba(239,68,68,.15)}
+.order-badge{background:rgba(212,175,55,.1);color:var(--gold-l);font-family:'Cinzel',serif;font-size:10px;padding:2px 8px;border-radius:10px}
 
-/* PRICE CARD in hero */
-.price-highlight{
-  background:rgba(255,246,229,.06);border:1px solid rgba(212,175,55,.3);
-  border-radius:var(--r-lg);padding:28px;
-  display:flex;flex-direction:column;gap:16px
+/* ── TABLE ── */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{font-family:'Cinzel',serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-l);padding:10px 14px;text-align:left;border-bottom:1px solid var(--border)}
+td{padding:12px 14px;border-bottom:1px solid rgba(212,175,55,.06);font-size:13px;color:var(--text-m)}
+tr:hover td{background:rgba(212,175,55,.03)}
+.td-name{color:var(--text);font-weight:500}
+.status-pill{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:40px;font-size:10px;font-family:'Cinzel',serif;letter-spacing:.5px}
+.pill-active{background:rgba(34,197,94,.1);color:var(--green);border:1px solid rgba(34,197,94,.2)}
+.pill-inactive{background:rgba(239,68,68,.1);color:var(--red);border:1px solid rgba(239,68,68,.2)}
+.pill-dot{width:4px;height:4px;border-radius:50%;background:currentColor}
+
+/* ── FORM ELEMENTS ── */
+.form-group{margin-bottom:16px}
+.form-label{display:block;font-family:'Cinzel',serif;font-size:10px;letter-spacing:1.5px;color:var(--text-m);text-transform:uppercase;margin-bottom:6px}
+.form-input{
+  width:100%;padding:10px 14px;background:var(--panel2);
+  border:1px solid var(--border);border-radius:var(--r);
+  color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;
+  transition:border-color .2s;outline:none
 }
-.price-main{display:flex;align-items:baseline;gap:6px}
-.price-amount{font-family:'Cinzel Decorative',serif;font-size:52px;color:var(--gold);line-height:1}
-.price-period{font-family:'Cinzel',serif;font-size:13px;color:rgba(255,246,229,.5);letter-spacing:1px}
-.price-includes{display:flex;flex-direction:column;gap:10px}
-.price-item{display:flex;align-items:center;gap:10px;font-size:14px;color:rgba(255,246,229,.75)}
-.price-item-check{width:18px;height:18px;border-radius:50%;background:rgba(22,163,74,.2);border:1px solid rgba(22,163,74,.5);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0}
-.cta-row{display:flex;gap:12px;flex-wrap:wrap}
+.form-input:focus{border-color:var(--saffron)}
+.form-input::placeholder{color:var(--text-l)}
+textarea.form-input{resize:vertical;min-height:80px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 20px;border-radius:var(--r);font-family:'Cinzel',serif;font-size:10px;font-weight:700;letter-spacing:1.2px;cursor:pointer;transition:all .2s;border:none}
+.btn-primary{background:linear-gradient(135deg,var(--saffron),var(--saffron-d));color:var(--white)}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(255,107,0,.3)}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-d));color:var(--bg)}
+.btn-gold:hover{transform:translateY(-1px)}
+.btn-ghost{background:rgba(255,255,255,.05);color:var(--text-m);border:1px solid var(--border)}
+.btn-ghost:hover{border-color:var(--border-h);color:var(--text)}
+.btn-danger{background:rgba(239,68,68,.12);color:var(--red);border:1px solid rgba(239,68,68,.2)}
+.btn-danger:hover{background:rgba(239,68,68,.2)}
+.btn-sm{padding:6px 14px;font-size:9px}
 
-/* ANIMATIONS */
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.4)}}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-@keyframes spin-slow{to{transform:rotate(360deg)}}
-@keyframes spin-rev{to{transform:rotate(-360deg)}}
-@keyframes glow{0%,100%{box-shadow:0 0 20px rgba(212,175,55,.3)}50%{box-shadow:0 0 50px rgba(212,175,55,.7)}}
-@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
-@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--panel);border:1px solid var(--border-h);border-radius:var(--r-lg);padding:28px;width:100%;max-width:520px;max-height:85vh;overflow-y:auto;transform:scale(.95);transition:transform .25s}
+.modal-overlay.open .modal{transform:scale(1)}
+.modal-title{font-family:'Cinzel',serif;font-size:16px;color:var(--gold);margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.modal-close{cursor:pointer;color:var(--text-l);font-size:20px;transition:color .2s}
+.modal-close:hover{color:var(--text)}
+.modal-footer{display:flex;justify-content:flex-end;gap:10px;margin-top:20px;padding-top:16px;border-top:1px solid var(--border)}
 
-/* MANDALA visual */
-.mandala-wrap{position:relative;width:340px;height:340px;margin:0 auto;animation:float 6s ease-in-out infinite}
-.ring{position:absolute;border-radius:50%;border:1px solid;top:50%;left:50%;transform:translate(-50%,-50%)}
-.ring-1{width:340px;height:340px;border-color:rgba(212,175,55,.12);animation:spin-slow 35s linear infinite}
-.ring-2{width:260px;height:260px;border-color:rgba(255,107,0,.2);animation:spin-rev 22s linear infinite;border-style:dashed}
-.ring-3{width:190px;height:190px;border-color:rgba(212,175,55,.3);animation:spin-slow 16s linear infinite}
-.mandala-core{position:absolute;width:130px;height:130px;border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(255,107,0,.3),rgba(212,175,55,.15));border:2px solid rgba(212,175,55,.5);display:flex;align-items:center;justify-content:center;box-shadow:0 0 60px rgba(212,175,55,.4);animation:glow 3s ease-in-out infinite}
-.om-symbol{font-family:'Noto Sans Devanagari',sans-serif;font-size:60px;color:var(--gold);text-shadow:0 0 40px rgba(212,175,55,.8);line-height:1}
+/* ── ACTIVITY FEED ── */
+.activity-item{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid rgba(212,175,55,.06)}
+.activity-icon{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.activity-text{font-size:12px;line-height:1.5}
+.activity-text strong{color:var(--text);font-weight:500}
+.activity-time{font-size:10px;color:var(--text-l);margin-top:2px;font-family:'Cinzel',serif;letter-spacing:.5px}
 
-/* HOW IT WORKS */
-.how-section{padding:90px 0;background:var(--cream-d)}
-.steps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:56px;position:relative}
-.steps-grid::before{content:'';position:absolute;top:36px;left:12.5%;right:12.5%;height:2px;background:linear-gradient(90deg,transparent,var(--gold),var(--gold),var(--gold),transparent);z-index:0}
-.step-item{display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 16px;position:relative;z-index:1}
-.step-circle{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--saffron),var(--saffron-d));display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:20px;box-shadow:0 8px 24px rgba(255,107,0,.35);border:3px solid var(--cream-d)}
-.step-num{position:absolute;top:-6px;right:calc(50% - 46px);width:20px;height:20px;border-radius:50%;background:var(--maroon);color:var(--gold);font-family:'Cinzel',serif;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center}
-.step-title{font-family:'Cinzel',serif;font-size:13px;font-weight:700;color:var(--maroon);margin-bottom:8px;line-height:1.3}
-.step-desc{font-size:12.5px;color:var(--ink-m);line-height:1.65}
-
-/* SUBSCRIPTION FORM SECTION */
-.form-section{padding:90px 0;background:var(--cream)}
-.form-wrapper{
-  max-width:760px;margin:0 auto;
-  background:var(--white);border-radius:var(--r-xl);
-  box-shadow:var(--sh-lg);border:1px solid rgba(212,175,55,.2);
-  overflow:hidden
+/* ── CHART PLACEHOLDER ── */
+.chart-bar-wrap{display:flex;align-items:flex-end;gap:6px;height:120px;padding-top:16px}
+.chart-bar{
+  flex:1;border-radius:3px 3px 0 0;
+  background:linear-gradient(180deg,var(--saffron),var(--saffron-d));
+  transition:height .5s ease;cursor:pointer;position:relative
 }
-.form-header{
-  background:linear-gradient(135deg,var(--maroon-d),var(--maroon));
-  padding:36px 40px;text-align:center;position:relative;overflow:hidden
-}
-.form-header::before{content:'ॐ';position:absolute;right:30px;top:50%;transform:translateY(-50%);font-family:'Noto Sans Devanagari',sans-serif;font-size:80px;color:rgba(212,175,55,.08);line-height:1}
-.form-header-title{font-family:'Cinzel Decorative',serif;font-size:22px;color:var(--gold);margin-bottom:6px}
-.form-header-sub{font-family:'Cinzel',serif;font-size:11px;color:rgba(255,246,229,.6);letter-spacing:2px}
-.form-body{padding:40px}
-.form-steps-nav{display:flex;margin-bottom:36px;border-radius:var(--r-sm);overflow:hidden;border:1px solid var(--cream-dd)}
-.form-step-tab{flex:1;padding:12px;text-align:center;font-family:'Cinzel',serif;font-size:10px;font-weight:700;letter-spacing:1px;color:var(--ink-l);background:var(--cream);transition:all .3s;cursor:default}
-.form-step-tab.active{background:linear-gradient(135deg,var(--saffron),var(--saffron-d));color:var(--white)}
-.form-step-tab.done{background:var(--green-l);color:var(--green)}
-.form-panel{display:none}.form-panel.active{display:block;animation:fadeUp .4s ease}
+.chart-bar:hover::after{content:attr(data-v);position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-family:'Cinzel',serif;font-size:9px;color:var(--gold);white-space:nowrap}
+.chart-bar.gold{background:linear-gradient(180deg,var(--gold),var(--gold-d))}
+.chart-labels{display:flex;gap:6px;margin-top:6px}
+.chart-label{flex:1;text-align:center;font-size:9px;color:var(--text-l);font-family:'Cinzel',serif;letter-spacing:.5px}
 
-/* FORM FIELDS */
-.field-group{margin-bottom:22px}
-.field-label{font-family:'Cinzel',serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-m);margin-bottom:8px;display:flex;align-items:center;gap:6px}
-.field-required{color:var(--saffron);font-size:12px}
-.field-input{
-  width:100%;padding:13px 16px;border-radius:var(--r-sm);
-  border:1.5px solid var(--cream-dd);background:var(--cream);
-  font-family:'Lora',serif;font-size:15px;color:var(--ink);
-  transition:all .25s;outline:none
-}
-.field-input:focus{border-color:var(--saffron);background:var(--white);box-shadow:0 0 0 3px rgba(255,107,0,.1)}
-.field-input.error{border-color:#EF4444}
-.field-error{font-size:11px;color:#EF4444;margin-top:4px;font-family:'Cinzel',serif;letter-spacing:.5px}
-.field-hint{font-size:12px;color:var(--ink-l);margin-top:4px;line-height:1.5}
-.fields-row{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-select.field-input{cursor:pointer}
-textarea.field-input{resize:vertical;min-height:90px}
+/* ── QUICK TOGGLE GRID ── */
+.quick-toggles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.qt-item{background:var(--panel2);border:1px solid var(--border);border-radius:var(--r);padding:14px;display:flex;flex-direction:column;gap:10px;transition:all .25s}
+.qt-item:hover{border-color:var(--border-h)}
+.qt-header{display:flex;justify-content:space-between;align-items:center}
+.qt-name{font-size:12px;font-weight:500;color:var(--text)}
+.qt-sub{font-size:10px;color:var(--text-l)}
 
-/* MANDIR CARDS */
-.mandir-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:8px}
-.mandir-card{
-  border:2px solid var(--cream-dd);border-radius:var(--r-md);
-  padding:16px;cursor:pointer;transition:all .3s;
-  display:flex;align-items:center;gap:12px;position:relative
-}
-.mandir-card:hover{border-color:var(--saffron);background:rgba(255,107,0,.03)}
-.mandir-card.selected{border-color:var(--saffron);background:rgba(255,107,0,.06)}
-.mandir-card.selected::after{content:'✓';position:absolute;top:8px;right:10px;width:18px;height:18px;border-radius:50%;background:var(--saffron);color:var(--white);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center}
-.mandir-emoji{font-size:28px;flex-shrink:0}
-.mandir-name{font-family:'Cinzel',serif;font-size:12px;font-weight:700;color:var(--maroon);margin-bottom:2px;line-height:1.3}
-.mandir-loc{font-size:11px;color:var(--ink-l)}
-.mandir-empty{font-family:'Cinzel',serif;font-size:12px;color:var(--ink-l);text-align:center;padding:24px;grid-column:1/-1;border:2px dashed var(--cream-dd);border-radius:var(--r-md)}
-
-/* DATE PICKER */
-.date-options{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:8px}
-.date-opt{
-  border:2px solid var(--cream-dd);border-radius:var(--r-sm);
-  padding:12px 8px;text-align:center;cursor:pointer;transition:all .25s
-}
-.date-opt:hover{border-color:var(--gold)}
-.date-opt.selected{border-color:var(--saffron);background:rgba(255,107,0,.06)}
-.date-opt-day{font-family:'Cinzel Decorative',serif;font-size:18px;color:var(--maroon)}
-.date-opt-label{font-family:'Cinzel',serif;font-size:9px;color:var(--ink-l);letter-spacing:1px;text-transform:uppercase;margin-top:2px}
-
-/* PAYMENT */
-.payment-summary{
-  background:linear-gradient(135deg,var(--maroon-d),#3A0808);
-  border-radius:var(--r-lg);padding:24px;margin-bottom:24px
-}
-.payment-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(212,175,55,.1)}
-.payment-row:last-child{border:none;padding-top:14px;margin-top:6px}
-.payment-label{font-family:'Cinzel',serif;font-size:11px;color:rgba(255,246,229,.55);letter-spacing:.5px}
-.payment-value{font-family:'Cinzel',serif;font-size:13px;color:rgba(255,246,229,.85)}
-.payment-total-label{font-family:'Cinzel',serif;font-size:12px;color:var(--gold-h);letter-spacing:1px}
-.payment-total-value{font-family:'Cinzel Decorative',serif;font-size:24px;color:var(--gold)}
-.razorpay-note{font-size:12px;color:var(--ink-l);text-align:center;margin-top:12px;display:flex;align-items:center;justify-content:center;gap:6px}
-.payment-methods{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
-.pm-badge{padding:5px 14px;border-radius:var(--r-xs);border:1px solid var(--cream-dd);font-family:'Cinzel',serif;font-size:9px;color:var(--ink-l);letter-spacing:1px;background:var(--cream)}
-
-/* TERMS checkbox */
-.checkbox-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:24px}
-.custom-checkbox{width:18px;height:18px;border:2px solid var(--cream-dd);border-radius:3px;cursor:pointer;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:all .25s}
-.custom-checkbox.checked{background:var(--saffron);border-color:var(--saffron);color:var(--white);font-size:10px}
-.checkbox-text{font-size:13px;color:var(--ink-m);line-height:1.5}
-.checkbox-text a{color:var(--saffron);text-decoration:underline}
-
-/* NAV BUTTONS */
-.form-nav{display:flex;justify-content:space-between;align-items:center;margin-top:28px;padding-top:24px;border-top:1px solid var(--cream-dd)}
-.step-indicator{font-family:'Cinzel',serif;font-size:10px;color:var(--ink-l);letter-spacing:1px}
-
-/* SUCCESS PAGE */
-.success-page{
-  min-height:70vh;display:flex;align-items:center;justify-content:center;
-  padding:90px 0;background:var(--cream)
-}
-.success-card{
-  max-width:560px;margin:0 auto;text-align:center;
-  background:var(--white);border-radius:var(--r-xl);padding:56px 40px;
-  box-shadow:var(--sh-lg);border:1px solid rgba(212,175,55,.2)
-}
-.success-icon{font-size:64px;margin-bottom:20px;animation:float 3s ease-in-out infinite}
-.success-title{font-family:'Cinzel Decorative',serif;font-size:26px;color:var(--maroon);margin-bottom:12px}
-.success-shloka{font-family:'Noto Sans Devanagari',sans-serif;font-size:15px;color:var(--saffron);margin-bottom:20px;letter-spacing:1px}
-.success-desc{font-size:14px;color:var(--ink-m);line-height:1.8;margin-bottom:28px}
-.success-details{background:var(--cream);border-radius:var(--r-md);padding:20px;margin-bottom:28px;text-align:left}
-.success-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--cream-dd);font-size:13px}
-.success-row:last-child{border:none}
-.success-row-label{color:var(--ink-l);font-family:'Cinzel',serif;font-size:10px;letter-spacing:1px;text-transform:uppercase}
-.success-row-val{color:var(--maroon);font-weight:600}
-.sub-id{font-family:'Cinzel',serif;font-size:18px;color:var(--saffron);font-weight:700;letter-spacing:2px;margin:12px 0}
-
-/* TRUST BADGES */
-.trust-section{padding:60px 0;background:var(--maroon-d)}
-.trust-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
-.trust-item{text-align:center;padding:20px}
-.trust-icon{font-size:32px;margin-bottom:12px}
-.trust-title{font-family:'Cinzel',serif;font-size:12px;font-weight:700;color:var(--gold-h);margin-bottom:6px}
-.trust-desc{font-size:12px;color:rgba(255,246,229,.5);line-height:1.5}
-
-/* FAQ */
-.faq-section{padding:90px 0;background:var(--cream-d)}
-.faq-list{max-width:700px;margin:48px auto 0;display:flex;flex-direction:column;gap:12px}
-.faq-item{background:var(--white);border-radius:var(--r-md);border:1px solid rgba(212,175,55,.15);overflow:hidden}
-.faq-q{padding:18px 22px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-family:'Cinzel',serif;font-size:13px;font-weight:600;color:var(--maroon);transition:background .2s}
-.faq-q:hover{background:rgba(255,107,0,.04)}
-.faq-q-icon{font-size:18px;color:var(--saffron);transition:transform .3s;flex-shrink:0;margin-left:12px}
-.faq-item.open .faq-q-icon{transform:rotate(45deg)}
-.faq-a{display:none;padding:0 22px 18px;font-size:13.5px;color:var(--ink-m);line-height:1.75}
-.faq-item.open .faq-a{display:block;animation:fadeUp .3s ease}
-
-/* TOAST */
-.toast{position:fixed;bottom:32px;right:28px;z-index:9999;background:var(--maroon-d);color:var(--gold-h);font-family:'Cinzel',serif;font-size:12px;letter-spacing:.5px;padding:14px 22px;border-radius:var(--r-sm);border-left:3px solid var(--gold);box-shadow:var(--sh-lg);transform:translateX(120px);opacity:0;transition:all .35s;pointer-events:none;max-width:320px}
-.toast.show{transform:translateX(0);opacity:1}
-
-/* LOADING */
-.btn-loading{position:relative;color:transparent!important}
-.btn-loading::after{content:'';position:absolute;width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:var(--white);border-radius:50%;animation:spin-slow .7s linear infinite}
-
-/* SCROLL TOP */
-#scroll-top{position:fixed;bottom:28px;right:28px;z-index:500;width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--saffron),var(--saffron-d));color:var(--white);font-size:18px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(255,107,0,.4);cursor:pointer;opacity:0;pointer-events:none;transition:all .3s;border:none}
-#scroll-top.visible{opacity:1;pointer-events:all}
-
-/* FOOTER */
-.mini-footer{background:var(--maroon-d);padding:28px 0;text-align:center;border-top:2px solid rgba(212,175,55,.2)}
-.mini-footer-text{font-family:'Cinzel',serif;font-size:10px;color:rgba(255,246,229,.35);letter-spacing:1px}
-.mini-footer-dharma{font-family:'Noto Sans Devanagari',sans-serif;font-size:13px;color:var(--saffron-h);opacity:.6;margin-top:6px}
-
-/* RESPONSIVE */
-@media(max-width:900px){
-  .hero-grid{grid-template-columns:1fr}.mandala-wrap{display:none}
-  .steps-grid{grid-template-columns:1fr 1fr;gap:32px}.steps-grid::before{display:none}
-  .trust-grid{grid-template-columns:1fr 1fr}
-  .fields-row{grid-template-columns:1fr}
-  .hamburger{display:flex}
-  .nav-links{display:none}
-  .topbar{display:none}
-}
-@media(max-width:600px){
-  .mandir-grid{grid-template-columns:1fr}
-  .date-options{grid-template-columns:repeat(2,1fr)}
-  .form-body{padding:24px}
-  .trust-grid{grid-template-columns:1fr 1fr}
-  .steps-grid{grid-template-columns:1fr}
-  .cta-row{flex-direction:column}
+/* ── DRAG DROP VISUAL ── */
+.dd-placeholder{
+  height:60px;border:2px dashed rgba(255,107,0,.4);border-radius:var(--r);
+  background:rgba(255,107,0,.04);display:flex;align-items:center;justify-content:center;
+  font-size:11px;color:var(--saffron);font-family:'Cinzel',serif;letter-spacing:1px;
+  margin-bottom:8px
 }
 
-/* Mobile Nav */
-#mobile-nav{position:fixed;top:0;left:0;right:0;bottom:0;z-index:999;background:var(--maroon-d);padding:80px 32px;display:flex;flex-direction:column;gap:6px;transform:translateX(100%);transition:transform .35s ease}
-#mobile-nav.open{transform:translateX(0)}
-#mobile-nav .nav-link{color:var(--gold-h);font-size:16px;padding:14px 0;border-bottom:1px solid rgba(212,175,55,.1)}
-#mobile-close{position:absolute;top:20px;right:24px;font-size:28px;color:var(--gold);cursor:pointer;background:none;border:none}
+/* ── COLOR PREVIEW ── */
+.color-swatch{width:28px;height:28px;border-radius:50%;border:2px solid rgba(255,255,255,.2);cursor:pointer;display:inline-block;vertical-align:middle}
+
+/* ── MISC ── */
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.empty-state{text-align:center;padding:48px 20px;color:var(--text-l)}
+.empty-icon{font-size:40px;margin-bottom:12px;opacity:.4}
+.empty-text{font-family:'Cinzel',serif;font-size:13px;letter-spacing:.5px}
+.tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-family:'Cinzel',serif;letter-spacing:.5px;margin:1px}
+.tag-saffron{background:rgba(255,107,0,.12);color:var(--saffron);border:1px solid rgba(255,107,0,.2)}
+.tag-gold{background:rgba(212,175,55,.12);color:var(--gold);border:1px solid rgba(212,175,55,.2)}
+.divider{height:1px;background:var(--border);margin:16px 0}
+.flex{display:flex}.items-center{align-items:center}.justify-between{justify-content:space-between}.gap-sm{gap:8px}.gap-md{gap:16px}
+.text-gold{color:var(--gold)}.text-saffron{color:var(--saffron)}.text-green{color:var(--green)}.text-red{color:var(--red)}
+.font-mono{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.5px}
+.preview-link{color:var(--saffron);font-size:12px;text-decoration:none;display:flex;align-items:center;gap:4px}
+.preview-link:hover{text-decoration:underline}
+
+/* ── SCROLLBAR ── */
+.sidebar::-webkit-scrollbar,.main::-webkit-scrollbar{width:4px}
+.sidebar::-webkit-scrollbar-thumb,.main::-webkit-scrollbar-thumb{background:rgba(212,175,55,.15);border-radius:2px}
 </style>
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
+<div class="app">
 
-<!-- HEADER -->
-<header id="site-header">
-  <div class="topbar">
-    <span style="font-family:'Noto Sans Devanagari',sans-serif;font-size:12px;color:var(--gold-h)">🕉 जय श्री राम • हर हर महादेव • जय माता दी 🕉</span>
-    <div class="topbar-links">
-      <a href="index.html">Home</a>
-      <a href="admin.html" target="_blank">Admin Panel</a>
-    </div>
+<!-- ═══ TOP BAR ═══ -->
+<header class="topbar">
+  <div class="tb-logo">
+    <div class="tb-logo-icon">🕉</div>
+    SanataniAnthem
+    <span style="color:var(--text-l);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:300">/ Admin</span>
   </div>
-  <nav class="navbar">
-    <a href="index.html" class="logo">
-      <div class="logo-ring">🕉</div>
-      <div class="logo-words">
-        <span class="logo-name">SanataniAnthem</span>
-        <span class="logo-sub">हर घर मंदिर</span>
-      </div>
-    </a>
-    <div class="nav-links">
-      <a href="index.html" class="nav-link">Home</a>
-      <a href="index.html#darshan" class="nav-link">Darshan</a>
-      <a href="#subscribe" class="nav-link active">Book Puja</a>
-      <a href="index.html#astrology" class="nav-link">Astrology</a>
-      <a href="index.html#donation" class="nav-link">Donate</a>
-      <a href="index.html#festivals" class="nav-link">Festivals</a>
-    </div>
-    <div style="display:flex;align-items:center;gap:10px">
-      <a href="admin.html" target="_blank" class="btn btn-primary" style="padding:9px 18px;font-size:10px">Admin</a>
-      <button class="hamburger" onclick="toggleMobileNav()"><span></span><span></span><span></span></button>
-    </div>
-  </nav>
+  <div class="tb-badge"><span class="tb-badge-dot"></span>All Systems Live</div>
+  <div style="display:flex;gap:8px;margin-left:auto">
+    <a href="index.html" target="_blank" class="preview-link">🌐 Preview Site</a>
+    <button class="tb-btn tb-btn-ghost" onclick="showToast('Syncing to Firebase...')">↺ Sync</button>
+    <button class="tb-btn tb-btn-primary" onclick="saveAndPublish()">🚀 Publish</button>
+    <div class="tb-avatar" onclick="showToast('Admin profile')">👤</div>
+  </div>
 </header>
 
-<div id="mobile-nav">
-  <button id="mobile-close" onclick="toggleMobileNav()">✕</button>
-  <a href="index.html" class="nav-link" onclick="toggleMobileNav()">Home</a>
-  <a href="index.html#darshan" class="nav-link" onclick="toggleMobileNav()">Darshan</a>
-  <a href="#subscribe" class="nav-link" onclick="toggleMobileNav()">Book Puja</a>
-  <a href="index.html#astrology" class="nav-link" onclick="toggleMobileNav()">Astrology</a>
-  <a href="index.html#donation" class="nav-link" onclick="toggleMobileNav()">Donate</a>
+<!-- ═══ SIDEBAR ═══ -->
+<aside class="sidebar">
+  <div class="sidebar-section">Main</div>
+  <div class="nav-item active" onclick="showPage('dashboard',this)"><span class="nav-icon">📊</span>Dashboard</div>
+  <div class="nav-item" onclick="showPage('sections',this)"><span class="nav-icon">🧩</span>Section Control<span class="nav-badge">Live</span></div>
+  <div class="nav-item" onclick="showPage('navigation',this)"><span class="nav-icon">🔗</span>Navigation Tabs</div>
+
+  <div class="sidebar-section">Content</div>
+  <div class="nav-item" onclick="showPage('darshan',this)"><span class="nav-icon">🛕</span>Temple Darshan</div>
+  <div class="nav-item" onclick="showPage('pujas',this)"><span class="nav-icon">🪔</span>Puja Manager</div>
+  <div class="nav-item" onclick="showPage('services',this)"><span class="nav-icon">⚡</span>Services</div>
+  <div class="nav-item" onclick="showPage('festivals',this)"><span class="nav-icon">🎉</span>Festivals</div>
+  <div class="nav-item" onclick="showPage('knowledge',this)"><span class="nav-icon">📖</span>Knowledge</div>
+
+  <div class="sidebar-section">Puja Subscriptions</div>
+  <div class="nav-item" onclick="showPage('subscriptions',this)"><span class="nav-icon">🙏</span>Subscriptions<span class="nav-badge" id="sub-count-badge">0</span></div>
+  <div class="nav-item" onclick="showPage('mandirs',this)"><span class="nav-icon">🛕</span>Manage Mandirs</div>
+  <div class="nav-item" onclick="showPage('recordings',this)"><span class="nav-icon">🎥</span>Puja Recordings<span class="nav-badge" id="rec-pending-badge" style="background:#E53E3E">0</span></div>
+
+
+    <div class="sidebar-section">
+
+  <div class="sidebar-section">Puja Subscriptions</div>
+  <div class="nav-item" onclick="showPage('subscriptions',this)"><span class="nav-icon">🙏</span>Subscriptions<span class="nav-badge" id="sub-count-badge">0</span></div>
+  <div class="nav-item" onclick="showPage('mandirs',this)"><span class="nav-icon">🛕</span>Manage Mandirs</div>
+  <div class="nav-item" onclick="showPage('purohit',this)"><span class="nav-icon">👳</span>Purohit Portal</div>
+
+  <div class="sidebar-section <div class="nav-item" onclick="showPage('users',this)"><span class="nav-icon">👥</span>Users</div>
+  <div class="nav-item" onclick="showPage('donations',this)"><span class="nav-icon">💛</span>Donations</div>
+  <div class="nav-item" onclick="showPage('notifications',this)"><span class="nav-icon">🔔</span>Notifications</div>
+  <div class="nav-item" onclick="showPage('settings',this)"><span class="nav-icon">⚙️</span>Settings</div>
+
+  <div class="sidebar-spacer"></div>
+  <div class="sidebar-footer">
+    <div class="sidebar-user">
+      <div class="tb-avatar" style="width:36px;height:36px">👤</div>
+      <div class="sidebar-user-info">
+        <span class="sidebar-user-name">Admin Pandit</span>
+        <span class="sidebar-user-role">Super Admin</span>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- ═══ MAIN CONTENT ═══ -->
+<main class="main">
+
+  <!-- ── DASHBOARD ── -->
+  <div class="page active" id="page-dashboard">
+    <div class="page-title">Dashboard</div>
+    <div class="page-sub">Welcome back, Admin. Here's what's happening across all platforms.</div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-header">
+          <div class="stat-icon" style="background:rgba(255,107,0,.12)">👥</div>
+          <span class="stat-trend up">↑ 12.4%</span>
+        </div>
+        <div class="stat-value" id="stat-users">5,24,890</div>
+        <div class="stat-label">Total Devotees</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-header">
+          <div class="stat-icon" style="background:rgba(212,175,55,.12)">🪔</div>
+          <span class="stat-trend up">↑ 8.2%</span>
+        </div>
+        <div class="stat-value">12,445</div>
+        <div class="stat-label">Pujas Booked</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-header">
+          <div class="stat-icon" style="background:rgba(34,197,94,.12)">💛</div>
+          <span class="stat-trend up">↑ 22.1%</span>
+        </div>
+        <div class="stat-value">₹48.2L</div>
+        <div class="stat-label">Donations This Month</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-header">
+          <div class="stat-icon" style="background:rgba(168,85,247,.12)">📱</div>
+          <span class="stat-trend down">↓ 1.3%</span>
+        </div>
+        <div class="stat-value">2,12,560</div>
+        <div class="stat-label">App Downloads</div>
+      </div>
+    </div>
+
+    <div class="grid-2col">
+      <!-- Traffic Chart -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Weekly Engagement</span>
+          <span class="font-mono text-gold">This Week</span>
+        </div>
+        <div class="chart-bar-wrap" id="chart-bars"></div>
+        <div class="chart-labels" id="chart-labels"></div>
+      </div>
+      <!-- Recent Activity -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Live Activity</span>
+          <span class="tb-badge" style="font-size:9px"><span class="tb-badge-dot"></span>Real-time</span>
+        </div>
+        <div id="activity-feed"></div>
+      </div>
+    </div>
+
+    <!-- Quick Toggles -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">⚡ Quick Section Toggles</span>
+        <span class="font-mono" style="color:var(--text-l)">Changes reflect instantly on Website + Apps</span>
+      </div>
+      <div class="quick-toggles" id="quick-toggles"></div>
+    </div>
+
+    <!-- Platform Status -->
+    <div class="card">
+      <div class="card-header"><span class="card-title">Platform Status</span></div>
+      <div class="grid-3col">
+        <div style="text-align:center;padding:16px">
+          <div style="font-size:32px;margin-bottom:8px">🌐</div>
+          <div style="font-family:'Cinzel',serif;font-size:13px;color:var(--text);margin-bottom:4px">Website</div>
+          <span class="status-pill pill-active"><span class="pill-dot"></span>Online</span>
+        </div>
+        <div style="text-align:center;padding:16px">
+          <div style="font-size:32px;margin-bottom:8px">🤖</div>
+          <div style="font-family:'Cinzel',serif;font-size:13px;color:var(--text);margin-bottom:4px">Android App</div>
+          <span class="status-pill pill-active"><span class="pill-dot"></span>v2.4.1 Live</span>
+        </div>
+        <div style="text-align:center;padding:16px">
+          <div style="font-size:32px;margin-bottom:8px">🍎</div>
+          <div style="font-family:'Cinzel',serif;font-size:13px;color:var(--text);margin-bottom:4px">iOS App</div>
+          <span class="status-pill pill-active"><span class="pill-dot"></span>v2.4.1 Live</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECTION CONTROL ── -->
+  <div class="page" id="page-sections">
+    <div class="page-title">Section Control</div>
+    <div class="page-sub">Drag to reorder. Toggle to show/hide. Changes apply instantly to Website + Android + iOS.</div>
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">🧩 Homepage Sections</span>
+        <button class="btn btn-primary btn-sm" onclick="openModal('add-section')">+ Add Section</button>
+      </div>
+      <div id="sections-list"></div>
+    </div>
+  </div>
+
+  <!-- ── NAVIGATION ── -->
+  <div class="page" id="page-navigation">
+    <div class="page-title">Navigation Tabs</div>
+    <div class="page-sub">Control which tabs appear in the website header and mobile app bottom bar.</div>
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">🔗 Navigation Links</span>
+        <button class="btn btn-primary btn-sm" onclick="openModal('add-nav')">+ Add Tab</button>
+      </div>
+      <div id="nav-list"></div>
+    </div>
+  </div>
+
+  <!-- ── DARSHAN ── -->
+  <div class="page" id="page-darshan">
+    <div class="page-title">Temple Darshan</div>
+    <div class="page-sub">Manage live temple darshan feeds and listings.</div>
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">🛕 Temple Listings</span>
+        <button class="btn btn-primary btn-sm" onclick="openModal('add-darshan')">+ Add Temple</button>
+      </div>
+      <div class="table-wrap">
+        <table id="darshan-table"></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PUJAS ── -->
+  <div class="page" id="page-pujas">
+    <div class="page-title">Puja Manager</div>
+    <div class="page-sub">Add, edit and manage puja offerings across the platform.</div>
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">🪔 Puja Listings</span>
+        <button class="btn btn-primary btn-sm" onclick="openModal('add-puja')">+ Add Puja</button>
+      </div>
+      <div class="table-wrap">
+        <table id="puja-table"></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SERVICES ── -->
+  <div class="page" id="page-services">
+    <div class="page-title">Services Manager</div>
+    <div class="page-sub">Manage spiritual services shown on website and apps. Add or remove anytime.</div>
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">⚡ Service Cards</span>
+        <button class="btn btn-primary btn-sm" onclick="openModal('add-service')">+ Add Service</button>
+      </div>
+      <div id="services-grid-admin" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px"></div>
+    </div>
+  </div>
+
+  <!-- ── FESTIVALS ── -->
+  <div class="page" id="page-festivals">
+    <div class="page-title">Festivals Manager</div>
+    <div class="page-sub">Manage sacred festival listings and banners.</div>
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">🎉 Festival Calendar</span>
+        <button class="btn btn-primary btn-sm" onclick="openModal('add-festival')">+ Add Festival</button>
+      </div>
+      <div class="table-wrap">
+        <table id="festival-table"></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── KNOWLEDGE ── -->
+  <div class="page" id="page-knowledge">
+    <div class="page-title">Knowledge Manager</div>
+    <div class="page-sub">Create and manage spiritual articles, shlokas, and sacred content.</div>
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">📖 Articles</span>
+        <button class="btn btn-primary btn-sm" onclick="openModal('add-article')">+ New Article</button>
+      </div>
+      <div class="table-wrap">
+        <table id="knowledge-table"></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── USERS ── -->
+  <div class="page" id="page-users">
+    <div class="page-title">User Manager</div>
+    <div class="page-sub">View and manage devotee accounts across all platforms.</div>
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">👥 Devotees</span>
+        <div class="flex gap-sm">
+          <input class="form-input" placeholder="Search users..." style="width:220px;padding:7px 12px">
+          <button class="btn btn-ghost btn-sm">Filter</button>
+        </div>
+      </div>
+      <div id="users-table-wrap"></div>
+    </div>
+  </div>
+
+  <!-- ── DONATIONS ── -->
+  <div class="page" id="page-donations">
+    <div class="page-title">Donation Manager</div>
+    <div class="page-sub">Track and manage all donations and Seva contributions.</div>
+    <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
+      <div class="stat-card">
+        <div class="stat-header"><div class="stat-icon" style="background:rgba(212,175,55,.1)">💛</div><span class="stat-trend up">↑ 22%</span></div>
+        <div class="stat-value">₹48.2L</div><div class="stat-label">This Month</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-header"><div class="stat-icon" style="background:rgba(34,197,94,.1)">🏆</div><span class="stat-trend up">↑ 5%</span></div>
+        <div class="stat-value">₹4.2Cr</div><div class="stat-label">Total Raised</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-header"><div class="stat-icon" style="background:rgba(59,130,246,.1)">👤</div><span class="stat-trend up">↑ 9%</span></div>
+        <div class="stat-value">12,450</div><div class="stat-label">Donors</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">💰 Recent Transactions</span></div>
+      <div id="donations-table-wrap"></div>
+    </div>
+  </div>
+
+<!-- SUBSCRIPTIONS PAGE -->
+  <div class="page" id="page-subscriptions">
+    <div class="page-title">Puja Subscriptions</div>
+    <div class="page-sub">All active Rs.200/month subscribers. Each gets 4 pujas/month at their chosen temple.</div>
+    <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:24px">
+      <div class="stat-card"><div class="stat-header"><div class="stat-icon" style="background:rgba(255,107,0,.1)">🙏</div><span class="stat-trend up" id="sub-stat-trend">Live</span></div><div class="stat-value" id="sub-stat-active">0</div><div class="stat-label">Active Subscribers</div></div>
+      <div class="stat-card"><div class="stat-header"><div class="stat-icon" style="background:rgba(212,175,55,.1)">Rs</div></div><div class="stat-value" id="sub-stat-revenue">Rs.0</div><div class="stat-label">Monthly Revenue</div></div>
+      <div class="stat-card"><div class="stat-header"><div class="stat-icon" style="background:rgba(34,197,94,.1)">🎥</div></div><div class="stat-value" id="sub-stat-pujas">0</div><div class="stat-label">Pujas Performed</div></div>
+      <div class="stat-card"><div class="stat-header"><div class="stat-icon" style="background:rgba(59,130,246,.1)">📅</div></div><div class="stat-value" id="sub-stat-pending">0</div><div class="stat-label">Pending This Week</div></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">All Subscribers</span><div style="display:flex;gap:8px;align-items:center"><input style="background:rgba(255,255,255,.05);border:1px solid rgba(212,175,55,.2);color:var(--text);padding:6px 12px;border-radius:var(--r);font-size:12px;width:200px;outline:none" placeholder="Search by name..." id="sub-search" oninput="filterSubscriptions()"/><select style="background:var(--panel2);border:1px solid rgba(212,175,55,.2);color:var(--text);padding:6px 10px;border-radius:var(--r);font-size:12px;cursor:pointer" id="sub-filter" onchange="filterSubscriptions()"><option value="all">All Status</option><option value="active">Active</option><option value="paused">Paused</option><option value="cancelled">Cancelled</option></select></div></div>
+      <div id="subscriptions-table"></div>
+    </div>
+  </div>
+
+  <!-- MANDIRS MANAGER PAGE -->
+  <div class="page" id="page-mandirs">
+    <div class="page-title">Manage Mandirs</div>
+    <div class="page-sub">Add, edit or remove temples. Changes reflect instantly on the subscription form.</div>
+    <div style="display:flex;gap:12px;margin-bottom:24px"><button class="tb-btn tb-btn-primary" onclick="openAddMandir()">+ Add New Mandir</button><a href="puja-subscription.html" target="_blank" class="tb-btn tb-btn-ghost" style="text-decoration:none">Preview Subscription Form</a></div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">Active Mandirs</span><span style="font-size:12px;color:var(--text-l)" id="mandir-count">0 temples</span></div>
+      <div id="mandirs-list"></div>
+    </div>
+    <div id="add-mandir-form" style="display:none">
+      <div class="card" style="border-color:rgba(255,107,0,.3);margin-top:16px">
+        <div class="card-header"><span class="card-title">Add New Mandir</span><button onclick="closeAddMandir()" style="color:var(--text-l);font-size:18px;cursor:pointer;background:none;border:none">X</button></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div class="form-group"><label class="form-label">Mandir Name *</label><input class="form-input" id="nm-name" placeholder="e.g. Kashi Vishwanath"/></div>
+          <div class="form-group"><label class="form-label">Location *</label><input class="form-input" id="nm-loc" placeholder="e.g. Varanasi, UP"/></div>
+          <div class="form-group"><label class="form-label">Emoji Icon</label><input class="form-input" id="nm-emoji" placeholder="Temple emoji" style="font-size:20px"/></div>
+          <div class="form-group"><label class="form-label">Purohit Name</label><input class="form-input" id="nm-purohit" placeholder="e.g. Pandit Ramesh Sharma"/></div>
+          <div class="form-group"><label class="form-label">Purohit Phone</label><input class="form-input" id="nm-phone" placeholder="+91 98765 43210"/></div>
+          <div class="form-group"><label class="form-label">Upload Code</label><input class="form-input" id="nm-code" placeholder="e.g. KASHI7"/></div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:8px"><button class="tb-btn tb-btn-primary" onclick="saveMandir()">Save Mandir</button><button class="tb-btn tb-btn-ghost" onclick="closeAddMandir()">Cancel</button></div>
+      </div>
+    </div>
+  </div>
+
+    <!-- RECORDINGS PAGE -->
+  <div class="page" id="page-recordings">
+    <div class="page-title">Puja Recordings</div>
+    <div class="page-sub">Purohit ki live recordings yahan aayengi. Approve karo toh subscribers ko auto-email jaayega.</div>
+
+    <!-- Stats row -->
+    <div class="stats-row" id="rec-stats-row" style="display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap">
+      <div class="stat-card" style="flex:1;min-width:130px"><div class="stat-number" id="rec-stat-total">0</div><div class="stat-label">Total Recordings</div></div>
+      <div class="stat-card" style="flex:1;min-width:130px;border-color:rgba(229,62,62,.3)"><div class="stat-number" id="rec-stat-pending" style="color:#FC8181">0</div><div class="stat-label">Pending Approval</div></div>
+      <div class="stat-card" style="flex:1;min-width:130px;border-color:rgba(34,197,94,.3)"><div class="stat-number" id="rec-stat-approved" style="color:#22C55E">0</div><div class="stat-label">Approved</div></div>
+    </div>
+
+    <div id="recordings-list">
+      <div style="text-align:center;padding:40px;color:var(--text-l);font-family:Cinzel,serif;font-size:13px">
+        Abhi koi recording nahi hai.<br/>Purohit jab live kare aur stop kare toh yahan aayegi.
+      </div>
+    </div>
+  </div>
+
+<!-- PUROHIT LINK PAGE -->
+  <div class="page" id="page-purohit">
+    <div class="page-title">Purohit Portal Link</div>
+    <div class="page-sub">Share this separate link with your purohits. They can ONLY upload puja videos — they cannot access admin panel.</div>
+    <div class="card" style="max-width:600px;border-color:rgba(34,197,94,.2)">
+      <div class="card-header"><span class="card-title" style="color:#22C55E">🔒 Secure Purohit Portal</span></div>
+      <p style="font-size:13px;color:var(--text-m);margin-bottom:20px;line-height:1.7">
+        Purohit portal is a <strong style="color:var(--text)">separate page</strong> from this admin panel. Purohits can only:<br>
+        ✅ Login with their secret code<br>
+        ✅ See subscribers at their temple<br>
+        ✅ Upload Google Drive video link<br>
+        ❌ Cannot access admin panel<br>
+        ❌ Cannot see other temples' data
+      </p>
+      <div class="form-group">
+        <label class="form-label">Purohit Portal URL</label>
+        <div style="display:flex;gap:8px;align-items:center">
+          <input class="form-input" id="purohit-url-display" value="purohit.html" readonly style="background:var(--panel3);cursor:text;letter-spacing:1px"/>
+          <button class="tb-btn tb-btn-primary" onclick="copyPurohitLink()" style="white-space:nowrap">Copy Link</button>
+          <a href="purohit.html" target="_blank" class="tb-btn tb-btn-ghost" style="text-decoration:none;white-space:nowrap">Open →</a>
+        </div>
+        <div style="font-size:11px;color:var(--text-l);margin-top:6px">In production, replace with your full domain URL: https://yourdomain.com/purohit.html</div>
+      </div>
+    </div>
+    <div class="card" style="max-width:600px">
+      <div class="card-header"><span class="card-title">👳 Purohit Upload Codes</span></div>
+      <p style="font-size:13px;color:var(--text-m);margin-bottom:16px">Each mandir has a unique secret code. Share ONLY that mandir's code with its purohit.</p>
+      <div id="purohit-codes-list">Loading...</div>
+    </div>
+  </div>
+
+  <!-- ── NOTIFICATIONS ── -->
+  <div class="page" id="page-notifications">
+    <div class="page-title">Notification Manager</div>
+    <div class="page-sub">Send push notifications to Website, Android, and iOS simultaneously.</div>
+    <div class="grid-2col">
+      <div class="card">
+        <div class="card-header"><span class="card-title">📢 New Notification</span></div>
+        <div class="form-group">
+          <label class="form-label">Title</label>
+          <input class="form-input" id="notif-title" placeholder="e.g. Shivratri Special Puja">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Message</label>
+          <textarea class="form-input" id="notif-body" placeholder="Enter notification message..."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Target</label>
+          <select class="form-input" id="notif-target">
+            <option value="all">All Platforms (Website + Android + iOS)</option>
+            <option value="android">Android Only</option>
+            <option value="ios">iOS Only</option>
+            <option value="web">Website Only</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Schedule</label>
+          <select class="form-input" id="notif-schedule">
+            <option value="now">Send Immediately</option>
+            <option value="schedule">Schedule for Later</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" onclick="sendNotification()">🔔 Send Notification</button>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">📋 Sent Notifications</span></div>
+        <div id="notif-history"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SETTINGS ── -->
+  <div class="page" id="page-settings">
+    <div class="page-title">Platform Settings</div>
+    <div class="page-sub">Configure global settings for Website, Android, and iOS apps.</div>
+    <div class="grid-2col">
+      <div class="card">
+        <div class="card-header"><span class="card-title">🎨 Branding</span></div>
+        <div class="form-group">
+          <label class="form-label">Platform Name</label>
+          <input class="form-input" id="setting-name" value="SanataniAnthem">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tagline (Sanskrit)</label>
+          <input class="form-input" id="setting-tagline" value="हर घर मंदिर">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Primary Color</label>
+          <div class="flex items-center gap-sm">
+            <input type="color" id="setting-color" value="#FF6B00" style="width:40px;height:36px;border:none;cursor:pointer;background:none">
+            <input class="form-input" value="#FF6B00" style="flex:1">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Secondary Color (Gold)</label>
+          <div class="flex items-center gap-sm">
+            <input type="color" value="#D4AF37" style="width:40px;height:36px;border:none;cursor:pointer;background:none">
+            <input class="form-input" value="#D4AF37" style="flex:1">
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="saveSettings()">💾 Save Branding</button>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">🔒 Security & Access</span></div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="qt-item">
+            <div class="qt-header"><div class="qt-name">Two-Factor Auth</div><label class="toggle"><input type="checkbox" checked onchange="showToast('2FA setting updated')"><span class="toggle-slider"></span></label></div>
+            <div class="qt-sub">Require 2FA for all admin logins</div>
+          </div>
+          <div class="qt-item">
+            <div class="qt-header"><div class="qt-name">Audit Logging</div><label class="toggle"><input type="checkbox" checked onchange="showToast('Audit logging updated')"><span class="toggle-slider"></span></label></div>
+            <div class="qt-sub">Log all admin actions to audit trail</div>
+          </div>
+          <div class="qt-item">
+            <div class="qt-header"><div class="qt-name">Maintenance Mode</div><label class="toggle"><input type="checkbox" onchange="showToast('Maintenance mode: '+this.checked)"><span class="toggle-slider"></span></label></div>
+            <div class="qt-sub">Show maintenance page to visitors</div>
+          </div>
+          <div class="qt-item">
+            <div class="qt-header"><div class="qt-name">App Store Review Mode</div><label class="toggle"><input type="checkbox" onchange="showToast('App review mode: '+this.checked)"><span class="toggle-slider"></span></label></div>
+            <div class="qt-sub">Simplified view for app store review</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">🔧 API & Integrations</span></div>
+      <div class="grid-3col">
+        <div class="qt-item"><div class="qt-header"><div class="qt-name">Firebase</div><span class="status-pill pill-active" style="font-size:9px"><span class="pill-dot"></span>Connected</span></div><div class="qt-sub">Firestore + Auth + Storage</div></div>
+        <div class="qt-item"><div class="qt-header"><div class="qt-name">Razorpay</div><span class="status-pill pill-active" style="font-size:9px"><span class="pill-dot"></span>Connected</span></div><div class="qt-sub">Payments Gateway</div></div>
+        <div class="qt-item"><div class="qt-header"><div class="qt-name">FCM Push</div><span class="status-pill pill-active" style="font-size:9px"><span class="pill-dot"></span>Active</span></div><div class="qt-sub">Push Notifications</div></div>
+        <div class="qt-item"><div class="qt-header"><div class="qt-name">AWS S3</div><span class="status-pill pill-active" style="font-size:9px"><span class="pill-dot"></span>Connected</span></div><div class="qt-sub">Media Storage</div></div>
+        <div class="qt-item"><div class="qt-header"><div class="qt-name">Twilio SMS</div><span class="status-pill pill-inactive" style="font-size:9px"><span class="pill-dot"></span>Not Set</span></div><div class="qt-sub">SMS Notifications</div></div>
+        <div class="qt-item"><div class="qt-header"><div class="qt-name">YouTube Live</div><span class="status-pill pill-active" style="font-size:9px"><span class="pill-dot"></span>Connected</span></div><div class="qt-sub">Temple Live Streams</div></div>
+      </div>
+    </div>
+  </div>
+
+</main>
 </div>
 
-<!-- HERO -->
-<section class="puja-hero">
-  <div class="container">
-    <div class="hero-grid">
-      <div>
-        <div class="hero-badge">
-          <span class="hero-badge-dot"></span>
-          अब घर बैठे पाएं मंदिर का आशीर्वाद
-        </div>
-        <h1 class="hero-title">
-          Your Personal<br/>
-          <span class="accent">Monthly Puja</span><br/>
-          Service
-        </h1>
-        <p class="hero-shloka">यत्र योगेश्वरः कृष्णः</p>
-        <p class="hero-desc">Subscribe once. Our dedicated purohits perform 4 sacred pujas every month at your chosen temple — and send you the video as a divine blessing.</p>
-        <div class="cta-row">
-          <a href="#subscribe" class="btn btn-primary" style="font-size:13px;padding:15px 34px">🪔 Subscribe for ₹200/month</a>
-          <a href="#how-it-works" class="btn btn-outline" style="color:rgba(255,246,229,.7);border-color:rgba(212,175,55,.35)">How it works ↓</a>
-        </div>
-      </div>
-      <div style="display:flex;align-items:center;justify-content:center;padding:40px 0">
-        <div style="display:flex;flex-direction:column;gap:16px;width:100%;max-width:340px">
-          <div class="price-highlight">
-            <div class="price-main">
-              <span class="price-amount">₹200</span>
-              <span class="price-period">/ month</span>
-            </div>
-            <div class="price-includes">
-              <div class="price-item"><div class="price-item-check">✓</div>4 Pujas every month</div>
-              <div class="price-item"><div class="price-item-check">✓</div>Your chosen sacred temple</div>
-              <div class="price-item"><div class="price-item-check">✓</div>HD puja video recording</div>
-              <div class="price-item"><div class="price-item-check">✓</div>Email delivery after each puja</div>
-              <div class="price-item"><div class="price-item-check">✓</div>Personalized with your name & gotra</div>
-              <div class="price-item"><div class="price-item-check">✓</div>Cancel anytime</div>
-            </div>
-            <a href="#subscribe" class="btn btn-gold" style="width:100%;justify-content:center;margin-top:8px">Start My Subscription →</a>
-          </div>
-          <div style="text-align:center;font-family:'Cinzel',serif;font-size:10px;color:rgba(255,246,229,.4);letter-spacing:1px">🔒 Secure payment via Razorpay</div>
-        </div>
-      </div>
+<!-- ═══ MODALS ═══ -->
+
+<!-- Add Section Modal -->
+<div class="modal-overlay" id="modal-add-section">
+  <div class="modal">
+    <div class="modal-title">Add New Section <span class="modal-close" onclick="closeModal('add-section')">✕</span></div>
+    <div class="form-group"><label class="form-label">Section Name</label><input class="form-input" id="new-section-name" placeholder="e.g. Daily Mantra"></div>
+    <div class="form-group"><label class="form-label">Icon (Emoji)</label><input class="form-input" id="new-section-icon" placeholder="🪔" style="font-size:20px"></div>
+    <div class="form-group"><label class="form-label">Description</label><input class="form-input" id="new-section-sub" placeholder="Short description of this section"></div>
+    <div class="form-group">
+      <label class="form-label">Visible by default</label>
+      <label class="toggle"><input type="checkbox" checked id="new-section-visible"><span class="toggle-slider"></span></label>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('add-section')">Cancel</button>
+      <button class="btn btn-primary" onclick="addSection()">Add Section</button>
     </div>
   </div>
-</section>
+</div>
 
-<!-- HOW IT WORKS -->
-<section class="how-section" id="how-it-works">
-  <div class="container">
-    <div class="text-center">
-      <div class="section-eyebrow">Simple Process</div>
-      <h2 class="section-title">How Your Puja Reaches You</h2>
-    </div>
-    <div class="steps-grid">
-      <div class="step-item">
-        <div class="step-circle" style="position:relative">
-          🙏
-          <div class="step-num">1</div>
-        </div>
-        <div class="step-title">Subscribe & Choose Temple</div>
-        <div class="step-desc">Fill your details, select your desired mandir, and pay ₹200 securely via Razorpay or UPI.</div>
-      </div>
-      <div class="step-item">
-        <div class="step-circle" style="position:relative">
-          📅
-          <div class="step-num">2</div>
-        </div>
-        <div class="step-title">Puja Scheduled</div>
-        <div class="step-desc">We assign a dedicated purohit at your chosen temple. 4 pujas are scheduled every month in your name.</div>
-      </div>
-      <div class="step-item">
-        <div class="step-circle" style="position:relative">
-          🎥
-          <div class="step-num">3</div>
-        </div>
-        <div class="step-title">Purohit Records Puja</div>
-        <div class="step-desc">On puja day, your purohit performs the ritual with your name & gotra, records full HD video.</div>
-      </div>
-      <div class="step-item">
-        <div class="step-circle" style="position:relative">
-          📧
-          <div class="step-num">4</div>
-        </div>
-        <div class="step-title">Video Delivered to You</div>
-        <div class="step-desc">Video is uploaded to Google Drive and emailed directly to you within hours of the puja.</div>
-      </div>
+<!-- Add Nav Tab Modal -->
+<div class="modal-overlay" id="modal-add-nav">
+  <div class="modal">
+    <div class="modal-title">Add Navigation Tab <span class="modal-close" onclick="closeModal('add-nav')">✕</span></div>
+    <div class="form-group"><label class="form-label">Tab Label</label><input class="form-input" id="new-nav-label" placeholder="e.g. Meditation"></div>
+    <div class="form-group"><label class="form-label">Link/Anchor</label><input class="form-input" id="new-nav-href" placeholder="e.g. #meditation"></div>
+    <div class="form-group"><label class="form-label">Visible</label><label class="toggle"><input type="checkbox" checked id="new-nav-visible"><span class="toggle-slider"></span></label></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('add-nav')">Cancel</button>
+      <button class="btn btn-primary" onclick="addNavTab()">Add Tab</button>
     </div>
   </div>
-</section>
+</div>
 
-<!-- SUBSCRIPTION FORM -->
-<section class="form-section" id="subscribe">
-  <div class="container">
-    <div class="text-center" style="margin-bottom:48px">
-      <div class="section-eyebrow">Begin Your Journey</div>
-      <h2 class="section-title">Subscribe to Monthly Puja</h2>
-      <p style="font-size:15px;color:var(--ink-m);max-width:500px;margin:0 auto">Fill the form below. Your first puja will be performed within 7 days of subscribing.</p>
+<!-- Add Temple Modal -->
+<div class="modal-overlay" id="modal-add-darshan">
+  <div class="modal">
+    <div class="modal-title">Add Temple <span class="modal-close" onclick="closeModal('add-darshan')">✕</span></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Temple Name</label><input class="form-input" id="new-temple-name" placeholder="Temple name"></div>
+      <div class="form-group"><label class="form-label">Emoji/Icon</label><input class="form-input" id="new-temple-emoji" placeholder="🛕" style="font-size:20px"></div>
     </div>
-
-    <div class="form-wrapper" id="subscription-form-wrap">
-      <div class="form-header">
-        <div class="form-header-title">Monthly Puja Subscription</div>
-        <div class="form-header-sub">₹200/month • 4 Pujas • HD Video • Email Delivery</div>
-      </div>
-      <div class="form-body">
-        <!-- Step Nav -->
-        <div class="form-steps-nav">
-          <div class="form-step-tab active" id="tab-1">1. Your Details</div>
-          <div class="form-step-tab" id="tab-2">2. Choose Temple</div>
-          <div class="form-step-tab" id="tab-3">3. Puja Dates</div>
-          <div class="form-step-tab" id="tab-4">4. Payment</div>
-        </div>
-
-        <!-- STEP 1: Personal Details -->
-        <div class="form-panel active" id="panel-1">
-          <div class="fields-row">
-            <div class="field-group">
-              <div class="field-label">Full Name <span class="field-required">*</span></div>
-              <input class="field-input" id="f-name" type="text" placeholder="e.g. Ramesh Kumar Sharma"/>
-              <div class="field-error hidden" id="err-name">Please enter your full name</div>
-            </div>
-            <div class="field-group">
-              <div class="field-label">Mobile Number <span class="field-required">*</span></div>
-              <input class="field-input" id="f-phone" type="tel" placeholder="+91 98765 43210"/>
-              <div class="field-error hidden" id="err-phone">Enter valid 10-digit number</div>
-            </div>
-          </div>
-          <div class="field-group">
-            <div class="field-label">Email Address <span class="field-required">*</span></div>
-            <input class="field-input" id="f-email" type="email" placeholder="your@email.com"/>
-            <div class="field-hint">🎥 Your puja videos will be sent to this email</div>
-            <div class="field-error hidden" id="err-email">Enter a valid email address</div>
-          </div>
-          <div class="fields-row">
-            <div class="field-group">
-              <div class="field-label">Gotra <span style="font-size:10px;color:var(--ink-l);font-weight:400;letter-spacing:0">(Optional)</span></div>
-              <input class="field-input" id="f-gotra" type="text" placeholder="e.g. Bharadwaj, Kashyap"/>
-              <div class="field-hint">Mentioned during puja for extra blessings</div>
-            </div>
-            <div class="field-group">
-              <div class="field-label">City / State</div>
-              <input class="field-input" id="f-city" type="text" placeholder="e.g. Mumbai, Maharashtra"/>
-            </div>
-          </div>
-          <div class="field-group">
-            <div class="field-label">Special Prayer / Sankalp <span style="font-size:10px;color:var(--ink-l);font-weight:400;letter-spacing:0">(Optional)</span></div>
-            <textarea class="field-input" id="f-sankalp" placeholder="Any specific wish or prayer you'd like the purohit to include..."></textarea>
-          </div>
-          <div class="form-nav">
-            <span class="step-indicator">Step 1 of 4</span>
-            <button class="btn btn-primary" onclick="goToStep(2)">Next: Choose Temple →</button>
-          </div>
-        </div>
-
-        <!-- STEP 2: Choose Mandir -->
-        <div class="form-panel" id="panel-2">
-          <div class="field-group">
-            <div class="field-label">Select Your Sacred Temple <span class="field-required">*</span></div>
-            <div class="field-hint" style="margin-bottom:12px">🛕 Choose the mandir where you'd like your pujas performed each month</div>
-            <div class="mandir-grid" id="mandir-grid">
-              <!-- Populated from DB -->
-            </div>
-            <div class="field-error hidden" id="err-mandir" style="margin-top:8px">Please select a temple to continue</div>
-          </div>
-          <div class="form-nav">
-            <button class="btn btn-outline" onclick="goToStep(1)" style="color:var(--ink-m);border-color:var(--cream-dd)">← Back</button>
-            <span class="step-indicator">Step 2 of 4</span>
-            <button class="btn btn-primary" onclick="goToStep(3)">Next: Puja Dates →</button>
-          </div>
-        </div>
-
-        <!-- STEP 3: Puja Dates -->
-        <div class="form-panel" id="panel-3">
-          <div class="field-group">
-            <div class="field-label">Choose Your Puja Days <span class="field-required">*</span></div>
-            <div class="field-hint" style="margin-bottom:12px">Select 4 dates each month when your puja will be performed</div>
-            <div class="date-options" id="date-options">
-              <!-- Populated by JS -->
-            </div>
-            <div class="field-error hidden" id="err-dates" style="margin-top:8px">Please select exactly 4 dates</div>
-          </div>
-          <div style="background:rgba(255,107,0,.06);border:1px solid rgba(255,107,0,.2);border-radius:var(--r-md);padding:16px;margin-top:8px;font-size:13px;color:var(--ink-m);line-height:1.6">
-            💡 <strong style="color:var(--maroon)">Tip:</strong> Choose days that hold significance for you — like Ekadashi, Mondays (Lord Shiva), Fridays (Goddess Lakshmi), or any special dates.
-          </div>
-          <div class="form-nav">
-            <button class="btn btn-outline" onclick="goToStep(2)" style="color:var(--ink-m);border-color:var(--cream-dd)">← Back</button>
-            <span class="step-indicator">Step 3 of 4</span>
-            <button class="btn btn-primary" onclick="goToStep(4)">Next: Payment →</button>
-          </div>
-        </div>
-
-        <!-- STEP 4: Payment -->
-        <div class="form-panel" id="panel-4">
-          <div class="payment-summary">
-            <div class="payment-row">
-              <span class="payment-label">Subscriber</span>
-              <span class="payment-value" id="pay-name">—</span>
-            </div>
-            <div class="payment-row">
-              <span class="payment-label">Temple</span>
-              <span class="payment-value" id="pay-mandir">—</span>
-            </div>
-            <div class="payment-row">
-              <span class="payment-label">Pujas Per Month</span>
-              <span class="payment-value">4 Pujas</span>
-            </div>
-            <div class="payment-row">
-              <span class="payment-label">Puja Dates</span>
-              <span class="payment-value" id="pay-dates">—</span>
-            </div>
-            <div class="payment-row">
-              <span class="payment-total-label">Monthly Amount</span>
-              <span class="payment-total-value">₹200</span>
-            </div>
-          </div>
-
-          <div style="margin-bottom:16px">
-            <div class="field-label" style="margin-bottom:10px">Accepted Payment Methods</div>
-            <div class="payment-methods">
-              <span class="pm-badge">📱 UPI</span>
-              <span class="pm-badge">💳 Debit Card</span>
-              <span class="pm-badge">💳 Credit Card</span>
-              <span class="pm-badge">🏦 Net Banking</span>
-              <span class="pm-badge">📲 PhonePe / GPay</span>
-            </div>
-          </div>
-
-          <div class="checkbox-row" id="terms-row">
-            <div class="custom-checkbox" id="terms-checkbox" onclick="toggleTerms()"></div>
-            <span class="checkbox-text">I agree to the <a href="#">Terms of Service</a> and <a href="#">Puja Subscription Policy</a>. I understand that 4 pujas will be performed monthly at my chosen temple and videos will be emailed to me.</span>
-          </div>
-          <div class="field-error hidden" id="err-terms">Please accept the terms to continue</div>
-
-          <button class="btn btn-primary" id="pay-btn" onclick="initiatePayment()" style="width:100%;justify-content:center;padding:16px;font-size:13px;margin-top:8px">
-            🙏 Pay ₹200 & Start My Puja Subscription
-          </button>
-          <div class="razorpay-note">🔒 Secured by Razorpay • Your data is safe</div>
-
-          <div class="form-nav" style="border-top:none;padding-top:0;margin-top:12px">
-            <button class="btn btn-outline" onclick="goToStep(3)" style="color:var(--ink-m);border-color:var(--cream-dd);padding:8px 18px;font-size:10px">← Back</button>
-            <span class="step-indicator">Step 4 of 4</span>
-            <span></span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- SUCCESS STATE (hidden initially) -->
-    <div class="success-page hidden" id="success-page">
-      <div class="success-card">
-        <div class="success-icon">🪔</div>
-        <div class="success-title">Subscription Confirmed!</div>
-        <div class="success-shloka">शुभं भवतु • मंगलं भवतु</div>
-        <p class="success-desc">Your monthly puja subscription is now active. Our purohit will perform your first puja within 7 days and send the video to your email.</p>
-        <div class="success-details" id="success-details">
-          <!-- Populated by JS -->
-        </div>
-        <div style="font-family:'Cinzel',serif;font-size:10px;color:var(--ink-l);letter-spacing:1px;margin-bottom:20px">YOUR SUBSCRIPTION ID</div>
-        <div class="sub-id" id="success-sub-id">SA-2024-XXXX</div>
-        <p style="font-size:12px;color:var(--ink-l);margin-bottom:28px">Save this ID for your records. A confirmation email has been sent to your inbox.</p>
-        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-          <a href="index.html" class="btn btn-primary">🏠 Go to Home</a>
-          <button class="btn btn-outline" onclick="window.print()" style="color:var(--maroon)">🖨 Print Receipt</button>
-        </div>
-      </div>
+    <div class="form-group"><label class="form-label">Location</label><input class="form-input" id="new-temple-loc" placeholder="City, State"></div>
+    <div class="form-group"><label class="form-label">Darshan Time</label><input class="form-input" id="new-temple-time" placeholder="e.g. 5:00 AM Aarti"></div>
+    <div class="form-group"><label class="form-label">Live Stream</label><label class="toggle"><input type="checkbox" id="new-temple-live"><span class="toggle-slider"></span></label></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('add-darshan')">Cancel</button>
+      <button class="btn btn-primary" onclick="addTemple()">Add Temple</button>
     </div>
   </div>
-</section>
+</div>
 
-<!-- TRUST BADGES -->
-<section class="trust-section">
-  <div class="container">
-    <div class="trust-grid">
-      <div class="trust-item">
-        <div class="trust-icon">🛡️</div>
-        <div class="trust-title">100% Secure Payment</div>
-        <div class="trust-desc">All payments encrypted via Razorpay. Your card details are never stored.</div>
-      </div>
-      <div class="trust-item">
-        <div class="trust-icon">🎥</div>
-        <div class="trust-title">Video Proof of Puja</div>
-        <div class="trust-desc">Every puja recorded and delivered. See your ritual performed in real-time.</div>
-      </div>
-      <div class="trust-item">
-        <div class="trust-icon">🕉️</div>
-        <div class="trust-title">Authentic Purohits</div>
-        <div class="trust-desc">All priests are Vedic-trained, verified, and temple-certified.</div>
-      </div>
-      <div class="trust-item">
-        <div class="trust-icon">❌</div>
-        <div class="trust-title">Cancel Anytime</div>
-        <div class="trust-desc">No lock-in. Cancel your subscription any time with one click.</div>
-      </div>
+<!-- Add Puja Modal -->
+<div class="modal-overlay" id="modal-add-puja">
+  <div class="modal">
+    <div class="modal-title">Add Puja <span class="modal-close" onclick="closeModal('add-puja')">✕</span></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Puja Name</label><input class="form-input" id="new-puja-name" placeholder="e.g. Hanuman Puja"></div>
+      <div class="form-group"><label class="form-label">Emoji</label><input class="form-input" id="new-puja-emoji" placeholder="🙏" style="font-size:20px"></div>
+    </div>
+    <div class="form-group"><label class="form-label">Description</label><textarea class="form-input" id="new-puja-desc" placeholder="Puja description..."></textarea></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Price</label><input class="form-input" id="new-puja-price" placeholder="₹1,100"></div>
+      <div class="form-group"><label class="form-label">Ribbon Label</label><input class="form-input" id="new-puja-ribbon" placeholder="e.g. Popular"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('add-puja')">Cancel</button>
+      <button class="btn btn-primary" onclick="addPuja()">Add Puja</button>
     </div>
   </div>
-</section>
+</div>
 
-<!-- FAQ -->
-<section class="faq-section">
-  <div class="container">
-    <div class="text-center">
-      <div class="section-eyebrow">Questions</div>
-      <h2 class="section-title">Frequently Asked Questions</h2>
+<!-- Add Service Modal -->
+<div class="modal-overlay" id="modal-add-service">
+  <div class="modal">
+    <div class="modal-title">Add Service <span class="modal-close" onclick="closeModal('add-service')">✕</span></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Service Name</label><input class="form-input" id="new-service-name" placeholder="e.g. Online Astrology"></div>
+      <div class="form-group"><label class="form-label">Emoji</label><input class="form-input" id="new-service-emoji" placeholder="⭐" style="font-size:20px"></div>
     </div>
-    <div class="faq-list">
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">How do I receive my puja video? <span class="faq-q-icon">+</span></div>
-        <div class="faq-a">After each puja, the purohit uploads the video to Google Drive. Within 2–4 hours, you'll receive an email with the video link. The video is yours to keep and watch anytime.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">Can I change my temple after subscribing? <span class="faq-q-icon">+</span></div>
-        <div class="faq-a">Yes! You can change your temple once per billing cycle. Simply email us or use the customer portal. Changes take effect from the next month.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">What type of puja is performed? <span class="faq-q-icon">+</span></div>
-        <div class="faq-a">Our purohits perform Satyanarayan Puja, Abhishek, Aarti, or the temple's primary daily puja — based on what's most auspicious at that temple. Your name and gotra are specifically mentioned during the sankalp (holy intent-setting).</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">Is ₹200 charged every month automatically? <span class="faq-q-icon">+</span></div>
-        <div class="faq-a">Yes, ₹200 is automatically charged on the same date every month via Razorpay. You'll get a payment receipt by email. If payment fails, we'll notify you and pause your subscription temporarily.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">What if a puja is missed due to temple closure? <span class="faq-q-icon">+</span></div>
-        <div class="faq-a">If a temple is closed on your scheduled date (holidays, special events), we reschedule the puja to the nearest available date and notify you in advance.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q" onclick="toggleFaq(this)">How do I cancel my subscription? <span class="faq-q-icon">+</span></div>
-        <div class="faq-a">You can cancel anytime by emailing us at <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5d2d28373c2e1d2e3c333c293c33343c3329353830733e3230">[email&#160;protected]</a> or via the cancellation link in any of our emails. Your subscription will end at the current month's close with no further charges.</div>
-      </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('add-service')">Cancel</button>
+      <button class="btn btn-primary" onclick="addService()">Add Service</button>
     </div>
   </div>
-</section>
+</div>
 
-<!-- MINI FOOTER -->
-<footer class="mini-footer">
-  <div class="container">
-    <div class="mini-footer-text">© 2024 SanataniAnthem. All rights reserved.</div>
-    <div class="mini-footer-dharma">सनातन धर्म की जय 🕉</div>
+<!-- Add Festival Modal -->
+<div class="modal-overlay" id="modal-add-festival">
+  <div class="modal">
+    <div class="modal-title">Add Festival <span class="modal-close" onclick="closeModal('add-festival')">✕</span></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Festival Name</label><input class="form-input" id="new-fest-name" placeholder="e.g. Ganesh Chaturthi"></div>
+      <div class="form-group"><label class="form-label">Emoji</label><input class="form-input" id="new-fest-emoji" placeholder="🐘" style="font-size:20px"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Date</label><input class="form-input" id="new-fest-date" placeholder="e.g. 22 Aug"></div>
+      <div class="form-group"><label class="form-label">Description</label><input class="form-input" id="new-fest-desc" placeholder="Short description"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('add-festival')">Cancel</button>
+      <button class="btn btn-primary" onclick="addFestival()">Add Festival</button>
+    </div>
   </div>
-</footer>
+</div>
 
-<button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
-<div class="toast" id="toast"></div>
+<!-- Add Article Modal -->
+<div class="modal-overlay" id="modal-add-article">
+  <div class="modal">
+    <div class="modal-title">Add Article <span class="modal-close" onclick="closeModal('add-article')">✕</span></div>
+    <div class="form-group"><label class="form-label">Title</label><input class="form-input" id="new-art-title" placeholder="Article title"></div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Category</label><input class="form-input" id="new-art-cat" placeholder="e.g. Rituals"></div>
+      <div class="form-group"><label class="form-label">Emoji</label><input class="form-input" id="new-art-emoji" placeholder="📖" style="font-size:20px"></div>
+    </div>
+    <div class="form-group"><label class="form-label">Excerpt</label><textarea class="form-input" id="new-art-excerpt" placeholder="Short excerpt..."></textarea></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('add-article')">Cancel</button>
+      <button class="btn btn-primary" onclick="addArticle()">Add Article</button>
+    </div>
+  </div>
+</div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-/* ══════════════════════════════════════════
-   STATE
-══════════════════════════════════════════ */
-const formState = {
-  step: 1,
-  name:'', phone:'', email:'', gotra:'', city:'', sankalp:'',
-  mandir: null,
-  selectedDates: [],
-  termsAccepted: false
+<!-- Toast -->
+<div id="admin-toast" style="position:fixed;bottom:24px;right:24px;background:var(--panel);border:1px solid var(--border-h);border-left:3px solid var(--saffron);color:var(--gold);font-family:'Cinzel',sans-serif;font-size:12px;padding:12px 20px;border-radius:var(--r);box-shadow:var(--sh);transform:translateX(120px);opacity:0;transition:all .3s;z-index:999;pointer-events:none;max-width:300px"></div>
+
+<script>
+/* ═══════════════════════════════════
+   DATA LAYER — Syncs via localStorage
+   (In production: Firebase Firestore)
+═══════════════════════════════════ */
+
+const DEFAULT = {
+  settings:{siteName:"SanataniAnthem",tagline:"हर घर मंदिर",primaryColor:"#FF6B00",goldColor:"#D4AF37"},
+  navLinks:[
+    {id:"n1",label:"Home",href:"#",visible:true,order:1},
+    {id:"n2",label:"Darshan",href:"#darshan",visible:true,order:2},
+    {id:"n3",label:"Book Puja",href:"#puja",visible:true,order:3},
+    {id:"n4",label:"Services",href:"#services",visible:true,order:4},
+    {id:"n5",label:"Astrology",href:"#astrology",visible:true,order:5},
+    {id:"n6",label:"Donate",href:"#donation",visible:true,order:6},
+    {id:"n7",label:"Festivals",href:"#festivals",visible:true,order:7},
+    {id:"n8",label:"Knowledge",href:"#knowledge",visible:true,order:8},
+  ],
+  sections:{
+    darshan:  {visible:true,order:1,name:"Daily Darshan",icon:"🛕",sub:"Live temple feeds"},
+    puja:     {visible:true,order:2,name:"Puja Booking", icon:"🪔",sub:"Online ritual booking"},
+    services: {visible:true,order:3,name:"Services",     icon:"⚡",sub:"Spiritual service cards"},
+    astrology:{visible:true,order:4,name:"Astrology",    icon:"⭐",sub:"Vedic guidance section"},
+    donation: {visible:true,order:5,name:"Donations",    icon:"💛",sub:"Daan & seva section"},
+    festivals:{visible:true,order:6,name:"Festivals",    icon:"🎉",sub:"Sacred festival listings"},
+    knowledge:{visible:true,order:7,name:"Knowledge",    icon:"📖",sub:"Articles & scripture"},
+    app:      {visible:true,order:8,name:"App Download", icon:"📱",sub:"Download banners"},
+  },
+  darshan:[
+    {id:"d1",name:"Kashi Vishwanath",location:"Varanasi, UP",time:"5:00 AM Aarti",emoji:"🛕",live:true},
+    {id:"d2",name:"Tirupati Balaji",location:"Tirupati, AP",time:"6:30 AM Darshan",emoji:"🙏",live:false},
+    {id:"d3",name:"Vaishno Devi",location:"Katra, J&K",time:"4:00 AM Aarti",emoji:"⛰️",live:true},
+    {id:"d4",name:"Jagannath Puri",location:"Puri, Odisha",time:"5:30 AM Darshan",emoji:"🌊",live:false},
+    {id:"d5",name:"Somnath",location:"Prabhas Patan",time:"7:00 AM Puja",emoji:"🌙",live:false},
+    {id:"d6",name:"Shirdi Sai Baba",location:"Shirdi, MH",time:"5:15 AM Kakad Aarti",emoji:"🌹",live:true},
+  ],
+  pujas:[
+    {id:"p1",name:"Satyanarayan Puja",desc:"Complete puja for blessings and prosperity.",price:"₹1,100",ribbon:"Most Popular",emoji:"🪷"},
+    {id:"p2",name:"Ganesh Puja",desc:"Remove obstacles, invoke Ganesha's blessings.",price:"₹501",ribbon:"",emoji:"🐘"},
+    {id:"p3",name:"Rudrabhishek",desc:"Sacred Shiva puja with milk and sacred herbs.",price:"₹2,100",ribbon:"Sacred",emoji:"🔱"},
+    {id:"p4",name:"Kali Puja",desc:"Powerful puja for protection and strength.",price:"₹1,500",ribbon:"",emoji:"🌺"},
+    {id:"p5",name:"Navgraha Puja",desc:"Align all nine planets for harmony.",price:"₹3,100",ribbon:"Recommended",emoji:"⭐"},
+    {id:"p6",name:"Lakshmi Puja",desc:"Invite abundance with Goddess Lakshmi's blessings.",price:"₹1,100",ribbon:"",emoji:"💫"},
+  ],
+  services:[
+    {id:"s1",name:"Daily Darshan",emoji:"🛕"},{id:"s2",name:"Online Puja",emoji:"🪔"},
+    {id:"s3",name:"Vedic Astrology",emoji:"⭐"},{id:"s4",name:"Temple Tour",emoji:"🗺️"},
+    {id:"s5",name:"Prasad Delivery",emoji:"🎁"},{id:"s6",name:"Sacred Texts",emoji:"📖"},
+    {id:"s7",name:"Mantra Classes",emoji:"🎵"},{id:"s8",name:"Vastu Shastra",emoji:"🏠"},
+    {id:"s9",name:"Yoga & Meditation",emoji:"🧘"},{id:"s10",name:"Pilgrimage Plans",emoji:"✈️"},
+    {id:"s11",name:"Donation Drive",emoji:"💛"},{id:"s12",name:"Festival Calendar",emoji:"📅"},
+  ],
+  festivals:[
+    {id:"f1",name:"Maha Shivratri",desc:"The great night of Lord Shiva",date:"26 Feb",emoji:"🔱",bg:"#2C0808"},
+    {id:"f2",name:"Holi",desc:"Festival of colors and joy",date:"14 Mar",emoji:"🎨",bg:"#4A1200"},
+    {id:"f3",name:"Ram Navami",desc:"Lord Ram's birth celebration",date:"6 Apr",emoji:"🏹",bg:"#1A3A1A"},
+    {id:"f4",name:"Navratri",desc:"Nine nights of Goddess Durga",date:"3 Oct",emoji:"🌺",bg:"#2C0044"},
+    {id:"f5",name:"Diwali",desc:"Festival of lights and prosperity",date:"20 Oct",emoji:"🪔",bg:"#3A2A00"},
+  ],
+  knowledge:[
+    {id:"k1",title:"The Significance of Sandhya Vandanam",excerpt:"Understanding the ancient ritual...",cat:"Rituals",emoji:"🌅",bg:"#F5E6C8"},
+    {id:"k2",title:"108 Names of Lord Shiva",excerpt:"The sacred 108 names reveal infinite facets...",cat:"Scripture",emoji:"🔱",bg:"#E8D5C8"},
+    {id:"k3",title:"Bhagavad Gita Chapter 2",excerpt:"Arjuna's grief and Krishna's cosmic wisdom...",cat:"Gita",emoji:"📖",bg:"#D5E8D5"},
+  ],
+  donationAmounts:[51,101,251,501,1001,2100],
+  donationImpacts:[
+    {emoji:"🪔",title:"Light the Way",desc:"₹51 lights a diya at a sacred temple"},
+    {emoji:"🍛",title:"Annadaan",desc:"₹251 provides meals to 10 devotees"},
+    {emoji:"🛕",title:"Temple Seva",desc:"₹1001 supports temple restoration"},
+    {emoji:"📚",title:"Vidya Daan",desc:"₹2100 supports Sanskrit education"},
+  ],
+  appFeatures:[
+    {emoji:"🛕",title:"Live Darshan",desc:"Watch live temple streams daily"},
+    {emoji:"🪔",title:"Puja Booking",desc:"Book sacred rituals in seconds"},
+    {emoji:"⭐",title:"Astrology",desc:"Personalized Vedic guidance"},
+    {emoji:"📿",title:"Daily Mantra",desc:"Morning and evening devotionals"},
+    {emoji:"💛",title:"Easy Donations",desc:"Donate securely from the app"},
+    {emoji:"🔔",title:"Festival Alerts",desc:"Never miss an auspicious day"},
+  ],
+  marqueeItems:["🕉 जय श्री राम","🔱 हर हर महादेव","🌺 जय माता दी","🐘 गणपति बप्पा मोरया","🦚 राधे राधे","🌸 जय श्री कृष्ण"],
 };
 
-/* ══════════════════════════════════════════
-   FIREBASE + DB
-══════════════════════════════════════════ */
+/* ── IN-MEMORY DB (synced from Firebase) ── */
+let _memDB = null;
+
+function getDB(){
+  return _memDB || JSON.parse(localStorage.getItem('sanatani_cms') || 'null') || DEFAULT;
+}
+
+function saveDB(db){
+  _memDB = db;
+  // Save locally for instant UI response
+  localStorage.setItem('sanatani_cms', JSON.stringify(db));
+  // Save to Firebase — syncs to ALL devices
+  adminRTDB.ref('cms').set(db).catch(e => console.error('Firebase save error:', e));
+}
+
+function initFirebaseSync(){
+  // Listen to Firebase CMS data — load on startup
+  adminRTDB.ref('cms').on('value', snapshot => {
+    const data = snapshot.val();
+    if(data){
+      _memDB = data;
+      localStorage.setItem('sanatani_cms', JSON.stringify(data));
+      // Re-render current page with fresh data
+      const activePage = document.querySelector('.page.active');
+      if(activePage){
+        const pageId = activePage.id.replace('page-','');
+        renderPage(pageId);
+      }
+    } else {
+      // Firebase empty — push DEFAULT data up
+      adminRTDB.ref('cms').set(DEFAULT);
+    }
+  });
+}
+function genId(){return Math.random().toString(36).slice(2,9);}
+
+/* ── NAVIGATION ── */
+function showPage(id,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if(el) el.classList.add('active');
+  renderPage(id);
+}
+
+function renderPage(id){
+  const db = getDB();
+  switch(id){
+    case 'dashboard': renderDashboard(db); break;
+    case 'sections': renderSectionsPage(db); break;
+    case 'navigation': renderNavPage(db); break;
+    case 'darshan': renderDarshanTable(db); break;
+    case 'pujas': renderPujaTable(db); break;
+    case 'services': renderServicesAdmin(db); break;
+    case 'festivals': renderFestivalsTable(db); break;
+    case 'knowledge': renderKnowledgeTable(db); break;
+    case 'users': renderUsersTable(); break;
+    case 'donations': renderDonationsTable(); break;
+    case 'notifications': renderNotifHistory(); break;
+  }
+}
+
+/* ── DASHBOARD ── */
+function renderDashboard(db){
+  // Chart
+  const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const vals=[65,72,58,88,94,110,102];
+  const max=Math.max(...vals);
+  document.getElementById('chart-bars').innerHTML =
+    vals.map((v,i)=>`<div class="chart-bar${i===4?' gold':''}" style="height:${(v/max)*100}%" data-v="${v}K visits"></div>`).join('');
+  document.getElementById('chart-labels').innerHTML =
+    days.map(d=>`<div class="chart-label">${d}</div>`).join('');
+
+  // Activity
+  const acts=[
+    {icon:'🪔',bg:'rgba(255,107,0,.12)',text:'<strong>Ramesh Kumar</strong> booked <strong>Satyanarayan Puja</strong>',time:'2 min ago'},
+    {icon:'💛',bg:'rgba(212,175,55,.12)',text:'<strong>Priya Sharma</strong> donated <strong>₹1,001</strong> for Temple Seva',time:'5 min ago'},
+    {icon:'👤',bg:'rgba(34,197,94,.12)',text:'<strong>245 new devotees</strong> joined today',time:'12 min ago'},
+    {icon:'🛕',bg:'rgba(122,30,30,.2)',text:'<strong>Kashi Vishwanath</strong> live stream started',time:'28 min ago'},
+    {icon:'⭐',bg:'rgba(168,85,247,.12)',text:'<strong>Ananya Patel</strong> booked an <strong>Astrology consultation</strong>',time:'45 min ago'},
+  ];
+  document.getElementById('activity-feed').innerHTML =
+    acts.map(a=>`<div class="activity-item"><div class="activity-icon" style="background:${a.bg}">${a.icon}</div><div><div class="activity-text">${a.text}</div><div class="activity-time">${a.time}</div></div></div>`).join('');
+
+  // Quick toggles
+  const secs = db.sections||DEFAULT.sections;
+  const keys = Object.keys(secs);
+  document.getElementById('quick-toggles').innerHTML =
+    keys.map(k=>{
+      const s=secs[k];
+      return `<div class="qt-item">
+        <div class="qt-header">
+          <div><div class="qt-name">${s.icon||'🔹'} ${s.name}</div></div>
+          <label class="toggle"><input type="checkbox" ${s.visible?'checked':''} onchange="quickToggleSection('${k}',this.checked)"><span class="toggle-slider"></span></label>
+        </div>
+        <div class="qt-sub">${s.visible?'<span style="color:var(--green)">● Visible on all platforms</span>':'<span style="color:var(--red)">● Hidden from all platforms</span>'}</div>
+      </div>`;
+    }).join('');
+}
+
+function quickToggleSection(key, val){
+  const db = getDB();
+  if(!db.sections[key]) db.sections[key]={};
+  db.sections[key].visible = val;
+  saveDB(db);
+  showToast(`${key} section ${val?'shown on':'hidden from'} all platforms`);
+  renderDashboard(db);
+}
+
+/* ── SECTIONS PAGE ── */
+function renderSectionsPage(db){
+  const secs = db.sections||{};
+  const sorted = Object.entries(secs).sort((a,b)=>(a[1].order||99)-(b[1].order||99));
+  let html = '';
+  sorted.forEach(([key,sec])=>{
+    html += `<div class="section-row" draggable="true" data-key="${key}">
+      <span class="drag-handle">⠿</span>
+      <div class="section-row-icon">${sec.icon||'🔹'}</div>
+      <div class="section-row-info">
+        <div class="section-row-name">${sec.name||key}</div>
+        <div class="section-row-sub">${sec.sub||''}</div>
+      </div>
+      <span class="order-badge">#${sec.order}</span>
+      <div class="section-row-actions">
+        <label class="toggle" title="Toggle visibility"><input type="checkbox" ${sec.visible?'checked':''} onchange="toggleSection('${key}',this.checked)"><span class="toggle-slider"></span></label>
+        <button class="row-btn row-btn-edit" onclick="showToast('Edit ${sec.name} — coming soon')">Edit</button>
+        <button class="row-btn row-btn-del" onclick="deleteSection('${key}')">Delete</button>
+      </div>
+    </div>`;
+  });
+  document.getElementById('sections-list').innerHTML = html || '<div class="empty-state"><div class="empty-icon">🧩</div><div class="empty-text">No sections yet</div></div>';
+  initDragDrop('sections-list', 'sections');
+}
+
+function toggleSection(key, val){
+  const db = getDB();
+  if(db.sections[key]) db.sections[key].visible = val;
+  saveDB(db);
+  showToast(`"${key}" section ${val?'visible':'hidden'} on all platforms`);
+}
+
+function deleteSection(key){
+  if(!confirm(`Delete section "${key}"? This cannot be undone.`)) return;
+  const db = getDB();
+  delete db.sections[key];
+  saveDB(db);
+  renderSectionsPage(db);
+  showToast(`Section "${key}" deleted`);
+}
+
+function addSection(){
+  const name = document.getElementById('new-section-name').value.trim();
+  if(!name){showToast('Please enter a section name');return;}
+  const db = getDB();
+  const key = name.toLowerCase().replace(/\s+/g,'_');
+  const orders = Object.values(db.sections).map(s=>s.order||0);
+  db.sections[key]={
+    name,
+    icon:document.getElementById('new-section-icon').value||'🔹',
+    sub:document.getElementById('new-section-sub').value||'',
+    visible:document.getElementById('new-section-visible').checked,
+    order:Math.max(...orders,0)+1
+  };
+  saveDB(db);
+  closeModal('add-section');
+  renderSectionsPage(db);
+  showToast(`Section "${name}" added to all platforms!`);
+  // Clear form
+  ['new-section-name','new-section-icon','new-section-sub'].forEach(id=>document.getElementById(id).value='');
+}
+
+/* ── NAV PAGE ── */
+function renderNavPage(db){
+  const links = [...(db.navLinks||[])].sort((a,b)=>a.order-b.order);
+  document.getElementById('nav-list').innerHTML = links.map(n=>`
+    <div class="section-row" data-id="${n.id}">
+      <span class="drag-handle">⠿</span>
+      <div class="section-row-info">
+        <div class="section-row-name">${n.label}</div>
+        <div class="section-row-sub font-mono">${n.href}</div>
+      </div>
+      <span class="order-badge">#${n.order}</span>
+      <div class="section-row-actions">
+        <label class="toggle"><input type="checkbox" ${n.visible?'checked':''} onchange="toggleNav('${n.id}',this.checked)"><span class="toggle-slider"></span></label>
+        <button class="row-btn row-btn-del" onclick="deleteNav('${n.id}')">Delete</button>
+      </div>
+    </div>`).join('') || '<div class="empty-state"><div class="empty-icon">🔗</div><div class="empty-text">No nav tabs</div></div>';
+}
+
+function toggleNav(id, val){
+  const db=getDB();
+  const n=db.navLinks.find(x=>x.id===id);
+  if(n) n.visible=val;
+  saveDB(db); showToast(`Tab ${val?'shown':'hidden'} on all platforms`);
+}
+function deleteNav(id){
+  const db=getDB();
+  db.navLinks=db.navLinks.filter(x=>x.id!==id);
+  saveDB(db); renderNavPage(db); showToast('Tab deleted');
+}
+function addNavTab(){
+  const label=document.getElementById('new-nav-label').value.trim();
+  if(!label){showToast('Enter tab label');return;}
+  const db=getDB();
+  const maxOrder=Math.max(...db.navLinks.map(n=>n.order||0),0);
+  db.navLinks.push({id:'n'+genId(),label,href:document.getElementById('new-nav-href').value||'#',visible:document.getElementById('new-nav-visible').checked,order:maxOrder+1});
+  saveDB(db); closeModal('add-nav'); renderNavPage(db);
+  showToast(`Tab "${label}" added to navigation!`);
+  document.getElementById('new-nav-label').value=''; document.getElementById('new-nav-href').value='';
+}
+
+/* ── TEMPLE TABLE ── */
+function renderDarshanTable(db){
+  const items=db.darshan||[];
+  document.getElementById('darshan-table').innerHTML = `
+    <tr><th>Temple</th><th>Location</th><th>Darshan Time</th><th>Live</th><th>Actions</th></tr>
+    ${items.map(d=>`<tr>
+      <td><span class="td-name">${d.emoji} ${d.name}</span></td>
+      <td>${d.location}</td>
+      <td>${d.time}</td>
+      <td><span class="status-pill ${d.live?'pill-active':'pill-inactive'}"><span class="pill-dot"></span>${d.live?'Live':'Offline'}</span></td>
+      <td><button class="btn btn-ghost btn-sm" onclick="toggleTemple('${d.id}')">Toggle Live</button> <button class="btn btn-danger btn-sm" onclick="deleteTemple('${d.id}')">Delete</button></td>
+    </tr>`).join('')}`;
+}
+function toggleTemple(id){const db=getDB();const d=db.darshan.find(x=>x.id===id);if(d){d.live=!d.live;saveDB(db);renderDarshanTable(db);showToast(d.name+' now '+(d.live?'LIVE':'Offline'));}}
+function deleteTemple(id){if(!confirm('Delete this temple?'))return;const db=getDB();db.darshan=db.darshan.filter(x=>x.id!==id);saveDB(db);renderDarshanTable(db);showToast('Temple deleted');}
+function addTemple(){
+  const name=document.getElementById('new-temple-name').value.trim();
+  if(!name){showToast('Enter temple name');return;}
+  const db=getDB();
+  db.darshan.push({id:'d'+genId(),name,emoji:document.getElementById('new-temple-emoji').value||'🛕',location:document.getElementById('new-temple-loc').value||'India',time:document.getElementById('new-temple-time').value||'6:00 AM Aarti',live:document.getElementById('new-temple-live').checked});
+  saveDB(db);closeModal('add-darshan');renderDarshanTable(db);
+  showToast(`Temple "${name}" added to all platforms!`);
+  ['new-temple-name','new-temple-emoji','new-temple-loc','new-temple-time'].forEach(id=>document.getElementById(id).value='');
+}
+
+/* ── PUJA TABLE ── */
+function renderPujaTable(db){
+  const items=db.pujas||[];
+  document.getElementById('puja-table').innerHTML=`
+    <tr><th>Puja</th><th>Price</th><th>Ribbon</th><th>Actions</th></tr>
+    ${items.map(p=>`<tr>
+      <td><span class="td-name">${p.emoji} ${p.name}</span></td>
+      <td style="color:var(--saffron);font-family:'Cinzel',serif">${p.price}</td>
+      <td>${p.ribbon?`<span class="tag tag-saffron">${p.ribbon}</span>`:'-'}</td>
+      <td><button class="btn btn-ghost btn-sm" onclick="showToast('Edit puja: ${p.name}')">Edit</button> <button class="btn btn-danger btn-sm" onclick="deletePuja('${p.id}')">Delete</button></td>
+    </tr>`).join('')}`;
+}
+function deletePuja(id){if(!confirm('Delete this puja?'))return;const db=getDB();db.pujas=db.pujas.filter(x=>x.id!==id);saveDB(db);renderPujaTable(db);showToast('Puja deleted');}
+function addPuja(){
+  const name=document.getElementById('new-puja-name').value.trim();
+  if(!name){showToast('Enter puja name');return;}
+  const db=getDB();
+  db.pujas.push({id:'p'+genId(),name,emoji:document.getElementById('new-puja-emoji').value||'🙏',desc:document.getElementById('new-puja-desc').value||'',price:document.getElementById('new-puja-price').value||'₹501',ribbon:document.getElementById('new-puja-ribbon').value||''});
+  saveDB(db);closeModal('add-puja');renderPujaTable(db);
+  showToast(`Puja "${name}" added to all platforms!`);
+  ['new-puja-name','new-puja-emoji','new-puja-desc','new-puja-price','new-puja-ribbon'].forEach(id=>document.getElementById(id).value='');
+}
+
+/* ── SERVICES ADMIN ── */
+function renderServicesAdmin(db){
+  const items=db.services||[];
+  document.getElementById('services-grid-admin').innerHTML=items.map(s=>`
+    <div class="qt-item">
+      <div class="qt-header">
+        <div style="font-size:22px">${s.emoji}</div>
+        <button class="btn btn-danger btn-sm" onclick="deleteService('${s.id}')">✕</button>
+      </div>
+      <div class="qt-name">${s.name}</div>
+    </div>`).join('');
+}
+function deleteService(id){const db=getDB();db.services=db.services.filter(x=>x.id!==id);saveDB(db);renderServicesAdmin(db);showToast('Service removed from all platforms');}
+function addService(){
+  const name=document.getElementById('new-service-name').value.trim();
+  if(!name){showToast('Enter service name');return;}
+  const db=getDB();
+  db.services.push({id:'s'+genId(),name,emoji:document.getElementById('new-service-emoji').value||'⚡'});
+  saveDB(db);closeModal('add-service');renderServicesAdmin(db);
+  showToast(`Service "${name}" added to all platforms!`);
+  ['new-service-name','new-service-emoji'].forEach(id=>document.getElementById(id).value='');
+}
+
+/* ── FESTIVALS TABLE ── */
+function renderFestivalsTable(db){
+  const items=db.festivals||[];
+  document.getElementById('festival-table').innerHTML=`
+    <tr><th>Festival</th><th>Date</th><th>Description</th><th>Actions</th></tr>
+    ${items.map(f=>`<tr>
+      <td><span class="td-name">${f.emoji} ${f.name}</span></td>
+      <td style="font-family:'Cinzel',serif;color:var(--gold)">${f.date}</td>
+      <td style="color:var(--text-m)">${f.desc}</td>
+      <td><button class="btn btn-danger btn-sm" onclick="deleteFestival('${f.id}')">Delete</button></td>
+    </tr>`).join('')}`;
+}
+function deleteFestival(id){const db=getDB();db.festivals=db.festivals.filter(x=>x.id!==id);saveDB(db);renderFestivalsTable(db);showToast('Festival removed');}
+function addFestival(){
+  const name=document.getElementById('new-fest-name').value.trim();
+  if(!name){showToast('Enter festival name');return;}
+  const db=getDB();
+  if(!db.festivals) db.festivals=[];
+  const bg=['#2C0808','#4A1200','#1A3A1A','#3A2A00','#2C0044'][Math.floor(Math.random()*5)];
+  db.festivals.push({id:'f'+genId(),name,emoji:document.getElementById('new-fest-emoji').value||'🎉',date:document.getElementById('new-fest-date').value||'TBD',desc:document.getElementById('new-fest-desc').value||'',bg});
+  saveDB(db);closeModal('add-festival');renderFestivalsTable(db);
+  showToast(`Festival "${name}" added!`);
+  ['new-fest-name','new-fest-emoji','new-fest-date','new-fest-desc'].forEach(id=>document.getElementById(id).value='');
+}
+
+/* ── KNOWLEDGE TABLE ── */
+function renderKnowledgeTable(db){
+  const items=db.knowledge||[];
+  document.getElementById('knowledge-table').innerHTML=`
+    <tr><th>Title</th><th>Category</th><th>Actions</th></tr>
+    ${items.map(k=>`<tr>
+      <td><span class="td-name">${k.emoji} ${k.title}</span></td>
+      <td><span class="tag tag-gold">${k.cat}</span></td>
+      <td><button class="btn btn-danger btn-sm" onclick="deleteArticle('${k.id}')">Delete</button></td>
+    </tr>`).join('')}`;
+}
+function deleteArticle(id){const db=getDB();db.knowledge=db.knowledge.filter(x=>x.id!==id);saveDB(db);renderKnowledgeTable(db);showToast('Article removed');}
+function addArticle(){
+  const title=document.getElementById('new-art-title').value.trim();
+  if(!title){showToast('Enter article title');return;}
+  const db=getDB();
+  if(!db.knowledge) db.knowledge=[];
+  const bgs=['#F5E6C8','#E8D5C8','#D5E8D5','#E8D5E8','#C8D5E8'];
+  db.knowledge.push({id:'k'+genId(),title,emoji:document.getElementById('new-art-emoji').value||'📖',cat:document.getElementById('new-art-cat').value||'General',excerpt:document.getElementById('new-art-excerpt').value||'',bg:bgs[Math.floor(Math.random()*5)]});
+  saveDB(db);closeModal('add-article');renderKnowledgeTable(db);
+  showToast(`Article "${title}" published to all platforms!`);
+  ['new-art-title','new-art-emoji','new-art-cat','new-art-excerpt'].forEach(id=>document.getElementById(id).value='');
+}
+
+/* ── USERS TABLE ── */
+const SAMPLE_USERS=[
+  {name:'Ramesh Kumar',email:'ramesh@email.com',city:'Varanasi',pujas:12,platform:'Android',joined:'Jan 2024'},
+  {name:'Priya Sharma',email:'priya@email.com',city:'Mumbai',pujas:7,platform:'iOS',joined:'Feb 2024'},
+  {name:'Ananya Patel',email:'ananya@email.com',city:'Ahmedabad',pujas:3,platform:'Web',joined:'Mar 2024'},
+  {name:'Suresh Nair',email:'suresh@email.com',city:'Kochi',pujas:18,platform:'Android',joined:'Dec 2023'},
+  {name:'Kavita Devi',email:'kavita@email.com',city:'Jaipur',pujas:25,platform:'iOS',joined:'Nov 2023'},
+];
+function renderUsersTable(){
+  document.getElementById('users-table-wrap').innerHTML=`<div class="table-wrap"><table>
+    <tr><th>Name</th><th>Email</th><th>City</th><th>Pujas</th><th>Platform</th><th>Joined</th><th>Actions</th></tr>
+    ${SAMPLE_USERS.map(u=>`<tr>
+      <td class="td-name">👤 ${u.name}</td><td>${u.email}</td><td>📍${u.city}</td>
+      <td style="color:var(--saffron);font-family:'Cinzel',serif">${u.pujas}</td>
+      <td><span class="tag ${u.platform==='Android'?'tag-saffron':'tag-gold'}">${u.platform}</span></td>
+      <td style="color:var(--text-l);font-family:'Cinzel',serif;font-size:11px">${u.joined}</td>
+      <td><button class="btn btn-ghost btn-sm" onclick="showToast('View profile: ${u.name}')">View</button></td>
+    </tr>`).join('')}
+  </table></div>`;
+}
+
+/* ── DONATIONS TABLE ── */
+const SAMPLE_DONATIONS=[
+  {donor:'Ramesh Kumar',amount:'₹1,001',cause:'Temple Seva',platform:'Android',date:'Today 10:32 AM'},
+  {donor:'Anonymous',amount:'₹501',cause:'Annadaan',platform:'Web',date:'Today 9:15 AM'},
+  {donor:'Priya Sharma',amount:'₹2,100',cause:'Vidya Daan',platform:'iOS',date:'Yesterday'},
+  {donor:'Suresh Nair',amount:'₹5,001',cause:'Temple Seva',platform:'Android',date:'2 days ago'},
+  {donor:'Ananya Patel',amount:'₹251',cause:'Annadaan',platform:'iOS',date:'3 days ago'},
+];
+function renderDonationsTable(){
+  document.getElementById('donations-table-wrap').innerHTML=`<div class="table-wrap"><table>
+    <tr><th>Donor</th><th>Amount</th><th>Cause</th><th>Platform</th><th>Date</th></tr>
+    ${SAMPLE_DONATIONS.map(d=>`<tr>
+      <td class="td-name">💛 ${d.donor}</td>
+      <td style="color:var(--gold);font-family:'Cinzel',serif;font-size:15px">${d.amount}</td>
+      <td>${d.cause}</td>
+      <td><span class="tag ${d.platform==='Android'?'tag-saffron':'tag-gold'}">${d.platform}</span></td>
+      <td style="color:var(--text-l);font-size:11px">${d.date}</td>
+    </tr>`).join('')}
+  </table></div>`;
+}
+
+/* ── NOTIFICATIONS ── */
+const notifHistory=[];
+function renderNotifHistory(){
+  document.getElementById('notif-history').innerHTML=notifHistory.length?
+    notifHistory.map(n=>`<div class="activity-item">
+      <div class="activity-icon" style="background:rgba(255,107,0,.12)">🔔</div>
+      <div><div class="activity-text"><strong>${n.title}</strong> — ${n.body}</div>
+      <div class="activity-time">${n.target} · ${n.time}</div></div>
+    </div>`).join('') :
+    '<div class="empty-state"><div class="empty-icon">🔔</div><div class="empty-text">No notifications sent yet</div></div>';
+}
+function sendNotification(){
+  const title=document.getElementById('notif-title').value.trim();
+  const body=document.getElementById('notif-body').value.trim();
+  if(!title||!body){showToast('Fill in title and message');return;}
+  const target=document.getElementById('notif-target').value;
+  notifHistory.unshift({title,body,target,time:new Date().toLocaleTimeString()});
+  renderNotifHistory();
+  showToast(`Notification sent to ${target}!`);
+  document.getElementById('notif-title').value='';
+  document.getElementById('notif-body').value='';
+}
+
+/* ── DRAG & DROP ── */
+function initDragDrop(containerId, type){
+  const container = document.getElementById(containerId);
+  if(!container) return;
+  let dragEl = null;
+  container.querySelectorAll('.section-row').forEach(row=>{
+    row.addEventListener('dragstart',()=>{dragEl=row;row.classList.add('dragging');});
+    row.addEventListener('dragend',()=>{row.classList.remove('dragging');dragEl=null;saveReorder(container,type);});
+    row.addEventListener('dragover',e=>{e.preventDefault();if(dragEl&&dragEl!==row){const rect=row.getBoundingClientRect();const mid=rect.top+rect.height/2;if(e.clientY<mid)container.insertBefore(dragEl,row);else container.insertBefore(dragEl,row.nextSibling);}});
+  });
+}
+
+function saveReorder(container, type){
+  const db = getDB();
+  if(type==='sections'){
+    const rows = container.querySelectorAll('.section-row');
+    rows.forEach((r,i)=>{const k=r.dataset.key;if(db.sections[k])db.sections[k].order=i+1;});
+  } else if(type==='nav'){
+    const rows = container.querySelectorAll('.section-row');
+    rows.forEach((r,i)=>{const id=r.dataset.id;const n=db.navLinks.find(x=>x.id===id);if(n)n.order=i+1;});
+  }
+  saveDB(db);
+  showToast('Order saved! Updating all platforms...');
+}
+
+/* ── SETTINGS ── */
+function saveSettings(){
+  const db=getDB();
+  db.settings.siteName=document.getElementById('setting-name').value;
+  db.settings.tagline=document.getElementById('setting-tagline').value;
+  saveDB(db);
+  showToast('Settings saved and published to all platforms!');
+}
+
+/* ── MODAL ── */
+function openModal(id){document.getElementById('modal-'+id).classList.add('open');}
+function closeModal(id){document.getElementById('modal-'+id).classList.remove('open');}
+document.querySelectorAll('.modal-overlay').forEach(m=>{
+  m.addEventListener('click',e=>{if(e.target===m){const id=m.id.replace('modal-','');closeModal(id);}});
+});
+
+/* ── PUBLISH ── */
+function saveAndPublish(){
+  showToast('🚀 Published! Website + Android + iOS updated.');
+}
+
+/* ── TOAST ── */
+function showToast(msg){
+  const t=document.getElementById('admin-toast');
+  t.textContent=msg;
+  t.style.transform='translateX(0)';t.style.opacity='1';
+  clearTimeout(t._timer);
+  t._timer=setTimeout(()=>{t.style.transform='translateX(120px)';t.style.opacity='0';},3000);
+}
+
+/* ── INIT ── */
+renderPage('dashboard');
+
+
+/* ═══════════════════════════════════════════
+   SUBSCRIPTION MANAGEMENT JS
+═══════════════════════════════════════════ */
+
+/* ── RENDER SUBSCRIPTIONS PAGE ── */
+function renderSubscriptionsPage(db) {
+  const subs = db.subscriptions || [];
+  const active = subs.filter(s => s.status === 'active');
+  const el = id => document.getElementById(id);
+
+  if(el('sub-stat-active')) el('sub-stat-active').textContent = active.length;
+  if(el('sub-stat-revenue')) el('sub-stat-revenue').textContent = 'Rs.' + (active.length * 200).toLocaleString('en-IN');
+  if(el('sub-stat-pujas')) el('sub-stat-pujas').textContent = subs.reduce((a,s) => a + (s.totalPujas||0), 0);
+  if(el('sub-stat-pending')) el('sub-stat-pending').textContent = countPendingThisWeek(subs);
+  if(el('sub-count-badge')) el('sub-count-badge').textContent = active.length;
+
+  renderSubscriptionsTable(subs);
+}
+
+function countPendingThisWeek(subs) {
+  const today = new Date().getDate();
+  const weekEnd = today + 7;
+  let count = 0;
+  subs.filter(s => s.status === 'active').forEach(s => {
+    (s.pujasDates || []).forEach(d => {
+      if (d >= today && d <= weekEnd) count++;
+    });
+  });
+  return count;
+}
+
+function renderSubscriptionsTable(subs) {
+  const wrap = document.getElementById('subscriptions-table');
+  if (!wrap) return;
+  if (!subs || subs.length === 0) {
+    wrap.innerHTML = '<div style="padding:40px;text-align:center;color:var(--text-l);font-family:Cinzel,serif;font-size:13px">No subscribers yet. Share your subscription form to get started!</div>';
+    return;
+  }
+
+  const tableStyle = 'width:100%;border-collapse:collapse;font-size:13px';
+  const thStyle = 'padding:10px 14px;text-align:left;font-family:Cinzel,serif;font-size:10px;letter-spacing:1px;color:var(--text-l);border-bottom:1px solid var(--border);white-space:nowrap';
+  const tdStyle = 'padding:12px 14px;border-bottom:1px solid rgba(212,175,55,.06);color:var(--text-m)';
+
+  const statusColor = { active: '#22C55E', paused: '#F59E0B', cancelled: '#EF4444' };
+
+  wrap.innerHTML = '<div style="overflow-x:auto"><table style="' + tableStyle + '"><thead><tr>' +
+    ['Name', 'Temple', 'Email', 'Puja Dates', 'Start Date', 'Pujas Done', 'Status', 'Actions'].map(h => '<th style="' + thStyle + '">' + h + '</th>').join('') +
+    '</tr></thead><tbody>' +
+    subs.map(s => '<tr>' +
+      '<td style="' + tdStyle + ';color:var(--text);font-weight:500">' + s.name + (s.gotra ? '<br><span style="font-size:11px;color:var(--text-l)">Gotra: ' + s.gotra + '</span>' : '') + '</td>' +
+      '<td style="' + tdStyle + '">' + (s.mandir ? s.mandir.name : '—') + '</td>' +
+      '<td style="' + tdStyle + '">' + s.email + '</td>' +
+      '<td style="' + tdStyle + '">' + (s.pujasDates || []).map(d => d + 'th').join(', ') + '</td>' +
+      '<td style="' + tdStyle + '">' + (s.startDate ? new Date(s.startDate).toLocaleDateString('en-IN') : '—') + '</td>' +
+      '<td style="' + tdStyle + ';text-align:center">' + (s.totalPujas || 0) + '</td>' +
+      '<td style="' + tdStyle + '"><span style="background:' + (statusColor[s.status]||'#888') + '22;color:' + (statusColor[s.status]||'#888') + ';padding:3px 10px;border-radius:20px;font-family:Cinzel,serif;font-size:10px;letter-spacing:1px">' + (s.status||'active').toUpperCase() + '</span></td>' +
+      '<td style="' + tdStyle + '"><div style="display:flex;gap:6px">' +
+        '<button onclick="toggleSubStatus(\'' + s.id + '\')" style="padding:4px 10px;border-radius:4px;border:1px solid rgba(212,175,55,.3);background:none;color:var(--text-m);font-size:11px;cursor:pointer">' + (s.status==='active'?'Pause':'Activate') + '</button>' +
+        '<button onclick="cancelSub(\'' + s.id + '\')" style="padding:4px 10px;border-radius:4px;border:1px solid rgba(239,68,68,.3);background:none;color:#EF4444;font-size:11px;cursor:pointer">Cancel</button>' +
+      '</div></td>' +
+    '</tr>').join('') +
+    '</tbody></table></div>';
+}
+
+function filterSubscriptions() {
+  const db = getDB();
+  let subs = db.subscriptions || [];
+  const search = (document.getElementById('sub-search')||{}).value?.toLowerCase() || '';
+  const filter = (document.getElementById('sub-filter')||{}).value || 'all';
+  if (search) subs = subs.filter(s => s.name.toLowerCase().includes(search) || (s.mandir && s.mandir.name.toLowerCase().includes(search)));
+  if (filter !== 'all') subs = subs.filter(s => s.status === filter);
+  renderSubscriptionsTable(subs);
+}
+
+function toggleSubStatus(id) {
+  const db = getDB();
+  const sub = (db.subscriptions || []).find(s => s.id === id);
+  if (!sub) return;
+  sub.status = sub.status === 'active' ? 'paused' : 'active';
+  saveDB(db);
+  renderPage('subscriptions');
+  adminToast('Subscription status updated');
+}
+
+function cancelSub(id) {
+  if (!confirm('Cancel this subscription? This cannot be undone.')) return;
+  const db = getDB();
+  const sub = (db.subscriptions || []).find(s => s.id === id);
+  if (!sub) return;
+  sub.status = 'cancelled';
+  saveDB(db);
+  renderPage('subscriptions');
+  adminToast('Subscription cancelled');
+}
+
+/* ── MANDIRS ── */
+function renderMandirAdmin(db) {
+  const mandirs = db.mandirs || getDefaultMandirs();
+  const list = document.getElementById('mandirs-list');
+  const count = document.getElementById('mandir-count');
+  if (!list) return;
+  if (count) count.textContent = mandirs.length + ' temples';
+
+  const rowStyle = 'display:flex;align-items:center;gap:14px;padding:14px 16px;border:1px solid var(--border);border-radius:var(--r);margin-bottom:8px;background:var(--panel2)';
+
+  list.innerHTML = mandirs.map(m => '<div style="' + rowStyle + '">' +
+    '<span style="font-size:28px">' + (m.emoji||'🛕') + '</span>' +
+    '<div style="flex:1">' +
+      '<div style="font-family:Cinzel,serif;font-size:13px;color:var(--text)">' + m.name + '</div>' +
+      '<div style="font-size:11px;color:var(--text-l);margin-top:2px">📍 ' + m.location + (m.purohit ? ' • Purohit: ' + m.purohit : '') + (m.code ? ' • Code: <strong style=color:var(--saffron)>' + m.code + '</strong>' : '') + '</div>' +
+    '</div>' +
+    '<div style="display:flex;align-items:center;gap:8px">' +
+      '<label class="toggle" title="Active/Inactive"><input type="checkbox" ' + (m.active!==false?'checked':'') + ' onchange="toggleMandirActive(\'' + m.id + '\',this.checked)"><span class="toggle-slider"></span></label>' +
+      '<button onclick="deleteMandir(\'' + m.id + '\')" style="padding:4px 10px;border-radius:4px;border:1px solid rgba(239,68,68,.3);background:none;color:#EF4444;font-size:11px;cursor:pointer">Remove</button>' +
+    '</div>' +
+  '</div>').join('');
+
+  if (mandirs.length === 0) list.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-l);font-size:13px">No mandirs added yet. Add your first temple above.</div>';
+}
+
+function getDefaultMandirs() {
+  return [
+    {id:'m1',name:'Kashi Vishwanath',location:'Varanasi, UP',emoji:'🛕',active:true},
+    {id:'m2',name:'Tirupati Balaji',location:'Tirupati, AP',emoji:'🙏',active:true},
+    {id:'m3',name:'Vaishno Devi',location:'Katra, J&K',emoji:'⛰️',active:true},
+    {id:'m4',name:'Jagannath Puri',location:'Puri, Odisha',emoji:'🌊',active:true},
+    {id:'m5',name:'Somnath Mandir',location:'Prabhas Patan, GJ',emoji:'🌙',active:true},
+    {id:'m6',name:'Shirdi Sai Baba',location:'Shirdi, MH',emoji:'🌹',active:true},
+  ];
+}
+
+function openAddMandir() { document.getElementById('add-mandir-form').style.display='block'; }
+function closeAddMandir() { document.getElementById('add-mandir-form').style.display='none'; }
+
+function saveMandir() {
+  const name = document.getElementById('nm-name').value.trim();
+  const loc = document.getElementById('nm-loc').value.trim();
+  if (!name || !loc) { adminToast('Name and location are required'); return; }
+  const db = getDB();
+  if (!db.mandirs) db.mandirs = getDefaultMandirs();
+  const code = document.getElementById('nm-code').value.trim().toUpperCase() || name.slice(0,5).toUpperCase() + Math.floor(Math.random()*9+1);
+  db.mandirs.push({
+    id: 'm' + Date.now(),
+    name, location: loc,
+    emoji: document.getElementById('nm-emoji').value.trim() || '🛕',
+    purohit: document.getElementById('nm-purohit').value.trim(),
+    phone: document.getElementById('nm-phone').value.trim(),
+    code, active: true
+  });
+  saveDB(db);
+  closeAddMandir();
+  ['nm-name','nm-loc','nm-emoji','nm-purohit','nm-phone','nm-code'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
+  renderPage('mandirs');
+  adminToast('Mandir added! Now visible on subscription form.');
+}
+
+function toggleMandirActive(id, val) {
+  const db = getDB();
+  if (!db.mandirs) db.mandirs = getDefaultMandirs();
+  const m = db.mandirs.find(m => m.id === id);
+  if (m) { m.active = val; saveDB(db); adminToast('Mandir ' + (val?'activated':'deactivated')); }
+}
+
+function deleteMandir(id) {
+  if (!confirm('Remove this mandir from subscriptions?')) return;
+  const db = getDB();
+  if (!db.mandirs) return;
+  db.mandirs = db.mandirs.filter(m => m.id !== id);
+  saveDB(db);
+  renderPage('mandirs');
+  adminToast('Mandir removed');
+}
+
+/* ── PUROHIT PORTAL ── */
+let currentPurohitMandir = null;
+
+function purohitLogin() {
+  const code = (document.getElementById('purohit-code').value||'').trim().toUpperCase();
+  if (!code) { adminToast('Enter your upload code'); return; }
+  const db = getDB();
+  const mandirs = db.mandirs || getDefaultMandirs();
+  const mandir = mandirs.find(m => m.code && m.code.toUpperCase() === code);
+  if (!mandir) { adminToast('Invalid code. Contact admin.'); return; }
+  currentPurohitMandir = mandir;
+  document.getElementById('purohit-temple-name').textContent = mandir.name + ' — ' + mandir.location;
+  document.getElementById('purohit-panel').style.display = 'block';
+
+  // Load subscribers for this temple
+  const subs = (db.subscriptions || []).filter(s => s.mandir && s.mandir.id === mandir.id && s.status === 'active');
+  const list = document.getElementById('purohit-pujas-list');
+  if (subs.length === 0) {
+    list.innerHTML = '<div style="padding:20px;color:var(--text-l);font-size:13px">No active subscribers at this temple yet.</div>';
+  } else {
+    list.innerHTML = subs.map(s => '<div style="display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--border);border-radius:var(--r);margin-bottom:8px;background:var(--panel2)">' +
+      '<span style="font-size:24px">🙏</span>' +
+      '<div style="flex:1"><div style="font-size:13px;color:var(--text)">' + s.name + (s.gotra ? ' (' + s.gotra + ')' : '') + '</div>' +
+      '<div style="font-size:11px;color:var(--text-l)">Puja dates: ' + (s.pujasDates||[]).map(d=>d+'th').join(', ') + ' • Total done: ' + (s.totalPujas||0) + '</div>' +
+      (s.sankalp ? '<div style="font-size:11px;color:var(--saffron);margin-top:2px">Sankalp: ' + s.sankalp + '</div>' : '') +
+      '</div></div>'
+    ).join('');
+  }
+
+  // Populate upload dropdown
+  const sel = document.getElementById('upload-subscriber');
+  sel.innerHTML = '<option value="">-- Select Subscriber --</option>' +
+    subs.map(s => '<option value="' + s.id + '">' + s.name + ' (' + s.email + ')</option>').join('');
+}
+
+function submitPujaUpload() {
+  const subId = (document.getElementById('upload-subscriber').value||'').trim();
+  const driveLink = (document.getElementById('upload-drive-link').value||'').trim();
+  const notes = (document.getElementById('upload-notes').value||'').trim();
+  const statusEl = document.getElementById('upload-status');
+
+  if (!subId) { statusEl.innerHTML = '<span style="color:#EF4444">Please select a subscriber</span>'; return; }
+  if (!driveLink || !driveLink.startsWith('http')) { statusEl.innerHTML = '<span style="color:#EF4444">Please enter a valid Google Drive link</span>'; return; }
+
+  const db = getDB();
+  const sub = (db.subscriptions||[]).find(s => s.id === subId);
+  if (!sub) { statusEl.innerHTML = '<span style="color:#EF4444">Subscriber not found</span>'; return; }
+
+  // Record the puja
+  if (!db.pujaHistory) db.pujaHistory = [];
+  const pujaRecord = {
+    id: 'puja_' + Date.now(),
+    subscriptionId: subId,
+    subscriberName: sub.name,
+    subscriberEmail: sub.email,
+    mandir: currentPurohitMandir ? currentPurohitMandir.name : '—',
+    driveLink, notes,
+    date: new Date().toISOString()
+  };
+  db.pujaHistory.push(pujaRecord);
+  sub.totalPujas = (sub.totalPujas || 0) + 1;
+  sub.lastPujaDate = new Date().toISOString();
+  saveDB(db);
+
+  // Show success + email preview
+  statusEl.innerHTML = '<span style="color:#22C55E">✓ Puja recorded! In production, email would auto-send to: ' + sub.email + '</span>';
+
+  const emailHtml = generateEmailPreview(sub, driveLink, notes, currentPurohitMandir);
+  document.getElementById('email-preview-content').innerHTML = emailHtml;
+  document.getElementById('email-preview-card').style.display = 'block';
+
+  document.getElementById('upload-drive-link').value = '';
+  document.getElementById('upload-notes').value = '';
+  adminToast('Puja uploaded! Subscriber notified.');
+}
+
+function generateEmailPreview(sub, driveLink, notes, mandir) {
+  const date = new Date().toLocaleDateString('en-IN', {day:'numeric',month:'long',year:'numeric'});
+  return '<div style="font-family:Georgia,serif;max-width:500px">' +
+    '<div style="font-size:18px;margin-bottom:8px">🪔 Your Puja at ' + (mandir?mandir.name:'the temple') + ' is Complete</div>' +
+    '<p style="margin:8px 0">Dear <strong>' + sub.name + ' Ji</strong>,</p>' +
+    '<p style="margin:8px 0">Namaste! Your monthly puja was performed today at <strong>' + (mandir?mandir.name:'your chosen temple') + '</strong>.</p>' +
+    '<p style="margin:8px 0"><strong>Date:</strong> ' + date + '</p>' +
+    (sub.gotra ? '<p style="margin:8px 0"><strong>Performed for:</strong> ' + sub.name + ' (Gotra: ' + sub.gotra + ')</p>' : '') +
+    (notes ? '<p style="margin:8px 0"><strong>Puja Details:</strong> ' + notes + '</p>' : '') +
+    '<p style="margin:16px 0"><a href="' + driveLink + '" style="background:#FF6B00;color:white;padding:10px 20px;border-radius:4px;text-decoration:none;font-family:Cinzel,serif;font-size:12px">🎥 Watch Your Puja Video</a></p>' +
+    '<p style="margin:8px 0;font-size:12px;color:#888">Jai Shri Ram • Your next puja is scheduled as per your chosen dates.</p>' +
+    '<p style="margin:8px 0;font-size:11px;color:#aaa">SanataniAnthem – Har Ghar Mandir 🕉</p>' +
+  '</div>';
+}
+
+/* ── EXTEND renderPage to include new pages ── */
+const _origRenderPage = renderPage;
+renderPage = function(id) {
+  const db = getDB();
+  if (id === 'subscriptions') { renderSubscriptionsPage(db); return; }
+  if (id === 'mandirs') { renderMandirAdmin(db); return; }
+  if (id === 'purohit') { /* Purohit page is interactive, no initial render needed */ return; }
+  _origRenderPage(id);
+};
+
+/* ── Helper toast (admin version) ── */
+function adminToast(msg) {
+  let t = document.getElementById('admin-toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'admin-toast';
+    t.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:9999;background:var(--panel);color:var(--gold-l,#E8CC6A);font-family:Cinzel,serif;font-size:12px;padding:12px 20px;border-radius:6px;border-left:3px solid var(--gold,#D4AF37);box-shadow:0 4px 24px rgba(0,0,0,.5);transform:translateX(120px);opacity:0;transition:all .35s;pointer-events:none';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.transform = 'translateX(0)';
+  t.style.opacity = '1';
+  setTimeout(() => { t.style.transform = 'translateX(120px)'; t.style.opacity = '0'; }, 3000);
+}
+
+/* ── Update subscription count badge on load ── */
+(function updateBadge() {
+  setInterval(() => {
+    const db = getDB();
+    const el = document.getElementById('sub-count-badge');
+    if (el) el.textContent = ((db.subscriptions||[]).filter(s=>s.status==='active')).length;
+  }, 2000);
+})();
+
+
+/* ── PUROHIT LINK PAGE ── */
+function copyPurohitLink() {
+  const url = window.location.href.replace('admin.html','purohit.html');
+  navigator.clipboard.writeText(url).then(()=>adminToast('Link copied! Send to purohit.')).catch(()=>{
+    document.getElementById('purohit-url-display').value = url;
+    adminToast('URL shown in box — copy manually');
+  });
+}
+
+function renderPurohitCodesPage(db) {
+  const mandirs = db.mandirs && db.mandirs.length > 0 ? db.mandirs : [
+    {id:'m1',name:'Kashi Vishwanath',emoji:'🛕',code:'KASHI7'},
+    {id:'m2',name:'Tirupati Balaji',emoji:'🙏',code:'TIRUPA7'},
+    {id:'m3',name:'Vaishno Devi',emoji:'⛰️',code:'VAISH7'},
+    {id:'m4',name:'Jagannath Puri',emoji:'🌊',code:'JAGANN7'},
+    {id:'m5',name:'Somnath Mandir',emoji:'🌙',code:'SOMNAT7'},
+    {id:'m6',name:'Shirdi Sai Baba',emoji:'🌹',code:'SHIRDI7'},
+  ];
+  const el = document.getElementById('purohit-codes-list');
+  if (!el) return;
+  el.innerHTML = mandirs.map(m =>
+    '<div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--border);border-radius:var(--r);margin-bottom:8px;background:var(--panel2)">' +
+    '<span style="font-size:20px">' + (m.emoji||'🛕') + '</span>' +
+    '<div style="flex:1"><div style="font-size:13px;color:var(--text)">' + m.name + '</div>' +
+    '<div style="font-size:11px;color:var(--text-l)">Purohit Upload Code: <strong style="color:var(--saffron);font-family:Cinzel,serif;letter-spacing:2px">' + (m.code||'—') + '</strong></div></div>' +
+    '<button onclick="navigator.clipboard.writeText(\'' + (m.code||'') + '\').then(()=>adminToast(\'Code copied!\'))" style="padding:4px 12px;border-radius:4px;border:1px solid rgba(212,175,55,.3);background:none;color:var(--gold);font-size:11px;cursor:pointer;font-family:Cinzel,serif">Copy</button>' +
+    '</div>'
+  ).join('');
+}
+
+/* ── Extend renderPage for purohit link page ── */
+const _origRender2 = renderPage;
+renderPage = function(id) {
+  if (id === 'purohit') { renderPurohitCodesPage(getDB()); return; }
+  _origRender2(id);
+};
+
+
+/* ════════════════════════════════════════
+   PUJA RECORDINGS — Approve & Email
+════════════════════════════════════════ */
+function renderRecordingsPage(db) {
+  const recs = db.pujaRecordings || [];
+  const pending = recs.filter(r => r.status === 'pending');
+  const approved = recs.filter(r => r.status === 'approved');
+
+  // Stats
+  const el = id => document.getElementById(id);
+  if(el('rec-stat-total')) el('rec-stat-total').textContent = recs.length;
+  if(el('rec-stat-pending')) el('rec-stat-pending').textContent = pending.length;
+  if(el('rec-stat-approved')) el('rec-stat-approved').textContent = approved.length;
+
+  // Badge in nav
+  const badge = document.getElementById('rec-pending-badge');
+  if(badge) { badge.textContent = pending.length; badge.style.display = pending.length > 0 ? 'inline-flex' : 'none'; }
+
+  const list = document.getElementById('recordings-list');
+  if(!list) return;
+
+  if(recs.length === 0) {
+    list.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-l);font-family:Cinzel,serif;font-size:13px">Abhi koi recording nahi hai.<br/>Purohit jab live kare aur stop kare toh yahan aayegi.</div>';
+    return;
+  }
+
+  list.innerHTML = recs.map(r => {
+    const date = new Date(r.recordedAt).toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+    const durText = r.duration > 0 ? Math.floor(r.duration/60)+'m '+Math.round(r.duration%60)+'s' : '—';
+    const isPending = r.status === 'pending';
+
+    return `<div style="background:var(--panel2);border:1px solid ${isPending ? 'rgba(229,62,62,.3)' : 'rgba(34,197,94,.2)'};border-radius:12px;padding:20px;margin-bottom:14px">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap">
+        <div>
+          <div style="font-family:Cinzel,serif;font-size:14px;color:var(--text);margin-bottom:6px">
+            ${r.mandirEmoji || '🛕'} ${r.mandirName}
+          </div>
+          <div style="font-size:12px;color:var(--text-l);line-height:1.8">
+            📅 ${date}<br/>
+            ⏱ Duration: ${durText}
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end">
+          <span style="font-family:Cinzel,serif;font-size:10px;letter-spacing:1px;padding:3px 10px;border-radius:12px;${isPending ? 'background:rgba(229,62,62,.1);color:#FC8181;border:1px solid rgba(229,62,62,.3)' : 'background:rgba(34,197,94,.1);color:#22C55E;border:1px solid rgba(34,197,94,.3)'}">
+            ${isPending ? '⏳ PENDING' : '✅ APPROVED'}
+          </span>
+        </div>
+      </div>
+
+      <!-- Video preview -->
+      <div style="margin:14px 0;background:#000;border-radius:8px;overflow:hidden">
+        <video src="${r.videoUrl}" controls style="width:100%;max-height:200px;display:block" preload="metadata"></video>
+      </div>
+
+      <!-- Action buttons -->
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <a href="${r.videoUrl}" target="_blank" class="tb-btn tb-btn-ghost" style="text-decoration:none;font-size:11px">🔗 Open Video</a>
+        ${isPending ? `
+        <button onclick="approveRecording('${r.id}')" class="tb-btn tb-btn-primary" style="background:linear-gradient(135deg,#16A34A,#15803D);font-size:11px">
+          ✅ Approve &amp; Email Subscribers
+        </button>
+        <button onclick="rejectRecording('${r.id}')" class="tb-btn tb-btn-ghost" style="font-size:11px;color:#FC8181;border-color:rgba(229,62,62,.3)">
+          ❌ Delete
+        </button>
+        ` : `
+        <button onclick="rejectRecording('${r.id}')" class="tb-btn tb-btn-ghost" style="font-size:11px;color:var(--text-l)">
+          🗑 Delete
+        </button>
+        `}
+      </div>
+      ${!isPending && r.notifiedSubscribers ? '<div style="font-size:11px;color:#22C55E;margin-top:8px;font-family:Cinzel,serif">📧 Subscribers ko email bheja ja chuka hai</div>' : ''}
+    </div>`;
+  }).join('');
+}
+
+function approveRecording(recId) {
+  const db = getDB();
+  const rec = (db.pujaRecordings || []).find(r => r.id === recId);
+  if(!rec) return;
+
+  if(!confirm('Approve karein? Is mandir ke sabhi active subscribers ko email jaayega.')) return;
+
+  rec.status = 'approved';
+  rec.approvedAt = new Date().toISOString();
+
+  // Get subscribers for this mandir
+  const subs = (db.subscriptions || []).filter(s =>
+    s.mandir && s.mandir.id === rec.mandirId && s.status === 'active'
+  );
+
+  saveDB(db);
+  renderRecordingsPage(getDB());
+  adminToast('✅ Approved! ' + subs.length + ' subscriber(s) ko email bheja ja raha hai...');
+
+  // Send emails via EmailJS if configured
+  sendApprovalEmails(rec, subs);
+}
+
+function sendApprovalEmails(rec, subs) {
+  // EmailJS keys — same as purohit portal
+  const EMAILJS_SERVICE_ID  = 'service_mw59a1f';
+  const EMAILJS_TEMPLATE_ID = 'template_4y3hreg';
+  const EMAILJS_PUBLIC_KEY  = 'KbAWcBNxayfWnSH4R';
+
+  // EmailJS already initialized at page load
+  doSendEmails(rec, subs, EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID);
+}
+
+async function doSendEmails(rec, subs, svcId, tplId) {
+  const date = new Date(rec.approvedAt || rec.recordedAt).toLocaleDateString('en-IN', {day:'numeric',month:'long',year:'numeric'});
+  let sent = 0;
+  for(const sub of subs) {
+    try {
+      await emailjs.send(svcId, tplId, {
+        to_email:        sub.email,
+        subscriber_name: sub.name,
+        subscriber_gotra: sub.gotra || '',
+        mandir_name:     rec.mandirName,
+        mandir_location: '',
+        puja_date:       date,
+        puja_notes:      'Aaj ki puja ka video recording yahan dekh sakte hain.',
+        video_url:       rec.videoUrl,
+      });
+      sent++;
+    } catch(e) { console.error('Email failed for', sub.email, e); }
+  }
+  markNotified(rec.id);
+  adminToast('📧 ' + sent + '/' + subs.length + ' emails bhej diye!');
+}
+
+function markNotified(recId) {
+  const db = getDB();
+  const rec = (db.pujaRecordings || []).find(r => r.id === recId);
+  if(rec) { rec.notifiedSubscribers = true; saveDB(db); renderRecordingsPage(getDB()); }
+}
+
+function rejectRecording(recId) {
+  if(!confirm('Is recording ko delete karein?')) return;
+  const db = getDB();
+  db.pujaRecordings = (db.pujaRecordings || []).filter(r => r.id !== recId);
+  saveDB(db);
+  renderRecordingsPage(db);
+  adminToast('Recording delete ho gayi.');
+}
+
+/* ── Update pending badge on every render ── */
+const _origRender3 = renderPage;
+renderPage = function(id) {
+  if(id === 'recordings') { renderRecordingsPage(getDB()); return; }
+  _origRender3(id);
+  // Always update pending badge
+  const db = getDB();
+  const pending = (db.pujaRecordings || []).filter(r => r.status === 'pending').length;
+  const badge = document.getElementById('rec-pending-badge');
+  if(badge) { badge.textContent = pending; badge.style.display = pending > 0 ? 'inline-flex' : 'none'; }
+};
+
+// Check for pending recordings every 5s
+setInterval(() => {
+  const db = getDB();
+  const pending = (db.pujaRecordings || []).filter(r => r.status === 'pending').length;
+  const badge = document.getElementById('rec-pending-badge');
+  if(badge) { badge.textContent = pending; badge.style.display = pending > 0 ? 'inline-flex' : 'none'; }
+}, 5000);
+
+
+/* ════════════════════════════════════════
+   FIREBASE INIT — ADMIN PANEL
+════════════════════════════════════════ */
 const firebaseConfig = {
   apiKey: "AIzaSyBC1yt-YE74pKCKMfukmc7_3vicM49h6vE",
   authDomain: "sanatanianthem-652a3.firebaseapp.com",
@@ -723,308 +1897,99 @@ const firebaseConfig = {
   appId: "1:1031082702558:web:744ffa9cfa54ff838db44f"
 };
 if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-const subDB = firebase.database();
+emailjs.init("KbAWcBNxayfWnSH4R");window._ejsInited=true;
+const adminRTDB = firebase.database();
+// Start Firebase sync immediately
+setTimeout(initFirebaseSync, 100);
 
-// Load latest mandirs from Firebase
-subDB.ref('cms').once('value').then(snap => {
-  const data = snap.val();
-  if(data){
-    localStorage.setItem('sanatani_cms', JSON.stringify(data));
-    renderMandirGrid();
+/* ── Listen for subscriptions in Firebase ── */
+adminRTDB.ref('subscriptions').on('value', snapshot => {
+  const data = snapshot.val() || {};
+  const subs = Object.values(data);
+  if(subs.length > 0){
+    const db = getDB();
+    db.subscriptions = subs;
+    saveDB(db);
+    // Update badge
+    const activeSubs = subs.filter(s => s.status === 'active').length;
+    const badge = document.getElementById('sub-count-badge');
+    if(badge) badge.textContent = activeSubs;
+    // Re-render if on subscriptions page
+    const subPage = document.getElementById('page-subscriptions');
+    if(subPage && subPage.classList.contains('active')) renderPage('subscriptions');
   }
 });
 
-function getDB(){
-  try{
-    const s = localStorage.getItem('sanatani_cms');
-    return s ? JSON.parse(s) : null;
-  }catch(e){ return null; }
-}
+/* ── Listen for new recordings in Firebase ── */
+adminRTDB.ref('pujaRecordings').on('value', snapshot => {
+  const data = snapshot.val() || {};
+  const recs = Object.values(data).sort((a,b) => new Date(b.recordedAt) - new Date(a.recordedAt));
 
-function getMandirs(){
+  // Sync to localStorage so existing renderRecordingsPage works
   const db = getDB();
-  // Use admin-managed mandirs if available, else defaults
-  if(db && db.mandirs && db.mandirs.length > 0) return db.mandirs;
-  return [
-    {id:'m1', name:'Kashi Vishwanath', location:'Varanasi, UP', emoji:'🛕', active:true},
-    {id:'m2', name:'Tirupati Balaji', location:'Tirupati, AP', emoji:'🙏', active:true},
-    {id:'m3', name:'Vaishno Devi', location:'Katra, J&K', emoji:'⛰️', active:true},
-    {id:'m4', name:'Jagannath Puri', location:'Puri, Odisha', emoji:'🌊', active:true},
-    {id:'m5', name:'Somnath Mandir', location:'Prabhas Patan, GJ', emoji:'🌙', active:true},
-    {id:'m6', name:'Shirdi Sai Baba', location:'Shirdi, MH', emoji:'🌹', active:true},
-  ];
-}
+  db.pujaRecordings = recs;
+  saveDB(db);
 
-/* ══════════════════════════════════════════
-   RENDER MANDIRS
-══════════════════════════════════════════ */
-function renderMandirGrid(){
-  const mandirs = getMandirs().filter(m=>m.active!==false);
-  const grid = document.getElementById('mandir-grid');
-  if(mandirs.length === 0){
-    grid.innerHTML = '<div class="mandir-empty">🛕 No temples available yet.<br/>Please check back soon or contact admin.</div>';
-    return;
-  }
-  grid.innerHTML = mandirs.map(m=>`
-    <div class="mandir-card" id="mc-${m.id}" onclick="selectMandir('${m.id}','${m.name}')">
-      <span class="mandir-emoji">${m.emoji}</span>
-      <div>
-        <div class="mandir-name">${m.name}</div>
-        <div class="mandir-loc">📍 ${m.location}</div>
-      </div>
-    </div>`).join('');
-}
-
-function selectMandir(id, name){
-  document.querySelectorAll('.mandir-card').forEach(c=>c.classList.remove('selected'));
-  document.getElementById('mc-'+id)?.classList.add('selected');
-  formState.mandir = {id, name};
-  document.getElementById('err-mandir').classList.add('hidden');
-}
-
-/* ══════════════════════════════════════════
-   RENDER DATE OPTIONS
-══════════════════════════════════════════ */
-function renderDateOptions(){
-  const container = document.getElementById('date-options');
-  const days = [];
-  for(let i=1;i<=28;i++) days.push(i);
-  container.innerHTML = days.map(d=>`
-    <div class="date-opt" id="do-${d}" onclick="toggleDate(${d})">
-      <div class="date-opt-day">${d}</div>
-      <div class="date-opt-label">Every Month</div>
-    </div>`).join('');
-}
-
-function toggleDate(d){
-  const el = document.getElementById('do-'+d);
-  const idx = formState.selectedDates.indexOf(d);
-  if(idx > -1){
-    formState.selectedDates.splice(idx,1);
-    el.classList.remove('selected');
-  } else {
-    if(formState.selectedDates.length >= 4){
-      showToast('You can only select 4 puja dates per month');
-      return;
-    }
-    formState.selectedDates.push(d);
-    formState.selectedDates.sort((a,b)=>a-b);
-    el.classList.add('selected');
-  }
-  document.getElementById('err-dates').classList.add('hidden');
-}
-
-/* ══════════════════════════════════════════
-   STEP NAVIGATION
-══════════════════════════════════════════ */
-function goToStep(n){
-  if(n > formState.step && !validateStep(formState.step)) return;
-
-  // Update formState from inputs
-  if(formState.step === 1){
-    formState.name = document.getElementById('f-name').value.trim();
-    formState.phone = document.getElementById('f-phone').value.trim();
-    formState.email = document.getElementById('f-email').value.trim();
-    formState.gotra = document.getElementById('f-gotra').value.trim();
-    formState.city = document.getElementById('f-city').value.trim();
-    formState.sankalp = document.getElementById('f-sankalp').value.trim();
+  // Update pending badge
+  const pending = recs.filter(r => r.status === 'pending').length;
+  const badge = document.getElementById('rec-pending-badge');
+  if(badge) {
+    badge.textContent = pending;
+    badge.style.display = pending > 0 ? 'inline-flex' : 'none';
   }
 
-  // Update payment summary on step 4
-  if(n === 4){
-    document.getElementById('pay-name').textContent = formState.name;
-    document.getElementById('pay-mandir').textContent = formState.mandir?.name || '—';
-    document.getElementById('pay-dates').textContent = formState.selectedDates.map(d=>d+'th').join(', ');
+  // Re-render if on recordings page
+  const recPage = document.getElementById('page-recordings');
+  if(recPage && recPage.style.display !== 'none') {
+    renderRecordingsPage(getDB());
   }
 
-  // Switch panels
-  document.getElementById('panel-'+formState.step).classList.remove('active');
-  document.getElementById('panel-'+n).classList.add('active');
-
-  // Update tabs
-  for(let i=1;i<=4;i++){
-    const tab = document.getElementById('tab-'+i);
-    tab.classList.remove('active','done');
-    if(i === n) tab.classList.add('active');
-    else if(i < n) tab.classList.add('done');
+  // Show toast for new pending recordings
+  if(pending > 0 && document.getElementById('page-recordings') &&
+     document.getElementById('page-recordings').style.display === 'none') {
+    // only notify if not already on recordings page
   }
-
-  formState.step = n;
-  window.scrollTo({top: document.getElementById('subscribe').offsetTop - 80, behavior:'smooth'});
-}
-
-/* ══════════════════════════════════════════
-   VALIDATION
-══════════════════════════════════════════ */
-function validateStep(step){
-  if(step === 1){
-    const name = document.getElementById('f-name').value.trim();
-    const phone = document.getElementById('f-phone').value.trim();
-    const email = document.getElementById('f-email').value.trim();
-    let ok = true;
-    if(!name){ document.getElementById('err-name').classList.remove('hidden'); document.getElementById('f-name').classList.add('error'); ok=false; }
-    else{ document.getElementById('err-name').classList.add('hidden'); document.getElementById('f-name').classList.remove('error'); }
-    if(!phone || !/^[+]?[\d\s]{10,14}$/.test(phone)){ document.getElementById('err-phone').classList.remove('hidden'); document.getElementById('f-phone').classList.add('error'); ok=false; }
-    else{ document.getElementById('err-phone').classList.add('hidden'); document.getElementById('f-phone').classList.remove('error'); }
-    if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ document.getElementById('err-email').classList.remove('hidden'); document.getElementById('f-email').classList.add('error'); ok=false; }
-    else{ document.getElementById('err-email').classList.add('hidden'); document.getElementById('f-email').classList.remove('error'); }
-    return ok;
-  }
-  if(step === 2){
-    if(!formState.mandir){ document.getElementById('err-mandir').classList.remove('hidden'); return false; }
-    return true;
-  }
-  if(step === 3){
-    if(formState.selectedDates.length !== 4){ document.getElementById('err-dates').classList.remove('hidden'); return false; }
-    return true;
-  }
-  return true;
-}
-
-/* ══════════════════════════════════════════
-   TERMS TOGGLE
-══════════════════════════════════════════ */
-function toggleTerms(){
-  formState.termsAccepted = !formState.termsAccepted;
-  const cb = document.getElementById('terms-checkbox');
-  cb.classList.toggle('checked', formState.termsAccepted);
-  cb.textContent = formState.termsAccepted ? '✓' : '';
-  document.getElementById('err-terms').classList.add('hidden');
-}
-
-/* ══════════════════════════════════════════
-   PAYMENT INITIATION
-   In production: Replace with Razorpay SDK call
-══════════════════════════════════════════ */
-function initiatePayment(){
-  if(!formState.termsAccepted){
-    document.getElementById('err-terms').classList.remove('hidden');
-    return;
-  }
-
-  const btn = document.getElementById('pay-btn');
-  btn.classList.add('btn-loading');
-  btn.disabled = true;
-
-  // ── PRODUCTION: Load Razorpay ──
-  // const options = {
-  //   key: 'YOUR_RAZORPAY_KEY',
-  //   amount: 20000, // ₹200 in paise
-  //   currency: 'INR',
-  //   name: 'SanataniAnthem',
-  //   description: 'Monthly Puja Subscription – 4 Pujas',
-  //   image: '/logo.png',
-  //   subscription_id: 'YOUR_RAZORPAY_SUBSCRIPTION_ID',
-  //   handler: function(response){ onPaymentSuccess(response); },
-  //   prefill: { name: formState.name, email: formState.email, contact: formState.phone },
-  //   theme: { color: '#FF6B00' }
-  // };
-  // const rzp = new Razorpay(options);
-  // rzp.open();
-
-  // ── DEMO: Simulate payment ──
-  setTimeout(()=>{
-    btn.classList.remove('btn-loading');
-    btn.disabled = false;
-    onPaymentSuccess({ razorpay_payment_id: 'pay_demo_'+Math.random().toString(36).slice(2,10).toUpperCase() });
-  }, 2200);
-}
-
-function onPaymentSuccess(response){
-  // Save subscription to localStorage (CMS)
-  const subId = 'SA-' + new Date().getFullYear() + '-' + Math.random().toString(36).slice(2,6).toUpperCase();
-  const subscription = {
-    id: subId,
-    name: formState.name,
-    phone: formState.phone,
-    email: formState.email,
-    gotra: formState.gotra,
-    city: formState.city,
-    sankalp: formState.sankalp,
-    mandir: formState.mandir,
-    pujasDates: formState.selectedDates,
-    status: 'active',
-    paymentId: response.razorpay_payment_id || 'demo',
-    startDate: new Date().toISOString(),
-    nextPujaDate: getNextPujaDate(formState.selectedDates),
-    pujasDone: 0,
-    totalPujas: 0,
-  };
-
-  // Save to Firebase — admin turant dekh sakta hai!
-  subDB.ref('subscriptions/' + subId).set(subscription)
-    .then(() => console.log('Saved to Firebase:', subId))
-    .catch(e => console.error('Firebase error:', e));
-
-  // Local cache bhi update karo
-  const db = getDB() || {};
-  if(!db.subscriptions) db.subscriptions = [];
-  db.subscriptions.unshift(subscription);
-  localStorage.setItem('sanatani_cms', JSON.stringify(db));
-
-  showSuccessPage(subscription);
-}
-
-function getNextPujaDate(dates){
-  if(!dates || dates.length === 0) return '—';
-  const today = new Date().getDate();
-  const future = dates.find(d => d > today);
-  const dayNum = future || dates[0];
-  const d = new Date();
-  if(!future) d.setMonth(d.getMonth()+1);
-  d.setDate(dayNum);
-  return d.toLocaleDateString('en-IN', {day:'numeric', month:'long', year:'numeric'});
-}
-
-function showSuccessPage(sub){
-  document.getElementById('subscription-form-wrap').classList.add('hidden');
-  const sp = document.getElementById('success-page');
-  sp.classList.remove('hidden');
-
-  document.getElementById('success-sub-id').textContent = sub.id;
-  document.getElementById('success-details').innerHTML = `
-    <div class="success-row"><span class="success-row-label">Name</span><span class="success-row-val">${sub.name}</span></div>
-    <div class="success-row"><span class="success-row-label">Temple</span><span class="success-row-val">${sub.mandir.name}</span></div>
-    <div class="success-row"><span class="success-row-label">Puja Dates</span><span class="success-row-val">${sub.pujasDates.map(d=>d+'th').join(', ')} every month</span></div>
-    <div class="success-row"><span class="success-row-label">Next Puja</span><span class="success-row-val">${sub.nextPujaDate}</span></div>
-    <div class="success-row"><span class="success-row-label">Email</span><span class="success-row-val">${sub.email}</span></div>
-    <div class="success-row"><span class="success-row-label">Amount</span><span class="success-row-val">₹200/month</span></div>
-  `;
-
-  sp.scrollIntoView({behavior:'smooth'});
-  showToast('🙏 Subscription confirmed! Check your email.');
-}
-
-/* ══════════════════════════════════════════
-   FAQ TOGGLE
-══════════════════════════════════════════ */
-function toggleFaq(el){
-  el.parentElement.classList.toggle('open');
-}
-
-/* ══════════════════════════════════════════
-   MOBILE NAV
-══════════════════════════════════════════ */
-function toggleMobileNav(){
-  document.getElementById('mobile-nav').classList.toggle('open');
-}
-
-/* ══════════════════════════════════════════
-   TOAST
-══════════════════════════════════════════ */
-function showToast(msg){
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'), 3000);
-}
-
-/* ══════════════════════════════════════════
-   SCROLL
-══════════════════════════════════════════ */
-window.addEventListener('scroll',()=>{
-  const st = document.getElementById('scroll-top');
-  st.classList.toggle('visible', window.scrollY > 400);
 });
 
-/* ════════════════════════════════�
+/* ── Listen for live streams ── */
+adminRTDB.ref('liveStreams').on('value', snapshot => {
+  const data = snapshot.val() || {};
+  const liveList = Object.values(data).filter(s => s && s.isLive);
+  const liveIndicator = document.getElementById('live-indicator');
+  if(liveIndicator) {
+    if(liveList.length > 0) {
+      liveIndicator.textContent = '🔴 ' + liveList[0].mandirName + ' LIVE';
+      liveIndicator.style.display = 'inline-flex';
+    } else {
+      liveIndicator.style.display = 'none';
+    }
+  }
+});
+
+/* ── Override approveRecording to also update Firebase ── */
+const _origApprove = approveRecording;
+approveRecording = function(recId) {
+  // Call original (handles email sending)
+  _origApprove(recId);
+  // Also update Firebase status
+  adminRTDB.ref('pujaRecordings/' + recId + '/status').set('approved');
+  adminRTDB.ref('pujaRecordings/' + recId + '/approvedAt').set(new Date().toISOString());
+};
+
+/* ── Override rejectRecording to also delete from Firebase ── */
+const _origReject = rejectRecording;
+rejectRecording = function(recId) {
+  if(!confirm('Is recording ko delete karein?')) return;
+  // Delete from Firebase
+  adminRTDB.ref('pujaRecordings/' + recId).remove();
+  // Delete from localStorage
+  const db = getDB();
+  db.pujaRecordings = (db.pujaRecordings || []).filter(r => r.id !== recId);
+  saveDB(db);
+  renderRecordingsPage(db);
+  adminToast('Recording delete ho gayi.');
+};
+
+</script>
+</body>
+</html>
