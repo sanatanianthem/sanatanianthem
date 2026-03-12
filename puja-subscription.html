@@ -308,6 +308,9 @@ textarea.field-input{resize:vertical;min-height:90px}
 #mobile-nav .nav-link{color:var(--gold-h);font-size:16px;padding:14px 0;border-bottom:1px solid rgba(212,175,55,.1)}
 #mobile-close{position:absolute;top:20px;right:24px;font-size:28px;color:var(--gold);cursor:pointer;background:none;border:none}
 </style>
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 </head>
 <body>
 
@@ -678,7 +681,7 @@ textarea.field-input{resize:vertical;min-height:90px}
       </div>
       <div class="faq-item">
         <div class="faq-q" onclick="toggleFaq(this)">How do I cancel my subscription? <span class="faq-q-icon">+</span></div>
-        <div class="faq-a">You can cancel anytime by emailing us at pujas@sanatanianthem.com or via the cancellation link in any of our emails. Your subscription will end at the current month's close with no further charges.</div>
+        <div class="faq-a">You can cancel anytime by emailing us at <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5d2d28373c2e1d2e3c333c293c33343c3329353830733e3230">[email&#160;protected]</a> or via the cancellation link in any of our emails. Your subscription will end at the current month's close with no further charges.</div>
       </div>
     </div>
   </div>
@@ -695,7 +698,7 @@ textarea.field-input{resize:vertical;min-height:90px}
 <button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 <div class="toast" id="toast"></div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 /* ══════════════════════════════════════════
    STATE
 ══════════════════════════════════════════ */
@@ -708,8 +711,29 @@ const formState = {
 };
 
 /* ══════════════════════════════════════════
-   DB (reads from localStorage — shared with admin)
+   FIREBASE + DB
 ══════════════════════════════════════════ */
+const firebaseConfig = {
+  apiKey: "AIzaSyBC1yt-YE74pKCKMfukmc7_3vicM49h6vE",
+  authDomain: "sanatanianthem-652a3.firebaseapp.com",
+  databaseURL: "https://sanatanianthem-652a3-default-rtdb.firebaseio.com",
+  projectId: "sanatanianthem-652a3",
+  storageBucket: "sanatanianthem-652a3.firebasestorage.app",
+  messagingSenderId: "1031082702558",
+  appId: "1:1031082702558:web:744ffa9cfa54ff838db44f"
+};
+if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const subDB = firebase.database();
+
+// Load latest mandirs from Firebase
+subDB.ref('cms').once('value').then(snap => {
+  const data = snap.val();
+  if(data){
+    localStorage.setItem('sanatani_cms', JSON.stringify(data));
+    renderMandirGrid();
+  }
+});
+
 function getDB(){
   try{
     const s = localStorage.getItem('sanatani_cms');
@@ -927,7 +951,12 @@ function onPaymentSuccess(response){
     totalPujas: 0,
   };
 
-  // Store in CMS DB
+  // Save to Firebase — admin turant dekh sakta hai!
+  subDB.ref('subscriptions/' + subId).set(subscription)
+    .then(() => console.log('Saved to Firebase:', subId))
+    .catch(e => console.error('Firebase error:', e));
+
+  // Local cache bhi update karo
   const db = getDB() || {};
   if(!db.subscriptions) db.subscriptions = [];
   db.subscriptions.unshift(subscription);
@@ -998,11 +1027,4 @@ window.addEventListener('scroll',()=>{
   st.classList.toggle('visible', window.scrollY > 400);
 });
 
-/* ══════════════════════════════════════════
-   INIT
-══════════════════════════════════════════ */
-renderMandirGrid();
-renderDateOptions();
-</script>
-</body>
-</html>
+/* ════════════════════════════════�
