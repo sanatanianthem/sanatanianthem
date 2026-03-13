@@ -286,9 +286,9 @@ function loadSubscribers(mandir){
   const today=new Date().getDate();
   list.innerHTML=subs.map(s=>{
     const isToday=(s.pujasDates||[]).includes(today);
-    return '<div class="sub-card"><div class="sub-name">🙏 '+s.name+(s.gotra?' <span style="font-size:11px;opacity:.5">('+s.gotra+')</span>':'')+
-      '</div><div class="sub-detail">📧 '+s.email+'</div>'+
-      '<div class="sub-detail">📅 '+((s.pujasDates||[]).map(d=>d+'th').join(', '))+'</div>'+
+    return '<div class="sub-card"><div class="sub-name">🙏 '+s.name+
+      (s.gotra?'<span style="font-size:11px;opacity:.5;margin-left:6px">(Gotra: '+s.gotra+')</span>':'')+
+      '</div>'+
       (s.sankalp?'<div class="sub-detail" style="color:rgba(255,140,53,.7)">🙏 '+s.sankalp+'</div>':'')+
       '<div><span class="badge badge-active">Active</span>'+(isToday?' <span class="badge badge-today">Aaj Ka Din</span>':'')+'</div></div>';
   }).join('');
