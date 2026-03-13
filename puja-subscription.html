@@ -827,10 +827,7 @@ function toggleDate(d){
    STEP NAVIGATION
 ══════════════════════════════════════════ */
 function goToStep(n){
-  // Auto-assign 4 default puja dates (admin can override in future)
-  if(n === 4 && (!formState.selectedDates || formState.selectedDates.length === 0)){
-    formState.selectedDates = [1, 8, 15, 22]; // Default: 4 dates spread across month
-  }
+
   if(n > formState.step && !validateStep(formState.step)) return;
 
   // Update formState from inputs
@@ -847,7 +844,7 @@ function goToStep(n){
   if(n === 4){
     document.getElementById('pay-name').textContent = formState.name;
     document.getElementById('pay-mandir').textContent = formState.mandir?.name || '—';
-    document.getElementById('pay-dates').textContent = (formState.selectedDates.length ? formState.selectedDates.map(d=>d+'th').join(', ') : '1st, 8th, 15th, 22nd') + ' every month';
+
   }
 
   // Switch panels
@@ -935,6 +932,60 @@ function initiatePayment(){
   // const rzp = new Razorpay(options);
   // rzp.open();
 
+  // Check duplicate before payment
+  checkDuplicateAndPay(btn);
+}
+
+async function checkDuplicateAndPay(btn) {
+  if(!subDB){ proceedToPayment(btn); return; }
+
+  try {
+    const snap = await subDB.ref('subscriptions').once('value');
+    const data = snap.val() || {};
+    const existing = Object.values(data);
+
+    const emailExists = existing.some(s =>
+      s.email && s.email.toLowerCase() === formState.email.toLowerCase() && s.status === 'active'
+    );
+    const phoneExists = existing.some(s =>
+      s.phone && s.phone === formState.phone && s.status === 'active'
+    );
+
+    if(emailExists){
+      btn.classList.remove('btn-loading');
+      btn.disabled = false;
+      showFieldError('Is email se pehle se subscription active hai!');
+      return;
+    }
+    if(phoneExists){
+      btn.classList.remove('btn-loading');
+      btn.disabled = false;
+      showFieldError('Is phone number se pehle se subscription active hai!');
+      return;
+    }
+
+    proceedToPayment(btn);
+  } catch(e) {
+    console.warn('Duplicate check failed, proceeding:', e);
+    proceedToPayment(btn);
+  }
+}
+
+function showFieldError(msg) {
+  // Show error on payment page
+  let errEl = document.getElementById('payment-error-msg');
+  if(!errEl){
+    errEl = document.createElement('div');
+    errEl.id = 'payment-error-msg';
+    errEl.style.cssText = 'background:#FEE2E2;color:#DC2626;padding:12px 16px;border-radius:8px;font-family:Cinzel,serif;font-size:12px;margin-bottom:16px;text-align:center;border:1px solid #FCA5A5';
+    const payBtn = document.getElementById('pay-btn');
+    if(payBtn) payBtn.parentNode.insertBefore(errEl, payBtn);
+  }
+  errEl.textContent = '⚠️ ' + msg;
+  errEl.style.display = 'block';
+}
+
+function proceedToPayment(btn) {
   // ── DEMO: Simulate payment ──
   setTimeout(()=>{
     btn.classList.remove('btn-loading');
@@ -944,7 +995,6 @@ function initiatePayment(){
 }
 
 function onPaymentSuccess(response){
-  // Save subscription to localStorage (CMS)
   const subId = 'SA-' + new Date().getFullYear() + '-' + Math.random().toString(36).slice(2,6).toUpperCase();
   const subscription = {
     id: subId,
@@ -955,7 +1005,7 @@ function onPaymentSuccess(response){
     city: formState.city,
     sankalp: formState.sankalp,
     mandir: formState.mandir,
-    pujasDates: formState.selectedDates,
+    pujasDates: [], // Admin will assign dates
     status: 'active',
     paymentId: response.razorpay_payment_id || 'demo',
     startDate: new Date().toISOString(),
@@ -1001,7 +1051,7 @@ function showSuccessPage(sub){
   document.getElementById('success-details').innerHTML = `
     <div class="success-row"><span class="success-row-label">Name</span><span class="success-row-val">${sub.name}</span></div>
     <div class="success-row"><span class="success-row-label">Temple</span><span class="success-row-val">${sub.mandir.name}</span></div>
-    <div class="success-row"><span class="success-row-label">Puja Dates</span><span class="success-row-val">${sub.pujasDates.map(d=>d+'th').join(', ')} every month</span></div>
+
     <div class="success-row"><span class="success-row-label">Next Puja</span><span class="success-row-val">${sub.nextPujaDate}</span></div>
     <div class="success-row"><span class="success-row-label">Email</span><span class="success-row-val">${sub.email}</span></div>
     <div class="success-row"><span class="success-row-label">Amount</span><span class="success-row-val">₹200/month</span></div>
