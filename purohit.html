@@ -8,6 +8,9 @@
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+<!-- TensorFlow.js + NSFWJS for real-time content moderation -->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.10.0/dist/tf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/nsfwjs@2.4.2/dist/nsfwjs.min.js"></script>
 
 <style>
 :root{--saffron:#FF6B00;--saffron-d:#C95000;--gold:#D4AF37;--gold-h:#E8CC6A;--maroon:#5A0E0E;--cream:#FFF6E5;--bg-dark:#140800;--green:#16A34A;}
@@ -40,16 +43,88 @@ button{cursor:pointer;font-family:inherit;border:none}
 .btn-primary:hover:not(:disabled){transform:translateY(-2px)}
 .btn-red{background:linear-gradient(135deg,#E53E3E,#C53030);color:#fff;box-shadow:0 4px 20px rgba(229,62,62,.35)}
 .btn-red:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 28px rgba(229,62,62,.5)}
+.btn-countdown-opt{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:14px 8px;border-radius:10px;cursor:pointer;font-family:'Cinzel',serif;
+  font-weight:700;text-transform:uppercase;transition:all .25s;border:none;
+  box-shadow:0 4px 16px rgba(0,0,0,.4);
+}
+.btn-countdown-opt:hover{transform:translateY(-3px);filter:brightness(1.15);box-shadow:0 8px 24px rgba(0,0,0,.5);}
 .btn-ghost{background:rgba(255,246,229,.07);color:rgba(255,246,229,.6);border:1px solid rgba(212,175,55,.2);font-size:11px;padding:10px 18px}
 .btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
 .btn:disabled{opacity:.5;cursor:not-allowed;transform:none !important}
 /* LIVE UI */
 .live-preview{position:relative;border-radius:10px;overflow:hidden;background:#000;margin-bottom:14px}
 #local-video{width:100%;display:block;max-height:280px;object-fit:cover}
-.live-badge{position:absolute;top:10px;left:10px;background:rgba(229,62,62,.92);color:#fff;font-family:'Cinzel',serif;font-size:11px;letter-spacing:1.5px;padding:5px 12px;border-radius:20px;display:flex;align-items:center;gap:6px}
 .live-dot{width:7px;height:7px;background:#fff;border-radius:50%;animation:blink 1s infinite;flex-shrink:0}
-.viewer-count{position:absolute;bottom:10px;right:10px;background:rgba(0,0,0,.65);color:rgba(255,255,255,.75);font-family:'Cinzel',serif;font-size:10px;padding:3px 10px;border-radius:4px}
-.rec-badge{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.65);color:#FC8181;font-family:'Cinzel',serif;font-size:10px;padding:3px 10px;border-radius:4px;display:flex;align-items:center;gap:4px}
+
+/* TOP-RIGHT cluster: [● LIVE] [● REC] */
+.top-right-badges{
+  position:absolute;top:10px;right:10px;
+  display:flex;align-items:center;gap:6px;
+}
+.live-badge-tr{
+  background:rgba(229,62,62,.92);color:#fff;
+  font-family:'Cinzel',serif;font-size:11px;letter-spacing:1.5px;
+  padding:4px 12px;border-radius:20px;
+  display:flex;align-items:center;gap:5px;
+}
+.rec-badge-tr{
+  background:rgba(0,0,0,.70);color:#FC8181;
+  font-family:'Cinzel',serif;font-size:11px;letter-spacing:1.5px;
+  padding:4px 12px;border-radius:20px;
+  display:flex;align-items:center;gap:5px;
+  border:1px solid rgba(252,129,129,.3);
+}
+
+/* ── MAINTAINING PURITY BANNER — full width bottom of preview ── */
+.guard-badge{
+  position:absolute;
+  bottom:calc(13% + 6px);
+  left:0; right:0;
+  margin:0 10px;
+  background:linear-gradient(135deg,rgba(20,60,20,.82),rgba(10,40,10,.88));
+  border:1.5px solid rgba(34,197,94,.45);
+  border-radius:10px;
+  color:#22C55E;
+  font-family:'Cinzel',serif;
+  font-size:15px;
+  font-weight:700;
+  letter-spacing:2px;
+  padding:9px 16px;
+  display:none; /* shown via JS when monitoring starts */
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  box-shadow:0 2px 16px rgba(0,0,0,.5), inset 0 1px 0 rgba(34,197,94,.15);
+  transition:background .35s,border-color .35s,color .35s;
+}
+/* ALERT state — red, pulsing, full attention */
+.guard-badge.alert{
+  background:linear-gradient(135deg,rgba(100,0,0,.92),rgba(60,0,0,.95));
+  border-color:rgba(229,62,62,.85);
+  color:#FF4444;
+  font-size:16px;
+  letter-spacing:2.5px;
+  box-shadow:0 0 24px rgba(229,62,62,.6), inset 0 1px 0 rgba(255,68,68,.2);
+  animation:purity-alert .5s ease-in-out infinite;
+}
+@keyframes purity-alert{
+  0%,100%{opacity:1; box-shadow:0 0 24px rgba(229,62,62,.6);}
+  50%{opacity:.85; box-shadow:0 0 40px rgba(229,62,62,.9);}
+}
+.shield-dot{
+  width:9px;height:9px;
+  border-radius:50%;
+  background:currentColor;
+  flex-shrink:0;
+  box-shadow:0 0 6px currentColor;
+}
+
+/* old classes kept as no-op to avoid JS errors */
+.live-badge{display:none}
+.rec-badge{display:none}
+
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 /* TIMER */
 .live-timer{text-align:center;font-family:'Cinzel',serif;font-size:28px;color:#FC8181;margin:8px 0 16px;letter-spacing:2px}
@@ -69,9 +144,83 @@ button{cursor:pointer;font-family:inherit;border:none}
 .footer-text{font-family:'Cinzel',serif;font-size:10px;color:rgba(255,246,229,.15);letter-spacing:1px}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#1E0C00;color:var(--gold-h);font-family:'Cinzel',serif;font-size:12px;padding:12px 24px;border-radius:8px;border:1px solid rgba(212,175,55,.3);box-shadow:0 8px 24px rgba(0,0,0,.6);opacity:0;transition:all .35s;pointer-events:none;z-index:999;max-width:90vw;text-align:center}
 .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+/* ── START LIVE BUTTON GRID ── */
+.btn-start{
+  flex-direction:column;gap:2px;padding:14px 10px;
+  background:linear-gradient(160deg,#7A1A00,#3D0800);
+  border:1px solid rgba(212,175,55,.25);
+  color:var(--cream);
+  border-radius:10px;
+  position:relative;overflow:hidden;
+  transition:all .25s;
+}
+.btn-start::before{
+  content:'🔴 Start Live';
+  display:block;font-size:9px;letter-spacing:1.5px;
+  color:rgba(255,246,229,.45);margin-bottom:4px;
+  font-family:'Cinzel',serif;
+}
+.btn-start:hover:not(:disabled){
+  transform:translateY(-2px);
+  border-color:rgba(212,175,55,.55);
+  box-shadow:0 6px 24px rgba(255,107,0,.35);
+}
+.btn-start-num{
+  font-family:'Cinzel',serif;font-size:28px;font-weight:700;
+  color:var(--gold);line-height:1;
+  text-shadow:0 0 16px rgba(212,175,55,.4);
+}
+.btn-start-lbl{
+  font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;
+  color:rgba(255,246,229,.45);text-transform:uppercase;
+}
+/* 51s — slightly warmer */
+.btn-start-sm{ background:linear-gradient(160deg,#6B2800,#3D1400); }
+/* 11s — most urgent, saffron accent */
+.btn-start-xs{
+  background:linear-gradient(160deg,#8B3A00,#5A1E00);
+  border-color:rgba(255,107,0,.35);
+}
+.btn-start-xs .btn-start-num{ color:var(--saffron); text-shadow:0 0 16px rgba(255,107,0,.5); }
+.btn-start-xs::before{ content:'⚡ Quick Live'; color:rgba(255,160,80,.6); }
 @keyframes spin{to{transform:rotate(360deg)}}
 .spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
 @media(max-width:480px){.main{padding:16px 12px}.card{padding:16px}.input.code-input{font-size:18px;letter-spacing:4px}}
+
+/* ════ COUNTDOWN STATE ════ */
+#state-countdown{display:none;text-align:center;padding:12px 0 20px}
+.countdown-ring-wrap{position:relative;width:160px;height:160px;margin:0 auto 16px}
+.countdown-ring-wrap svg{position:absolute;top:0;left:0;width:100%;height:100%;transform:rotate(-90deg)}
+.countdown-ring-bg{fill:none;stroke:rgba(212,175,55,.12);stroke-width:6}
+.countdown-ring-prog{fill:none;stroke:var(--gold);stroke-width:6;stroke-linecap:round;stroke-dasharray:439.82;stroke-dashoffset:0;transition:stroke-dashoffset 1s linear}
+.countdown-num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.countdown-n{font-family:'Cinzel',serif;font-size:52px;font-weight:700;color:var(--gold);line-height:1;text-shadow:0 0 24px rgba(212,175,55,.5)}
+.countdown-lbl{font-family:'Noto Sans Devanagari',sans-serif;font-size:10px;color:rgba(255,246,229,.4);letter-spacing:1.5px;margin-top:2px}
+.countdown-title{font-family:'Cinzel',serif;font-size:13px;color:var(--gold-h);letter-spacing:1.5px;margin-bottom:6px}
+.countdown-sub{font-size:11px;color:rgba(255,246,229,.4);font-family:'Noto Sans Devanagari',sans-serif;margin-bottom:18px}
+.btn-countdown-cancel{background:transparent;border:1px solid rgba(255,246,229,.15);color:rgba(255,246,229,.35);font-family:'Cinzel',serif;font-size:10px;letter-spacing:1px;padding:7px 20px;border-radius:6px;cursor:pointer;transition:.25s}
+.btn-countdown-cancel:hover{border-color:rgba(229,62,62,.5);color:#FC8181}
+@keyframes pulse-gold{0%,100%{box-shadow:0 0 0 0 rgba(212,175,55,.25)}70%{box-shadow:0 0 0 14px rgba(212,175,55,0)}}
+.countdown-ring-wrap{animation:pulse-gold 2s ease-in-out infinite}
+
+/* ════ NSFW SHIELD — see .guard-badge above ════ */
+
+/* hidden canvas for NSFW frame capture */
+#nsfw-canvas{display:none;position:absolute;pointer-events:none}
+
+/* ── WATERMARK CANVAS (replaces raw video in preview) ── */
+#watermark-canvas{
+  width:100%;display:block;max-height:280px;object-fit:cover;border-radius:0;
+}
+/* Raw camera video — invisible but NOT display:none.
+   Must remain in render tree so browser decodes frames for drawImage(). */
+#local-video{
+  position:absolute;
+  width:1px; height:1px;
+  opacity:0;
+  pointer-events:none;
+  top:0; left:0;
+}
 </style>
 </head>
 <body>
@@ -129,9 +278,24 @@ button{cursor:pointer;font-family:inherit;border:none}
             &#x2705; Admin approve kare &#x2192; Subscribers ko email jaaye
           </div>
         </div>
-        <button class="btn btn-red" id="start-btn" onclick="startLive()">
-          <span>&#x1F534; Start Live &amp; Record</span>
-        </button>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <button class="btn btn-countdown-opt" onclick="startLive(1008)" style="background:linear-gradient(135deg,#5A0E0E,#3D0808);border:1px solid rgba(212,175,55,.35);color:var(--gold)">
+            <div style="font-size:18px;margin-bottom:2px">🕉</div>
+            <div style="font-size:11px;letter-spacing:1px">1008 Seconds</div>
+          </button>
+          <button class="btn btn-countdown-opt" onclick="startLive(108)" style="background:linear-gradient(135deg,#7A1E0E,#C53030);border:1px solid rgba(252,129,129,.25);color:#fff">
+            <div style="font-size:18px;margin-bottom:2px">🔴</div>
+            <div style="font-size:11px;letter-spacing:1px">108 Seconds</div>
+          </button>
+          <button class="btn btn-countdown-opt" onclick="startLive(51)" style="background:linear-gradient(135deg,#7A3800,#C05000);border:1px solid rgba(255,107,0,.3);color:#FFD0A0">
+            <div style="font-size:18px;margin-bottom:2px">⚡</div>
+            <div style="font-size:11px;letter-spacing:1px">51 Seconds</div>
+          </button>
+          <button class="btn btn-countdown-opt" onclick="startLive(11)" style="background:linear-gradient(135deg,#1A4A1A,#16A34A);border:1px solid rgba(34,197,94,.3);color:#A8FFB8">
+            <div style="font-size:18px;margin-bottom:2px">🟢</div>
+            <div style="font-size:11px;letter-spacing:1px">11 Seconds</div>
+          </button>
+        </div>
       </div>
 
       <!-- PREPARING -->
@@ -140,13 +304,42 @@ button{cursor:pointer;font-family:inherit;border:none}
         <div style="font-family:'Cinzel',serif;font-size:13px;color:rgba(255,246,229,.5)" id="prepare-text">Camera shuru ho rahi hai...</div>
       </div>
 
+      <!-- COUNTDOWN -->
+      <div id="state-countdown">
+        <div class="countdown-title">🕉 Puja Ki Taiyari</div>
+        <div class="countdown-sub">Live hone se pehle 108 seconds ka sankalp</div>
+        <div class="countdown-ring-wrap">
+          <svg viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+            <circle class="countdown-ring-bg" cx="80" cy="80" r="70"/>
+            <circle class="countdown-ring-prog" id="countdown-ring" cx="80" cy="80" r="70"/>
+          </svg>
+          <div class="countdown-num">
+            <div class="countdown-n" id="countdown-display">108</div>
+            <div class="countdown-lbl">seconds</div>
+          </div>
+        </div>
+        <button class="btn-countdown-cancel" onclick="cancelCountdown()">✕ Cancel</button>
+      </div>
+
       <!-- LIVE -->
       <div id="state-live" style="display:none">
         <div class="live-preview">
           <video id="local-video" autoplay muted playsinline></video>
-          <div class="live-badge"><div class="live-dot"></div>LIVE</div>
-          <div class="rec-badge"><div class="live-dot" style="background:#FC8181"></div>REC</div>
-          <div class="viewer-count" id="viewer-count">&#x1F441; 0</div>
+          <!-- Composited canvas: camera + burned-in watermark -->
+          <canvas id="watermark-canvas"></canvas>
+
+          <!-- TOP-RIGHT: LIVE + REC side by side -->
+          <div class="top-right-badges">
+            <div class="live-badge-tr"><div class="live-dot"></div>LIVE</div>
+            <div class="rec-badge-tr"><div class="live-dot" style="background:#FC8181"></div>REC</div>
+          </div>
+
+          <div class="guard-badge" id="nsfw-shield">
+            <div class="shield-dot"></div><span id="nsfw-status-text">Maintaining Purity</span>
+          </div>
+
+          <!-- Hidden canvas for frame analysis -->
+          <canvas id="nsfw-canvas" width="224" height="224"></canvas>
         </div>
         <div class="live-timer" id="live-timer">00:00:00</div>
         <div style="display:flex;gap:10px">
@@ -298,12 +491,17 @@ function loadSubscribers(mandir){
    LIVE + RECORD
 ══════════════════════════════════════════ */
 function setState(name){
-  ['offline','preparing','live','saving','saved'].forEach(s=>{
+  ['offline','preparing','countdown','live','saving','saved'].forEach(s=>{
     document.getElementById('state-'+s).style.display = s===name ? 'block' : 'none';
   });
 }
 
-async function startLive(){
+async function startLive(seconds){
+  // Kick off countdown with chosen duration; live starts automatically after it ends
+  startCountdown(seconds || 108);
+}
+
+async function _doStartLive(){
   setState('preparing');
   document.getElementById('prepare-text').textContent='Camera permission maang raha hai...';
 
@@ -325,19 +523,57 @@ async function startLive(){
 
     document.getElementById('prepare-text').textContent='Live connect ho raha hai...';
 
-    // Show preview
-    document.getElementById('local-video').srcObject = localStream;
+    // ── WATERMARK COMPOSITING ──────────────────────────────────────────
+    // Pipe raw camera → canvas → burn date/time/mandir → capture as stream
+    // Both MediaRecorder and WebRTC use the composited stream so watermark
+    // is baked into the recording AND the live feed seen by viewers.
 
-    // Start MediaRecorder for local recording
+    const rawVideo = document.getElementById('local-video');
+    rawVideo.srcObject = localStream;
+    rawVideo.muted = true;
+
+    // Wait for video to have real decoded dimensions (canplay is more reliable than loadedmetadata)
+    await new Promise(res => {
+      if(rawVideo.videoWidth > 0 && rawVideo.readyState >= 3){ res(); return; }
+      const done = () => { rawVideo.removeEventListener('canplay', done); res(); };
+      rawVideo.addEventListener('canplay', done);
+      rawVideo.play().catch(()=>{});
+      setTimeout(res, 2000); // hard fallback after 2s
+    });
+
+    const wCanvas = document.getElementById('watermark-canvas');
+    const W = rawVideo.videoWidth  || 1280;
+    const H = rawVideo.videoHeight || 720;
+    wCanvas.width  = W;
+    wCanvas.height = H;
+    const wCtx = wCanvas.getContext('2d');
+
+    // Start the compositing loop at ~30fps
+    startWatermarkLoop(rawVideo, wCanvas, wCtx);
+
+    // Wait one rAF tick so canvas has at least one real frame before captureStream
+    await new Promise(res => requestAnimationFrame(() => requestAnimationFrame(res)));
+
+    // Capture composited canvas as a MediaStream (30fps)
+    const canvasStream = wCanvas.captureStream(30);
+
+    // Add the original audio track from the camera stream
+    localStream.getAudioTracks().forEach(t => canvasStream.addTrack(t));
+
+    // ── MediaRecorder now records the COMPOSITED stream (with watermark) ──
     recordedChunks = [];
     const mimeType = MediaRecorder.isTypeSupported('video/webm;codecs=vp9,opus')
       ? 'video/webm;codecs=vp9,opus'
       : MediaRecorder.isTypeSupported('video/webm')
       ? 'video/webm' : 'video/mp4';
 
-    mediaRecorder = new MediaRecorder(localStream, {mimeType, videoBitsPerSecond:1500000});
+    mediaRecorder = new MediaRecorder(canvasStream, {mimeType, videoBitsPerSecond:1500000});
     mediaRecorder.ondataavailable = e => { if(e.data.size>0) recordedChunks.push(e.data); };
-    mediaRecorder.start(1000); // collect every 1s
+    mediaRecorder.start(1000);
+
+    // ── Store composited stream reference for WebRTC and cleanup ──
+    window._compositedStream = canvasStream;
+    // (rawVideo keeps playing — no srcObject reassignment needed)
 
     // Mark live in Firebase — visitors turant dekhenge
     setLiveSignal(currentMandir.id, {
@@ -350,6 +586,10 @@ async function startLive(){
 
     setState('live');
     startTimer();
+
+    // Start NSFW monitoring after going live
+    startNSFWMonitoring();
+
     showToast('🔴 Live shuru! Recording bhi chal rahi hai.');
 
     // Native WebRTC — Firebase signaling, no external server needed!
@@ -367,8 +607,9 @@ async function startLive(){
 
       const pc = new RTCPeerConnection(ICE_CONFIG);
 
-      // Send local stream to viewer
-      localStream.getTracks().forEach(track => pc.addTrack(track, localStream));
+      // Send composited stream (with watermark) to viewer
+      const streamToSend = window._compositedStream || localStream;
+      streamToSend.getTracks().forEach(track => pc.addTrack(track, streamToSend));
 
       // Send ICE candidates to Firebase
       pc.onicecandidate = e => {
@@ -379,12 +620,10 @@ async function startLive(){
       pc.onconnectionstatechange = () => {
         if(pc.connectionState === 'connected'){
           activeConnections.push({pc, id:viewerId});
-          updateViewerCount();
           showToast('Ek viewer join kiya! 👁');
         }
         if(['disconnected','failed','closed'].includes(pc.connectionState)){
           activeConnections = activeConnections.filter(c=>c.id!==viewerId);
-          updateViewerCount();
         }
       };
 
@@ -413,6 +652,8 @@ async function startLive(){
 function stopLive(){
   if(!mediaRecorder && !localStream){ setState('offline'); return; }
 
+  stopNSFWMonitoring(); // ← stop content guard
+  stopWatermarkLoop();  // ← stop canvas compositing
   setState('saving');
   stopTimer();
 
@@ -537,12 +778,12 @@ function toggleMic(){
   micOn=!micOn; t.enabled=micOn;
   document.getElementById('mic-btn').textContent=micOn?'🎤 Mic Off':'🎤 Mic On';
 }
-function updateViewerCount(){
-  document.getElementById('viewer-count').textContent='👁 '+activeConnections.length;
-}
-
 /* ── CLEANUP ── */
 function cleanupLive(){
+  stopNSFWMonitoring();
+  stopCountdown();
+  stopWatermarkLoop();
+  window._compositedStream = null;
   if(localStream){localStream.getTracks().forEach(t=>t.stop());localStream=null;}
   activeConnections.forEach(c=>{try{c.pc.close()}catch(e){}});
   activeConnections=[];
@@ -557,7 +798,6 @@ function cleanupLive(){
 function resetForNext(){
   setState('offline');
   document.getElementById('live-timer').textContent='00:00:00';
-  document.getElementById('viewer-count').textContent='👁 0';
   document.getElementById('cam-btn').textContent='📷 Cam Off';
   document.getElementById('mic-btn').textContent='🎤 Mic Off';
   camOn=true; micOn=true;
@@ -580,6 +820,390 @@ function showToast(msg){
   const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),3200);
 }
+
+/* ══════════════════════════════════════════════════════════════
+   FEATURE 3 — BURNED-IN WATERMARK (DATE · TIME · MANDIR NAME)
+   Architecture:
+     raw camera video → hidden <video> → canvas.drawImage() each frame
+     → overlay text (mandir, date, live clock) → canvas.captureStream()
+     → MediaRecorder + WebRTC both receive this composited stream
+   Result: watermark is PERMANENTLY baked into recording & live feed.
+══════════════════════════════════════════════════════════════ */
+
+let _watermarkRAF    = null;  // requestAnimationFrame handle
+let _watermarkActive = false;
+
+/**
+ * startWatermarkLoop — continuously composites camera frames + overlay
+ * onto the watermark canvas at native display rate via rAF.
+ * @param {HTMLVideoElement} video  — raw camera source
+ * @param {HTMLCanvasElement} canvas — destination (also seen in preview)
+ * @param {CanvasRenderingContext2D} ctx
+ */
+function startWatermarkLoop(video, canvas, ctx){
+  _watermarkActive = true;
+
+  function drawFrame(){
+    if(!_watermarkActive) return;
+
+    const W = canvas.width;
+    const H = canvas.height;
+
+    // 1. Draw raw camera frame
+    if(video.readyState >= 2){
+      ctx.drawImage(video, 0, 0, W, H);
+    } else {
+      ctx.fillStyle = '#000';
+      ctx.fillRect(0, 0, W, H);
+    }
+
+    // 2. Draw watermark overlay
+    _drawWatermark(ctx, W, H);
+
+    // 3. Schedule next frame
+    _watermarkRAF = requestAnimationFrame(drawFrame);
+  }
+
+  _watermarkRAF = requestAnimationFrame(drawFrame);
+  console.log('🖋 Watermark loop started');
+}
+
+/** Stop the compositing loop */
+function stopWatermarkLoop(){
+  _watermarkActive = false;
+  if(_watermarkRAF){ cancelAnimationFrame(_watermarkRAF); _watermarkRAF = null; }
+  console.log('🖋 Watermark loop stopped');
+}
+
+/**
+ * _drawWatermark — renders bold, always-readable overlay onto the canvas.
+ *
+ * Layout (on the CANVAS at full resolution, e.g. 1280×720):
+ *   TOP BAR:     semi-transparent strip  →  🛕 MANDIR NAME  (large gold)
+ *   BOTTOM BAR:  semi-transparent strip  →  DATE (left)  |  TIME (right)
+ *
+ * Strategy: use fixed pixel sizes based on canvas HEIGHT (not width) so
+ * text is always proportional on any device resolution. No emoji inside
+ * the font string — emoji is drawn separately to avoid measureText bugs.
+ */
+function _drawWatermark(ctx, W, H){
+  const now        = new Date();
+  const mandirName = (currentMandir && currentMandir.name) || 'SanataniAnthem';
+
+  // ── Date & Time strings ──────────────────────────────────────
+  const months  = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+  const dateStr = now.getDate() + ' ' + months[now.getMonth()] + ' ' + now.getFullYear();
+  const hh = String(now.getHours()).padStart(2,'0');
+  const mm = String(now.getMinutes()).padStart(2,'0');
+  const ss = String(now.getSeconds()).padStart(2,'0');
+  const timeStr = hh + ':' + mm + ':' + ss;
+
+  // ── Sizing anchored to canvas HEIGHT ────────────────────────
+  const fTop     = Math.round(H * 0.052);  // mandir name  ~37px @ 720p
+  const fTime    = Math.round(H * 0.046);  // clock        ~33px @ 720p
+  const fDate    = Math.round(H * 0.034);  // date         ~24px @ 720p
+  const fPurity  = Math.round(H * 0.050);  // purity text  ~36px @ 720p — large & prominent
+  const barH     = Math.round(H * 0.13);   // bottom bar height ~94px @ 720p (taller for 2 lines)
+  const padX     = Math.round(W * 0.018);
+
+  ctx.save();
+
+  // ── Helper: dark bar ─────────────────────────────────────────
+  function drawBar(y, h){
+    ctx.fillStyle = 'rgba(0,0,0,0.65)';
+    ctx.fillRect(0, y, W, h);
+  }
+
+  // ── Helper: text with thick outline ─────────────────────────
+  function drawText(text, x, y, fontSize, align, color){
+    ctx.font         = `bold ${fontSize}px Arial, sans-serif`;
+    ctx.textAlign    = align;
+    ctx.textBaseline = 'middle';
+    ctx.strokeStyle  = 'rgba(0,0,0,0.95)';
+    ctx.lineWidth    = Math.max(3, fontSize * 0.13);
+    ctx.lineJoin     = 'round';
+    ctx.strokeText(text, x, y);
+    ctx.fillStyle    = color || '#FFFFFF';
+    ctx.fillText(text, x, y);
+  }
+
+  // ══ TOP BAR — Mandir name (gold) ════════════════════════════
+  drawBar(0, Math.round(H * 0.10));
+  drawText(
+    '\u{1F6D5}  ' + mandirName.toUpperCase(),
+    padX, Math.round(H * 0.05),
+    fTop, 'left', '#F5C842'
+  );
+
+  // ══ BOTTOM BAR (taller — holds 2 lines right + 1 line left) ═
+  const botBarY  = H - barH;
+  drawBar(botBarY, barH);
+
+  // Vertical split: top-line Y and bottom-line Y inside the bar
+  const lineTop = botBarY + barH * 0.32;   // upper line centre
+  const lineBot = botBarY + barH * 0.72;   // lower line centre
+
+  // ── BOTTOM-LEFT: "Maintaining Purity" (where date used to be)
+  // Use a warm saffron/gold colour to match the spiritual theme
+  drawText(
+    '\u{1F54E}  Maintaining Purity',
+    padX, botBarY + barH * 0.5,   // vertically centred in bar
+    fPurity, 'left', '#FFAD42'    // saffron-gold
+  );
+
+  // ── BOTTOM-RIGHT top line: Clock (time) ──────────────────────
+  drawText(
+    '\uD83D\uDD50  ' + timeStr,
+    W - padX, lineTop,
+    fTime, 'right', '#FFFFFF'
+  );
+
+  // ── BOTTOM-RIGHT bottom line: Date (below clock) ─────────────
+  drawText(
+    '\uD83D\uDCC5  ' + dateStr,
+    W - padX, lineBot,
+    fDate, 'right', 'rgba(255,255,255,0.80)'
+  );
+
+  ctx.restore();
+}
+
+/* ══════════════════════════════════════════════════════════════
+   FEATURE 1 — 108-SECOND SPIRITUAL COUNTDOWN
+   State flow: offline → countdown → preparing → live
+══════════════════════════════════════════════════════════════ */
+const RING_CIRCUMFERENCE = 2 * Math.PI * 70; // r=70
+
+let _countdownInterval  = null;
+let _countdownRemaining = 0;
+let _countdownTotal     = 108;   // set per call
+let _countdownRunning   = false;
+let _audioCtx           = null;
+
+/* Web Audio API — lazy init (required by browser autoplay policy) */
+function _getAudioCtx(){
+  if(!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return _audioCtx;
+}
+
+/**
+ * playTickSound — soft, meditative 'ding' using Web Audio API.
+ * Two-oscillator blend: a high sine + soft triangle fade-out → gentle bell.
+ */
+function playTickSound(){
+  try{
+    const ctx  = _getAudioCtx();
+    const now  = ctx.currentTime;
+
+    // Primary tone — sine wave at 528 Hz (Solfeggio frequency)
+    const osc1  = ctx.createOscillator();
+    const gain1 = ctx.createGain();
+    osc1.type      = 'sine';
+    osc1.frequency.setValueAtTime(528, now);
+    gain1.gain.setValueAtTime(0.18, now);
+    gain1.gain.exponentialRampToValueAtTime(0.0001, now + 0.65);
+    osc1.connect(gain1); gain1.connect(ctx.destination);
+    osc1.start(now); osc1.stop(now + 0.65);
+
+    // Sub-tone — triangle wave at 264 Hz (octave below) for warmth
+    const osc2  = ctx.createOscillator();
+    const gain2 = ctx.createGain();
+    osc2.type      = 'triangle';
+    osc2.frequency.setValueAtTime(264, now);
+    gain2.gain.setValueAtTime(0.07, now);
+    gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.4);
+    osc2.connect(gain2); gain2.connect(ctx.destination);
+    osc2.start(now); osc2.stop(now + 0.4);
+
+  } catch(e){ /* non-fatal — silent tick if audio unavailable */ }
+}
+
+/** Update the SVG ring progress and the numeric display */
+function _updateCountdownUI(remaining){
+  const el = document.getElementById('countdown-display');
+  const ring = document.getElementById('countdown-ring');
+  if(el)  el.textContent = remaining;
+  if(ring){
+    const progress  = 1 - (remaining / _countdownTotal);
+    const dashOffset = RING_CIRCUMFERENCE * (1 - progress);
+    ring.style.strokeDasharray  = RING_CIRCUMFERENCE;
+    ring.style.strokeDashoffset = dashOffset;
+  }
+}
+
+/** Begin countdown with given duration (default 108s) */
+function startCountdown(seconds){
+  if(_countdownRunning){
+    console.warn('Countdown already running — ignoring duplicate call');
+    return;
+  }
+  _countdownTotal     = seconds || 108;
+  _countdownRunning   = true;
+  _countdownRemaining = _countdownTotal;
+
+  // Update subtitle text to show chosen duration
+  const subEl = document.querySelector('.countdown-sub');
+  if(subEl) subEl.textContent = 'Live hone se pehle ' + _countdownTotal + ' seconds ka sankalp';
+
+  setState('countdown');
+  _updateCountdownUI(_countdownRemaining);
+  showToast('🕉 ' + _countdownTotal + ' seconds ki taiyari... OM');
+
+  _countdownInterval = setInterval(()=>{
+    _countdownRemaining--;
+    _updateCountdownUI(_countdownRemaining);
+    playTickSound();
+
+    if(_countdownRemaining <= 0){
+      stopCountdown();
+      _doStartLive(); // ← launch actual live stream
+    }
+  }, 1000);
+}
+
+/** Stop and clean up the countdown (safe to call multiple times) */
+function stopCountdown(){
+  if(_countdownInterval){ clearInterval(_countdownInterval); _countdownInterval = null; }
+  _countdownRunning   = false;
+  _countdownRemaining = 0;
+}
+
+/** Cancel button inside countdown screen */
+function cancelCountdown(){
+  stopCountdown();
+  setState('offline');
+  showToast('Countdown roka gaya.');
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   FEATURE 2 — REAL-TIME NSFW / ADULT CONTENT AUTO-STOP
+   Uses: TensorFlow.js + NSFWJS
+   Detection interval: 500ms  |  Threshold: 0.75  |  Canvas: 224×224
+══════════════════════════════════════════════════════════════ */
+const NSFW_CLASSES       = ['Porn', 'Hentai', 'Sexy'];
+const NSFW_THRESHOLD     = 0.75;
+const NSFW_INTERVAL_MS   = 500;
+
+let _nsfwModel           = null;
+let _nsfwMonitorInterval = null;
+let _nsfwModelLoading    = false;
+let _nsfwTriggered       = false;  // guard: prevent duplicate stop
+
+/**
+ * initNSFWModel — loads NSFWJS model once (called on portal load).
+ * Fires silently in the background; errors are swallowed so LIVE is unaffected.
+ */
+async function initNSFWModel(){
+  if(_nsfwModel || _nsfwModelLoading) return;
+  _nsfwModelLoading = true;
+  try{
+    // Use the MobileNetV2 NSFW model hosted on the NSFWJS CDN
+    _nsfwModel = await nsfwjs.load('https://nsfwjs.com/quant_nsfw_mobilenet/', {size: 224});
+    console.log('🛡 NSFW Guard model loaded successfully');
+  } catch(err){
+    console.warn('⚠️ NSFW model failed to load — guard disabled:', err.message);
+    _nsfwModel = null;
+  } finally{
+    _nsfwModelLoading = false;
+  }
+}
+
+/**
+ * startNSFWMonitoring — begins periodic frame capture + classification.
+ * Must be called AFTER localStream is set and video element has data.
+ */
+function startNSFWMonitoring(){
+  if(!_nsfwModel){
+    console.warn('NSFW model not ready — monitoring skipped');
+    return;
+  }
+  if(_nsfwMonitorInterval) return; // already running
+
+  _nsfwTriggered = false;
+
+  // Show green GUARD badge bottom-right
+  const shield = document.getElementById('nsfw-shield');
+  if(shield){
+    shield.classList.remove('alert');
+    document.getElementById('nsfw-status-text').textContent = 'Maintaining Purity';
+    shield.style.display = 'flex';
+  }
+
+  _nsfwMonitorInterval = setInterval(()=>{
+    checkFrameForNSFW();
+  }, NSFW_INTERVAL_MS);
+
+  console.log('🛡 NSFW monitoring started (every '+NSFW_INTERVAL_MS+'ms)');
+}
+
+/** Stop the monitoring loop and hide the badge */
+function stopNSFWMonitoring(){
+  if(_nsfwMonitorInterval){ clearInterval(_nsfwMonitorInterval); _nsfwMonitorInterval = null; }
+  _nsfwTriggered = false;
+  const shield = document.getElementById('nsfw-shield');
+  if(shield) shield.style.display = 'none';
+  console.log('🛡 NSFW monitoring stopped');
+}
+
+/**
+ * checkFrameForNSFW — captures one frame from local-video into the
+ * hidden 224×224 canvas, classifies it, and auto-stops if a violation
+ * exceeds the confidence threshold.
+ */
+async function checkFrameForNSFW(){
+  // Guard: don't run if already triggered, model gone, or stream inactive
+  if(_nsfwTriggered)         return;
+  if(!_nsfwModel)            return;
+  if(!localStream)           return;
+
+  const video  = document.getElementById('local-video');
+  const canvas = document.getElementById('nsfw-canvas');
+  if(!video || !canvas)      return;
+  if(video.readyState < 2)   return; // video not ready yet
+
+  // Draw current frame to 224×224 canvas
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(video, 0, 0, 224, 224);
+
+  try{
+    const predictions = await _nsfwModel.classify(canvas);
+
+    // Check each prediction for violations
+    for(const pred of predictions){
+      if(NSFW_CLASSES.includes(pred.className) && pred.probability >= NSFW_THRESHOLD){
+        _nsfwTriggered = true; // prevent re-entry
+
+        console.error('🚨 NSFW violation detected:', pred.className, (pred.probability*100).toFixed(1)+'%');
+
+        // Flash full-width banner with bold alert message
+        const shield = document.getElementById('nsfw-shield');
+        if(shield){
+          document.getElementById('nsfw-status-text').textContent = '🚨 INAPPROPRIATE CONTENT — LIVE STOPPED';
+          shield.classList.add('alert');
+        }
+
+        // Show alert for 1.5s so user clearly sees it, then stop live
+        setTimeout(()=>{
+          showToast('🚫 Live stopped: Inappropriate content detected');
+          stopLive();
+        }, 1500);
+
+        stopNSFWMonitoring();
+        return;
+      }
+    }
+  } catch(err){
+    // Non-fatal — silently ignore classification errors
+    console.warn('NSFW frame check error (non-fatal):', err.message);
+  }
+}
+
+/* ── Pre-load NSFW model once the page is interactive ── */
+document.addEventListener('DOMContentLoaded', ()=>{
+  // Defer model load by 2s so page render is unaffected
+  setTimeout(initNSFWModel, 2000);
+});
 </script>
 </body>
 </html>
