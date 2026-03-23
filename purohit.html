@@ -77,7 +77,28 @@ button{cursor:pointer;font-family:inherit;border:none}
   border:1px solid rgba(252,129,129,.3);
 }
 
-/* ── MAINTAINING PURITY BANNER — full width bottom of preview ── */
+/* ── HANUMAN CHALISA — SINGLE VERSE DISPLAY ── */
+.chalisa-single-wrap{
+  min-height:180px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:8px 4px;
+}
+.chalisa-verse-single{
+  font-family:'Noto Sans Devanagari',sans-serif;
+  font-size:18px;
+  color:var(--cream);
+  line-height:2.1;
+  text-align:center;
+  padding:18px 12px;
+  background:rgba(212,175,55,.05);
+  border:1px solid rgba(212,175,55,.18);
+  border-radius:10px;
+  width:100%;
+  opacity:1;
+  transition:opacity .5s ease;
+}
+.chalisa-verse-single.fade-out{ opacity:0; }
+.chalisa-verse-single.fade-in { opacity:1; }
 .guard-badge{
   position:absolute;
   bottom:calc(13% + 6px);
@@ -205,6 +226,44 @@ button{cursor:pointer;font-family:inherit;border:none}
 
 /* ════ NSFW SHIELD — see .guard-badge above ════ */
 
+/* Step header bar */
+.step-header-bar{
+  margin-bottom:16px;
+  padding:12px 14px;
+  background:rgba(0,0,0,.25);
+  border-radius:10px;
+  border:1px solid rgba(212,175,55,.12);
+}
+.step-header-dots{
+  display:flex;align-items:center;gap:6px;margin-bottom:8px;
+}
+.sdot{
+  width:10px;height:10px;border-radius:50%;
+  background:rgba(255,246,229,.1);
+  border:1.5px solid rgba(255,246,229,.15);
+  transition:all .4s;flex-shrink:0;
+}
+.sdot.done { background:rgba(22,163,74,.6); border-color:rgba(22,163,74,.8); }
+.sdot.active{ background:var(--saffron); border-color:var(--gold); box-shadow:0 0 8px rgba(255,107,0,.6); animation:pulse-dot 1.2s ease-in-out infinite; }
+@keyframes pulse-dot{ 0%,100%{box-shadow:0 0 8px rgba(255,107,0,.5)} 50%{box-shadow:0 0 18px rgba(255,107,0,.9)} }
+.step-header-title{
+  font-family:'Cinzel',serif;font-size:15px;font-weight:700;
+  color:var(--gold-h);letter-spacing:1px;margin-bottom:3px;
+  transition:color .3s;
+}
+.step-header-sub{
+  font-family:'Lora',serif;font-size:11px;
+  color:rgba(255,246,229,.4);line-height:1.5;
+}
+  position:absolute;bottom:calc(13% + 8px);left:10px;
+  background:rgba(0,0,0,.6);
+  border:1px solid rgba(212,175,55,.3);
+  color:var(--gold-h);
+  font-family:'Cinzel',serif;font-size:11px;letter-spacing:1px;
+  padding:4px 12px;border-radius:20px;
+  pointer-events:none;
+}
+
 /* hidden canvas for NSFW frame capture */
 #nsfw-canvas{display:none;position:absolute;pointer-events:none}
 
@@ -265,37 +324,108 @@ button{cursor:pointer;font-family:inherit;border:none}
 
     <!-- ── LIVE CARD ── -->
     <div class="card" style="border-color:rgba(229,62,62,.25)">
-      <div class="card-title" style="color:#FC8181">&#x1F534; Live Puja — Auto Record</div>
 
-      <!-- OFFLINE -->
-      <div id="state-offline">
-        <div style="background:rgba(255,107,0,.06);border:1px solid rgba(255,107,0,.15);border-radius:10px;padding:16px;margin-bottom:18px">
-          <div style="font-family:'Cinzel',serif;font-size:11px;color:var(--gold-h);margin-bottom:10px;letter-spacing:1px">&#x2728; KAISE KAAM KARTA HAI</div>
-          <div style="font-size:12px;color:rgba(255,246,229,.55);line-height:1.9">
-            &#x1F534; Start dabao &#x2192; Camera live ho jaaye<br/>
-            &#x1F3A5; Puja karo &#x2192; Automatically record hogi<br/>
-            &#x23F9; Stop karo &#x2192; Video cloud pe save ho jaaye<br/>
-            &#x2705; Admin approve kare &#x2192; Subscribers ko email jaaye
+      <!-- Dynamic step header — updates as flow progresses -->
+      <div id="live-step-header" class="step-header-bar" style="display:none">
+        <div class="step-header-dots">
+          <span class="sdot" id="sdot-1"></span>
+          <span class="sdot" id="sdot-2"></span>
+          <span class="sdot" id="sdot-3"></span>
+          <span class="sdot" id="sdot-4"></span>
+        </div>
+        <div id="step-header-title" class="step-header-title">🔴 Live Puja — Auto Record</div>
+        <div id="step-header-sub" class="step-header-sub"></div>
+      </div>
+
+      <!-- Static title shown only when offline -->
+      <div class="card-title" id="card-title-offline" style="color:#FC8181;display:none">&#x1F534; Live Puja — Auto Record</div>
+      <div id="state-offline" style="display:none"></div>
+
+      <!-- STEP 1 — BHAGWAN PHOTO LIVE (no camera) -->
+      <div id="state-step1" style="display:none">
+        <!-- Camera preview for photo capture -->
+        <div class="live-preview" id="step1-preview-wrap">
+          <!-- Live camera viewfinder (NOT recorded) -->
+          <video id="step1-viewfinder" autoplay muted playsinline
+            style="width:100%;display:block;max-height:280px;object-fit:cover"></video>
+          <!-- After photo taken: show canvas with captured still -->
+          <canvas id="watermark-canvas" style="display:none"></canvas>
+          <div class="top-right-badges" id="step1-live-badges" style="display:none">
+            <div class="live-badge-tr"><div class="live-dot"></div>LIVE</div>
+            <div class="rec-badge-tr"><div class="live-dot" style="background:#FC8181"></div>REC</div>
           </div>
+          <!-- Shutter flash overlay -->
+          <div id="shutter-flash" style="position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;transition:opacity .08s"></div>
+          <div class="step-label" id="step1-label">📸 Bhagwan ka Photo Lo</div>
+          <canvas id="nsfw-canvas" width="224" height="224" style="display:none;position:absolute"></canvas>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-          <button class="btn btn-countdown-opt" onclick="startLive(1008)" style="background:linear-gradient(135deg,#5A0E0E,#3D0808);border:1px solid rgba(212,175,55,.35);color:var(--gold)">
-            <div style="font-size:18px;margin-bottom:2px">🕉</div>
-            <div style="font-size:11px;letter-spacing:1px">1008 Seconds</div>
-          </button>
-          <button class="btn btn-countdown-opt" onclick="startLive(108)" style="background:linear-gradient(135deg,#7A1E0E,#C53030);border:1px solid rgba(252,129,129,.25);color:#fff">
-            <div style="font-size:18px;margin-bottom:2px">🔴</div>
-            <div style="font-size:11px;letter-spacing:1px">108 Seconds</div>
-          </button>
-          <button class="btn btn-countdown-opt" onclick="startLive(51)" style="background:linear-gradient(135deg,#7A3800,#C05000);border:1px solid rgba(255,107,0,.3);color:#FFD0A0">
-            <div style="font-size:18px;margin-bottom:2px">⚡</div>
-            <div style="font-size:11px;letter-spacing:1px">51 Seconds</div>
-          </button>
-          <button class="btn btn-countdown-opt" onclick="startLive(11)" style="background:linear-gradient(135deg,#1A4A1A,#16A34A);border:1px solid rgba(34,197,94,.3);color:#A8FFB8">
-            <div style="font-size:18px;margin-bottom:2px">🟢</div>
-            <div style="font-size:11px;letter-spacing:1px">11 Seconds</div>
+
+        <div style="text-align:center;font-family:'Cinzel',serif;font-size:11px;color:rgba(255,246,229,.35);margin:8px 0 6px;letter-spacing:1px">STEP 1 OF 4 — BHAGWAN DARSHAN PHOTO</div>
+
+        <!-- Photo not taken yet -->
+        <div id="step1-capture-ui">
+          <div style="background:rgba(212,175,55,.06);border:1px solid rgba(212,175,55,.15);border-radius:8px;padding:10px 14px;font-size:11px;color:rgba(255,246,229,.5);text-align:center;margin-bottom:12px;line-height:1.8">
+            Camera se Bhagwan ka photo lo.<br/>Yeh photo Live stream aur recording mein background banegi.
+          </div>
+          <!-- Camera facing toggle -->
+          <div style="display:flex;gap:8px;margin-bottom:10px">
+            <button class="btn btn-ghost" onclick="toggleStep1Camera()" id="btn-flip-cam" style="flex:1;font-size:11px;padding:9px">🔄 Flip Camera</button>
+            <button class="btn btn-ghost" onclick="retakePhoto()" id="btn-retake" style="flex:1;font-size:11px;padding:9px;display:none">🔁 Retake</button>
+          </div>
+          <button class="btn btn-red" id="btn-capture-photo" onclick="capturePhoto()" style="font-size:14px;padding:14px;letter-spacing:2px">
+            📸 Photo Khicho
           </button>
         </div>
+
+        <!-- After photo taken -->
+        <div id="step1-photo-taken-ui" style="display:none">
+          <div style="background:rgba(22,163,74,.08);border:1px solid rgba(22,163,74,.3);border-radius:8px;padding:10px 14px;font-size:11px;color:#22C55E;text-align:center;margin-bottom:12px">
+            ✅ Photo liya gaya! Ab Live aur Recording shuru ho gayi hai.
+          </div>
+          <button class="btn btn-red" onclick="proceedToAnnouncement()">
+            🙏 Devotee Announcement Shuru Karo →
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 2 — DEVOTEE ANNOUNCEMENT (image + overlay) -->
+      <div id="state-step2" style="display:none">
+        <div class="live-preview">
+          <canvas id="watermark-canvas2" style="width:100%;display:block;max-height:280px"></canvas>
+          <div class="top-right-badges">
+            <div class="live-badge-tr"><div class="live-dot"></div>LIVE</div>
+            <div class="rec-badge-tr"><div class="live-dot" style="background:#FC8181"></div>REC</div>
+          </div>
+          <div class="step-label">📢 Devotee Announcement</div>
+        </div>
+
+        <!-- Step indicator -->
+        <div style="text-align:center;font-family:'Cinzel',serif;font-size:10px;color:rgba(255,246,229,.3);margin:8px 0 2px;letter-spacing:1.5px">STEP 2 OF 4 — DEVOTEE ANNOUNCEMENT</div>
+
+        <!-- Current devotee display -->
+        <div id="devotee-display-card" style="background:rgba(212,175,55,.06);border:1px solid rgba(212,175,55,.18);border-radius:10px;padding:14px 16px;margin:8px 0 10px;text-align:center;min-height:72px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px">
+          <div id="devotee-name-display" style="font-family:'Cinzel',serif;font-size:15px;color:var(--gold-h);letter-spacing:1px">—</div>
+          <div id="devotee-gotra-display" style="font-size:11px;color:rgba(255,246,229,.45);font-family:'Lora',serif"></div>
+          <div id="devotee-sankalp-display" style="font-size:11px;color:rgba(255,140,53,.7);font-family:'Lora',serif;font-style:italic"></div>
+        </div>
+
+        <!-- Progress bar & counter -->
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <div style="font-family:'Cinzel',serif;font-size:10px;color:rgba(255,246,229,.35);white-space:nowrap" id="devotee-counter">0 / 0</div>
+          <div style="flex:1;height:3px;background:rgba(255,246,229,.08);border-radius:2px;overflow:hidden">
+            <div id="auto-scroll-bar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--saffron),var(--gold));border-radius:2px;transition:width .1s linear"></div>
+          </div>
+          <div style="font-family:'Cinzel',serif;font-size:10px;color:rgba(255,246,229,.35);white-space:nowrap" id="auto-scroll-timer-label">10s</div>
+        </div>
+
+        <!-- Prev / Next controls -->
+        <div style="display:flex;gap:8px;margin-bottom:10px">
+          <button class="btn btn-ghost" onclick="prevDevotee()" style="flex:1;padding:10px;font-size:13px" id="btn-prev-devotee">← Prev</button>
+          <button class="btn btn-ghost" onclick="nextDevotee()" style="flex:1;padding:10px;font-size:13px" id="btn-next-devotee">Next →</button>
+        </div>
+
+        <!-- Skip to countdown -->
+        <button class="btn btn-red" onclick="proceedToCountdown()" style="font-size:11px;padding:10px">⏳ Skip to Countdown →</button>
       </div>
 
       <!-- PREPARING -->
@@ -306,40 +436,49 @@ button{cursor:pointer;font-family:inherit;border:none}
 
       <!-- COUNTDOWN -->
       <div id="state-countdown">
-        <div class="countdown-title">🕉 Puja Ki Taiyari</div>
-        <div class="countdown-sub">Live hone se pehle 108 seconds ka sankalp</div>
-        <div class="countdown-ring-wrap">
-          <svg viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
-            <circle class="countdown-ring-bg" cx="80" cy="80" r="70"/>
-            <circle class="countdown-ring-prog" id="countdown-ring" cx="80" cy="80" r="70"/>
-          </svg>
-          <div class="countdown-num">
-            <div class="countdown-n" id="countdown-display">108</div>
-            <div class="countdown-lbl">seconds</div>
-          </div>
+
+        <!-- Header -->
+        <div style="text-align:center;margin-bottom:10px">
+          <div style="font-family:'Noto Sans Devanagari',sans-serif;font-size:18px;color:var(--gold);font-weight:700;text-shadow:0 0 20px rgba(212,175,55,.4)">॥ श्री हनुमान चालीसा ॥</div>
+          <div style="font-size:9px;font-family:'Cinzel',serif;color:rgba(255,246,229,.25);letter-spacing:2px;margin-top:2px">STEP 3 — PUJA KI TAIYARI</div>
         </div>
-        <button class="btn-countdown-cancel" onclick="cancelCountdown()">✕ Cancel</button>
+
+        <!-- Progress bar (countdown) -->
+        <div style="height:3px;background:rgba(212,175,55,.12);border-radius:2px;margin-bottom:14px;overflow:hidden">
+          <div id="chalisa-progress-bar" style="height:100%;width:100%;background:linear-gradient(90deg,var(--saffron),var(--gold));border-radius:2px;transition:width 1s linear"></div>
+        </div>
+
+        <!-- Single verse display -->
+        <div class="chalisa-single-wrap">
+          <!-- Section label (दोहा / चौपाई) -->
+          <div id="chalisa-section-lbl" class="chalisa-section-title" style="margin-bottom:12px"></div>
+          <!-- Verse number -->
+          <div id="chalisa-verse-num" style="font-family:'Cinzel',serif;font-size:10px;color:rgba(255,246,229,.25);text-align:center;margin-bottom:10px;letter-spacing:2px"></div>
+          <!-- Verse text — fades in/out -->
+          <div id="chalisa-verse-box" class="chalisa-verse-single"></div>
+          <!-- Verse dots indicator -->
+          <div id="chalisa-dots" style="text-align:center;margin-top:14px;font-size:8px;color:rgba(255,246,229,.2);letter-spacing:3px"></div>
+        </div>
+
+        <div style="margin-top:14px">
+          <button class="btn-countdown-cancel" onclick="cancelCountdown()" style="width:100%">✕ Roko</button>
+        </div>
       </div>
 
-      <!-- LIVE -->
+      <!-- LIVE (STEP 4 — ACTUAL PUJA) -->
       <div id="state-live" style="display:none">
         <div class="live-preview">
           <video id="local-video" autoplay muted playsinline></video>
-          <!-- Composited canvas: camera + burned-in watermark -->
-          <canvas id="watermark-canvas"></canvas>
-
-          <!-- TOP-RIGHT: LIVE + REC side by side -->
+          <!-- Step 4 reuses the same master canvas via JS ref — shown here via CSS -->
+          <canvas id="watermark-canvas-live" style="width:100%;display:block;max-height:280px"></canvas>
           <div class="top-right-badges">
             <div class="live-badge-tr"><div class="live-dot"></div>LIVE</div>
             <div class="rec-badge-tr"><div class="live-dot" style="background:#FC8181"></div>REC</div>
           </div>
-
           <div class="guard-badge" id="nsfw-shield">
             <div class="shield-dot"></div><span id="nsfw-status-text">Maintaining Purity</span>
           </div>
-
-          <!-- Hidden canvas for frame analysis -->
-          <canvas id="nsfw-canvas" width="224" height="224"></canvas>
+          <canvas id="nsfw-canvas" width="224" height="224" style="display:none;position:absolute"></canvas>
         </div>
         <div class="live-timer" id="live-timer">00:00:00</div>
         <div style="display:flex;gap:10px">
@@ -468,6 +607,8 @@ function showPortal(m){
   document.getElementById('mandir-name').textContent=m.name;
   document.getElementById('mandir-loc').textContent='📍 '+m.location+(m.purohit?' • '+m.purohit:'');
   loadSubscribers(m);
+  // Auto-start Step 1 immediately after login
+  startBhagwanLive();
 }
 
 function loadSubscribers(mandir){
@@ -491,169 +632,859 @@ function loadSubscribers(mandir){
    LIVE + RECORD
 ══════════════════════════════════════════ */
 function setState(name){
-  ['offline','preparing','countdown','live','saving','saved'].forEach(s=>{
-    document.getElementById('state-'+s).style.display = s===name ? 'block' : 'none';
+  ['offline','step1','step2','preparing','countdown','live','saving','saved'].forEach(s=>{
+    const el = document.getElementById('state-'+s);
+    if(el) el.style.display = s===name ? 'block' : 'none';
   });
+  // Update step progress header
+  const stepMap = { step1:1, step2:2, countdown:3, preparing:3, live:4 };
+  _updateStepHeader(stepMap[name] || 0);
+}
+
+/* ── Update the step progress header in the card ── */
+function _updateStepHeader(activeStep){
+  const header = document.getElementById('live-step-header');
+  // Hide header when offline (no active step)
+  if(header) header.style.display = (activeStep === 0) ? 'none' : 'block';
+  const staticTitle = document.getElementById('card-title-offline');
+  if(staticTitle) staticTitle.style.display = (activeStep === 0) ? 'flex' : 'none';
+
+  const configs = {
+    0: {
+      title: '🔴 Live Puja — Auto Record',
+      sub:   'Countdown chunein aur Live shuru karein',
+      color: '#FC8181'
+    },
+    1: {
+      title: '📸 Step 1 — Bhagwan Darshan Photo',
+      sub:   'Camera se Bhagwan ka photo lo. Yeh recording ki background banega.',
+      color: '#F5C842'
+    },
+    2: {
+      title: '📢 Step 2 — Devotee Announcement',
+      sub:   'Subscribers ke naam ek ek karke announce ho rahe hain. Camera band hai.',
+      color: '#FFAD42'
+    },
+    3: {
+      title: '⏳ Step 3 — Countdown',
+      sub:   'Countdown chal raha hai. Bhagwan ka photo background mein hai. Camera band.',
+      color: '#FF9966'
+    },
+    4: {
+      title: '🔴 Step 4 — Puja Live',
+      sub:   'Camera ab ON hai. Puja LIVE chal rahi hai aur record ho rahi hai.',
+      color: '#FC8181'
+    }
+  };
+
+  const cfg = configs[activeStep] || configs[0];
+
+  const titleEl = document.getElementById('step-header-title');
+  const subEl   = document.getElementById('step-header-sub');
+  if(titleEl){ titleEl.textContent = cfg.title; titleEl.style.color = cfg.color; }
+  if(subEl)  { subEl.textContent   = cfg.sub; }
+
+  // Update dots: done=green, active=saffron, pending=dim
+  for(let i = 1; i <= 4; i++){
+    const dot = document.getElementById('sdot-' + i);
+    if(!dot) continue;
+    dot.className = 'sdot';
+    if(activeStep === 0) { /* all dim */ }
+    else if(i < activeStep)  dot.classList.add('done');
+    else if(i === activeStep) dot.classList.add('active');
+    // else: pending — stays dim
+  }
 }
 
 async function startLive(seconds){
-  // Kick off countdown with chosen duration; live starts automatically after it ends
-  startCountdown(seconds || 108);
+  _chosenSeconds = seconds || 108;
+  // Step 1: open camera for photo capture
+  await startBhagwanLive();
 }
 
-async function _doStartLive(){
+// startCountdown is now ONLY called from proceedToCountdown (Step 3)
+// It no longer auto-triggers step1 or step2
+
+/* ══════════════════════════════════════════════════════════════
+   4-STEP SPIRITUAL LIVE FLOW
+   Step 1 → Bhagwan Photo LIVE (no camera)
+   Step 2 → Devotee Announcement (image + overlay)
+   Step 3 → Countdown (image stays, camera still off)
+   Step 4 → Actual Puja LIVE (camera starts NOW)
+══════════════════════════════════════════════════════════════ */
+let currentStep = 0;   // 0=idle, 1,2,3,4
+let _bhagwanImg = null;
+let _masterCanvas = null;
+let _masterCtx   = null;
+let _masterStream = null;   // canvas.captureStream — single stream for all steps
+let _masterRAF   = null;
+let _masterActive = false;
+let _chosenSeconds = 108;   // set by startLive()
+
+// Bhagwan image — captured from camera by purohit in Step 1
+// (no external URL — user takes the photo themselves)
+
+let _step1CameraStream = null;  // viewfinder stream (not recorded)
+let _step1FacingMode   = 'environment'; // start with back camera
+let _photoTaken        = false;
+
+/* ── Open camera for viewfinder (no recording yet) ── */
+async function _openStep1Camera(){
+  // Stop any existing viewfinder stream
+  if(_step1CameraStream){
+    _step1CameraStream.getTracks().forEach(t => t.stop());
+    _step1CameraStream = null;
+  }
+  try{
+    _step1CameraStream = await navigator.mediaDevices.getUserMedia({
+      video:{ facingMode: _step1FacingMode, width:{ideal:1280}, height:{ideal:720} },
+      audio: false
+    });
+    const vf = document.getElementById('step1-viewfinder');
+    vf.srcObject = _step1CameraStream;
+    vf.style.display = 'block';
+  } catch(err){
+    showToast('Camera nahi mila: ' + err.message);
+  }
+}
+
+/* ── Flip front/back camera ── */
+async function toggleStep1Camera(){
+  _step1FacingMode = (_step1FacingMode === 'environment') ? 'user' : 'environment';
+  await _openStep1Camera();
+}
+
+/* ── Capture still photo from viewfinder ── */
+function capturePhoto(){
+  const vf = document.getElementById('step1-viewfinder');
+  if(!vf || !vf.srcObject){ showToast('Camera ready nahi hai'); return; }
+
+  // Shutter flash effect
+  const flash = document.getElementById('shutter-flash');
+  if(flash){
+    flash.style.opacity = '1';
+    setTimeout(() => { flash.style.opacity = '0'; }, 120);
+  }
+
+  // Capture frame into an offscreen canvas → set as _bhagwanImg
+  const W = vf.videoWidth  || 1280;
+  const H = vf.videoHeight || 720;
+  const snap = document.createElement('canvas');
+  snap.width = W; snap.height = H;
+  snap.getContext('2d').drawImage(vf, 0, 0, W, H);
+
+  // Convert to Image object so _startMasterLoop can drawImage() it
+  _bhagwanImg = new Image();
+  _bhagwanImg.onload = () => {
+    _photoTaken = true;
+    _onPhotoTaken();
+  };
+  _bhagwanImg.src = snap.toDataURL('image/jpeg', 0.92);
+}
+
+/* ── Called after photo captured ── */
+function _onPhotoTaken(){
+  // Stop viewfinder camera — photo is enough
+  if(_step1CameraStream){
+    _step1CameraStream.getTracks().forEach(t => t.stop());
+    _step1CameraStream = null;
+  }
+
+  // Hide viewfinder, show canvas
+  const vf = document.getElementById('step1-viewfinder');
+  if(vf) vf.style.display = 'none';
+
+  const wc = document.getElementById('watermark-canvas');
+  if(wc) wc.style.display = 'block';
+
+  // Show LIVE/REC badges
+  const badges = document.getElementById('step1-live-badges');
+  if(badges) badges.style.display = 'flex';
+
+  // Update label
+  const lbl = document.getElementById('step1-label');
+  if(lbl) lbl.textContent = '🙏 Bhagwan Darshan — LIVE';
+
+  // Update UI panels
+  document.getElementById('step1-capture-ui').style.display = 'none';
+  document.getElementById('step1-photo-taken-ui').style.display = 'block';
+
+  // Show retake button (for future use)
+  const btnR = document.getElementById('btn-retake');
+  if(btnR) btnR.style.display = 'block';
+
+  // Setup master canvas and start streaming
+  _masterCanvas = document.getElementById('watermark-canvas');
+  _masterCanvas.width  = _bhagwanImg.naturalWidth  || 1280;
+  _masterCanvas.height = _bhagwanImg.naturalHeight || 720;
+  _masterCtx = _masterCanvas.getContext('2d');
+
+  currentStep = 1;
+  _startMasterLoop();
+  _startCanvasMirror();
+
+  // Start capture stream + recording
+  _masterStream = _masterCanvas.captureStream(30);
+  recordedChunks = [];
+  const mimeType = MediaRecorder.isTypeSupported('video/webm;codecs=vp9,opus')
+    ? 'video/webm;codecs=vp9,opus'
+    : MediaRecorder.isTypeSupported('video/webm') ? 'video/webm' : 'video/mp4';
+  mediaRecorder = new MediaRecorder(_masterStream, {mimeType, videoBitsPerSecond:1500000});
+  mediaRecorder.ondataavailable = e => { if(e.data.size>0) recordedChunks.push(e.data); };
+  mediaRecorder.start(1000);
+
+  // Mark live in Firebase
+  setLiveSignal(currentMandir.id, {
+    mandirId: currentMandir.id, mandirName: currentMandir.name,
+    mandirEmoji: currentMandir.emoji || '🛕',
+    startTime: new Date().toISOString(), isLive: true, step: 1
+  });
+
+  // Start WebRTC so viewers see the photo live
+  _startWebRTC();
+  window._compositedStream = _masterStream;
+
+  showToast('📸 Photo LIVE ho gayi! Step 1 complete.');
+}
+
+/* ── Retake photo ── */
+async function retakePhoto(){
+  _photoTaken = false;
+  // Stop current stream/recording
+  if(mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
+  _stopMasterLoop();
+  clearLiveSignal(currentMandir.id);
+
+  // Reset UI to viewfinder
+  document.getElementById('step1-viewfinder').style.display = 'block';
+  document.getElementById('watermark-canvas').style.display = 'none';
+  const badges = document.getElementById('step1-live-badges');
+  if(badges) badges.style.display = 'none';
+  document.getElementById('step1-capture-ui').style.display = 'block';
+  document.getElementById('step1-photo-taken-ui').style.display = 'none';
+  document.getElementById('step1-label').textContent = '📸 Bhagwan ka Photo Lo';
+  recordedChunks = [];
+
+  await _openStep1Camera();
+}
+
+/* ── Dummy _preloadBhagwanImage (kept for legacy calls) ── */
+function _preloadBhagwanImage(){ return Promise.resolve(_bhagwanImg); }
+
+/* ── MASTER CANVAS LOOP ─────────────────────────────────────── */
+function _startMasterLoop(){
+  _masterActive = true;
+  const canvas = _masterCanvas;
+  const ctx    = _masterCtx;
+
+  function frame(){
+    if(!_masterActive) return;
+    const W = canvas.width, H = canvas.height;
+
+    if(currentStep === 1 || currentStep === 2 || currentStep === 3){
+      // Steps 1–3: ONLY Bhagwan image — NO video
+      if(_bhagwanImg && _bhagwanImg.complete && _bhagwanImg.naturalWidth > 0){
+        // Cover-fit the image
+        const iW = _bhagwanImg.naturalWidth, iH = _bhagwanImg.naturalHeight;
+        const scale = Math.max(W/iW, H/iH);
+        const dW = iW*scale, dH = iH*scale;
+        ctx.drawImage(_bhagwanImg, (W-dW)/2, (H-dH)/2, dW, dH);
+      } else {
+        // Fallback: sacred gradient
+        const grd = ctx.createLinearGradient(0,0,W,H);
+        grd.addColorStop(0, '#1A0800');
+        grd.addColorStop(0.5, '#3D1200');
+        grd.addColorStop(1, '#140800');
+        ctx.fillStyle = grd;
+        ctx.fillRect(0,0,W,H);
+        ctx.font = `bold ${Math.round(H*0.12)}px serif`;
+        ctx.fillStyle = '#D4AF37';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('🕉', W/2, H/2);
+      }
+
+      // Step 2: announcement overlay
+      if(currentStep === 2) _drawAnnouncementOverlay(ctx, W, H);
+
+      // Step 3: countdown overlay on image
+      if(currentStep === 3) _drawCountdownOverlay(ctx, W, H);
+
+    } else if(currentStep === 4){
+      // Step 4 ONLY: draw live camera video
+      const vid = document.getElementById('local-video');
+      if(vid && vid.readyState >= 2){
+        ctx.drawImage(vid, 0, 0, W, H);
+      } else {
+        ctx.fillStyle = '#000';
+        ctx.fillRect(0, 0, W, H);
+      }
+    }
+
+    // Always draw watermark on top
+    _drawWatermark(ctx, W, H);
+
+    _masterRAF = requestAnimationFrame(frame);
+  }
+  _masterRAF = requestAnimationFrame(frame);
+}
+
+function _stopMasterLoop(){
+  _masterActive = false;
+  if(_masterRAF){ cancelAnimationFrame(_masterRAF); _masterRAF = null; }
+  if(_mirrorRAF){ cancelAnimationFrame(_mirrorRAF); _mirrorRAF = null; }
+}
+
+let _mirrorRAF = null;
+/* Mirror master canvas pixels into step2 and step4 display canvases */
+function _startCanvasMirror(){
+  function mirror(){
+    if(!_masterActive){ _mirrorRAF = null; return; }
+    const src = _masterCanvas;
+    if(!src) { _mirrorRAF = requestAnimationFrame(mirror); return; }
+    // Step 2 mirror
+    const c2 = document.getElementById('watermark-canvas2');
+    if(c2){
+      if(c2.width !== src.width || c2.height !== src.height){ c2.width=src.width; c2.height=src.height; }
+      try{ c2.getContext('2d').drawImage(src,0,0); }catch(e){}
+    }
+    // Step 4 (live) mirror
+    const cl = document.getElementById('watermark-canvas-live');
+    if(cl){
+      if(cl.width !== src.width || cl.height !== src.height){ cl.width=src.width; cl.height=src.height; }
+      try{ cl.getContext('2d').drawImage(src,0,0); }catch(e){}
+    }
+    _mirrorRAF = requestAnimationFrame(mirror);
+  }
+  _mirrorRAF = requestAnimationFrame(mirror);
+}
+
+/* ── STEP 1: OPEN CAMERA FOR PHOTO CAPTURE ──────────────────── */
+async function startBhagwanLive(){
+  currentStep = 0;
+  _photoTaken = false;
+
+  // Show step1 UI first
+  setState('step1');
+
+  // Reset UI state
+  document.getElementById('step1-viewfinder').style.display = 'block';
+  document.getElementById('watermark-canvas').style.display = 'none';
+  const badges = document.getElementById('step1-live-badges');
+  if(badges) badges.style.display = 'none';
+  document.getElementById('step1-capture-ui').style.display = 'block';
+  document.getElementById('step1-photo-taken-ui').style.display = 'none';
+  document.getElementById('step1-label').textContent = '📸 Bhagwan ka Photo Lo';
+
+  // Open camera viewfinder (back camera by default)
+  await _openStep1Camera();
+  showToast('📷 Camera ready! Bhagwan ka photo khicho.');
+}
+
+/* ── STEP 2: ANNOUNCEMENT ────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════
+   STEP 2 — DEVOTEE ANNOUNCEMENT (AUTO + MANUAL)
+   • One devotee shown at a time on canvas (name, gotra, sankalp)
+   • Auto-scrolls every 10s
+   • Purohit can prev/next anytime → resets timer
+   • After last devotee → auto proceeds to Step 3 (countdown)
+   • All canvas drawing is baked into WebRTC stream + recording
+══════════════════════════════════════════════════════════════ */
+let _announcementDevotees  = [];   // filtered list for today
+let currentDevoteeIndex    = 0;
+let autoScrollInterval     = null;
+let _autoScrollElapsed     = 0;    // ms elapsed in current 10s window
+let _autoScrollRAF         = null; // for progress bar animation
+const AUTO_SCROLL_MS       = 10000;
+
+/* ── Load today's devotees from localStorage ── */
+function _loadAnnouncementDevotees(){
+  const db    = getDB();
+  const subs  = (db.subscriptions || []).filter(s =>
+    s.mandir && s.mandir.id === (currentMandir && currentMandir.id) && s.status === 'active'
+  );
+  const today = new Date().getDate();
+  const todaySubs = subs.filter(s => (s.pujasDates || []).includes(today));
+  // Prefer today's subscribers; fallback to all active
+  return (todaySubs.length > 0 ? todaySubs : subs);
+}
+
+/* ── Update the UI card below the canvas ── */
+function _refreshDevoteeCard(){
+  const d   = _announcementDevotees[currentDevoteeIndex];
+  const tot = _announcementDevotees.length;
+  document.getElementById('devotee-counter').textContent =
+    (currentDevoteeIndex + 1) + ' / ' + tot;
+  document.getElementById('devotee-name-display').textContent =
+    d ? ('🙏 ' + d.name) : '—';
+  document.getElementById('devotee-gotra-display').textContent =
+    (d && d.gotra) ? 'Gotra: ' + d.gotra : '';
+  document.getElementById('devotee-sankalp-display').textContent =
+    (d && d.sankalp) ? d.sankalp : '';
+  // Prev/Next button states
+  const btnP = document.getElementById('btn-prev-devotee');
+  const btnN = document.getElementById('btn-next-devotee');
+  if(btnP) btnP.disabled = (currentDevoteeIndex === 0);
+  if(btnN) btnN.disabled = (currentDevoteeIndex >= tot - 1);
+}
+
+/* ── Progress bar animation (fills 0→100% in AUTO_SCROLL_MS) ── */
+function _startProgressBar(){
+  cancelAnimationFrame(_autoScrollRAF);
+  _autoScrollElapsed = 0;
+  const bar  = document.getElementById('auto-scroll-bar');
+  const lbl  = document.getElementById('auto-scroll-timer-label');
+  let last   = performance.now();
+
+  function tick(now){
+    const delta = now - last;
+    last = now;
+    _autoScrollElapsed = Math.min(_autoScrollElapsed + delta, AUTO_SCROLL_MS);
+    const pct = (_autoScrollElapsed / AUTO_SCROLL_MS) * 100;
+    if(bar) bar.style.width = pct + '%';
+    const secLeft = Math.ceil((AUTO_SCROLL_MS - _autoScrollElapsed) / 1000);
+    if(lbl) lbl.textContent = secLeft + 's';
+    if(_autoScrollElapsed < AUTO_SCROLL_MS){
+      _autoScrollRAF = requestAnimationFrame(tick);
+    }
+  }
+  _autoScrollRAF = requestAnimationFrame(tick);
+}
+
+function _stopProgressBar(){
+  cancelAnimationFrame(_autoScrollRAF);
+  _autoScrollRAF = null;
+  const bar = document.getElementById('auto-scroll-bar');
+  const lbl = document.getElementById('auto-scroll-timer-label');
+  if(bar) bar.style.width = '0%';
+  if(lbl) lbl.textContent = '10s';
+}
+
+/* ── Auto scroll interval ── */
+function startAutoScroll(){
+  clearInterval(autoScrollInterval);
+  _startProgressBar();
+  autoScrollInterval = setInterval(() => {
+    if(currentDevoteeIndex < _announcementDevotees.length - 1){
+      currentDevoteeIndex++;
+      _refreshDevoteeCard();
+      resetAutoScroll();
+    } else {
+      // Last devotee reached — auto proceed to countdown
+      stopAnnouncement();
+      proceedToCountdown();
+    }
+  }, AUTO_SCROLL_MS);
+}
+
+function resetAutoScroll(){
+  clearInterval(autoScrollInterval);
+  startAutoScroll(); // restart timer + progress bar
+}
+
+function stopAnnouncement(){
+  clearInterval(autoScrollInterval);
+  autoScrollInterval = null;
+  _stopProgressBar();
+}
+
+/* ── Public navigation controls ── */
+function nextDevotee(){
+  if(currentDevoteeIndex >= _announcementDevotees.length - 1){
+    // Already at last — go to countdown
+    stopAnnouncement();
+    proceedToCountdown();
+    return;
+  }
+  currentDevoteeIndex++;
+  _refreshDevoteeCard();
+  resetAutoScroll();
+}
+
+function prevDevotee(){
+  if(currentDevoteeIndex <= 0) return;
+  currentDevoteeIndex--;
+  _refreshDevoteeCard();
+  resetAutoScroll();
+}
+
+/* ── Entry point called from startBhagwanLive flow ── */
+function proceedToAnnouncement(){
+  if(!_photoTaken){
+    showToast('Pehle Bhagwan ka photo khicho! 📸');
+    return;
+  }
+  if(currentStep >= 3) return; // already past step 2
+  currentStep = 2;
+
+  _announcementDevotees  = _loadAnnouncementDevotees();
+  currentDevoteeIndex    = 0;
+
+  setState('step2');
+  _refreshDevoteeCard();
+
+  if(_announcementDevotees.length === 0){
+    // No devotees → skip to countdown immediately
+    showToast('Koi devotee nahi hai — countdown shuru ho raha hai.');
+    setTimeout(() => proceedToCountdown(), 1200);
+    return;
+  }
+
+  startAutoScroll();
+  showToast('📢 Step 2: Devotee announcement shuru! Step 2 of 4.');
+}
+
+/* ── CANVAS overlay: ONE devotee at a time, centered ── */
+function _drawAnnouncementOverlay(ctx, W, H){
+  const devotee = _announcementDevotees[currentDevoteeIndex];
+  const total   = _announcementDevotees.length;
+
+  /* ── Panel geometry ── */
+  const panW = W * 0.80,  panH = H * 0.52;
+  const panX = (W - panW) / 2, panY = (H - panH) / 2;
+  const r = 20;
+
+  /* ── Glassmorphism panel ── */
+  ctx.save();
+  ctx.fillStyle = 'rgba(8,3,0,0.82)';
+  ctx.beginPath();
+  ctx.moveTo(panX+r, panY);
+  ctx.lineTo(panX+panW-r, panY);
+  ctx.quadraticCurveTo(panX+panW, panY, panX+panW, panY+r);
+  ctx.lineTo(panX+panW, panY+panH-r);
+  ctx.quadraticCurveTo(panX+panW, panY+panH, panX+panW-r, panY+panH);
+  ctx.lineTo(panX+r, panY+panH);
+  ctx.quadraticCurveTo(panX, panY+panH, panX, panY+panH-r);
+  ctx.lineTo(panX, panY+r);
+  ctx.quadraticCurveTo(panX, panY, panX+r, panY);
+  ctx.closePath();
+  ctx.fill();
+
+  /* Gold border */
+  ctx.strokeStyle = 'rgba(212,175,55,0.65)';
+  ctx.lineWidth   = Math.round(W * 0.002);
+  ctx.stroke();
+
+  /* Top saffron accent bar */
+  ctx.fillStyle = 'rgba(255,107,0,0.35)';
+  ctx.fillRect(panX, panY, panW, Math.round(H * 0.055));
+
+  const cx = W / 2;
+
+  /* ── Helper ── */
+  function txt(text, x, y, size, color, align){
+    ctx.font         = `bold ${size}px Arial, sans-serif`;
+    ctx.textAlign    = align || 'center';
+    ctx.textBaseline = 'middle';
+    ctx.strokeStyle  = 'rgba(0,0,0,0.9)';
+    ctx.lineWidth    = Math.max(2, size * 0.1);
+    ctx.lineJoin     = 'round';
+    ctx.strokeText(text, x, y);
+    ctx.fillStyle    = color;
+    ctx.fillText(text, x, y);
+  }
+
+  /* ── Header: "Aaj Ke Devotees" ── */
+  const fHdr  = Math.round(H * 0.038);
+  txt('\u{1F64F}  Aaj Ke Devotees',
+      cx, panY + Math.round(H * 0.028), fHdr, '#F5C842');
+
+  /* ── Counter badge (top-right corner of panel) ── */
+  const fCtr  = Math.round(H * 0.025);
+  txt(String(currentDevoteeIndex + 1) + ' / ' + total,
+      panX + panW - Math.round(W*0.03),
+      panY + Math.round(H*0.028), fCtr, 'rgba(255,246,229,0.5)', 'right');
+
+  /* ── Gold divider ── */
+  ctx.fillStyle = 'rgba(212,175,55,0.35)';
+  ctx.fillRect(panX + panW*0.08, panY + H*0.07, panW*0.84, 1);
+
+  if(!devotee){
+    const fNone = Math.round(H * 0.032);
+    txt('Koi devotee nahi hai', cx, panY + panH*0.55, fNone, 'rgba(255,246,229,0.35)');
+    ctx.restore();
+    return;
+  }
+
+  /* ── Devotee NAME (large, gold) ── */
+  const fName = Math.round(H * 0.062);
+  txt('\u{1F331}  ' + devotee.name,
+      cx, panY + panH * 0.40, fName, '#FFF6E5');
+
+  /* ── GOTRA (medium, saffron) ── */
+  if(devotee.gotra){
+    const fGotra = Math.round(H * 0.038);
+    txt('Gotra: ' + devotee.gotra,
+        cx, panY + panH * 0.58, fGotra, '#FFAD42');
+  }
+
+  /* ── SANKALP (small, warm white) ── */
+  if(devotee.sankalp){
+    const fSnk = Math.round(H * 0.030);
+    txt(devotee.sankalp,
+        cx, panY + panH * 0.74, fSnk, 'rgba(255,220,170,0.75)');
+  }
+
+  /* ── Progress bar at bottom of panel ── */
+  const barY   = panY + panH - Math.round(H * 0.022);
+  const barW   = panW * 0.82;
+  const barX   = panX + (panW - barW) / 2;
+  const barH2  = Math.round(H * 0.014);
+  const progPct = _autoScrollElapsed / AUTO_SCROLL_MS;
+
+  // Track
+  ctx.fillStyle = 'rgba(255,246,229,0.10)';
+  _canvasRoundRect(ctx, barX, barY, barW, barH2, barH2/2);
+  ctx.fill();
+  // Fill
+  if(progPct > 0){
+    const grd = ctx.createLinearGradient(barX, 0, barX + barW, 0);
+    grd.addColorStop(0, '#FF6B00');
+    grd.addColorStop(1, '#D4AF37');
+    ctx.fillStyle = grd;
+    _canvasRoundRect(ctx, barX, barY, barW * progPct, barH2, barH2/2);
+    ctx.fill();
+  }
+
+  ctx.restore();
+}
+
+/* ── Rounded rect helper for canvas ── */
+function _canvasRoundRect(ctx, x, y, w, h, r){
+  if(w <= 0) return;
+  r = Math.min(r, w/2, h/2);
+  ctx.beginPath();
+  ctx.moveTo(x+r, y);
+  ctx.lineTo(x+w-r, y);
+  ctx.quadraticCurveTo(x+w, y, x+w, y+r);
+  ctx.lineTo(x+w, y+h-r);
+  ctx.quadraticCurveTo(x+w, y+h, x+w-r, y+h);
+  ctx.lineTo(x+r, y+h);
+  ctx.quadraticCurveTo(x, y+h, x, y+h-r);
+  ctx.lineTo(x, y+r);
+  ctx.quadraticCurveTo(x, y, x+r, y);
+  ctx.closePath();
+}
+function proceedToCountdown(){
+  if(currentStep >= 3) return;
+  currentStep = 3;
+  stopAnnouncement();
+  setState('countdown');
+  const bar = document.getElementById('chalisa-progress-bar');
+  if(bar) bar.style.width = '100%';
+  startCountdown(_chosenSeconds);
+  startChalisaDisplay(_chosenSeconds);
+  showToast('\u{1F549} Puja Ki Taiyari — Hanuman Chalisa padhen.');
+}
+
+/* ── STEP 4: ACTUAL CAMERA PUJA LIVE ────────────────────────── */
+async function startCameraLive(){
   setState('preparing');
   document.getElementById('prepare-text').textContent='Camera permission maang raha hai...';
 
   try{
-    // Get camera + mic
+    // ONLY NOW: request camera + mic
     localStream = await navigator.mediaDevices.getUserMedia({
-      video:{
-        facingMode:{ideal:'environment'},
-        width:{ideal:1280},
-        height:{ideal:720},
-        frameRate:{ideal:30}
-      },
-      audio:{
-        echoCancellation:true,
-        noiseSuppression:true
-      }
+      video:{ facingMode:{ideal:'environment'}, width:{ideal:1280}, height:{ideal:720}, frameRate:{ideal:30} },
+      audio:{ echoCancellation:true, noiseSuppression:true }
     });
-    console.log('Stream tracks:', localStream.getTracks().map(t=>t.kind+':'+t.label));
-
-    document.getElementById('prepare-text').textContent='Live connect ho raha hai...';
-
-    // ── WATERMARK COMPOSITING ──────────────────────────────────────────
-    // Pipe raw camera → canvas → burn date/time/mandir → capture as stream
-    // Both MediaRecorder and WebRTC use the composited stream so watermark
-    // is baked into the recording AND the live feed seen by viewers.
 
     const rawVideo = document.getElementById('local-video');
     rawVideo.srcObject = localStream;
     rawVideo.muted = true;
 
-    // Wait for video to have real decoded dimensions (canplay is more reliable than loadedmetadata)
     await new Promise(res => {
       if(rawVideo.videoWidth > 0 && rawVideo.readyState >= 3){ res(); return; }
       const done = () => { rawVideo.removeEventListener('canplay', done); res(); };
       rawVideo.addEventListener('canplay', done);
       rawVideo.play().catch(()=>{});
-      setTimeout(res, 2000); // hard fallback after 2s
+      setTimeout(res, 2000);
     });
 
-    const wCanvas = document.getElementById('watermark-canvas');
-    const W = rawVideo.videoWidth  || 1280;
-    const H = rawVideo.videoHeight || 720;
-    wCanvas.width  = W;
-    wCanvas.height = H;
-    const wCtx = wCanvas.getContext('2d');
+    // Switch canvas to step 4 (video) mode
+    currentStep = 4;
 
-    // Start the compositing loop at ~30fps
-    startWatermarkLoop(rawVideo, wCanvas, wCtx);
-
-    // Wait one rAF tick so canvas has at least one real frame before captureStream
-    await new Promise(res => requestAnimationFrame(() => requestAnimationFrame(res)));
-
-    // Capture composited canvas as a MediaStream (30fps)
-    const canvasStream = wCanvas.captureStream(30);
-
-    // Add the original audio track from the camera stream
-    localStream.getAudioTracks().forEach(t => canvasStream.addTrack(t));
-
-    // ── MediaRecorder now records the COMPOSITED stream (with watermark) ──
-    recordedChunks = [];
-    const mimeType = MediaRecorder.isTypeSupported('video/webm;codecs=vp9,opus')
-      ? 'video/webm;codecs=vp9,opus'
-      : MediaRecorder.isTypeSupported('video/webm')
-      ? 'video/webm' : 'video/mp4';
-
-    mediaRecorder = new MediaRecorder(canvasStream, {mimeType, videoBitsPerSecond:1500000});
-    mediaRecorder.ondataavailable = e => { if(e.data.size>0) recordedChunks.push(e.data); };
-    mediaRecorder.start(1000);
-
-    // ── Store composited stream reference for WebRTC and cleanup ──
-    window._compositedStream = canvasStream;
-    // (rawVideo keeps playing — no srcObject reassignment needed)
-
-    // Mark live in Firebase — visitors turant dekhenge
-    setLiveSignal(currentMandir.id, {
-      mandirId: currentMandir.id,
-      mandirName: currentMandir.name,
-      mandirEmoji: currentMandir.emoji || '🛕',
-      startTime: new Date().toISOString(),
-      isLive: true
-    });
+    // Add audio track to the master stream
+    localStream.getAudioTracks().forEach(t => _masterStream.addTrack(t));
 
     setState('live');
     startTimer();
-
-    // Start NSFW monitoring after going live
     startNSFWMonitoring();
 
-    showToast('🔴 Live shuru! Recording bhi chal rahi hai.');
-
-    // Native WebRTC — Firebase signaling, no external server needed!
-    offerCheckInterval = db_rt.ref('webrtc/' + currentMandir.id + '/offers').on('child_added', async snap => {
-      const data = snap.val();
-      if(!data || !data.offer || !localStream) return;
-      const viewerId = data.viewerId;
-
-      const ICE_CONFIG = { iceServers:[
-        {urls:'stun:stun.l.google.com:19302'},
-        {urls:'stun:stun1.l.google.com:19302'},
-        {urls:'turn:openrelay.metered.ca:80',username:'openrelayproject',credential:'openrelayproject'},
-        {urls:'turn:openrelay.metered.ca:443',username:'openrelayproject',credential:'openrelayproject'}
-      ]};
-
-      const pc = new RTCPeerConnection(ICE_CONFIG);
-
-      // Send composited stream (with watermark) to viewer
-      const streamToSend = window._compositedStream || localStream;
-      streamToSend.getTracks().forEach(track => pc.addTrack(track, streamToSend));
-
-      // Send ICE candidates to Firebase
-      pc.onicecandidate = e => {
-        if(e.candidate)
-          db_rt.ref('webrtc/'+currentMandir.id+'/purohitCandidates/'+viewerId).push({candidate: e.candidate.candidate, sdpMid: e.candidate.sdpMid, sdpMLineIndex: e.candidate.sdpMLineIndex});
-      };
-
-      pc.onconnectionstatechange = () => {
-        if(pc.connectionState === 'connected'){
-          activeConnections.push({pc, id:viewerId});
-          showToast('Ek viewer join kiya! 👁');
-        }
-        if(['disconnected','failed','closed'].includes(pc.connectionState)){
-          activeConnections = activeConnections.filter(c=>c.id!==viewerId);
-        }
-      };
-
-      await pc.setRemoteDescription(new RTCSessionDescription(data.offer));
-      const answer = await pc.createAnswer();
-      await pc.setLocalDescription(answer);
-
-      // Send answer back
-      db_rt.ref('webrtc/'+currentMandir.id+'/answers/'+viewerId).set({answer: {type: pc.localDescription.type, sdp: pc.localDescription.sdp}});
-
-      // Receive viewer ICE candidates
-      db_rt.ref('webrtc/'+currentMandir.id+'/viewerCandidates/'+viewerId).on('child_added', candSnap => {
-        pc.addIceCandidate(new RTCIceCandidate(candSnap.val())).catch(()=>{});
-      });
-
-      snap.ref.remove(); // clean up offer
-    });
+    showToast('🔴 Puja LIVE shuru! Step 4 of 4. Camera ON!');
 
   } catch(err){
-    setState('offline');
-    if(err.name==='NotAllowedError') showToast('Camera permission denied!');
-    else showToast('Camera start nahi hua: '+err.message);
+    // If camera fails, stay in step 3 visuals
+    currentStep = 3;
+    setState('live');
+    showToast('Camera error: '+err.message+'. Image se continue...');
   }
 }
 
-function stopLive(){
-  if(!mediaRecorder && !localStream){ setState('offline'); return; }
+/* ── COUNTDOWN OVERLAY ON BHAGWAN IMAGE ─────────────────────── */
+function _drawCountdownOverlay(ctx, W, H){
+  ctx.save();
 
-  stopNSFWMonitoring(); // ← stop content guard
-  stopWatermarkLoop();  // ← stop canvas compositing
+  // ── 1. Soft dark vignette over Bhagwan image ─────────────────
+  const vgrd = ctx.createRadialGradient(W/2, H/2, H*0.1, W/2, H/2, H*0.72);
+  vgrd.addColorStop(0, 'rgba(0,0,0,0.25)');
+  vgrd.addColorStop(1, 'rgba(0,0,0,0.70)');
+  ctx.fillStyle = vgrd;
+  ctx.fillRect(0, 0, W, H);
+
+  const cx    = W / 2;
+  const v     = CHALISA_VERSES[_chalisaIndex] || CHALISA_VERSES[0];
+
+  // ── 2. Header: ॥ श्री हनुमान चालीसा ॥ ─────────────────────
+  const fHdr  = Math.round(H * 0.052);
+  ctx.font         = `bold ${fHdr}px Arial, sans-serif`;
+  ctx.textAlign    = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.strokeStyle  = 'rgba(0,0,0,0.95)';
+  ctx.lineWidth    = Math.max(3, fHdr * 0.12);
+  ctx.lineJoin     = 'round';
+  ctx.strokeText('\u0964\u0964 \u0936\u094D\u0930\u0940 \u0939\u0928\u0941\u092E\u093E\u0928 \u091A\u093E\u0932\u0940\u0938\u093E \u0964\u0964', cx, H * 0.10);
+  ctx.fillStyle    = '#F5C842';
+  ctx.fillText('\u0964\u0964 \u0936\u094D\u0930\u0940 \u0939\u0928\u0941\u092E\u093E\u0928 \u091A\u093E\u0932\u0940\u0938\u093E \u0964\u0964', cx, H * 0.10);
+
+  // ── 3. Section label (दोहा / चौपाई) ─────────────────────────
+  if(v.section || v.num){
+    const fSec = Math.round(H * 0.032);
+    const secTxt = v.section ? v.section : ('\u091A\u094C\u092A\u093E\u0908 ' + v.num);
+    ctx.font         = `bold ${fSec}px Arial, sans-serif`;
+    ctx.strokeStyle  = 'rgba(0,0,0,0.9)';
+    ctx.lineWidth    = Math.max(2, fSec * 0.1);
+    ctx.strokeText(secTxt, cx, H * 0.22);
+    ctx.fillStyle    = '#FFAD42';
+    ctx.fillText(secTxt, cx, H * 0.22);
+  }
+
+  // ── 4. Verse card background ──────────────────────────────────
+  const cardW = W * 0.82;
+  const cardH = H * 0.36;
+  const cardX = (W - cardW) / 2;
+  const cardY = H * 0.28;
+  const rr    = 16;
+
+  ctx.fillStyle = 'rgba(8,3,0,0.75)';
+  ctx.beginPath();
+  ctx.moveTo(cardX+rr, cardY);
+  ctx.lineTo(cardX+cardW-rr, cardY);
+  ctx.quadraticCurveTo(cardX+cardW, cardY, cardX+cardW, cardY+rr);
+  ctx.lineTo(cardX+cardW, cardY+cardH-rr);
+  ctx.quadraticCurveTo(cardX+cardW, cardY+cardH, cardX+cardW-rr, cardY+cardH);
+  ctx.lineTo(cardX+rr, cardY+cardH);
+  ctx.quadraticCurveTo(cardX, cardY+cardH, cardX, cardY+cardH-rr);
+  ctx.lineTo(cardX, cardY+rr);
+  ctx.quadraticCurveTo(cardX, cardY, cardX+rr, cardY);
+  ctx.closePath();
+  ctx.fill();
+
+  // Gold border
+  ctx.strokeStyle = 'rgba(212,175,55,0.55)';
+  ctx.lineWidth   = Math.max(1, Math.round(W * 0.002));
+  ctx.stroke();
+
+  // ── 5. Verse lines ────────────────────────────────────────────
+  const lines   = v.text.split('\n');
+  const fVerse  = Math.round(H * 0.048);
+  const lineGap = fVerse * 1.85;
+  const totalTH = lines.length * lineGap;
+  const startY  = cardY + (cardH - totalTH) / 2 + fVerse * 0.6;
+
+  lines.forEach((line, i) => {
+    const y = startY + i * lineGap;
+    ctx.font         = `bold ${fVerse}px Arial, sans-serif`;
+    ctx.textAlign    = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.strokeStyle  = 'rgba(0,0,0,0.95)';
+    ctx.lineWidth    = Math.max(3, fVerse * 0.12);
+    ctx.lineJoin     = 'round';
+    ctx.strokeText(line, cx, y);
+    ctx.fillStyle    = '#FFF6E5';
+    ctx.fillText(line, cx, y);
+  });
+
+  // ── 6. Progress dots ──────────────────────────────────────────
+  const total   = CHALISA_VERSES.length;
+  const dotR    = Math.round(W * 0.008);
+  const dotGap  = dotR * 3.5;
+  const dotsShow = 10;
+  const dotStartX = cx - (dotsShow * dotGap) / 2;
+  const dotY    = cardY + cardH + Math.round(H * 0.04);
+  const filled  = Math.round((_chalisaIndex / total) * dotsShow);
+
+  for(let i = 0; i < dotsShow; i++){
+    ctx.beginPath();
+    ctx.arc(dotStartX + i * dotGap, dotY, dotR, 0, Math.PI * 2);
+    ctx.fillStyle = i < filled ? '#FF6B00' : 'rgba(255,246,229,0.18)';
+    ctx.fill();
+  }
+
+  ctx.restore();
+}
+
+/* ── MODIFIED _doStartLive → now called startCameraLive ─────── */
+async function _doStartLive(){
+  // Called by countdown ending at step 3 → triggers camera (step 4)
+  await startCameraLive();
+}
+
+/* ── WebRTC setup — serves _masterStream to all viewers ─────── */
+function _startWebRTC(){
+  offerCheckInterval = db_rt.ref('webrtc/' + currentMandir.id + '/offers').on('child_added', async snap => {
+    const data = snap.val();
+    if(!data || !data.offer) return;
+    const viewerId = data.viewerId;
+
+    const ICE_CONFIG = { iceServers:[
+      {urls:'stun:stun.l.google.com:19302'},
+      {urls:'stun:stun1.l.google.com:19302'},
+      {urls:'turn:openrelay.metered.ca:80',username:'openrelayproject',credential:'openrelayproject'},
+      {urls:'turn:openrelay.metered.ca:443',username:'openrelayproject',credential:'openrelayproject'}
+    ]};
+
+    const pc = new RTCPeerConnection(ICE_CONFIG);
+    const streamToSend = _masterStream || window._compositedStream;
+    if(streamToSend) streamToSend.getTracks().forEach(track => pc.addTrack(track, streamToSend));
+
+    pc.onicecandidate = e => {
+      if(e.candidate)
+        db_rt.ref('webrtc/'+currentMandir.id+'/purohitCandidates/'+viewerId).push({
+          candidate: e.candidate.candidate, sdpMid: e.candidate.sdpMid, sdpMLineIndex: e.candidate.sdpMLineIndex
+        });
+    };
+
+    pc.onconnectionstatechange = () => {
+      if(pc.connectionState === 'connected'){
+        activeConnections.push({pc, id:viewerId});
+        showToast('Ek viewer join kiya! \uD83D\uDC41');
+      }
+      if(['disconnected','failed','closed'].includes(pc.connectionState)){
+        activeConnections = activeConnections.filter(c=>c.id!==viewerId);
+      }
+    };
+
+    await pc.setRemoteDescription(new RTCSessionDescription(data.offer));
+    const answer = await pc.createAnswer();
+    await pc.setLocalDescription(answer);
+    db_rt.ref('webrtc/'+currentMandir.id+'/answers/'+viewerId).set({
+      answer: {type: pc.localDescription.type, sdp: pc.localDescription.sdp}
+    });
+    db_rt.ref('webrtc/'+currentMandir.id+'/viewerCandidates/'+viewerId).on('child_added', candSnap => {
+      pc.addIceCandidate(new RTCIceCandidate(candSnap.val())).catch(()=>{});
+    });
+    snap.ref.remove();
+  });
+}
+
+function stopLive(){
+  if(!mediaRecorder && !localStream && !_masterStream){ startBhagwanLive(); return; }
+
+  currentStep = 0;
+  stopNSFWMonitoring();
+  _stopMasterLoop();
+  stopWatermarkLoop(); // legacy safety
   setState('saving');
   stopTimer();
 
@@ -692,7 +1523,7 @@ async function uploadRecording(){
   console.log('Upload starting. Chunks:', recordedChunks.length);
   if(recordedChunks.length===0){
     showToast('Koi recording nahi mili. Dobara try karein.');
-    setState('offline');
+    startBhagwanLive();
     return;
   }
 
@@ -726,7 +1557,7 @@ async function uploadRecording(){
   } catch(err){
     console.error('Upload error:', err);
     showToast('Upload error: '+err.message+'. Internet check karo.');
-    setState('offline');
+    startBhagwanLive();
   }
 }
 
@@ -780,10 +1611,17 @@ function toggleMic(){
 }
 /* ── CLEANUP ── */
 function cleanupLive(){
+  currentStep = 0;
+  _photoTaken = false;
+  // Stop step1 viewfinder camera if still open
+  if(_step1CameraStream){ _step1CameraStream.getTracks().forEach(t=>t.stop()); _step1CameraStream=null; }
   stopNSFWMonitoring();
   stopCountdown();
+  stopAnnouncement();
+  _stopMasterLoop(); // also cancels _mirrorRAF
   stopWatermarkLoop();
   window._compositedStream = null;
+  _masterStream = null;
   if(localStream){localStream.getTracks().forEach(t=>t.stop());localStream=null;}
   activeConnections.forEach(c=>{try{c.pc.close()}catch(e){}});
   activeConnections=[];
@@ -796,12 +1634,13 @@ function cleanupLive(){
 }
 
 function resetForNext(){
-  setState('offline');
   document.getElementById('live-timer').textContent='00:00:00';
   document.getElementById('cam-btn').textContent='📷 Cam Off';
   document.getElementById('mic-btn').textContent='🎤 Mic Off';
   camOn=true; micOn=true;
   loadSubscribers(currentMandir);
+  // Restart from Step 1
+  startBhagwanLive();
 }
 
 function doLogout(){
@@ -819,6 +1658,111 @@ function doLogout(){
 function showToast(msg){
   const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),3200);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   HANUMAN CHALISA — AUTO-ADVANCE VERSE DISPLAY
+   Verses cycle automatically, timed to countdown duration.
+   Each verse shows for: totalSeconds / totalVerses seconds.
+══════════════════════════════════════════════════════════════ */
+const CHALISA_VERSES = [
+  { section:'॥ दोहा ॥',   num:'',    text:'श्रीगुरु चरन सरोज रज, निज मनु मुकुरु सुधारि।\nबरनऊँ रघुबर बिमल जसु, जो दायकु फल चारि॥' },
+  { section:'',            num:'',    text:'बुद्धिहीन तनु जानिके, सुमिरौं पवन-कुमार।\nबल बुद्धि विद्या देहु मोहिं, हरहु कलेस बिकार॥' },
+  { section:'॥ चौपाई ॥', num:'१',   text:'जय हनुमान ज्ञान गुन सागर।\nजय कपीस तिहुँ लोक उजागर॥' },
+  { section:'',            num:'२',   text:'राम दूत अतुलित बल धामा।\nअंजनि-पुत्र पवनसुत नामा॥' },
+  { section:'',            num:'३',   text:'महाबीर विक्रम बजरंगी।\nकुमति निवार सुमति के संगी॥' },
+  { section:'',            num:'४',   text:'कंचन बरन बिराज सुबेसा।\nकानन कुण्डल कुँचित केसा॥' },
+  { section:'',            num:'५',   text:'हाथ बज्र औ ध्वजा बिराजै।\nकाँधे मूँज जनेऊ साजै॥' },
+  { section:'',            num:'६',   text:'शंकर सुवन केसरीनंदन।\nतेज प्रताप महा जग बंदन॥' },
+  { section:'',            num:'७',   text:'विद्यावान गुनी अति चातुर।\nराम काज करिबे को आतुर॥' },
+  { section:'',            num:'८',   text:'प्रभु चरित्र सुनिबे को रसिया।\nराम लखन सीता मन बसिया॥' },
+  { section:'',            num:'९',   text:'सूक्ष्म रूप धरि सियहिं दिखावा।\nबिकट रूप धरि लंक जरावा॥' },
+  { section:'',            num:'१०',  text:'भीम रूप धरि असुर संहारे।\nरामचंद्र के काज सँवारे॥' },
+  { section:'',            num:'११',  text:'लाय सजीवन लखन जियाये।\nश्रीरघुबीर हरषि उर लाये॥' },
+  { section:'',            num:'१२',  text:'रघुपति कीन्ही बहुत बड़ाई।\nतुम मम प्रिय भरतहि सम भाई॥' },
+  { section:'',            num:'१३',  text:'सहस बदन तुम्हरो जस गावैं।\nअस कहि श्रीपति कण्ठ लगावैं॥' },
+  { section:'',            num:'१४',  text:'सनकादिक ब्रह्मादि मुनीसा।\nनारद सारद सहित अहीसा॥' },
+  { section:'',            num:'१५',  text:'जम कुबेर दिगपाल जहाँ ते।\nकवि कोबिद कहि सके कहाँ ते॥' },
+  { section:'',            num:'१६',  text:'तुम उपकार सुग्रीवहिं कीन्हा।\nराम मिलाय राज पद दीन्हा॥' },
+  { section:'',            num:'१७',  text:'तुम्हरो मंत्र बिभीषन माना।\nलंकेश्वर भए सब जग जाना॥' },
+  { section:'',            num:'१८',  text:'जुग सहस्र जोजन पर भानू।\nलील्यो ताहि मधुर फल जानू॥' },
+  { section:'',            num:'१९',  text:'प्रभु मुद्रिका मेलि मुख माहीं।\nजलधि लाँघि गये अचरज नाहीं॥' },
+  { section:'',            num:'२०',  text:'दुर्गम काज जगत के जेते।\nसुगम अनुग्रह तुम्हरे तेते॥' },
+  { section:'',            num:'२१',  text:'राम दुआरे तुम रखवारे।\nहोत न आज्ञा बिनु पैसारे॥' },
+  { section:'',            num:'२२',  text:'सब सुख लहै तुम्हारी सरना।\nतुम रक्षक काहू को डर ना॥' },
+  { section:'',            num:'२३',  text:'आपन तेज सम्हारो आपै।\nतीनों लोक हाँक तें काँपै॥' },
+  { section:'',            num:'२४',  text:'भूत पिशाच निकट नहिं आवै।\nमहाबीर जब नाम सुनावै॥' },
+  { section:'',            num:'२५',  text:'नासै रोग हरै सब पीरा।\nजपत निरंतर हनुमत बीरा॥' },
+  { section:'',            num:'२६',  text:'संकट से हनुमान छुड़ावै।\nमन क्रम बचन ध्यान जो लावै॥' },
+  { section:'',            num:'२७',  text:'सब पर राम तपस्वी राजा।\nतिन के काज सकल तुम साजा॥' },
+  { section:'',            num:'२८',  text:'और मनोरथ जो कोई लावै।\nसोई अमित जीवन फल पावै॥' },
+  { section:'',            num:'२९',  text:'चारों जुग परताप तुम्हारा।\nहै परसिद्ध जगत उजियारा॥' },
+  { section:'',            num:'३०',  text:'साधु-संत के तुम रखवारे।\nअसुर निकंदन राम दुलारे॥' },
+  { section:'',            num:'३१',  text:'अष्टसिद्धि नौ निधि के दाता।\nअस बर दीन जानकी माता॥' },
+  { section:'',            num:'३२',  text:'राम रसायन तुम्हरे पासा।\nसदा रहो रघुपति के दासा॥' },
+  { section:'',            num:'३३',  text:'तुम्हरे भजन राम को पावै।\nजनम-जनम के दुख बिसरावै॥' },
+  { section:'',            num:'३४',  text:'अन्तकाल रघुबर पुर जाई।\nजहाँ जन्म हरि-भक्त कहाई॥' },
+  { section:'',            num:'३५',  text:'और देवता चित्त न धरई।\nहनुमत सेइ सर्ब सुख करई॥' },
+  { section:'',            num:'३६',  text:'संकट कटै मिटै सब पीरा।\nजो सुमिरै हनुमत बलबीरा॥' },
+  { section:'',            num:'३७',  text:'जय जय जय हनुमान गोसाईं।\nकृपा करहु गुरुदेव की नाईं॥' },
+  { section:'',            num:'३८',  text:'जो सत बार पाठ कर कोई।\nछूटहि बंदि महा सुख होई॥' },
+  { section:'',            num:'३९',  text:'जो यह पढ़ै हनुमान चालीसा।\nहोय सिद्धि साखी गौरीसा॥' },
+  { section:'',            num:'४०',  text:'तुलसीदास सदा हरि चेरा।\nकीजै नाथ हृदय मँह डेरा॥' },
+  { section:'॥ दोहा ॥',   num:'',    text:'पवनतनय संकट हरन, मंगल मूरति रूप।\nराम लखन सीता सहित, हृदय बसहु सुर भूप॥' },
+  { section:'',            num:'',    text:'॥ श्री राम जय राम जय जय राम ॥' },
+];
+
+let _chalisaIndex    = 0;
+let _chalisaInterval = null;
+
+/* Start auto-advancing Chalisa display */
+function startChalisaDisplay(totalSeconds){
+  _chalisaIndex = 0;
+  const total   = CHALISA_VERSES.length;
+  // Time per verse = totalSeconds / total (min 2s, max 30s)
+  const perVerse = Math.max(2, Math.min(30, Math.floor(totalSeconds / total))) * 1000;
+
+  _showChalisaVerse(0);
+
+  _chalisaInterval = setInterval(() => {
+    _chalisaIndex = (_chalisaIndex + 1) % total;
+    _showChalisaVerse(_chalisaIndex);
+  }, perVerse);
+}
+
+function stopChalisaDisplay(){
+  clearInterval(_chalisaInterval);
+  _chalisaInterval = null;
+}
+
+function _showChalisaVerse(idx){
+  const v   = CHALISA_VERSES[idx];
+  const box = document.getElementById('chalisa-verse-box');
+  const sec = document.getElementById('chalisa-section-lbl');
+  const num = document.getElementById('chalisa-verse-num');
+  const dots= document.getElementById('chalisa-dots');
+
+  if(!box) return;
+
+  // Fade out
+  box.classList.add('fade-out');
+  setTimeout(() => {
+    // Update content
+    if(sec) sec.textContent = v.section || '';
+    if(num) num.textContent = v.num ? ('चौपाई ' + v.num) : '';
+    // Replace \n with <br>
+    box.innerHTML = v.text.replace(/\n/g, '<br/>');
+    // Dots indicator
+    if(dots){
+      const total = CHALISA_VERSES.length;
+      const filled = Math.round((idx / total) * 10);
+      dots.textContent = '●'.repeat(filled) + '○'.repeat(10 - filled);
+    }
+    // Fade in
+    box.classList.remove('fade-out');
+    box.classList.add('fade-in');
+    setTimeout(() => box.classList.remove('fade-in'), 600);
+  }, 500);
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -1031,32 +1975,34 @@ function _updateCountdownUI(remaining){
   }
 }
 
-/** Begin countdown with given duration (default 108s) */
+/** Begin countdown with given duration — triggers full 4-step flow */
 function startCountdown(seconds){
   if(_countdownRunning){
     console.warn('Countdown already running — ignoring duplicate call');
     return;
   }
-  _countdownTotal     = seconds || 108;
+  _countdownTotal     = seconds || _chosenSeconds || 108;
   _countdownRunning   = true;
   _countdownRemaining = _countdownTotal;
 
-  // Update subtitle text to show chosen duration
-  const subEl = document.querySelector('.countdown-sub');
-  if(subEl) subEl.textContent = 'Live hone se pehle ' + _countdownTotal + ' seconds ka sankalp';
-
-  setState('countdown');
+  showToast('\u{1F549} ' + _countdownTotal + ' seconds ki taiyari... OM');
   _updateCountdownUI(_countdownRemaining);
-  showToast('🕉 ' + _countdownTotal + ' seconds ki taiyari... OM');
+  _runCountdownTick();
+}
 
+function _runCountdownTick(){
   _countdownInterval = setInterval(()=>{
     _countdownRemaining--;
+    // Update chalisa progress bar (shrinks from 100% to 0%)
+    const pct = (_countdownRemaining / _countdownTotal) * 100;
+    const bar = document.getElementById('chalisa-progress-bar');
+    if(bar) bar.style.width = pct + '%';
+    // Still update ring if visible (for canvas overlay)
     _updateCountdownUI(_countdownRemaining);
     playTickSound();
-
     if(_countdownRemaining <= 0){
       stopCountdown();
-      _doStartLive(); // ← launch actual live stream
+      _doStartLive();
     }
   }, 1000);
 }
@@ -1066,13 +2012,16 @@ function stopCountdown(){
   if(_countdownInterval){ clearInterval(_countdownInterval); _countdownInterval = null; }
   _countdownRunning   = false;
   _countdownRemaining = 0;
+  stopChalisaDisplay();
 }
 
 /** Cancel button inside countdown screen */
 function cancelCountdown(){
   stopCountdown();
-  setState('offline');
-  showToast('Countdown roka gaya.');
+  stopAnnouncement();
+  cleanupLive();
+  showToast('Countdown roka gaya. Step 1 se shuru karein.');
+  startBhagwanLive();
 }
 
 
