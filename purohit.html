@@ -436,7 +436,25 @@ button{cursor:pointer;font-family:inherit;border:none}
           <div style="font-size:11px;color:rgba(255,246,229,.2);margin-top:4px">Sirf number likhein — OTP screen pe aayega</div>
         </div>
 
-        <button class="btn btn-primary" id="rs1-btn" onclick="rStep1()" style="width:100%;justify-content:center">
+        <button class="btn btn-primary" id="rs1-btn" style="width:100%;justify-content:center" onclick="
+          var nm = document.getElementById('r-name').value.trim();
+          var ph = document.getElementById('r-phone').value.replace(/\D/g,'');
+          var cc = document.getElementById('r-country-code').value || '+91';
+          if(!nm){ alert('Apna naam bharein'); return; }
+          if(ph.length < 8){ alert('Valid mobile number likhein'); return; }
+          var otp = String(Math.floor(100000 + Math.random()*900000));
+          window._rOTP = otp;
+          window._rName = nm;
+          window._rPhone = cc + ph;
+          document.getElementById('demo-otp-display').textContent = otp;
+          document.getElementById('demo-otp-box').style.display = 'block';
+          document.getElementById('rs1').style.display = 'none';
+          document.getElementById('rs2').style.display = 'block';
+          document.getElementById('r-otp').value = otp;
+          document.getElementById('sd1').className='reg-dot done';
+          document.getElementById('sd2').className='reg-dot active';
+          document.getElementById('sd-lbl').textContent='STEP 2 OF 2 — OTP VERIFY';
+        ">
           📤 OTP Bhejo → Mobile Verify
         </button>
         <!-- invisible recaptcha for real OTP mode -->
@@ -464,7 +482,12 @@ button{cursor:pointer;font-family:inherit;border:none}
           <input class="input code-input" id="r-otp" type="text" maxlength="6" placeholder="• • • • • •"
             onkeydown="if(event.key==='Enter')rVerifyOTP()"/>
         </div>
-        <button class="btn btn-primary" id="rs2-ver-btn" onclick="rVerifyOTP()" style="width:100%;justify-content:center">
+        <button class="btn btn-primary" id="rs2-ver-btn" style="width:100%;justify-content:center" onclick="
+          var entered = document.getElementById('r-otp').value.trim();
+          if(entered.length < 6){ showErr('6 digit OTP bharein'); return; }
+          if(entered !== window._rOTP){ showErr('Galat OTP — upar dikhaya OTP bharein'); return; }
+          rVerifyOTP();
+        ">
           ✅ Verify & Dashboard Dekho
         </button>
         <button onclick="rResetPhone()" style="width:100%;background:none;border:none;color:rgba(255,246,229,.22);font-family:'Cinzel',serif;font-size:10px;cursor:pointer;padding:8px">
@@ -1058,8 +1081,9 @@ async function rStep1(){
 
 async function rVerifyOTP(){
   const otp = (document.getElementById('r-otp').value||'').trim();
-  if(otp.length < 6){ showErr('6 digit OTP bharein.'); return; }
-  if(otp !== _demoOTP){ showErr('Galat OTP. Screen pe dikhaye OTP ko bharein.'); return; }
+  if(otp !== (window._rOTP || _demoOTP)){ showErr('Galat OTP.'); return; }
+  _rName  = window._rName  || _rName;
+  _rPhone = window._rPhone || _rPhone;
 
   const btn = document.getElementById('rs2-ver-btn');
   btn.disabled = true;
