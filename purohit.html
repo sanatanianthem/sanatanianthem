@@ -304,7 +304,7 @@ button{cursor:pointer;font-family:inherit;border:none}
       <div class="card-title">&#x1F511; Apna Code Enter Karein</div>
       <div class="field">
         <label class="label">Secret Code</label>
-        <input class="input code-input" id="code-input" type="text" placeholder="KASHI7" maxlength="10"
+        <input class="input code-input" id="code-input" type="text" placeholder="••••••••" maxlength="10"
           oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')doLogin()"/>
         <div class="err" id="login-err">Invalid code. Admin se contact karein.</div>
       </div>
@@ -574,30 +574,86 @@ function saveRecordingToFirebase(rec) {
   db_rt.ref('pujaRecordings/' + rec.id).set(rec);
 }
 
-function getDefaultMandirs(){return[
-  {id:'m1',name:'Kashi Vishwanath',location:'Varanasi, UP',emoji:'🛕',code:'KASHI7',active:true},
-  {id:'m2',name:'Tirupati Balaji',location:'Tirupati, AP',emoji:'🙏',code:'TIRUPA7',active:true},
-  {id:'m3',name:'Vaishno Devi',location:'Katra, J&K',emoji:'⛰️',code:'VAISH7',active:true},
-  {id:'m4',name:'Jagannath Puri',location:'Puri, Odisha',emoji:'🌊',code:'JAGANN7',active:true},
-  {id:'m5',name:'Somnath Mandir',location:'Prabhas Patan',emoji:'🌙',code:'SOMNAT7',active:true},
-  {id:'m6',name:'Shirdi Sai Baba',location:'Shirdi, MH',emoji:'🌹',code:'SHIRDI7',active:true},
-]}
+/* ══════════════════════════════════════════
+   SECURE LOGIN — codes verified from Firebase
+   (codes are NOT stored in this file anymore)
+══════════════════════════════════════════ */
 
-/* ── LOGIN ── */
+/* Rate limiting — max 5 attempts, then 2 min lockout */
+let _loginAttempts = 0;
+let _loginLockedUntil = 0;
+
 function doLogin(){
-  const code=(document.getElementById('code-input').value||'').trim().toUpperCase();
-  if(!code){showToast('Code enter karein');return}
-  const btn=document.getElementById('login-btn');
-  btn.innerHTML='<div class="spinner"></div><span>Checking...</span>';btn.disabled=true;
-  setTimeout(()=>{
-    const db=getDB();
-    const mandirs=(db.mandirs&&db.mandirs.length>0)?db.mandirs:getDefaultMandirs();
-    const mandir=mandirs.find(m=>m.code&&m.code.toUpperCase()===code);
-    btn.innerHTML='<span>Login</span>';btn.disabled=false;
-    if(!mandir){document.getElementById('login-err').style.display='block';document.getElementById('code-input').classList.add('error');return}
-    document.getElementById('login-err').style.display='none';document.getElementById('code-input').classList.remove('error');
-    currentMandir=mandir;showPortal(mandir);
-  },600);
+  const code = (document.getElementById('code-input').value || '').trim().toUpperCase();
+  if(!code){ showToast('Code enter karein'); return; }
+
+  /* Rate limit check */
+  const now = Date.now();
+  if(_loginLockedUntil > now){
+    const secsLeft = Math.ceil((_loginLockedUntil - now) / 1000);
+    document.getElementById('login-err').textContent = '⚠️ Bahut zyada galat attempts. ' + secsLeft + ' seconds baad try karein.';
+    document.getElementById('login-err').style.display = 'block';
+    return;
+  }
+
+  const btn = document.getElementById('login-btn');
+  btn.innerHTML = '<div class="spinner"></div><span>Checking...</span>';
+  btn.disabled = true;
+
+  /* Verify code against Firebase — codes never exposed in frontend */
+  db_rt.ref('mandirs').once('value')
+    .then(snapshot => {
+      const data = snapshot.val();
+
+      /* Fallback: also check cms/mandirs for backward compatibility */
+      let mandirs = [];
+      if(data){
+        mandirs = Object.values(data).filter(m => m && m.active !== false);
+      } else {
+        /* Try cms path */
+        return db_rt.ref('cms/mandirs').once('value').then(snap2 => {
+          const d2 = snap2.val();
+          if(d2 && Array.isArray(d2)) mandirs = d2.filter(m => m && m.active !== false);
+          return checkCode(code, mandirs, btn);
+        });
+      }
+      return checkCode(code, mandirs, btn);
+    })
+    .catch(err => {
+      btn.innerHTML = '<span>Login</span>';
+      btn.disabled = false;
+      document.getElementById('login-err').textContent = '⚠️ Connection error. Internet check karein.';
+      document.getElementById('login-err').style.display = 'block';
+    });
+}
+
+function checkCode(code, mandirs, btn){
+  btn.innerHTML = '<span>Login</span>';
+  btn.disabled = false;
+
+  const mandir = mandirs.find(m => m.code && m.code.toUpperCase() === code);
+
+  if(!mandir){
+    _loginAttempts++;
+    if(_loginAttempts >= 5){
+      _loginLockedUntil = Date.now() + (2 * 60 * 1000); /* 2 min lockout */
+      _loginAttempts = 0;
+      document.getElementById('login-err').textContent = '⚠️ 5 baar galat code. 2 minute ke liye locked.';
+    } else {
+      const remaining = 5 - _loginAttempts;
+      document.getElementById('login-err').textContent = '❌ Galat code. ' + remaining + ' attempts bache hain.';
+    }
+    document.getElementById('login-err').style.display = 'block';
+    document.getElementById('code-input').classList.add('error');
+    return;
+  }
+
+  /* ✅ Valid code */
+  _loginAttempts = 0;
+  document.getElementById('login-err').style.display = 'none';
+  document.getElementById('code-input').classList.remove('error');
+  currentMandir = mandir;
+  showPortal(mandir);
 }
 
 function showPortal(m){
