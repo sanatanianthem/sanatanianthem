@@ -423,7 +423,7 @@ button{cursor:pointer;font-family:inherit;border:none}
         <div class="field">
           <label class="label">Mobile Number ya Email</label>
           <input class="input" id="si-id" type="text"
-            placeholder="+91 number ya Email address"
+            placeholder="Registered mobile number (e.g. 9876543210)"
             oninput="siDetect(this.value)"
             onkeydown="if(event.key==='Enter')siNext()"/>
           <div style="font-size:11px;margin-top:5px;min-height:16px;font-family:'Cinzel',serif;letter-spacing:.3px;transition:color .2s" id="si-hint"></div>
@@ -823,7 +823,7 @@ async function checkAndEnter(user){
       showDashboard(user,profile);
       return;
     }
-    // Always show dashboard after login (approved or pending)
+    // Always show dashboard after login
     currentMandir=d.mandirObj||{id:user.uid,name:d.mandir||d.mandirName||d.name,location:d.city||'',emoji:'🛕'};
     saveSess(user,currentMandir);
     showDashboard(user,d);
@@ -934,18 +934,14 @@ window.addEventListener('load',()=>{
   ccRenderList();
   const s=getSess(); if(!s)return;
   currentMandir=s.mandir;
-  // Session ache — Firebase theke profile niye dashboard dikhao
+  // Session ache — DB se profile lo aur dashboard dikhao
   db_rt.ref('purohits/'+s.uid).once('value').then(snap=>{
     const d=snap.val();
     if(!d){ clearSess(); return; }
-    if(getPatH() && d.status==='approved'){
-      showPatUnlock(s);
-    } else {
-      showDashboard({uid:s.uid,email:s.email||'',phoneNumber:d.phone||'',displayName:d.name||''},d);
-    }
+    showDashboard({uid:s.uid,email:s.email||'',phoneNumber:d.phone||'',displayName:d.name||'Purohit ji'},d);
   }).catch(()=>{
-    // Offline fallback — show pattern or portal
-    if(getPatH()) showPatUnlock(s); else showPortal(s.mandir);
+    // Offline fallback
+    showPortal(s.mandir);
   });
 });
 let _otpMode  = 'demo';
@@ -1011,9 +1007,25 @@ async function regDirect(){
   var err   = document.getElementById('r-err1');
   err.style.display='none';
   if(!name) { err.textContent='Apna naam bharein'; err.style.display='block'; return; }
-  if(phone.length < 8){ err.textContent='Valid mobile number likhein'; err.style.display='block'; return; }
+  if(phone.length < 8){ err.textContent='Valid mobile number likhein (kam se kam 8 digits)'; err.style.display='block'; return; }
 
   var fullPhone = cc + phone;
+
+  // Check duplicate registration
+  var regBtn = document.querySelector('#vw-reg .btn-primary');
+  if(regBtn){ regBtn.disabled=true; regBtn.innerHTML='<div class="spinner"></div><span>Checking...</span>'; }
+
+  try{
+    // Check if already registered
+    const existing = await db_rt.ref('purohits').orderByChild('phone').equalTo(fullPhone).once('value');
+    if(existing.val()){
+      err.textContent='Yeh number already registered hai. Login tab use karein.';
+      err.style.display='block';
+      if(regBtn){ regBtn.disabled=false; regBtn.innerHTML='🙏 Register & Dashboard Dekho'; }
+      return;
+    }
+  } catch(e){ /* network issue — continue */ }
+
   var uid = 'p_' + phone + '_' + Date.now().toString(36);
   var profile = {
     uid, name, phone:fullPhone, email:'',
@@ -1022,17 +1034,22 @@ async function regDirect(){
     mandirObj:{ id:'m_'+uid.slice(2,8), name:'', location:'', emoji:'🛕', code:'' }
   };
 
+  if(regBtn){ regBtn.innerHTML='<div class="spinner"></div><span>Saving...</span>'; }
+
   try {
     await db_rt.ref('purohits/'+uid).set(profile);
     await db_rt.ref('adminNotifications').push({
       type:'new_purohit', name, phone:fullPhone,
       uid, at:new Date().toISOString(), read:false
     });
-  } catch(e){ console.warn('Firebase save failed:', e.message); }
-
-  var fakeUser = { uid, email:'', phoneNumber:fullPhone, displayName:name };
-  saveSess(fakeUser, profile.mandirObj);
-  showDashboard(fakeUser, profile);
+    var fakeUser = { uid, email:'', phoneNumber:fullPhone, displayName:name };
+    saveSess(fakeUser, profile.mandirObj);
+    showDashboard(fakeUser, profile);
+  } catch(e){
+    err.textContent='Save failed: '+e.message+'. Internet check karein aur retry karein.';
+    err.style.display='block';
+    if(regBtn){ regBtn.disabled=false; regBtn.innerHTML='🙏 Register & Dashboard Dekho'; }
+  }
 }
 
 /* ════ REGISTRATION OTP — CLEAN VERSION ════ */
@@ -1206,14 +1223,10 @@ function goToLive(){
   startBhagwanLive();
 }
 
-/* ════ LOGIN FLOW — Smart single input ════ */
-let _siConfirm=null, _siRecap=null, _siType='';
+/* ════ LOGIN FLOW — Phone number se DB lookup (Demo Mode) ════ */
+let _siType='';
 
-function initSiRecap(){
-  if(_siRecap||document.getElementById('si-recaptcha').children.length)return;
-  _siRecap=new firebase.auth.RecaptchaVerifier('si-recaptcha',{size:'normal',callback:()=>{},['expired-callback']:()=>{}});
-  _siRecap.render();
-}
+function initSiRecap(){} // no-op — reCAPTCHA not needed in demo mode
 
 function siDetect(val){
   hideErr();
@@ -1221,23 +1234,23 @@ function siDetect(val){
   const pwWrap=document.getElementById('si-pw-wrap');
   const btn=document.getElementById('si-btn');
   const otpWrap=document.getElementById('si-otp-wrap');
-  if(otpWrap.style.display!=='none'){otpWrap.style.display='none';_siConfirm=null;}
+  if(otpWrap.style.display!=='none') otpWrap.style.display='none';
   if(!val){hint.textContent='';pwWrap.style.display='none';btn.style.display='none';return;}
   const isPhone=/^[+\d]/.test(val)&&val.replace(/\D/g,'').length>=7;
   const isEmail=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
   if(isPhone){
     _siType='phone';
-    hint.textContent='📱 Mobile OTP se login hoga'; hint.style.color='rgba(255,246,229,.4)';
+    hint.textContent='📱 Registered number se login hoga'; hint.style.color='rgba(255,246,229,.4)';
     pwWrap.style.display='none'; btn.style.display='flex';
-    document.getElementById('si-btn-lbl').textContent='OTP Bhejo →';
+    document.getElementById('si-btn-lbl').textContent='Login →';
   } else if(isEmail){
     _siType='email';
-    hint.textContent='📧 Email + Password se login hoga'; hint.style.color='rgba(255,246,229,.4)';
-    pwWrap.style.display='block'; btn.style.display='flex';
+    hint.textContent='📧 Email se login hoga'; hint.style.color='rgba(255,246,229,.4)';
+    pwWrap.style.display='none'; btn.style.display='flex';
     document.getElementById('si-btn-lbl').textContent='Login →';
   } else {
     _siType='';
-    hint.textContent='Mobile (+91...) ya Email likhein'; hint.style.color='rgba(255,246,229,.2)';
+    hint.textContent='Registered mobile number likhein'; hint.style.color='rgba(255,246,229,.2)';
     pwWrap.style.display='none'; btn.style.display='none';
   }
 }
@@ -1245,41 +1258,55 @@ function siDetect(val){
 async function siNext(){
   const val=(document.getElementById('si-id').value||'').trim();
   hideErr();
-  if(_siType==='email'){
-    const pw=document.getElementById('si-pw').value||'';
-    if(!pw){showErr('Password bharein.');return;}
-    const btn=document.getElementById('si-btn');
-    btn.disabled=true; btn.innerHTML='<div class="spinner"></div><span>Logging in...</span>';
-    try{ await auth.signInWithEmailAndPassword(val,pw); }
-    catch(e){ showErr(ERRS[e.code]||e.message); btn.disabled=false; btn.innerHTML='<span id="si-btn-lbl">Login →</span>'; }
-  } else if(_siType==='phone'){
-    let phone=val; if(!phone.startsWith('+')) phone='+91'+phone.replace(/\D/g,'');
-    const btn=document.getElementById('si-btn');
-    btn.disabled=true; btn.innerHTML='<div class="spinner"></div><span>OTP bhej raha hoon...</span>';
-    try{
-      if(!_siRecap) initSiRecap();
-      _siConfirm=await auth.signInWithPhoneNumber(phone,_siRecap);
-      document.getElementById('si-otp-wrap').style.display='block';
-      document.getElementById('si-otp-msg').textContent='✅ OTP bheja gaya: '+phone;
-      btn.style.display='none';
-    }catch(e){ showErr(ERRS[e.code]||e.message); btn.disabled=false; btn.innerHTML='<span id="si-btn-lbl">OTP Bhejo →</span>'; }
-  } else { showErr('Mobile number ya Email sahi se likhein.'); }
+  if(!val){ showErr('Mobile number likhein.'); return; }
+
+  const btn=document.getElementById('si-btn');
+  btn.disabled=true; btn.innerHTML='<div class="spinner"></div><span>Dhundh raha hoon...</span>';
+
+  try{
+    // Normalize phone — add +91 if no country code
+    let phone = val.replace(/\D/g,'');
+    // Try matching with all common country codes
+    const snap = await db_rt.ref('purohits').once('value');
+    const all = snap.val();
+    let found = null;
+    let foundUid = null;
+    if(all){
+      for(const [uid, d] of Object.entries(all)){
+        if(!d || !d.phone) continue;
+        const stored = d.phone.replace(/\D/g,'');
+        const input  = phone;
+        // match last 10 digits or full number
+        if(stored === input || stored.endsWith(input) || input.endsWith(stored) ||
+           stored === '+91'+input || stored === input.slice(-10)){
+          found = d;
+          foundUid = uid;
+          break;
+        }
+      }
+    }
+
+    if(!found){
+      showErr('Yeh number registered nahi hai. Pehle Register karein.');
+      btn.disabled=false; btn.innerHTML='<span id="si-btn-lbl">Login →</span>';
+      return;
+    }
+
+    // Logged in — restore session
+    const fakeUser = { uid:foundUid, email:found.email||'', phoneNumber:found.phone||'', displayName:found.name||'Purohit ji' };
+    saveSess(fakeUser, found.mandirObj||{id:foundUid,name:found.mandir||'',location:found.city||'',emoji:'🛕'});
+    showDashboard(fakeUser, found);
+
+  } catch(e){
+    showErr('Login error: '+e.message);
+    btn.disabled=false; btn.innerHTML='<span id="si-btn-lbl">Login →</span>';
+  }
 }
 
-async function siVerifyOTP(){
-  const otp=(document.getElementById('si-otp').value||'').trim();
-  if(otp.length<6){showErr('6 digit OTP bharein.');return;}
-  const btn=document.getElementById('si-ver-btn');
-  btn.disabled=true; btn.innerHTML='<div class="spinner"></div><span>Verifying...</span>';
-  try{ await _siConfirm.confirm(otp); }
-  catch(e){ showErr('Galat OTP.'); btn.disabled=false; btn.innerHTML='✅ Verify & Login'; }
-}
-
+async function siVerifyOTP(){ /* not used in demo mode */ }
 function siResetOTP(){
   document.getElementById('si-otp-wrap').style.display='none';
   document.getElementById('si-btn').style.display='flex';
-  document.getElementById('si-otp').value='';
-  _siConfirm=null;
 }
 
 async function doGoogle(){
