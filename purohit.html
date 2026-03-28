@@ -1006,11 +1006,10 @@ let _demoOTP  = '';
 let _rConfirm = null;
 let _rRecap   = null;
 
-db_rt.ref('settings/otpMode').on('value', snap => {
-  _otpMode = snap.val() || 'demo';
-});
+/* otpMode is hardcoded as demo — admin can change via Firebase later */
 
 async function rStep1(){
+  try {
   const name    = (document.getElementById('r-name').value||'').trim();
   const phone   = (document.getElementById('r-phone').value||'').trim();
   const cc = document.getElementById('r-country-code').value || '+91';
@@ -1018,7 +1017,6 @@ async function rStep1(){
   if(!name) { showErr('Apna naam bharein.'); return; }
   if(!phone){ showErr('Mobile number bharein.'); return; }
 
-  /* Extract only digits from input */
   const digits = phone.replace(/\D/g,'');
   if(digits.length < 6 || digits.length > 15){
     showErr('Valid mobile number likhein.');
@@ -1035,7 +1033,6 @@ async function rStep1(){
   btn.disabled = true;
   btn.innerHTML = '<div class="spinner"></div><span>OTP generate ho raha hai...</span>';
 
-  /* Generate 6-digit demo OTP */
   _demoOTP = String(Math.floor(100000 + Math.random() * 900000));
 
   setTimeout(()=>{
@@ -1046,12 +1043,17 @@ async function rStep1(){
       rGoStep(2);
       document.getElementById('r-otp').value = _demoOTP;
     } catch(err) {
-      console.error('OTP display error:', err);
+      console.error('OTP show error:', err);
       showErr('Error: ' + err.message);
     }
     btn.disabled = false;
     btn.innerHTML = '📤 OTP Bhejo → Mobile Verify';
   }, 800);
+
+  } catch(e) {
+    console.error('rStep1 error:', e);
+    showErr('Error: ' + e.message);
+  }
 }
 
 async function rVerifyOTP(){
