@@ -520,18 +520,18 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
     <div class="topbar-links">
       <a href="puja-subscription.html">Monthly Puja (Rs.200)</a>
       <a href="admin.html" target="_blank">Admin Panel</a>
-      <a href="#" onclick="showToast('Login coming soon!')">Sign In</a>
+      <a href="purohit.html" onclick="">Sign In</a>
     </div>
   </div>
   <nav class="navbar">
-    <a href="#" class="logo">
+    <a href="index.html" class="logo">
       <div class="logo-ring">🕉</div>
       <div class="logo-words">
         <span class="logo-name">SanataniAnthem</span>
         <span class="logo-sub">हर घर मंदिर</span>
       </div>
     </a>
-    <div class="nav-links" id="nav-links">
+    <div class="nav-links" id="navLinks">
       <!-- Populated by JS from "DB" -->
     </div>
     <div class="nav-actions">
@@ -607,7 +607,7 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
     </div>
     <div class="darshan-scroll" id="darshan-container"></div>
     <div class="text-center mt-lg">
-      <a href="#" class="btn btn-gold" onclick="showToast('View all temples')">View All Temples →</a>
+      <a href="index.html#darshan" class="btn btn-gold">View All Temples →</a>
     </div>
   </div>
 </section>
@@ -645,7 +645,7 @@ button{cursor:pointer;font-family:inherit;border:none;background:none}
         <h2 class="section-title">Vedic Astrology &amp; Guidance</h2>
         <p class="section-sub" style="text-align:left">Consult our learned Jyotishis for personalized guidance based on ancient Vedic wisdom.</p>
         <div class="astro-cards mt-lg" id="astro-container"></div>
-        <div class="mt-lg"><a href="#" class="btn btn-primary" onclick="showToast('Booking astrology consultation!')">🔭 Consult Now</a></div>
+        <div class="mt-lg"><a href="index.html#astrology" class="btn btn-primary">🔭 Consult Now</a></div>
       </div>
       <div class="astro-visual">
         <div class="zodiac-wheel" id="zodiac-wheel">
@@ -953,7 +953,7 @@ function renderAll(){
 function renderNav(db){
   const links = [...db.navLinks].filter(n=>n.visible).sort((a,b)=>a.order-b.order);
   const html = links.map(n=>`<a href="${n.href}" class="nav-link${n.active?' active':''}">${n.label}</a>`).join('');
-  document.getElementById('nav-links').innerHTML = html;
+  document.getElementById('navLinks').innerHTML = html;
   document.getElementById('mobile-nav-links').innerHTML = links.map(n=>`<a href="${n.href}" class="nav-link" onclick="toggleMobileNav()">${n.label}</a>`).join('');
 }
 
@@ -1374,5 +1374,7 @@ function closeLiveViewer() {
   <div class="live-modal-info" id="live-modal-info">Connecting...</div>
 </div>
 
+<!-- firebase-links.js: real-time nav/footer sync from admin panel -->
+<script type="module" src="firebase-links.js"></script>
 </body>
 </html>
