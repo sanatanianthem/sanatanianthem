@@ -901,11 +901,11 @@ window.addEventListener('load',()=>{
 });
 
 /* ════ DEMO OTP MODE — No Firebase Auth needed ════ */
+let _otpMode  = 'demo';
 let _demoOTP  = '';
 let _rConfirm = null;
 let _rRecap   = null;
 
-// Load OTP mode from Firebase
 db_rt.ref('settings/otpMode').on('value', snap => {
   _otpMode = snap.val() || 'demo';
 });
@@ -927,16 +927,15 @@ async function rStep1(){
   btn.disabled = true;
   btn.innerHTML = '<div class="spinner"></div><span>OTP generate ho raha hai...</span>';
 
-  // Generate 6-digit OTP
+  // Generate 6-digit demo OTP
   _demoOTP = String(Math.floor(100000 + Math.random() * 900000));
 
-  // Show step 2 with OTP on screen
-  document.getElementById('demo-otp-display').textContent = _demoOTP;
-  document.getElementById('demo-otp-box').style.display   = 'block';
-  document.getElementById('real-otp-box').style.display   = 'none';
-
-  // Small delay for effect
   setTimeout(()=>{
+    // Show OTP on screen
+    document.getElementById('demo-otp-display').textContent = _demoOTP;
+    document.getElementById('demo-otp-box').style.display   = 'block';
+    document.getElementById('real-otp-box').style.display   = 'none';
+    // Go to step 2
     rGoStep(2);
     // Auto-fill OTP
     document.getElementById('r-otp').value = _demoOTP;
