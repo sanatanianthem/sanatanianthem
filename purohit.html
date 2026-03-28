@@ -343,134 +343,238 @@ button{cursor:pointer;font-family:inherit;border:none}
     <div id="pend-notice" style="display:none;background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.3);border-radius:10px;padding:18px;text-align:center;margin-bottom:16px">
       <div style="font-size:28px;margin-bottom:8px">🕐</div>
       <div style="font-family:'Cinzel',serif;font-size:13px;color:var(--gold);margin-bottom:6px">Registration Ho Gayi!</div>
-      <div style="font-size:12px;color:rgba(255,246,229,.5);line-height:1.7">Admin se approval ka wait karein.<br/>Approve hone ke baad login kar payenge.</div>
+      <div style="font-size:12px;color:rgba(255,246,229,.5);line-height:1.7">Admin approval ke baad aap Temple Donation page access kar payenge.<br/>Abhi apna basic dashboard dekh sakte hain.</div>
     </div>
 
     <!-- Error -->
     <div id="lg-err" style="display:none;margin-bottom:12px;font-size:12px;color:#EF4444;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);padding:10px 14px;border-radius:6px;font-family:'Cinzel',serif;text-align:center"></div>
 
-    <!-- ══ REGISTRATION (default) ══ -->
+    <!-- ══ TAB SWITCHER ══ -->
+    <div style="display:flex;border-radius:10px;overflow:hidden;border:1px solid rgba(212,175,55,.2);margin-bottom:20px">
+      <button id="tab-reg" onclick="showMode('reg')"
+        style="flex:1;padding:12px;border:none;font-family:'Cinzel',serif;font-size:11px;letter-spacing:1.2px;cursor:pointer;transition:all .25s;background:linear-gradient(135deg,var(--saffron),var(--saffron-d));color:#fff">
+        📝 New Registration
+      </button>
+      <button id="tab-login" onclick="showMode('login')"
+        style="flex:1;padding:12px;border:none;border-left:1px solid rgba(212,175,55,.2);font-family:'Cinzel',serif;font-size:11px;letter-spacing:1.2px;cursor:pointer;transition:all .25s;background:transparent;color:rgba(255,246,229,.4)">
+        🔐 Login
+      </button>
+    </div>
+
+    <!-- ══ REGISTRATION VIEW ══ -->
     <div id="vw-reg">
+
       <!-- Step dots -->
       <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:4px">
         <div class="sdot active" id="sd1">1</div>
         <div style="width:28px;height:2px;background:rgba(212,175,55,.15)"></div>
         <div class="sdot" id="sd2">2</div>
-        <div style="width:28px;height:2px;background:rgba(212,175,55,.15)"></div>
-        <div class="sdot" id="sd3">3</div>
       </div>
-      <div style="text-align:center;font-family:'Cinzel',serif;font-size:9px;color:rgba(255,246,229,.2);letter-spacing:1.5px;margin-bottom:14px" id="sd-lbl">STEP 1 OF 3 — EMAIL REGISTER</div>
+      <div style="text-align:center;font-family:'Cinzel',serif;font-size:9px;color:rgba(255,246,229,.2);letter-spacing:1.5px;margin-bottom:14px" id="sd-lbl">STEP 1 OF 2 — BASIC DETAILS</div>
 
-      <!-- Step 1: Email + Password -->
+      <!-- Step 1: Name + Mobile -->
       <div id="rs1" class="card">
-        <div class="card-title">📝 New Registration</div>
+        <div class="card-title">📝 Purohit Registration</div>
+
         <div class="field">
-          <label class="label">Email Address</label>
-          <input class="input" id="r-email" type="email" placeholder="purohit@example.com"/>
+          <label class="label">Purohit ka Naam (Full Name)</label>
+          <input class="input" id="r-name" type="text" placeholder="Pandit Ramesh Sharma"/>
         </div>
+
         <div class="field">
-          <label class="label">Password Banayein</label>
-          <input class="input" id="r-pass" type="password" placeholder="Min 6 characters"/>
+          <label class="label">Mobile Number</label>
+          <input class="input" id="r-phone" type="tel" placeholder="+91 98765 43210"/>
+          <div style="font-size:11px;color:rgba(255,246,229,.2);margin-top:4px">+91 ke saath likhein — OTP aayega</div>
         </div>
-        <div class="field">
-          <label class="label">Password Confirm Karein</label>
-          <input class="input" id="r-pass2" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')rStep1()"/>
-        </div>
-        <button class="btn btn-primary" id="rs1-btn" onclick="rStep1()" style="width:100%;justify-content:center">Next → Mobile Verify</button>
-        <div class="divor"><span></span><em>YA PHIR</em><span></span></div>
-        <button class="gbtn" onclick="doGoogle()"><span style="font-weight:900;font-size:15px;color:#4285F4">G</span> Google se Register / Login</button>
-        <div style="text-align:center;margin-top:14px;font-size:12px;color:rgba(255,246,229,.22)">
-          Already registered? <button onclick="showMode('login')" style="background:none;border:none;color:var(--saffron);font-family:'Cinzel',serif;font-size:11px;cursor:pointer">Login karein →</button>
-        </div>
+
+        <button class="btn btn-primary" id="rs1-btn" onclick="rStep1()" style="width:100%;justify-content:center">
+          📤 OTP Bhejo → Mobile Verify
+        </button>
+        <!-- invisible recaptcha for real OTP mode -->
+        <div id="r-recaptcha-hidden"></div>
       </div>
 
-      <!-- Step 2: Mobile OTP -->
+      <!-- Step 2: OTP + verify → auto dashboard -->
       <div id="rs2" class="card" style="display:none">
-        <div class="card-title">📱 Step 2: Mobile Verify</div>
-        <div style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:6px;padding:10px;margin-bottom:14px;font-size:11px;color:#22C55E;text-align:center">✅ Email registered!</div>
-        <div id="rs2a">
-          <div class="field">
-            <label class="label">Mobile Number</label>
-            <input class="input" id="r-phone" type="tel" placeholder="+91 98765 43210"/>
-            <div style="font-size:11px;color:rgba(255,246,229,.2);margin-top:4px">+91 ke saath likhein</div>
-          </div>
-          <div id="r-recaptcha" style="margin-bottom:12px"></div>
-          <button class="btn btn-primary" id="rs2-otp-btn" onclick="rSendOTP()" style="width:100%;justify-content:center">📤 OTP Bhejo</button>
+        <div class="card-title">📱 Step 2: OTP Verify Karein</div>
+
+        <!-- Demo OTP box — shown in demo mode -->
+        <div id="demo-otp-box" style="display:none;background:rgba(255,107,0,.1);border:2px dashed rgba(255,107,0,.4);border-radius:10px;padding:16px;margin-bottom:16px;text-align:center">
+          <div style="font-family:'Cinzel',serif;font-size:9px;color:rgba(255,107,0,.7);letter-spacing:2px;margin-bottom:8px">🧪 DEMO MODE — TESTING OTP</div>
+          <div style="font-family:'Cinzel',serif;font-size:36px;color:var(--saffron);letter-spacing:10px;font-weight:700" id="demo-otp-display">------</div>
+          <div style="font-size:11px;color:rgba(255,246,229,.3);margin-top:6px">Yeh OTP neeche box mein bharein</div>
         </div>
-        <div id="rs2b" style="display:none">
-          <div style="text-align:center;font-size:12px;color:rgba(255,246,229,.3);margin-bottom:12px" id="rs2-msg"></div>
-          <div class="field">
-            <label class="label">OTP Enter Karein</label>
-            <input class="input code-input" id="r-otp" type="text" maxlength="6" placeholder="• • • • • •" onkeydown="if(event.key==='Enter')rVerifyOTP()"/>
-          </div>
-          <button class="btn btn-primary" id="rs2-ver-btn" onclick="rVerifyOTP()" style="width:100%;justify-content:center">✅ Verify Karein</button>
-          <button onclick="rResetPhone()" style="width:100%;background:none;border:none;color:rgba(255,246,229,.22);font-family:'Cinzel',serif;font-size:10px;cursor:pointer;padding:8px">← Number change karein</button>
+
+        <!-- Real OTP notice — shown in real mode -->
+        <div id="real-otp-box" style="display:none;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:6px;padding:10px;margin-bottom:14px;font-size:11px;color:#22C55E;text-align:center">
+          ✅ OTP bheja gaya — <span id="rs2-phone-lbl"></span>
         </div>
+
+        <div class="field">
+          <label class="label">OTP Enter Karein</label>
+          <input class="input code-input" id="r-otp" type="text" maxlength="6" placeholder="• • • • • •"
+            onkeydown="if(event.key==='Enter')rVerifyOTP()"/>
+        </div>
+        <button class="btn btn-primary" id="rs2-ver-btn" onclick="rVerifyOTP()" style="width:100%;justify-content:center">
+          ✅ Verify & Dashboard Dekho
+        </button>
+        <button onclick="rResetPhone()" style="width:100%;background:none;border:none;color:rgba(255,246,229,.22);font-family:'Cinzel',serif;font-size:10px;cursor:pointer;padding:8px">
+          ← Number change karein
+        </button>
       </div>
 
-      <!-- Step 3: Profile -->
-      <div id="rs3" class="card" style="display:none">
-        <div class="card-title">🛕 Step 3: Purohit Details</div>
-        <div style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:6px;padding:10px;margin-bottom:14px;font-size:11px;color:#22C55E;text-align:center">✅ Email & Mobile verified!</div>
-        <div class="field"><label class="label">Full Name</label><input class="input" id="r-name" type="text" placeholder="Pandit Ramesh Sharma"/></div>
-        <div class="field"><label class="label">Mandir Name</label><input class="input" id="r-mandir" type="text" placeholder="Kashi Vishwanath Mandir"/></div>
-        <div class="field"><label class="label">City / Location</label><input class="input" id="r-city" type="text" placeholder="Varanasi, UP"/></div>
-        <div class="field"><label class="label">Experience (Years)</label><input class="input" id="r-exp" type="number" placeholder="5" min="0"/></div>
-        <div class="field"><label class="label">Specialization</label><input class="input" id="r-spec" type="text" placeholder="Vedic Rituals, Rudrabhishek"/></div>
-        <button class="btn btn-primary" id="rs3-btn" onclick="rSubmit()" style="width:100%;justify-content:center">🙏 Registration Submit Karein</button>
-      </div>
     </div><!-- end vw-reg -->
 
-    <!-- ══ LOGIN (hidden by default) ══ -->
+    <!-- ══ LOGIN VIEW ══ -->
     <div id="vw-login" style="display:none">
       <div class="card">
         <div class="card-title">🔐 Login Karein</div>
 
         <!-- Smart single input -->
         <div class="field">
-          <label class="label" id="si-lbl">Mobile Number ya Email</label>
+          <label class="label">Mobile Number ya Email</label>
           <input class="input" id="si-id" type="text"
             placeholder="+91 number ya Email address"
             oninput="siDetect(this.value)"
             onkeydown="if(event.key==='Enter')siNext()"/>
-          <div style="font-size:11px;margin-top:5px;min-height:16px;font-family:'Cinzel',serif;letter-spacing:.3px" id="si-hint"></div>
+          <div style="font-size:11px;margin-top:5px;min-height:16px;font-family:'Cinzel',serif;letter-spacing:.3px;transition:color .2s" id="si-hint"></div>
         </div>
 
-        <!-- Password — shown only for email -->
+        <!-- Password — shown for email only -->
         <div class="field" id="si-pw-wrap" style="display:none">
           <label class="label">Password</label>
-          <input class="input" id="si-pw" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')siNext()"/>
+          <input class="input" id="si-pw" type="password" placeholder="••••••••"
+            onkeydown="if(event.key==='Enter')siNext()"/>
         </div>
 
-        <!-- reCAPTCHA for mobile OTP -->
+        <!-- reCAPTCHA for mobile -->
         <div id="si-recaptcha" style="margin-bottom:10px"></div>
 
-        <!-- OTP step -->
+        <!-- OTP verify step -->
         <div id="si-otp-wrap" style="display:none">
           <div style="text-align:center;font-size:12px;color:rgba(255,246,229,.3);margin-bottom:10px" id="si-otp-msg"></div>
           <div class="field">
             <label class="label">OTP Enter Karein</label>
-            <input class="input code-input" id="si-otp" type="text" maxlength="6" placeholder="• • • • • •" onkeydown="if(event.key==='Enter')siVerifyOTP()"/>
+            <input class="input code-input" id="si-otp" type="text" maxlength="6" placeholder="• • • • • •"
+              onkeydown="if(event.key==='Enter')siVerifyOTP()"/>
           </div>
-          <button class="btn btn-primary" id="si-ver-btn" onclick="siVerifyOTP()" style="width:100%;justify-content:center;margin-bottom:8px">✅ Verify & Login</button>
-          <button onclick="siResetOTP()" style="width:100%;background:none;border:none;color:rgba(255,246,229,.22);font-family:'Cinzel',serif;font-size:10px;cursor:pointer;padding:6px">← Number change karein</button>
+          <button class="btn btn-primary" id="si-ver-btn" onclick="siVerifyOTP()"
+            style="width:100%;justify-content:center;margin-bottom:8px">✅ Verify & Login</button>
+          <button onclick="siResetOTP()"
+            style="width:100%;background:none;border:none;color:rgba(255,246,229,.22);font-family:'Cinzel',serif;font-size:10px;cursor:pointer;padding:6px">
+            ← Number change karein
+          </button>
         </div>
 
-        <!-- Main action button -->
-        <button class="btn btn-primary" id="si-btn" onclick="siNext()" style="width:100%;justify-content:center;display:none">
+        <!-- Action button -->
+        <button class="btn btn-primary" id="si-btn" onclick="siNext()"
+          style="width:100%;justify-content:center;display:none">
           <span id="si-btn-lbl">Login →</span>
         </button>
 
-        <div class="divor"><span></span><em>YA PHIR</em><span></span></div>
-        <button class="gbtn" onclick="doGoogle()"><span style="font-weight:900;font-size:15px;color:#4285F4">G</span> Google se Login</button>
-
-        <div style="text-align:center;margin-top:14px;font-size:12px;color:rgba(255,246,229,.22)">
-          Naya purohit hain? <button onclick="showMode('reg')" style="background:none;border:none;color:var(--saffron);font-family:'Cinzel',serif;font-size:11px;cursor:pointer">Register karein →</button>
-        </div>
       </div>
     </div><!-- end vw-login -->
 
   </div><!-- end view-login -->
+
+  <!-- ════ PUROHIT DASHBOARD (after login, before/after approval) ════ -->
+  <div id="view-dashboard" style="display:none">
+
+    <!-- Header -->
+    <div style="text-align:center;margin-bottom:20px">
+      <div style="font-size:40px;margin-bottom:8px">🙏</div>
+      <div style="font-family:'Cinzel',serif;font-size:18px;color:var(--gold)" id="dash-name">Purohit ji</div>
+      <div style="font-size:12px;color:rgba(255,246,229,.4);margin-top:4px" id="dash-phone"></div>
+    </div>
+
+    <!-- Approval status banner -->
+    <div id="dash-pending-banner" style="display:none;background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.3);border-radius:10px;padding:14px;text-align:center;margin-bottom:16px">
+      <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--gold);margin-bottom:4px">🕐 Admin Approval Pending</div>
+      <div style="font-size:11px;color:rgba(255,246,229,.4);line-height:1.6">Approval ke baad aap Temple Donation page access kar payenge.<br/>Niche apne mandir ki details fill karein.</div>
+    </div>
+
+    <div id="dash-approved-banner" style="display:none;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.25);border-radius:10px;padding:14px;text-align:center;margin-bottom:16px">
+      <div style="font-family:'Cinzel',serif;font-size:12px;color:#22C55E;margin-bottom:4px">✅ Aap Approved Hain!</div>
+      <div style="font-size:11px;color:rgba(255,246,229,.4)">Temple Donation page aur Live Puja access available hai.</div>
+    </div>
+
+    <!-- Mandir Details Form -->
+    <div class="card" id="dash-mandir-form">
+      <div class="card-title">🛕 Mandir Details</div>
+
+      <div class="field">
+        <label class="label">Mandir ka Naam</label>
+        <input class="input" id="d-mandir-name" type="text" placeholder="Kashi Vishwanath Mandir"/>
+      </div>
+
+      <div class="field">
+        <label class="label">Mandir ka Address</label>
+        <textarea class="input" id="d-mandir-addr" placeholder="Vishwanath Gali, Varanasi, UP 221001" style="min-height:70px;resize:vertical"></textarea>
+      </div>
+
+      <div class="field">
+        <label class="label">Mandir ki Photo (Google Drive / URL)</label>
+        <input class="input" id="d-mandir-photo" type="url" placeholder="https://drive.google.com/..."/>
+        <div style="font-size:11px;color:rgba(255,246,229,.2);margin-top:4px">Google Drive photo link paste karein</div>
+      </div>
+
+      <div class="field">
+        <label class="label">City / Location</label>
+        <input class="input" id="d-city" type="text" placeholder="Varanasi, UP"/>
+      </div>
+
+      <div class="field">
+        <label class="label">Specialization</label>
+        <input class="input" id="d-spec" type="text" placeholder="Rudrabhishek, Satyanarayan Puja..."/>
+      </div>
+
+      <div class="field">
+        <label class="label">Experience (Years)</label>
+        <input class="input" id="d-exp" type="number" placeholder="5" min="0"/>
+      </div>
+
+      <button class="btn btn-primary" id="d-save-btn" onclick="saveMandirDetails()" style="width:100%;justify-content:center">
+        💾 Details Save Karein
+      </button>
+    </div>
+
+    <!-- Services currently available -->
+    <div class="card">
+      <div class="card-title">⚡ Mandir ki Abhi ki Services</div>
+      <div id="dash-services-list" style="font-size:12px;color:rgba(255,246,229,.4);text-align:center;padding:12px">
+        Loading...
+      </div>
+    </div>
+
+    <!-- Temple Donation — only shown after approval -->
+    <div id="dash-donation-section" style="display:none">
+      <div class="card" style="border-color:rgba(212,175,55,.3)">
+        <div class="card-title" style="color:var(--gold)">💛 Temple Donation Page</div>
+        <div style="font-size:12px;color:rgba(255,246,229,.4);margin-bottom:14px;line-height:1.7">
+          Aapke mandir ke liye dedicated donation page available hai.<br/>
+          Subscribers is page se donation kar sakte hain.
+        </div>
+        <div style="background:rgba(212,175,55,.08);border:1px solid rgba(212,175,55,.2);border-radius:6px;padding:12px;margin-bottom:14px">
+          <div style="font-family:'Cinzel',serif;font-size:10px;color:rgba(255,246,229,.3);letter-spacing:1px;margin-bottom:4px">DONATION PAGE LINK</div>
+          <div style="font-size:12px;color:var(--gold)" id="donation-link-text">Loading...</div>
+        </div>
+        <button class="btn btn-primary" onclick="copyDonationLink()" style="width:100%;justify-content:center">
+          📋 Link Copy Karein
+        </button>
+      </div>
+    </div>
+
+    <!-- Go to Live Puja (only after approval) -->
+    <div id="dash-live-section" style="display:none">
+      <button class="btn btn-primary" onclick="goToLive()" style="width:100%;justify-content:center;margin-bottom:12px;padding:14px;font-size:13px">
+        🔴 Live Puja Shuru Karein
+      </button>
+    </div>
+
+    <div style="text-align:center;margin-bottom:20px">
+      <button onclick="doLogout()" style="background:none;border:1px solid rgba(255,246,229,.1);color:rgba(255,246,229,.3);font-family:'Cinzel',serif;font-size:10px;padding:8px 20px;border-radius:6px;cursor:pointer;letter-spacing:1px">🚪 Logout</button>
+    </div>
+  </div><!-- end dashboard -->
 
   <!-- ════ PORTAL ════ -->
   <div id="view-portal" style="display:none">
@@ -728,13 +832,23 @@ async function checkAndEnter(user){
   try{
     const snap=await db_rt.ref('purohits/'+user.uid).once('value');
     const d=snap.val();
-    if(!d){ _setupUser=user; showMode('reg'); rGoStep(3); return; }
-    if(d.status==='pending'){ document.getElementById('pend-notice').style.display='block'; auth.signOut(); return; }
-    if(d.status==='rejected'){ showErr('Account reject ho gaya. Admin se contact karein.'); auth.signOut(); return; }
+    if(!d){
+      // New Google login — show dashboard with pending status
+      const profile={uid:user.uid,name:user.displayName||'Purohit ji',phone:user.phoneNumber||'',email:user.email||'',status:'pending',registeredAt:new Date().toISOString(),mandirObj:{id:'m_'+user.uid.slice(0,6),name:'',location:'',emoji:'🛕',code:''}};
+      await db_rt.ref('purohits/'+user.uid).set(profile);
+      await db_rt.ref('adminNotifications').push({type:'new_purohit',name:user.displayName||'',uid:user.uid,at:new Date().toISOString(),read:false});
+      saveSess(user,profile.mandirObj);
+      showDashboard(user,profile);
+      return;
+    }
     if(d.status==='approved'){
       currentMandir=d.mandirObj||{id:user.uid,name:d.mandir||d.mandirName,location:d.city,emoji:'🛕'};
       saveSess(user,currentMandir);
       if(getPatH()) showPatUnlock(getSess()); else showPatSetup();
+    } else {
+      // pending or rejected — show dashboard
+      saveSess(user,d.mandirObj||{id:user.uid,name:d.name,location:d.city||'',emoji:'🛕'});
+      showDashboard(user,d);
     }
   }catch(e){ showErr('Connection error. Dobara try karein.'); }
 }
@@ -744,10 +858,16 @@ function showErr(m){ const e=document.getElementById('lg-err'); e.textContent='�
 function hideErr(){ document.getElementById('lg-err').style.display='none'; }
 function showMode(m){
   hideErr();
-  document.getElementById('vw-reg').style.display   = m==='reg'  ?'block':'none';
-  document.getElementById('vw-login').style.display = m==='login'?'block':'none';
-  if(m==='login') setTimeout(initSiRecap,300);
+  const isReg=m==='reg';
+  document.getElementById('vw-reg').style.display   = isReg?'block':'none';
+  document.getElementById('vw-login').style.display = isReg?'none':'block';
+  document.getElementById('tab-reg').style.background   = isReg?'linear-gradient(135deg,var(--saffron),var(--saffron-d))':'transparent';
+  document.getElementById('tab-reg').style.color         = isReg?'#fff':'rgba(255,246,229,.4)';
+  document.getElementById('tab-login').style.background  = isReg?'transparent':'linear-gradient(135deg,var(--saffron),var(--saffron-d))';
+  document.getElementById('tab-login').style.color        = isReg?'rgba(255,246,229,.4)':'#fff';
+  if(!isReg) setTimeout(initSiRecap,300);
 }
+
 const ERRS={
   'auth/email-already-in-use':'Yeh email already registered hai. Login karein.',
   'auth/wrong-password':'Galat password.',
@@ -762,100 +882,185 @@ const ERRS={
   'auth/network-request-failed':'Network error. Internet check karein.',
 };
 
-/* ════ REGISTRATION FLOW ════ */
-let _rConfirm=null, _rRecap=null;
+/* ════ REGISTRATION — Name + Mobile → OTP → Dashboard ════ */
+let _rConfirm=null, _rRecap=null, _rName='', _rPhone='';
 
 function rGoStep(n){
-  [1,2,3].forEach(i=>{
+  [1,2].forEach(i=>{
     document.getElementById('rs'+i).style.display=i===n?'block':'none';
     const d=document.getElementById('sd'+i);
     d.className='sdot'+(i===n?' active':i<n?' done':'');
   });
-  const L={1:'STEP 1 OF 3 — EMAIL REGISTER',2:'STEP 2 OF 3 — MOBILE VERIFY',3:'STEP 3 OF 3 — PROFILE DETAILS'};
-  document.getElementById('sd-lbl').textContent=L[n]||'';
+  document.getElementById('sd-lbl').textContent=n===1?'STEP 1 OF 2 — BASIC DETAILS':'STEP 2 OF 2 — OTP VERIFY';
 }
+
+window.addEventListener('load',()=>{
+  const s=getSess(); if(!s)return;
+  currentMandir=s.mandir;
+  if(getPatH()) showPatUnlock(s); else showPortal(s.mandir);
+});
+
+/* ════ DEMO OTP MODE — No Firebase Auth needed ════ */
+let _demoOTP  = '';
+let _rConfirm = null;
+let _rRecap   = null;
+
+// Load OTP mode from Firebase
+db_rt.ref('settings/otpMode').on('value', snap => {
+  _otpMode = snap.val() || 'demo';
+});
 
 async function rStep1(){
-  const email=(document.getElementById('r-email').value||'').trim();
-  const pass=document.getElementById('r-pass').value||'';
-  const pass2=document.getElementById('r-pass2').value||'';
+  const name  = (document.getElementById('r-name').value||'').trim();
+  const phone = (document.getElementById('r-phone').value||'').trim();
   hideErr();
-  if(!email){showErr('Email address bharein.');return;}
-  if(pass.length<6){showErr('Password kam se kam 6 characters.');return;}
-  if(pass!==pass2){showErr('Dono passwords match nahi karte.');return;}
-  const btn=document.getElementById('rs1-btn');
-  btn.disabled=true; btn.innerHTML='<div class="spinner"></div><span>Please wait...</span>';
-  try{
-    const c=await auth.createUserWithEmailAndPassword(email,pass);
-    _setupUser=c.user;
+  if(!name) { showErr('Apna naam bharein.'); return; }
+  if(!phone){ showErr('Mobile number bharein.'); return; }
+  let ph = phone.replace(/\D/g,'');
+  if(ph.length < 10){ showErr('Valid 10 digit mobile number likhein.'); return; }
+  if(!ph.startsWith('91')) ph = '91' + ph;
+  ph = '+' + ph;
+  _rName  = name;
+  _rPhone = ph;
+
+  const btn = document.getElementById('rs1-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div><span>OTP generate ho raha hai...</span>';
+
+  // Generate 6-digit OTP
+  _demoOTP = String(Math.floor(100000 + Math.random() * 900000));
+
+  // Show step 2 with OTP on screen
+  document.getElementById('demo-otp-display').textContent = _demoOTP;
+  document.getElementById('demo-otp-box').style.display   = 'block';
+  document.getElementById('real-otp-box').style.display   = 'none';
+
+  // Small delay for effect
+  setTimeout(()=>{
     rGoStep(2);
-    setTimeout(initRRecap,300);
-  }catch(e){
-    showErr(ERRS[e.code]||e.message);
-    btn.disabled=false; btn.innerHTML='Next → Mobile Verify';
-  }
-}
-
-function initRRecap(){
-  if(_rRecap)return;
-  _rRecap=new firebase.auth.RecaptchaVerifier('r-recaptcha',{size:'normal',callback:()=>{},['expired-callback']:()=>{}});
-  _rRecap.render();
-}
-
-async function rSendOTP(){
-  const phone=(document.getElementById('r-phone').value||'').trim();
-  if(!phone.startsWith('+')){showErr('+91 ke saath likhein. Ex: +91 98765 43210');return;}
-  const btn=document.getElementById('rs2-otp-btn');
-  btn.disabled=true; btn.innerHTML='<div class="spinner"></div><span>Bhej raha hoon...</span>';
-  hideErr();
-  try{
-    _rConfirm=await auth.signInWithPhoneNumber(phone,_rRecap);
-    _setupPhone=phone;
-    document.getElementById('rs2a').style.display='none';
-    document.getElementById('rs2b').style.display='block';
-    document.getElementById('rs2-msg').textContent='✅ OTP bheja gaya: '+phone;
-  }catch(e){
-    showErr(ERRS[e.code]||e.message);
-    btn.disabled=false; btn.innerHTML='📤 OTP Bhejo';
-  }
+    // Auto-fill OTP
+    document.getElementById('r-otp').value = _demoOTP;
+    btn.disabled = false;
+    btn.innerHTML = '📤 OTP Bhejo → Mobile Verify';
+  }, 800);
 }
 
 async function rVerifyOTP(){
-  const otp=(document.getElementById('r-otp').value||'').trim();
-  if(otp.length<6){showErr('6 digit OTP bharein.');return;}
-  const btn=document.getElementById('rs2-ver-btn');
-  btn.disabled=true; btn.innerHTML='<div class="spinner"></div><span>Verifying...</span>';
-  try{ await _rConfirm.confirm(otp); rGoStep(3); }
-  catch(e){ showErr('Galat OTP.'); btn.disabled=false; btn.innerHTML='✅ Verify Karein'; }
+  const otp = (document.getElementById('r-otp').value||'').trim();
+  if(otp.length < 6){ showErr('6 digit OTP bharein.'); return; }
+  if(otp !== _demoOTP){ showErr('Galat OTP. Screen pe dikhaye OTP ko bharein.'); return; }
+
+  const btn = document.getElementById('rs2-ver-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div><span>Verifying...</span>';
+
+  try {
+    // Save to Firebase RTDB directly (no Auth needed in demo mode)
+    const uid = 'demo_' + _rPhone.replace(/\D/g,'') + '_' + Date.now().toString(36);
+    const profile = {
+      uid, name:_rName, phone:_rPhone,
+      email:'', status:'pending',
+      isDemo: true,
+      registeredAt: new Date().toISOString(),
+      mandirObj:{id:'m_'+uid.slice(5,11), name:'', location:'', emoji:'🛕', code:''}
+    };
+    await db_rt.ref('purohits/'+uid).set(profile);
+    await db_rt.ref('adminNotifications').push({
+      type:'new_purohit', name:_rName, phone:_rPhone,
+      uid, at:new Date().toISOString(), read:false
+    });
+
+    // Save session locally
+    const fakeUser = {uid, email:'', phoneNumber:_rPhone, displayName:_rName};
+    saveSess(fakeUser, profile.mandirObj);
+    showDashboard(fakeUser, profile);
+
+  } catch(e){
+    showErr('Error: ' + e.message);
+    btn.disabled = false;
+    btn.innerHTML = '✅ Verify & Dashboard Dekho';
+  }
 }
 
 function rResetPhone(){
-  document.getElementById('rs2a').style.display='block';
-  document.getElementById('rs2b').style.display='none';
+  rGoStep(1);
   document.getElementById('r-otp').value='';
   _rConfirm=null;
   if(_rRecap){_rRecap.clear();_rRecap=null;}
   setTimeout(initRRecap,200);
 }
 
-async function rSubmit(){
-  const name=(document.getElementById('r-name').value||'').trim();
-  const mandir=(document.getElementById('r-mandir').value||'').trim();
-  const city=(document.getElementById('r-city').value||'').trim();
-  const exp=(document.getElementById('r-exp').value||'').trim();
-  const spec=(document.getElementById('r-spec').value||'').trim();
-  if(!name||!mandir||!city){showErr('Name, Mandir aur City zaroori hain.');return;}
-  const btn=document.getElementById('rs3-btn');
-  btn.disabled=true; btn.innerHTML='<div class="spinner"></div><span>Submit ho raha hai...</span>';
-  const user=_setupUser||auth.currentUser;
-  if(!user){showErr('Session expire. Dobara try karein.');btn.disabled=false;btn.innerHTML='🙏 Registration Submit Karein';return;}
-  const profile={uid:user.uid,name,mandir,city,exp,spec,email:user.email||'',phone:_setupPhone||'',status:'pending',registeredAt:new Date().toISOString(),mandirObj:{id:'m_'+user.uid.slice(0,6),name:mandir,location:city,emoji:'🛕',code:''}};
-  await db_rt.ref('purohits/'+user.uid).set(profile);
-  await db_rt.ref('adminNotifications').push({type:'new_purohit',name,mandir,uid:user.uid,at:new Date().toISOString(),read:false});
-  await auth.signOut();
-  document.getElementById('vw-reg').style.display='none';
-  document.getElementById('pend-notice').style.display='block';
-  window.scrollTo({top:0,behavior:'smooth'});
+/* ════ DASHBOARD ════ */
+function showDashboard(user,profile){
+  document.getElementById('view-login').style.display='none';
+  document.getElementById('view-dashboard').style.display='block';
+  document.getElementById('dash-name').textContent='🙏 '+( profile.name||user.displayName||'Purohit ji');
+  document.getElementById('dash-phone').textContent=profile.phone||user.phoneNumber||user.email||'';
+  const approved=profile.status==='approved';
+  document.getElementById('dash-pending-banner').style.display=approved?'none':'block';
+  document.getElementById('dash-approved-banner').style.display=approved?'block':'none';
+  document.getElementById('dash-donation-section').style.display=approved?'block':'none';
+  document.getElementById('dash-live-section').style.display=approved?'block':'none';
+  if(approved){
+    const uid=user.uid.slice(0,6);
+    document.getElementById('donation-link-text').textContent='sanatanianthem.com/donate?m='+uid;
+  }
+  // Pre-fill mandir details if saved
+  if(profile.mandirObj){
+    if(profile.mandirObj.name) document.getElementById('d-mandir-name').value=profile.mandirObj.name;
+    if(profile.mandirObj.location) document.getElementById('d-city').value=profile.mandirObj.location;
+  }
+  if(profile.spec) document.getElementById('d-spec').value=profile.spec;
+  if(profile.exp)  document.getElementById('d-exp').value=profile.exp;
+  // Load services from Firebase CMS
+  loadDashboardServices();
+}
+
+async function saveMandirDetails(){
+  const user=auth.currentUser||_setupUser;
+  if(!user){showErr('Session expire. Dobara login karein.');return;}
+  const mandirName=(document.getElementById('d-mandir-name').value||'').trim();
+  const addr=(document.getElementById('d-mandir-addr').value||'').trim();
+  const photo=(document.getElementById('d-mandir-photo').value||'').trim();
+  const city=(document.getElementById('d-city').value||'').trim();
+  const spec=(document.getElementById('d-spec').value||'').trim();
+  const exp=(document.getElementById('d-exp').value||'').trim();
+  if(!mandirName||!city){showErr('Mandir naam aur city zaroori hai.');return;}
+  const btn=document.getElementById('d-save-btn');
+  btn.disabled=true; btn.innerHTML='<div class="spinner"></div><span>Saving...</span>';
+  const updates={
+    mandir:mandirName,city,spec,exp,
+    'mandirObj/name':mandirName,'mandirObj/location':city,'mandirObj/photo':photo,'mandirObj/address':addr
+  };
+  await db_rt.ref('purohits/'+user.uid).update(updates);
+  btn.disabled=false; btn.innerHTML='💾 Details Save Karein';
+  showToast('✅ Details save ho gayi!');
+}
+
+function loadDashboardServices(){
+  db_rt.ref('cms/services').once('value').then(snap=>{
+    const data=snap.val();
+    const list=document.getElementById('dash-services-list');
+    if(!data||!data.length){list.innerHTML='<div style="color:rgba(255,246,229,.3);font-size:12px">Abhi koi service available nahi hai.</div>';return;}
+    list.innerHTML=data.filter(s=>s).map(s=>`
+      <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(212,175,55,.08)">
+        <span style="font-size:18px">${s.emoji||'🔹'}</span>
+        <span style="font-size:13px;color:var(--cream)">${s.name||''}</span>
+      </div>`).join('');
+  }).catch(()=>{
+    document.getElementById('dash-services-list').innerHTML='<div style="color:rgba(255,246,229,.3);font-size:12px">Services load nahi ho payi.</div>';
+  });
+}
+
+function copyDonationLink(){
+  const link=document.getElementById('donation-link-text').textContent;
+  navigator.clipboard.writeText(link).then(()=>showToast('✅ Link copy ho gaya!')).catch(()=>showToast('Link: '+link));
+}
+
+function goToLive(){
+  document.getElementById('view-dashboard').style.display='none';
+  document.getElementById('view-portal').style.display='block';
+  startBhagwanLive();
 }
 
 /* ════ LOGIN FLOW — Smart single input ════ */
