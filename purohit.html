@@ -8,6 +8,7 @@
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 <!-- TensorFlow.js + NSFWJS for real-time content moderation -->
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.10.0/dist/tf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/nsfwjs@2.4.2/dist/nsfwjs.min.js"></script>
@@ -280,6 +281,9 @@ button{cursor:pointer;font-family:inherit;border:none}
   pointer-events:none;
   top:0; left:0;
 }
+.login-tab{flex:1;padding:10px 6px;background:transparent;border:none;color:rgba(255,246,229,.4);font-family:'Cinzel',serif;font-size:10px;letter-spacing:1px;cursor:pointer;transition:all .2s}
+.login-tab.active{background:rgba(255,107,0,.15);color:var(--saffron)}
+.login-tab:hover{color:var(--cream)}
 </style>
 </head>
 <body>
@@ -300,17 +304,127 @@ button{cursor:pointer;font-family:inherit;border:none}
       <div class="login-title">Purohit Portal</div>
       <div class="login-sub">&#x92A;&#x941;&#x930;&#x94B;&#x939;&#x93F;&#x924; &#x932;&#x93E;&#x907;&#x935; &#x92A;&#x94B;&#x930;&#x94D;&#x91F;&#x932;</div>
     </div>
-    <div class="card">
-      <div class="card-title">&#x1F511; Apna Code Enter Karein</div>
-      <div class="field">
-        <label class="label">Secret Code</label>
-        <input class="input code-input" id="code-input" type="text" placeholder="••••••••" maxlength="10"
-          oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')doLogin()"/>
-        <div class="err" id="login-err">Invalid code. Admin se contact karein.</div>
-      </div>
-      <button class="btn btn-primary" id="login-btn" onclick="doLogin()"><span>Login</span></button>
+
+    <!-- ── PENDING APPROVAL NOTICE (shown after register) ── -->
+    <div id="pending-notice" style="display:none;background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.3);border-radius:10px;padding:18px;text-align:center;margin-bottom:16px">
+      <div style="font-size:28px;margin-bottom:8px">🕐</div>
+      <div style="font-family:'Cinzel',serif;font-size:13px;color:var(--gold);margin-bottom:6px">Registration Successful!</div>
+      <div style="font-size:12px;color:rgba(255,246,229,.5);line-height:1.7">Admin se approval ka wait karein.<br/>Approve hone ke baad aap login kar payenge.</div>
     </div>
-  </div>
+
+    <!-- ── LOGIN TABS ── -->
+    <div style="display:flex;gap:0;margin-bottom:16px;border-radius:8px;overflow:hidden;border:1px solid rgba(212,175,55,.2)">
+      <button class="login-tab active" id="tab-email" onclick="switchLoginTab('email')">📧 Email</button>
+      <button class="login-tab" id="tab-google" onclick="switchLoginTab('google')" style="border-left:1px solid rgba(212,175,55,.2);border-right:1px solid rgba(212,175,55,.2)">🇬 Google</button>
+      <button class="login-tab" id="tab-phone" onclick="switchLoginTab('phone')">📱 Mobile</button>
+    </div>
+
+    <!-- Error box -->
+    <div class="err" id="login-err" style="display:none;margin-bottom:12px;font-size:12px;color:#EF4444;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);padding:10px 14px;border-radius:6px;font-family:'Cinzel',serif"></div>
+
+    <!-- ── EMAIL LOGIN PANEL ── -->
+    <div id="panel-email" class="card">
+      <div class="card-title">📧 Email se Login / Register</div>
+
+      <!-- Toggle: Login vs Register -->
+      <div style="display:flex;gap:8px;margin-bottom:16px">
+        <button id="btn-show-login" onclick="showEmailMode('login')"
+          style="flex:1;padding:8px;border-radius:6px;font-family:'Cinzel',serif;font-size:10px;letter-spacing:1px;cursor:pointer;border:1px solid rgba(212,175,55,.3);background:rgba(255,107,0,.15);color:var(--saffron)">
+          Login
+        </button>
+        <button id="btn-show-register" onclick="showEmailMode('register')"
+          style="flex:1;padding:8px;border-radius:6px;font-family:'Cinzel',serif;font-size:10px;letter-spacing:1px;cursor:pointer;border:1px solid rgba(212,175,55,.15);background:transparent;color:rgba(255,246,229,.4)">
+          New Registration
+        </button>
+      </div>
+
+      <!-- Register-only fields -->
+      <div id="register-fields" style="display:none">
+        <div class="field">
+          <label class="label">Full Name</label>
+          <input class="input" id="reg-name" type="text" placeholder="Pandit Ramesh Sharma"/>
+        </div>
+        <div class="field">
+          <label class="label">Mobile Number</label>
+          <input class="input" id="reg-phone" type="tel" placeholder="+91 98765 43210"/>
+        </div>
+        <div class="field">
+          <label class="label">Mandir Name</label>
+          <input class="input" id="reg-mandir" type="text" placeholder="Kashi Vishwanath Mandir"/>
+        </div>
+        <div class="field">
+          <label class="label">City / Location</label>
+          <input class="input" id="reg-city" type="text" placeholder="Varanasi, UP"/>
+        </div>
+      </div>
+
+      <!-- Common fields -->
+      <div class="field">
+        <label class="label">Email Address</label>
+        <input class="input" id="email-input" type="email" placeholder="purohit@example.com"
+          onkeydown="if(event.key==='Enter')doEmailAuth()"/>
+      </div>
+      <div class="field">
+        <label class="label">Password</label>
+        <input class="input" id="pass-input" type="password" placeholder="••••••••"
+          onkeydown="if(event.key==='Enter')doEmailAuth()"/>
+      </div>
+
+      <button class="btn btn-primary" id="email-auth-btn" onclick="doEmailAuth()">
+        <span id="email-btn-text">🔐 Login</span>
+      </button>
+    </div>
+
+    <!-- ── GOOGLE LOGIN PANEL ── -->
+    <div id="panel-google" class="card" style="display:none;text-align:center">
+      <div class="card-title" style="justify-content:center">🇬 Google Account se Login</div>
+      <div style="font-size:12px;color:rgba(255,246,229,.4);margin-bottom:20px;line-height:1.7">
+        Apne Google account se sign in karein.<br/>Pehli baar login karne par registration form bharein.
+      </div>
+      <button class="btn btn-primary" id="google-btn" onclick="doGoogleLogin()" style="width:100%;justify-content:center;gap:10px">
+        <span style="font-size:16px">G</span> Google se Sign In
+      </button>
+    </div>
+
+    <!-- ── PHONE OTP PANEL ── -->
+    <div id="panel-phone" class="card" style="display:none">
+      <div class="card-title">📱 Mobile OTP se Login</div>
+
+      <!-- Step A: Enter phone -->
+      <div id="otp-step-phone">
+        <div class="field">
+          <label class="label">Mobile Number</label>
+          <input class="input" id="phone-input" type="tel" placeholder="+91 98765 43210"
+            onkeydown="if(event.key==='Enter')sendOTP()"/>
+          <div style="font-size:11px;color:rgba(255,246,229,.3);margin-top:4px">Country code ke saath likhein (e.g. +91)</div>
+        </div>
+        <!-- reCAPTCHA container -->
+        <div id="recaptcha-container" style="margin-bottom:14px"></div>
+        <button class="btn btn-primary" id="send-otp-btn" onclick="sendOTP()" style="width:100%;justify-content:center">
+          📤 OTP Bhejo
+        </button>
+      </div>
+
+      <!-- Step B: Enter OTP -->
+      <div id="otp-step-verify" style="display:none">
+        <div style="text-align:center;margin-bottom:16px">
+          <div style="font-size:12px;color:rgba(255,246,229,.5)" id="otp-sent-msg">OTP bheja gaya</div>
+        </div>
+        <div class="field">
+          <label class="label">OTP Code</label>
+          <input class="input code-input" id="otp-input" type="text" placeholder="— — — — — —"
+            maxlength="6" onkeydown="if(event.key==='Enter')verifyOTP()"/>
+        </div>
+        <button class="btn btn-primary" id="verify-otp-btn" onclick="verifyOTP()" style="width:100%;justify-content:center;margin-bottom:10px">
+          ✅ Verify & Login
+        </button>
+        <button onclick="resetOTPStep()" style="width:100%;padding:8px;background:transparent;border:none;color:rgba(255,246,229,.3);font-family:'Cinzel',serif;font-size:10px;cursor:pointer">
+          ← Dobara number change karein
+        </button>
+      </div>
+    </div>
+
+  </div><!-- end view-login -->
 
   <!-- ════ PORTAL ════ -->
   <div id="view-portal" style="display:none">
@@ -537,6 +651,276 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 const db_rt = firebase.database();
+const purohitAuth = firebase.auth();
+
+/* ══════════════════════════════════════════
+   LOGIN TAB SWITCHER
+══════════════════════════════════════════ */
+function switchLoginTab(tab){
+  ['email','google','phone'].forEach(t => {
+    document.getElementById('panel-'+t).style.display = t===tab ? 'block' : 'none';
+    document.getElementById('tab-'+t).classList.toggle('active', t===tab);
+  });
+  document.getElementById('login-err').style.display = 'none';
+}
+
+function showEmailMode(mode){
+  const isRegister = mode === 'register';
+  document.getElementById('register-fields').style.display = isRegister ? 'block' : 'none';
+  document.getElementById('email-btn-text').textContent = isRegister ? '📝 Register' : '🔐 Login';
+  document.getElementById('btn-show-login').style.background = isRegister ? 'transparent' : 'rgba(255,107,0,.15)';
+  document.getElementById('btn-show-login').style.color = isRegister ? 'rgba(255,246,229,.4)' : 'var(--saffron)';
+  document.getElementById('btn-show-register').style.background = isRegister ? 'rgba(255,107,0,.15)' : 'transparent';
+  document.getElementById('btn-show-register').style.color = isRegister ? 'var(--saffron)' : 'rgba(255,246,229,.4)';
+  document.getElementById('login-err').style.display = 'none';
+}
+
+function showLoginError(msg){
+  const el = document.getElementById('login-err');
+  el.textContent = '⚠️ ' + msg;
+  el.style.display = 'block';
+}
+
+/* ══════════════════════════════════════════
+   AUTH STATE — check on load
+══════════════════════════════════════════ */
+purohitAuth.onAuthStateChanged(async user => {
+  if(!user) return;
+  /* User is signed in — check approval status */
+  await checkApprovalAndEnter(user);
+});
+
+async function checkApprovalAndEnter(user){
+  try {
+    const snap = await db_rt.ref('purohits/' + user.uid).once('value');
+    const data = snap.val();
+
+    if(!data){
+      /* First time Google/Phone login — show registration form */
+      showRegistrationForm(user);
+      return;
+    }
+    if(data.status === 'pending'){
+      document.getElementById('pending-notice').style.display = 'block';
+      document.getElementById('view-login').style.display = 'block';
+      purohitAuth.signOut();
+      return;
+    }
+    if(data.status === 'approved'){
+      currentMandir = data.mandir || {id: user.uid, name: data.mandirName, location: data.city, emoji:'🛕'};
+      showPortal(currentMandir);
+      return;
+    }
+    if(data.status === 'rejected'){
+      showLoginError('Aapka account reject kar diya gaya. Admin se contact karein.');
+      purohitAuth.signOut();
+      return;
+    }
+  } catch(e){
+    showLoginError('Connection error. Dobara try karein.');
+  }
+}
+
+/* ══════════════════════════════════════════
+   REGISTRATION — save purohit profile
+══════════════════════════════════════════ */
+function showRegistrationForm(user){
+  /* Pre-fill email if available */
+  if(user.email) document.getElementById('email-input').value = user.email;
+  showEmailMode('register');
+  switchLoginTab('email');
+  showLoginError('Pehli baar login kar rahe hain — registration form bharein.');
+}
+
+async function savePurohitProfile(user, name, phone, mandirName, city){
+  const profile = {
+    uid: user.uid,
+    name: name,
+    email: user.email || '',
+    phone: phone,
+    mandirName: mandirName,
+    city: city,
+    status: 'pending', /* Admin will approve */
+    registeredAt: new Date().toISOString(),
+    loginMethod: user.providerData[0]?.providerId || 'unknown',
+    mandir: {
+      id: 'm_' + user.uid.slice(0,6),
+      name: mandirName,
+      location: city,
+      emoji: '🛕',
+      code: ''
+    }
+  };
+  await db_rt.ref('purohits/' + user.uid).set(profile);
+  /* Also notify admin */
+  await db_rt.ref('adminNotifications').push({
+    type: 'new_purohit_registration',
+    name: name,
+    mandirName: mandirName,
+    uid: user.uid,
+    at: new Date().toISOString(),
+    read: false
+  });
+}
+
+/* ══════════════════════════════════════════
+   EMAIL LOGIN / REGISTER
+══════════════════════════════════════════ */
+async function doEmailAuth(){
+  const email = (document.getElementById('email-input').value || '').trim();
+  const pass  =  document.getElementById('pass-input').value || '';
+  const isRegister = document.getElementById('register-fields').style.display !== 'none';
+  const btn = document.getElementById('email-auth-btn');
+
+  if(!email || !pass){ showLoginError('Email aur password dono bharein.'); return; }
+
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div><span>Please wait...</span>';
+  document.getElementById('login-err').style.display = 'none';
+
+  try {
+    if(isRegister){
+      const name      = (document.getElementById('reg-name').value || '').trim();
+      const phone     = (document.getElementById('reg-phone').value || '').trim();
+      const mandirName= (document.getElementById('reg-mandir').value || '').trim();
+      const city      = (document.getElementById('reg-city').value || '').trim();
+      if(!name || !mandirName || !city){ showLoginError('Sabhi fields bharein.'); btn.disabled=false; btn.innerHTML='<span>📝 Register</span>'; return; }
+
+      const cred = await purohitAuth.createUserWithEmailAndPassword(email, pass);
+      await savePurohitProfile(cred.user, name, phone, mandirName, city);
+      await purohitAuth.signOut();
+      document.getElementById('pending-notice').style.display = 'block';
+      document.getElementById('login-err').style.display = 'none';
+      showEmailMode('login');
+
+    } else {
+      await purohitAuth.signInWithEmailAndPassword(email, pass);
+      /* onAuthStateChanged handles the rest */
+    }
+  } catch(e){
+    const msgs = {
+      'auth/email-already-in-use': 'Yeh email already registered hai. Login karein.',
+      'auth/wrong-password':        'Galat password.',
+      'auth/user-not-found':        'Yeh email registered nahi hai. Register karein.',
+      'auth/invalid-credential':    'Galat email ya password.',
+      'auth/weak-password':         'Password kam se kam 6 characters ka hona chahiye.',
+      'auth/invalid-email':         'Valid email address bharein.',
+      'auth/too-many-requests':     'Bahut zyada attempts. Kuch der baad try karein.',
+    };
+    showLoginError(msgs[e.code] || e.message);
+  }
+  btn.disabled = false;
+  btn.innerHTML = isRegister ? '<span>📝 Register</span>' : '<span>🔐 Login</span>';
+}
+
+/* ══════════════════════════════════════════
+   GOOGLE LOGIN
+══════════════════════════════════════════ */
+async function doGoogleLogin(){
+  const btn = document.getElementById('google-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div><span>Opening Google...</span>';
+  document.getElementById('login-err').style.display = 'none';
+
+  try {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    await purohitAuth.signInWithPopup(provider);
+    /* onAuthStateChanged handles the rest */
+  } catch(e){
+    const msgs = {
+      'auth/popup-closed-by-user':    'Login cancel kar diya.',
+      'auth/popup-blocked':           'Popup block ho gayi. Browser settings check karein.',
+      'auth/network-request-failed':  'Network error. Internet check karein.',
+    };
+    showLoginError(msgs[e.code] || e.message);
+    btn.disabled = false;
+    btn.innerHTML = '<span style="font-size:16px">G</span> Google se Sign In';
+  }
+}
+
+/* ══════════════════════════════════════════
+   PHONE OTP LOGIN
+══════════════════════════════════════════ */
+let _confirmationResult = null;
+let _recaptchaVerifier  = null;
+
+function initRecaptcha(){
+  if(_recaptchaVerifier) return;
+  _recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+    size: 'normal',
+    callback: () => { document.getElementById('send-otp-btn').disabled = false; },
+    'expired-callback': () => { document.getElementById('send-otp-btn').disabled = true; }
+  });
+  _recaptchaVerifier.render();
+}
+
+/* init recaptcha when phone tab is first opened */
+const _origSwitchTab = switchLoginTab;
+switchLoginTab = function(tab){
+  _origSwitchTab(tab);
+  if(tab === 'phone') setTimeout(initRecaptcha, 100);
+};
+
+async function sendOTP(){
+  const phone = (document.getElementById('phone-input').value || '').trim();
+  if(!phone){ showLoginError('Mobile number bharein.'); return; }
+  if(!phone.startsWith('+')){ showLoginError('Country code ke saath likhein. Example: +91 98765 43210'); return; }
+
+  const btn = document.getElementById('send-otp-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div><span>Bhej raha hoon...</span>';
+  document.getElementById('login-err').style.display = 'none';
+
+  try {
+    _confirmationResult = await purohitAuth.signInWithPhoneNumber(phone, _recaptchaVerifier);
+    document.getElementById('otp-step-phone').style.display = 'none';
+    document.getElementById('otp-step-verify').style.display = 'block';
+    document.getElementById('otp-sent-msg').textContent = '✅ OTP bheja gaya: ' + phone;
+  } catch(e){
+    const msgs = {
+      'auth/invalid-phone-number':   'Galat phone number format.',
+      'auth/too-many-requests':      'Bahut zyada attempts. Baad mein try karein.',
+      'auth/quota-exceeded':         'SMS limit khatam. Kal try karein.',
+    };
+    showLoginError(msgs[e.code] || e.message);
+    btn.disabled = false;
+    btn.innerHTML = '📤 OTP Bhejo';
+  }
+}
+
+async function verifyOTP(){
+  const otp = (document.getElementById('otp-input').value || '').trim();
+  if(!otp || otp.length < 6){ showLoginError('6 digit OTP bharein.'); return; }
+
+  const btn = document.getElementById('verify-otp-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div><span>Verify ho raha hai...</span>';
+
+  try {
+    await _confirmationResult.confirm(otp);
+    /* onAuthStateChanged handles the rest */
+  } catch(e){
+    showLoginError('Galat OTP. Dobara check karein.');
+    btn.disabled = false;
+    btn.innerHTML = '✅ Verify & Login';
+  }
+}
+
+function resetOTPStep(){
+  document.getElementById('otp-step-phone').style.display = 'block';
+  document.getElementById('otp-step-verify').style.display = 'none';
+  document.getElementById('otp-input').value = '';
+  _confirmationResult = null;
+  if(_recaptchaVerifier){ _recaptchaVerifier.clear(); _recaptchaVerifier = null; }
+  setTimeout(initRecaptcha, 100);
+}
+
+/* ══════════════════════════════════════════
+   LOGOUT
+══════════════════════════════════════════ */
+function doLogout(){
+  purohitAuth.signOut().then(() => location.reload());
+}
 
 /* ══════════════════════════════════════════
    CLOUDINARY CONFIG
