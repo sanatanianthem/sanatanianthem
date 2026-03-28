@@ -2064,11 +2064,50 @@ adminAuth.onAuthStateChanged(user => {
     setTimeout(initFirebaseSync, 100);
     startFirebaseListeners();
 
+    /* Start auto-logout countdown */
+    resetAutoLogout();
+
   } else {
     /* 🔒 Not authenticated — show login overlay, hide admin */
     document.getElementById('auth-overlay').classList.remove('hidden');
     document.querySelector('.app').style.display = 'none';
   }
+});
+
+/* ════════════════════════════════════════
+   AUTO LOGOUT — 5 minutes of inactivity
+════════════════════════════════════════ */
+const AUTO_LOGOUT_MS = 5 * 60 * 1000; // 5 minutes
+const WARN_BEFORE_MS = 30 * 1000;      // warn 30 seconds before logout
+let _autoLogoutTimer   = null;
+let _autoLogoutWarning = null;
+let _warnToastShown    = false;
+
+function resetAutoLogout() {
+  clearTimeout(_autoLogoutTimer);
+  clearTimeout(_autoLogoutWarning);
+  _warnToastShown = false;
+
+  // Show warning 30 seconds before logout
+  _autoLogoutWarning = setTimeout(() => {
+    if(!_warnToastShown) {
+      _warnToastShown = true;
+      adminToast('⚠️ 30 seconds inactive — logging out soon!');
+    }
+  }, AUTO_LOGOUT_MS - WARN_BEFORE_MS);
+
+  // Auto logout after 5 minutes
+  _autoLogoutTimer = setTimeout(() => {
+    adminAuth.signOut().then(() => {
+      localStorage.removeItem('sanatani_cms');
+      location.reload();
+    });
+  }, AUTO_LOGOUT_MS);
+}
+
+// Reset timer on any user activity
+['mousemove','mousedown','keydown','touchstart','scroll','click'].forEach(evt => {
+  document.addEventListener(evt, resetAutoLogout, { passive: true });
 });
 
 function startFirebaseListeners(){
