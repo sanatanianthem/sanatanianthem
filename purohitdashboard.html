@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>SanataniAnthem – Purohit Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Noto+Sans+Devanagari:wght@400;600&family=Lora:wght@400;600&display=swap" rel="stylesheet"/>
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
+<style>
+:root{--saffron:#FF6B00;--saffron-d:#C95000;--gold:#D4AF37;--gold-h:#E8CC6A;--maroon:#5A0E0E;--cream:#FFF6E5;--bg-dark:#140800;--green:#16A34A;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Lora',serif;background:var(--bg-dark);color:var(--cream);min-height:100vh;display:flex;flex-direction:column}
+button{cursor:pointer;font-family:inherit;border:none}
+.topbar{background:var(--maroon);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid rgba(212,175,55,.3)}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-icon{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--saffron),var(--gold));display:flex;align-items:center;justify-content:center;font-size:18px}
+.logo-name{font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:var(--gold)}
+.logo-sub{font-family:'Noto Sans Devanagari',sans-serif;font-size:10px;color:rgba(255,246,229,.5);letter-spacing:1px}
+.topbar-badge{font-family:'Cinzel',serif;font-size:10px;color:#FC8181;background:rgba(229,62,62,.1);border:1px solid rgba(229,62,62,.3);padding:4px 12px;border-radius:20px;letter-spacing:1px}
+.main{flex:1;padding:28px 20px;max-width:520px;width:100%;margin:0 auto}
+.card{background:rgba(255,246,229,.05);border:1px solid rgba(212,175,55,.18);border-radius:14px;padding:24px;margin-bottom:20px}
+.card-title{font-family:'Cinzel',serif;font-size:14px;color:var(--gold-h);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.login-header{text-align:center;padding:20px 0 32px}
+.login-om{font-family:'Noto Sans Devanagari',sans-serif;font-size:64px;color:var(--gold);line-height:1;margin-bottom:12px;animation:glow 3s ease-in-out infinite}
+@keyframes glow{0%,100%{text-shadow:0 0 20px rgba(212,175,55,.4)}50%{text-shadow:0 0 50px rgba(212,175,55,.8)}}
+.login-title{font-family:'Cinzel',serif;font-size:20px;color:var(--gold);margin-bottom:6px}
+.login-sub{font-family:'Noto Sans Devanagari',sans-serif;font-size:13px;color:rgba(255,246,229,.5)}
+.field{margin-bottom:18px}
+.label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,246,229,.5);margin-bottom:8px;display:block}
+.input{width:100%;padding:13px 16px;background:rgba(255,246,229,.07);border:1.5px solid rgba(212,175,55,.2);border-radius:8px;color:var(--cream);font-family:'Lora',serif;font-size:15px;outline:none;transition:all .25s}
+.input:focus{border-color:var(--saffron)}
+.input.code-input{font-family:'Cinzel',serif;font-size:22px;letter-spacing:6px;text-transform:uppercase;text-align:center}
+.input.error{border-color:#EF4444}
+.err{font-size:12px;color:#EF4444;margin-top:5px;font-family:'Cinzel',serif;display:none}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px 24px;border-radius:6px;font-family:'Cinzel',serif;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;transition:all .3s;width:100%}
+.btn-primary{background:linear-gradient(135deg,var(--saffron),var(--saffron-d));color:#fff;box-shadow:0 4px 20px rgba(255,107,0,.3)}
+.btn-primary:hover:not(:disabled){transform:translateY(-2px)}
+.btn-red{background:linear-gradient(135deg,#E53E3E,#C53030);color:#fff;box-shadow:0 4px 20px rgba(229,62,62,.35)}
+.btn-red:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 28px rgba(229,62,62,.5)}
+.btn-ghost{background:rgba(255,246,229,.07);color:rgba(255,246,229,.6);border:1px solid rgba(212,175,55,.2);font-size:11px;padding:10px 18px}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none !important}
+/* LIVE UI */
+.live-preview{position:relative;border-radius:10px;overflow:hidden;background:#000;margin-bottom:14px}
+#local-video{width:100%;display:block;max-height:280px;object-fit:cover}
+.live-badge{position:absolute;top:10px;left:10px;background:rgba(229,62,62,.92);color:#fff;font-family:'Cinzel',serif;font-size:11px;letter-spacing:1.5px;padding:5px 12px;border-radius:20px;display:flex;align-items:center;gap:6px}
+.live-dot{width:7px;height:7px;background:#fff;border-radius:50%;animation:blink 1s infinite;flex-shrink:0}
+.viewer-count{position:absolute;bottom:10px;right:10px;background:rgba(0,0,0,.65);color:rgba(255,255,255,.75);font-family:'Cinzel',serif;font-size:10px;padding:3px 10px;border-radius:4px}
+.rec-badge{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.65);color:#FC8181;font-family:'Cinzel',serif;font-size:10px;padding:3px 10px;border-radius:4px;display:flex;align-items:center;gap:4px}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+/* TIMER */
+.live-timer{text-align:center;font-family:'Cinzel',serif;font-size:28px;color:#FC8181;margin:8px 0 16px;letter-spacing:2px}
+/* SUBSCRIBERS */
+.sub-card{background:rgba(255,246,229,.04);border:1px solid rgba(212,175,55,.12);border-radius:10px;padding:14px;margin-bottom:8px}
+.sub-name{font-family:'Cinzel',serif;font-size:13px;color:var(--gold-h);margin-bottom:3px}
+.sub-detail{font-size:12px;color:rgba(255,246,229,.45);line-height:1.6}
+.badge{display:inline-flex;align-items:center;gap:4px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:1px;padding:2px 8px;border-radius:12px;margin-top:6px}
+.badge-active{background:rgba(22,163,74,.1);color:#22C55E;border:1px solid rgba(22,163,74,.3)}
+.badge-today{background:rgba(255,107,0,.1);color:var(--saffron);border:1px solid rgba(255,107,0,.3)}
+/* RECORDING STATUS */
+.rec-status{background:rgba(22,163,74,.08);border:1px solid rgba(22,163,74,.3);border-radius:10px;padding:16px;text-align:center;margin-top:12px}
+.rec-status-icon{font-size:32px;margin-bottom:8px}
+.rec-status-title{font-family:'Cinzel',serif;font-size:14px;color:#22C55E;margin-bottom:6px}
+.rec-status-desc{font-size:12px;color:rgba(255,246,229,.5);line-height:1.6}
+.footer{padding:20px;text-align:center;border-top:1px solid rgba(212,175,55,.08);margin-top:auto}
+.footer-text{font-family:'Cinzel',serif;font-size:10px;color:rgba(255,246,229,.15);letter-spacing:1px}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#1E0C00;color:var(--gold-h);font-family:'Cinzel',serif;font-size:12px;padding:12px 24px;border-radius:8px;border:1px solid rgba(212,175,55,.3);box-shadow:0 8px 24px rgba(0,0,0,.6);opacity:0;transition:all .35s;pointer-events:none;z-index:999;max-width:90vw;text-align:center}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+@media(max-width:480px){.main{padding:16px 12px}.card{padding:16px}.input.code-input{font-size:18px;letter-spacing:4px}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="logo">
+    <div class="logo-icon">&#x1F549;</div>
+    <div><div class="logo-name">SanataniAnthem</div><div class="logo-sub">&#x939;&#x930; &#x918;&#x930; &#x92E;&#x902;&#x926;&#x93F;&#x930;</div></div>
+  </div>
+  <div class="topbar-badge">&#x1F534; PUROHIT LIVE</div>
+</div>
+
+<div class="main">
+
+  <!-- ════ LOGIN ════ -->
+  <div id="view-login">
+    <div class="login-header">
+      <div class="login-om">&#x950;</div>
+      <div class="login-title">Purohit Portal</div>
+      <div class="login-sub">&#x92A;&#x941;&#x930;&#x94B;&#x939;&#x93F;&#x924; &#x932;&#x93E;&#x907;&#x935; &#x92A;&#x94B;&#x930;&#x94D;&#x91F;&#x932;</div>
+    </div>
+    <div class="card">
+      <div class="card-title">&#x1F511; Apna Code Enter Karein</div>
+      <div class="field">
+        <label class="label">Secret Code</label>
+        <input class="input code-input" id="code-input" type="text" placeholder="KASHI7" maxlength="10"
+          oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')doLogin()"/>
+        <div class="err" id="login-err">Invalid code. Admin se contact karein.</div>
+      </div>
+      <button class="btn btn-primary" id="login-btn" onclick="doLogin()"><span>Login</span></button>
+    </div>
+  </div>
+
+  <!-- ════ PORTAL ════ -->
+  <div id="view-portal" style="display:none">
+
+    <!-- Mandir Header -->
+    <div style="text-align:center;margin-bottom:24px">
+      <div style="font-size:44px;margin-bottom:8px" id="mandir-emoji">&#x1F6D5;</div>
+      <div style="font-family:'Cinzel',serif;font-size:19px;color:var(--gold)" id="mandir-name">-</div>
+      <div style="font-size:12px;color:rgba(255,246,229,.4);margin-top:4px" id="mandir-loc">-</div>
+    </div>
+
+    <!-- ── LIVE CARD ── -->
+    <div class="card" style="border-color:rgba(229,62,62,.25)">
+      <div class="card-title" style="color:#FC8181">&#x1F534; Live Puja — Auto Record</div>
+
+      <!-- OFFLINE -->
+      <div id="state-offline">
+        <div style="background:rgba(255,107,0,.06);border:1px solid rgba(255,107,0,.15);border-radius:10px;padding:16px;margin-bottom:18px">
+          <div style="font-family:'Cinzel',serif;font-size:11px;color:var(--gold-h);margin-bottom:10px;letter-spacing:1px">&#x2728; KAISE KAAM KARTA HAI</div>
+          <div style="font-size:12px;color:rgba(255,246,229,.55);line-height:1.9">
+            &#x1F534; Start dabao &#x2192; Camera live ho jaaye<br/>
+            &#x1F3A5; Puja karo &#x2192; Automatically record hogi<br/>
+            &#x23F9; Stop karo &#x2192; Video cloud pe save ho jaaye<br/>
+            &#x2705; Admin approve kare &#x2192; Subscribers ko email jaaye
+          </div>
+        </div>
+        <button class="btn btn-red" id="start-btn" onclick="startLive()">
+          <span>&#x1F534; Start Live &amp; Record</span>
+        </button>
+      </div>
+
+      <!-- PREPARING -->
+      <div id="state-preparing" style="display:none;text-align:center;padding:20px 0">
+        <div class="spinner" style="margin:0 auto 12px"></div>
+        <div style="font-family:'Cinzel',serif;font-size:13px;color:rgba(255,246,229,.5)" id="prepare-text">Camera shuru ho rahi hai...</div>
+      </div>
+
+      <!-- LIVE -->
+      <div id="state-live" style="display:none">
+        <div class="live-preview">
+          <video id="local-video" autoplay muted playsinline></video>
+          <div class="live-badge"><div class="live-dot"></div>LIVE</div>
+          <div class="rec-badge"><div class="live-dot" style="background:#FC8181"></div>REC</div>
+          <div class="viewer-count" id="viewer-count">&#x1F441; 0</div>
+        </div>
+        <div class="live-timer" id="live-timer">00:00:00</div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-ghost" onclick="toggleCamera()" id="cam-btn" style="flex:1;padding:11px">&#x1F4F7; Cam Off</button>
+          <button class="btn btn-ghost" onclick="toggleMic()" id="mic-btn" style="flex:1;padding:11px">&#x1F3A4; Mic Off</button>
+          <button class="btn btn-ghost" onclick="stopLive()" style="flex:1;padding:11px;border-color:rgba(229,62,62,.4);color:#FC8181">&#x23F9; Stop</button>
+        </div>
+      </div>
+
+      <!-- SAVING -->
+      <div id="state-saving" style="display:none;text-align:center;padding:24px 0">
+        <div class="spinner" style="margin:0 auto 14px"></div>
+        <div style="font-family:'Cinzel',serif;font-size:13px;color:rgba(255,246,229,.6)">Recording cloud pe save ho rahi hai...</div>
+        <div style="font-size:11px;color:rgba(255,246,229,.3);margin-top:6px">Please wait, band mat karo</div>
+      </div>
+
+      <!-- SAVED -->
+      <div id="state-saved" style="display:none">
+        <div class="rec-status">
+          <div class="rec-status-icon">&#x1FA54;</div>
+          <div class="rec-status-title">Recording Save Ho Gayi!</div>
+          <div class="rec-status-desc">Admin approve karega toh sabhi subscribers ko email jaayega.<br/>Aapka kaam khatam! &#x1F64F;</div>
+        </div>
+        <button class="btn btn-red" onclick="resetForNext()" style="margin-top:16px">&#x1F534; Nayi Live Shuru Karo</button>
+      </div>
+    </div>
+
+    <!-- Subscribers List -->
+    <div class="card">
+      <div class="card-title">&#x1F64F; Is Mandir Ke Subscribers (<span id="sub-count">0</span>)</div>
+      <div id="subs-list"><div style="color:rgba(255,246,229,.3);font-size:13px;text-align:center;padding:20px">Loading...</div></div>
+    </div>
+
+    <div style="text-align:center;margin-bottom:20px">
+      <button class="btn btn-ghost" onclick="doLogout()" style="width:auto;padding:8px 22px;font-size:10px">&#x1F6AA; Logout</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer"><div class="footer-text">SanataniAnthem Purohit Portal • Confidential</div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ══════════════════════════════════════════
+   FIREBASE CONFIG
+══════════════════════════════════════════ */
+const firebaseConfig = {
+  apiKey: "AIzaSyBC1yt-YE74pKCKMfukmc7_3vicM49h6vE",
+  authDomain: "sanatanianthem-652a3.firebaseapp.com",
+  databaseURL: "https://sanatanianthem-652a3-default-rtdb.firebaseio.com",
+  projectId: "sanatanianthem-652a3",
+  storageBucket: "sanatanianthem-652a3.firebasestorage.app",
+  messagingSenderId: "1031082702558",
+  appId: "1:1031082702558:web:744ffa9cfa54ff838db44f"
+};
+firebase.initializeApp(firebaseConfig);
+const db_rt = firebase.database();
+
+/* ══════════════════════════════════════════
+   CLOUDINARY CONFIG
+══════════════════════════════════════════ */
+const CONFIG = {
+  CLOUDINARY_CLOUD_NAME:    'dfx2veoqn',
+  CLOUDINARY_UPLOAD_PRESET: 'SanataniAnthem',
+};
+
+/* ── STATE ── */
+let currentMandir = null;
+let localStream = null;
+let mediaRecorder = null;
+let recordedChunks = [];
+// WebRTC native — no PeerJS needed
+let activeConnections = []; // {pc, id}
+let offerCheckInterval = null;
+let timerInterval = null;
+let liveSeconds = 0;
+let camOn = true;
+let micOn = true;
+
+/* ── LOCAL DB (for subscriber data) ── */
+function getDB(){try{return JSON.parse(localStorage.getItem('sanatani_cms')||'{}')}catch(e){return{}}}
+function saveDB(db){localStorage.setItem('sanatani_cms',JSON.stringify(db))}
+
+/* ── FIREBASE LIVE SIGNAL ── */
+function setLiveSignal(mandirId, data) {
+  db_rt.ref('liveStreams/' + mandirId).set(data);
+}
+function clearLiveSignal(mandirId) {
+  db_rt.ref('liveStreams/' + mandirId).remove();
+}
+function saveRecordingToFirebase(rec) {
+  db_rt.ref('pujaRecordings/' + rec.id).set(rec);
+}
+
+function getDefaultMandirs(){return[
+  {id:'m1',name:'Kashi Vishwanath',location:'Varanasi, UP',emoji:'🛕',code:'KASHI7',active:true},
+  {id:'m2',name:'Tirupati Balaji',location:'Tirupati, AP',emoji:'🙏',code:'TIRUPA7',active:true},
+  {id:'m3',name:'Vaishno Devi',location:'Katra, J&K',emoji:'⛰️',code:'VAISH7',active:true},
+  {id:'m4',name:'Jagannath Puri',location:'Puri, Odisha',emoji:'🌊',code:'JAGANN7',active:true},
+  {id:'m5',name:'Somnath Mandir',location:'Prabhas Patan',emoji:'🌙',code:'SOMNAT7',active:true},
+  {id:'m6',name:'Shirdi Sai Baba',location:'Shirdi, MH',emoji:'🌹',code:'SHIRDI7',active:true},
+]}
+
+/* ── LOGIN ── */
+function doLogin(){
+  const code=(document.getElementById('code-input').value||'').trim().toUpperCase();
+  if(!code){showToast('Code enter karein');return}
+  const btn=document.getElementById('login-btn');
+  btn.innerHTML='<div class="spinner"></div><span>Checking...</span>';btn.disabled=true;
+  setTimeout(()=>{
+    const db=getDB();
+    const mandirs=(db.mandirs&&db.mandirs.length>0)?db.mandirs:getDefaultMandirs();
+    const mandir=mandirs.find(m=>m.code&&m.code.toUpperCase()===code);
+    btn.innerHTML='<span>Login</span>';btn.disabled=false;
+    if(!mandir){document.getElementById('login-err').style.display='block';document.getElementById('code-input').classList.add('error');return}
+    document.getElementById('login-err').style.display='none';document.getElementById('code-input').classList.remove('error');
+    currentMandir=mandir;showPortal(mandir);
+  },600);
+}
+
+function showPortal(m){
+  document.getElementById('view-login').style.display='none';
+  document.getElementById('view-portal').style.display='block';
+  document.getElementById('mandir-emoji').textContent=m.emoji||'🛕';
+  document.getElementById('mandir-name').textContent=m.name;
+  document.getElementById('mandir-loc').textContent='📍 '+m.location+(m.purohit?' • '+m.purohit:'');
+  loadSubscribers(m);
+}
+
+function loadSubscribers(mandir){
+  const db=getDB();
+  const subs=(db.subscriptions||[]).filter(s=>s.mandir&&s.mandir.id===mandir.id&&s.status==='active');
+  document.getElementById('sub-count').textContent=subs.length;
+  const list=document.getElementById('subs-list');
+  if(!subs.length){list.innerHTML='<div style="color:rgba(255,246,229,.3);font-size:13px;text-align:center;padding:24px">Abhi koi active subscriber nahi hai.</div>';return}
+  const today=new Date().getDate();
+  list.innerHTML=subs.map(s=>{
+    const isToday=(s.pujasDates||[]).includes(today);
+    return '<div class="sub-card"><div class="sub-name">🙏 '+s.name+
+      (s.gotra?'<span style="font-size:11px;opacity:.5;margin-left:6px">(Gotra: '+s.gotra+')</span>':'')+
+      '</div>'+
+      (s.sankalp?'<div class="sub-detail" style="color:rgba(255,140,53,.7)">🙏 '+s.sankalp+'</div>':'')+
+      '<div><span class="badge badge-active">Active</span>'+(isToday?' <span class="badge badge-today">Aaj Ka Din</span>':'')+'</div></div>';
+  }).join('');
+}
+
+/* ══════════════════════════════════════════
+   LIVE + RECORD
+══════════════════════════════════════════ */
+function setState(name){
+  ['offline','preparing','live','saving','saved'].forEach(s=>{
+    document.getElementById('state-'+s).style.display = s===name ? 'block' : 'none';
+  });
+}
+
+async function startLive(){
+  setState('preparing');
+  document.getElementById('prepare-text').textContent='Camera permission maang raha hai...';
+
+  try{
+    // Get camera + mic
+    localStream = await navigator.mediaDevices.getUserMedia({
+      video:{
+        facingMode:{ideal:'environment'},
+        width:{ideal:1280},
+        height:{ideal:720},
+        frameRate:{ideal:30}
+      },
+      audio:{
+        echoCancellation:true,
+        noiseSuppression:true
+      }
+    });
+    console.log('Stream tracks:', localStream.getTracks().map(t=>t.kind+':'+t.label));
+
+    document.getElementById('prepare-text').textContent='Live connect ho raha hai...';
+
+    // Show preview
+    document.getElementById('local-video').srcObject = localStream;
+
+    // Start MediaRecorder for local recording
+    recordedChunks = [];
+    const mimeType = MediaRecorder.isTypeSupported('video/webm;codecs=vp9,opus')
+      ? 'video/webm;codecs=vp9,opus'
+      : MediaRecorder.isTypeSupported('video/webm')
+      ? 'video/webm' : 'video/mp4';
+
+    mediaRecorder = new MediaRecorder(localStream, {mimeType, videoBitsPerSecond:1500000});
+    mediaRecorder.ondataavailable = e => { if(e.data.size>0) recordedChunks.push(e.data); };
+    mediaRecorder.start(1000); // collect every 1s
+
+    // Mark live in Firebase — visitors turant dekhenge
+    setLiveSignal(currentMandir.id, {
+      mandirId: currentMandir.id,
+      mandirName: currentMandir.name,
+      mandirEmoji: currentMandir.emoji || '🛕',
+      startTime: new Date().toISOString(),
+      isLive: true
+    });
+
+    setState('live');
+    startTimer();
+    showToast('🔴 Live shuru! Recording bhi chal rahi hai.');
+
+    // Native WebRTC — Firebase signaling, no external server needed!
+    offerCheckInterval = db_rt.ref('webrtc/' + currentMandir.id + '/offers').on('child_added', async snap => {
+      const data = snap.val();
+      if(!data || !data.offer || !localStream) return;
+      const viewerId = data.viewerId;
+
+      const ICE_CONFIG = { iceServers:[
+        {urls:'stun:stun.l.google.com:19302'},
+        {urls:'stun:stun1.l.google.com:19302'},
+        {urls:'turn:openrelay.metered.ca:80',username:'openrelayproject',credential:'openrelayproject'},
+        {urls:'turn:openrelay.metered.ca:443',username:'openrelayproject',credential:'openrelayproject'}
+      ]};
+
+      const pc = new RTCPeerConnection(ICE_CONFIG);
+
+      // Send local stream to viewer
+      localStream.getTracks().forEach(track => pc.addTrack(track, localStream));
+
+      // Send ICE candidates to Firebase
+      pc.onicecandidate = e => {
+        if(e.candidate)
+          db_rt.ref('webrtc/'+currentMandir.id+'/purohitCandidates/'+viewerId).push({candidate: e.candidate.candidate, sdpMid: e.candidate.sdpMid, sdpMLineIndex: e.candidate.sdpMLineIndex});
+      };
+
+      pc.onconnectionstatechange = () => {
+        if(pc.connectionState === 'connected'){
+          activeConnections.push({pc, id:viewerId});
+          updateViewerCount();
+          showToast('Ek viewer join kiya! 👁');
+        }
+        if(['disconnected','failed','closed'].includes(pc.connectionState)){
+          activeConnections = activeConnections.filter(c=>c.id!==viewerId);
+          updateViewerCount();
+        }
+      };
+
+      await pc.setRemoteDescription(new RTCSessionDescription(data.offer));
+      const answer = await pc.createAnswer();
+      await pc.setLocalDescription(answer);
+
+      // Send answer back
+      db_rt.ref('webrtc/'+currentMandir.id+'/answers/'+viewerId).set({answer: {type: pc.localDescription.type, sdp: pc.localDescription.sdp}});
+
+      // Receive viewer ICE candidates
+      db_rt.ref('webrtc/'+currentMandir.id+'/viewerCandidates/'+viewerId).on('child_added', candSnap => {
+        pc.addIceCandidate(new RTCIceCandidate(candSnap.val())).catch(()=>{});
+      });
+
+      snap.ref.remove(); // clean up offer
+    });
+
+  } catch(err){
+    setState('offline');
+    if(err.name==='NotAllowedError') showToast('Camera permission denied!');
+    else showToast('Camera start nahi hua: '+err.message);
+  }
+}
+
+function stopLive(){
+  if(!mediaRecorder && !localStream){ setState('offline'); return; }
+
+  setState('saving');
+  stopTimer();
+
+  // Remove from Firebase live registry
+  if(currentMandir) clearLiveSignal(currentMandir.id);
+
+  // Close all peer connections
+  activeConnections.forEach(c => { try{c.pc.close()}catch(e){} });
+  activeConnections = [];
+  // Stop listening for new offers
+  if(offerCheckInterval){
+    db_rt.ref('webrtc/'+currentMandir.id+'/offers').off('child_added', offerCheckInterval);
+    offerCheckInterval = null;
+  }
+  // Clean up WebRTC data from Firebase
+  if(currentMandir) db_rt.ref('webrtc/'+currentMandir.id).remove();
+
+  // Stop camera first (but keep stream data for upload)
+  document.getElementById('local-video').srcObject=null;
+
+  // Stop recording — onstop must be set BEFORE calling stop()
+  if(mediaRecorder && mediaRecorder.state!=='inactive'){
+    mediaRecorder.onstop = () => {
+      // Now stop camera tracks
+      if(localStream){ localStream.getTracks().forEach(t=>t.stop()); localStream=null; }
+      uploadRecording();
+    };
+    mediaRecorder.stop();
+  } else {
+    if(localStream){ localStream.getTracks().forEach(t=>t.stop()); localStream=null; }
+    uploadRecording();
+  }
+}
+
+async function uploadRecording(){
+  console.log('Upload starting. Chunks:', recordedChunks.length);
+  if(recordedChunks.length===0){
+    showToast('Koi recording nahi mili. Dobara try karein.');
+    setState('offline');
+    return;
+  }
+
+  const mimeType = recordedChunks[0].type || 'video/webm';
+  const ext = mimeType.includes('mp4') ? 'mp4' : 'webm';
+  const blob = new Blob(recordedChunks, {type: mimeType});
+  recordedChunks = [];
+
+  const date = new Date().toISOString().split('T')[0];
+  const filename = currentMandir.code + '_puja_' + date + '_' + Date.now();
+
+  const fd = new FormData();
+  fd.append('file', blob, filename+'.'+ext);
+  fd.append('upload_preset', CONFIG.CLOUDINARY_UPLOAD_PRESET);
+  fd.append('folder', 'sanatanianthem_recordings');
+  fd.append('public_id', filename);
+
+  try{
+    const res = await fetch(
+      'https://api.cloudinary.com/v1_1/'+CONFIG.CLOUDINARY_CLOUD_NAME+'/video/upload',
+      {method:'POST', body:fd}
+    );
+    const data = await res.json();
+    if(data.secure_url){
+      saveRecordingToDB(data.secure_url, data.duration||0);
+      setState('saved');
+      showToast('Recording save ho gayi! ✓');
+    } else {
+      throw new Error(data.error?.message || 'Upload failed');
+    }
+  } catch(err){
+    console.error('Upload error:', err);
+    showToast('Upload error: '+err.message+'. Internet check karo.');
+    setState('offline');
+  }
+}
+
+function saveRecordingToDB(videoUrl, duration){
+  const rec = {
+    id: 'rec_'+Date.now(),
+    mandirId: currentMandir.id,
+    mandirName: currentMandir.name,
+    mandirEmoji: currentMandir.emoji||'🛕',
+    videoUrl,
+    duration: Math.round(duration),
+    recordedAt: new Date().toISOString(),
+    status: 'pending',
+    approvedAt: null,
+    notifiedSubscribers: false,
+  };
+  // Save to Firebase — admin panel instantly dekh sakta hai
+  saveRecordingToFirebase(rec);
+  // Also save locally as backup
+  const db = getDB();
+  if(!db.pujaRecordings) db.pujaRecordings = [];
+  db.pujaRecordings.unshift(rec);
+  saveDB(db);
+}
+
+/* ── TIMER ── */
+function startTimer(){
+  liveSeconds=0;
+  timerInterval=setInterval(()=>{
+    liveSeconds++;
+    const h=String(Math.floor(liveSeconds/3600)).padStart(2,'0');
+    const m=String(Math.floor((liveSeconds%3600)/60)).padStart(2,'0');
+    const s=String(liveSeconds%60).padStart(2,'0');
+    document.getElementById('live-timer').textContent=h+':'+m+':'+s;
+  },1000);
+}
+function stopTimer(){ clearInterval(timerInterval); }
+
+/* ── CAM / MIC TOGGLE ── */
+function toggleCamera(){
+  if(!localStream)return;
+  const t=localStream.getVideoTracks()[0];if(!t)return;
+  camOn=!camOn; t.enabled=camOn;
+  document.getElementById('cam-btn').textContent=camOn?'📷 Cam Off':'📷 Cam On';
+}
+function toggleMic(){
+  if(!localStream)return;
+  const t=localStream.getAudioTracks()[0];if(!t)return;
+  micOn=!micOn; t.enabled=micOn;
+  document.getElementById('mic-btn').textContent=micOn?'🎤 Mic Off':'🎤 Mic On';
+}
+function updateViewerCount(){
+  document.getElementById('viewer-count').textContent='👁 '+activeConnections.length;
+}
+
+/* ── CLEANUP ── */
+function cleanupLive(){
+  if(localStream){localStream.getTracks().forEach(t=>t.stop());localStream=null;}
+  activeConnections.forEach(c=>{try{c.pc.close()}catch(e){}});
+  activeConnections=[];
+  if(offerCheckInterval && currentMandir){
+    db_rt.ref('webrtc/'+currentMandir.id+'/offers').off('child_added', offerCheckInterval);
+    offerCheckInterval=null;
+  }
+  if(mediaRecorder&&mediaRecorder.state!=='inactive')mediaRecorder.stop();
+  stopTimer(); activeConnections=[];
+}
+
+function resetForNext(){
+  setState('offline');
+  document.getElementById('live-timer').textContent='00:00:00';
+  document.getElementById('viewer-count').textContent='👁 0';
+  document.getElementById('cam-btn').textContent='📷 Cam Off';
+  document.getElementById('mic-btn').textContent='🎤 Mic Off';
+  camOn=true; micOn=true;
+  loadSubscribers(currentMandir);
+}
+
+function doLogout(){
+  cleanupLive();
+  if(currentMandir) clearLiveSignal(currentMandir.id);
+  currentMandir=null;
+  document.getElementById('view-portal').style.display='none';
+  document.getElementById('view-login').style.display='block';
+  document.getElementById('code-input').value='';
+  setState('offline');
+  window.scrollTo({top:0,behavior:'smooth'});
+  showToast('Logout. Jai Shri Ram! 🙏');
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3200);
+}
+</script>
+</body>
+</html>
