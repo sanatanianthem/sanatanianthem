@@ -823,15 +823,10 @@ async function checkAndEnter(user){
       showDashboard(user,profile);
       return;
     }
-    if(d.status==='approved'){
-      currentMandir=d.mandirObj||{id:user.uid,name:d.mandir||d.mandirName,location:d.city,emoji:'🛕'};
-      saveSess(user,currentMandir);
-      if(getPatH()) showPatUnlock(getSess()); else showPatSetup();
-    } else {
-      // pending or rejected — show dashboard
-      saveSess(user,d.mandirObj||{id:user.uid,name:d.name,location:d.city||'',emoji:'🛕'});
-      showDashboard(user,d);
-    }
+    // Always show dashboard after login (approved or pending)
+    currentMandir=d.mandirObj||{id:user.uid,name:d.mandir||d.mandirName||d.name,location:d.city||'',emoji:'🛕'};
+    saveSess(user,currentMandir);
+    showDashboard(user,d);
   }catch(e){ showErr('Connection error. Dobara try karein.'); }
 }
 
@@ -939,7 +934,19 @@ window.addEventListener('load',()=>{
   ccRenderList();
   const s=getSess(); if(!s)return;
   currentMandir=s.mandir;
-  if(getPatH()) showPatUnlock(s); else showPortal(s.mandir);
+  // Session ache — Firebase theke profile niye dashboard dikhao
+  db_rt.ref('purohits/'+s.uid).once('value').then(snap=>{
+    const d=snap.val();
+    if(!d){ clearSess(); return; }
+    if(getPatH() && d.status==='approved'){
+      showPatUnlock(s);
+    } else {
+      showDashboard({uid:s.uid,email:s.email||'',phoneNumber:d.phone||'',displayName:d.name||''},d);
+    }
+  }).catch(()=>{
+    // Offline fallback — show pattern or portal
+    if(getPatH()) showPatUnlock(s); else showPortal(s.mandir);
+  });
 });
 let _otpMode  = 'demo';
 let _demoOTP  = '';
