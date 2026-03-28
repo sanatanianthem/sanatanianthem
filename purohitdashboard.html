@@ -23,18 +23,11 @@ button{cursor:pointer;font-family:inherit;border:none}
 .main{flex:1;padding:28px 20px;max-width:520px;width:100%;margin:0 auto}
 .card{background:rgba(255,246,229,.05);border:1px solid rgba(212,175,55,.18);border-radius:14px;padding:24px;margin-bottom:20px}
 .card-title{font-family:'Cinzel',serif;font-size:14px;color:var(--gold-h);margin-bottom:16px;display:flex;align-items:center;gap:8px}
-.login-header{text-align:center;padding:20px 0 32px}
-.login-om{font-family:'Noto Sans Devanagari',sans-serif;font-size:64px;color:var(--gold);line-height:1;margin-bottom:12px;animation:glow 3s ease-in-out infinite}
-@keyframes glow{0%,100%{text-shadow:0 0 20px rgba(212,175,55,.4)}50%{text-shadow:0 0 50px rgba(212,175,55,.8)}}
-.login-title{font-family:'Cinzel',serif;font-size:20px;color:var(--gold);margin-bottom:6px}
-.login-sub{font-family:'Noto Sans Devanagari',sans-serif;font-size:13px;color:rgba(255,246,229,.5)}
+
 .field{margin-bottom:18px}
 .label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,246,229,.5);margin-bottom:8px;display:block}
 .input{width:100%;padding:13px 16px;background:rgba(255,246,229,.07);border:1.5px solid rgba(212,175,55,.2);border-radius:8px;color:var(--cream);font-family:'Lora',serif;font-size:15px;outline:none;transition:all .25s}
 .input:focus{border-color:var(--saffron)}
-.input.code-input{font-family:'Cinzel',serif;font-size:22px;letter-spacing:6px;text-transform:uppercase;text-align:center}
-.input.error{border-color:#EF4444}
-.err{font-size:12px;color:#EF4444;margin-top:5px;font-family:'Cinzel',serif;display:none}
 .btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px 24px;border-radius:6px;font-family:'Cinzel',serif;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;transition:all .3s;width:100%}
 .btn-primary{background:linear-gradient(135deg,var(--saffron),var(--saffron-d));color:#fff;box-shadow:0 4px 20px rgba(255,107,0,.3)}
 .btn-primary:hover:not(:disabled){transform:translateY(-2px)}
@@ -70,8 +63,9 @@ button{cursor:pointer;font-family:inherit;border:none}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#1E0C00;color:var(--gold-h);font-family:'Cinzel',serif;font-size:12px;padding:12px 24px;border-radius:8px;border:1px solid rgba(212,175,55,.3);box-shadow:0 8px 24px rgba(0,0,0,.6);opacity:0;transition:all .35s;pointer-events:none;z-index:999;max-width:90vw;text-align:center}
 .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
 @keyframes spin{to{transform:rotate(360deg)}}
+@keyframes glow{0%,100%{text-shadow:0 0 20px rgba(212,175,55,.4)}50%{text-shadow:0 0 50px rgba(212,175,55,.9)}}
 .spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
-@media(max-width:480px){.main{padding:16px 12px}.card{padding:16px}.input.code-input{font-size:18px;letter-spacing:4px}}
+@media(max-width:480px){.main{padding:16px 12px}.card{padding:16px}}
 </style>
 </head>
 <body>
@@ -88,23 +82,10 @@ button{cursor:pointer;font-family:inherit;border:none}
 
 <div class="main">
 
-  <!-- ════ LOGIN ════ -->
-  <div id="view-login">
-    <div class="login-header">
-      <div class="login-om">&#x950;</div>
-      <div class="login-title">Purohit Portal</div>
-      <div class="login-sub">&#x92A;&#x941;&#x930;&#x94B;&#x939;&#x93F;&#x924; &#x932;&#x93E;&#x907;&#x935; &#x92A;&#x94B;&#x930;&#x94D;&#x91F;&#x932;</div>
-    </div>
-    <div class="card">
-      <div class="card-title">&#x1F511; Apna Code Enter Karein</div>
-      <div class="field">
-        <label class="label">Secret Code</label>
-        <input class="input code-input" id="code-input" type="text" placeholder="KASHI7" maxlength="10"
-          oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')doLogin()"/>
-        <div class="err" id="login-err">Invalid code. Admin se contact karein.</div>
-      </div>
-      <button class="btn btn-primary" id="login-btn" onclick="doLogin()"><span>Login</span></button>
-    </div>
+  <!-- ════ LOADING SCREEN ════ -->
+  <div id="view-loading" style="text-align:center;padding:80px 20px">
+    <div style="font-size:64px;color:var(--gold);line-height:1;margin-bottom:20px;animation:glow 2s ease-in-out infinite">&#x950;</div>
+    <div style="font-family:'Cinzel',serif;font-size:13px;color:rgba(255,246,229,.4);letter-spacing:2px">Loading...</div>
   </div>
 
   <!-- ════ PORTAL ════ -->
@@ -245,39 +226,54 @@ function saveRecordingToFirebase(rec) {
   db_rt.ref('pujaRecordings/' + rec.id).set(rec);
 }
 
-function getDefaultMandirs(){return[
-  {id:'m1',name:'Kashi Vishwanath',location:'Varanasi, UP',emoji:'🛕',code:'KASHI7',active:true},
-  {id:'m2',name:'Tirupati Balaji',location:'Tirupati, AP',emoji:'🙏',code:'TIRUPA7',active:true},
-  {id:'m3',name:'Vaishno Devi',location:'Katra, J&K',emoji:'⛰️',code:'VAISH7',active:true},
-  {id:'m4',name:'Jagannath Puri',location:'Puri, Odisha',emoji:'🌊',code:'JAGANN7',active:true},
-  {id:'m5',name:'Somnath Mandir',location:'Prabhas Patan',emoji:'🌙',code:'SOMNAT7',active:true},
-  {id:'m6',name:'Shirdi Sai Baba',location:'Shirdi, MH',emoji:'🌹',code:'SHIRDI7',active:true},
-]}
+/* ══════════════════════════════════════════
+   SESSION AUTH — depends entirely on purohit.html
+   No login here. Session not found → redirect.
+══════════════════════════════════════════ */
+const SK = 'sa_pur_s';
 
-/* ── LOGIN ── */
-function doLogin(){
-  const code=(document.getElementById('code-input').value||'').trim().toUpperCase();
-  if(!code){showToast('Code enter karein');return}
-  const btn=document.getElementById('login-btn');
-  btn.innerHTML='<div class="spinner"></div><span>Checking...</span>';btn.disabled=true;
-  setTimeout(()=>{
-    const db=getDB();
-    const mandirs=(db.mandirs&&db.mandirs.length>0)?db.mandirs:getDefaultMandirs();
-    const mandir=mandirs.find(m=>m.code&&m.code.toUpperCase()===code);
-    btn.innerHTML='<span>Login</span>';btn.disabled=false;
-    if(!mandir){document.getElementById('login-err').style.display='block';document.getElementById('code-input').classList.add('error');return}
-    document.getElementById('login-err').style.display='none';document.getElementById('code-input').classList.remove('error');
-    currentMandir=mandir;showPortal(mandir);
-  },600);
+function getSession(){
+  try {
+    const raw = localStorage.getItem(SK);
+    if(!raw) return null;
+    const s = JSON.parse(raw);
+    if(!s || Date.now() > s.exp){ localStorage.removeItem(SK); return null; }
+    return s;
+  } catch(e){ return null; }
 }
 
-function showPortal(m){
-  document.getElementById('view-login').style.display='none';
+function initDashboard(){
+  const sess = getSession();
+  if(!sess){
+    // No session — redirect to purohit.html immediately
+    window.location.replace('purohit.html');
+    return;
+  }
+
+  const mandir = sess.mandir || {
+    id: sess.uid, name: 'Aapka Mandir',
+    location: '', emoji: '🛕'
+  };
+  currentMandir = mandir;
+
+  // Load fresh profile from Firebase
+  db_rt.ref('purohits/' + sess.uid).once('value').then(snap => {
+    const profile = snap.val();
+    if(profile && profile.mandirObj) currentMandir = profile.mandirObj;
+    showPortal(currentMandir, sess.name || 'Purohit ji');
+  }).catch(() => {
+    showPortal(mandir, sess.name || 'Purohit ji');
+  });
+}
+
+function showPortal(m, purohitName){
+  document.getElementById('view-loading').style.display='none';
   document.getElementById('view-portal').style.display='block';
   document.getElementById('mandir-emoji').textContent=m.emoji||'🛕';
-  document.getElementById('mandir-name').textContent=m.name;
-  document.getElementById('mandir-loc').textContent='📍 '+m.location+(m.purohit?' • '+m.purohit:'');
+  document.getElementById('mandir-name').textContent=m.name||'Aapka Mandir';
+  document.getElementById('mandir-loc').textContent='📍 '+(m.location||'')+(purohitName?' • 🙏 '+purohitName:'');
   loadSubscribers(m);
+  showToast('🙏 Swagat hai, '+(purohitName||'Purohit ji')+'!');
 }
 
 function loadSubscribers(mandir){
@@ -570,19 +566,19 @@ function resetForNext(){
 function doLogout(){
   cleanupLive();
   if(currentMandir) clearLiveSignal(currentMandir.id);
+  localStorage.removeItem(SK);
   currentMandir=null;
-  document.getElementById('view-portal').style.display='none';
-  document.getElementById('view-login').style.display='block';
-  document.getElementById('code-input').value='';
-  setState('offline');
-  window.scrollTo({top:0,behavior:'smooth'});
-  showToast('Logout. Jai Shri Ram! 🙏');
+  showToast('Logout ho gaye. Jai Shri Ram! 🙏');
+  setTimeout(()=>{ window.location.replace('purohit.html'); }, 1500);
 }
 
 function showToast(msg){
   const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),3200);
 }
+
+/* Run on page load */
+document.addEventListener('DOMContentLoaded', initDashboard);
 </script>
 </body>
 </html>
