@@ -312,8 +312,6 @@ textarea.field-input{resize:vertical;min-height:90px}
 #mobile-close{position:absolute;top:20px;right:24px;font-size:28px;color:var(--gold);cursor:pointer;background:none;border:none}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
 
@@ -568,7 +566,7 @@ textarea.field-input{resize:vertical;min-height:90px}
 
           <div class="checkbox-row" id="terms-row">
             <div class="custom-checkbox" id="terms-checkbox" onclick="toggleTerms()"></div>
-            <span class="checkbox-text">I agree to the <a href="#">Terms of Service</a> and <a href="#">Puja Subscription Policy</a>. I understand that 4 pujas will be performed monthly at my chosen temple and videos will be emailed to me.</span>
+            <span class="checkbox-text">I agree to the <a href="index.html#terms">Terms of Service</a> and <a href="index.html#terms">Puja Subscription Policy</a>. I understand that 4 pujas will be performed monthly at my chosen temple and videos will be emailed to me.</span>
           </div>
           <div class="field-error hidden" id="err-terms">Please accept the terms to continue</div>
 
@@ -732,23 +730,10 @@ function getDB(){
 }
 
 /* ══ EMAILJS ══ */
-emailjs.init('KbAWcBNxayfWnSH4R');
-
-async function sendConfirmationEmail(subscription){
-  try {
-    await emailjs.send('service_mw59a1f', 'template_nbxr39o', {
-      to_email:        subscription.email,
-      subscriber_name: subscription.name,
-      mandir_name:     subscription.mandir ? subscription.mandir.name : 'Your Temple',
-      puja_dates:      (subscription.pujasDates || [1,8,15,22]).map(d=>d+'th').join(', '),
-      subscription_id: subscription.id,
-      gotra:           subscription.gotra || 'Not specified',
-    });
-    console.log('Confirmation email sent to:', subscription.email);
-  } catch(e) {
-    console.error('Email send error:', e);
-  }
-}
+const EMAILJS_PUBLIC_KEY  = 'KbAWcBNxayfWnSH4R';
+const EMAILJS_SERVICE_ID  = 'service_mw59a1f';
+const EMAILJS_TEMPLATE_ID = 'template_nbxr39o';
+emailjs.init(EMAILJS_PUBLIC_KEY);
 
 function getMandirs(){
   const db = getDB();
@@ -916,15 +901,18 @@ function initiatePayment(){
   btn.classList.add('btn-loading');
   btn.disabled = true;
 
-  // ── PRODUCTION: Load Razorpay ──
+  // ── PRODUCTION: Razorpay payment ──
+  // ⚠️  STEP 1: Razorpay Dashboard → Settings → API Keys → Copy "Key ID"
+  // ⚠️  STEP 2: Create a Subscription Plan in Razorpay Dashboard → get subscription_id
+  // ⚠️  STEP 3: Replace the two placeholder values below, then uncomment this block
   // const options = {
-  //   key: 'YOUR_RAZORPAY_KEY',
-  //   amount: 20000, // ₹200 in paise
+  //   key: 'rzp_live_XXXXXXXXXXXXXXXX',       // ← apna Razorpay Key ID yahan daalen
+  //   amount: 20000,
   //   currency: 'INR',
   //   name: 'SanataniAnthem',
   //   description: 'Monthly Puja Subscription – 4 Pujas',
   //   image: '/logo.png',
-  //   subscription_id: 'YOUR_RAZORPAY_SUBSCRIPTION_ID',
+  //   subscription_id: 'sub_XXXXXXXXXXXXXXXX', // ← apna Razorpay Subscription ID yahan daalen
   //   handler: function(response){ onPaymentSuccess(response); },
   //   prefill: { name: formState.name, email: formState.email, contact: formState.phone },
   //   theme: { color: '#FF6B00' }
@@ -1099,79 +1087,19 @@ window.addEventListener('scroll',()=>{
 ══════════════════════════════════════════ */
 
 /* ════════════════════════════════════════
-   SUBSCRIPTION CONFIRMATION EMAIL
+   SUBSCRIPTION CONFIRMATION EMAIL (single clean version)
 ════════════════════════════════════════ */
-function sendConfirmationEmail(sub) {
+async function sendConfirmationEmail(sub) {
   try {
-    emailjs.init('KbAWcBNxayfWnSH4R');
-    emailjs.send('service_mw59a1f', 'template_nbxr39o', {
+    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
       to_email:        sub.email,
       subscriber_name: sub.name,
       mandir_name:     sub.mandir ? sub.mandir.name : 'Selected Mandir',
       puja_dates:      (sub.pujasDates || [1,8,15,22]).map(d => d+'th').join(', '),
       subscription_id: sub.id,
       gotra:           sub.gotra || 'Not specified',
-    }).then(() => {
-      console.log('Confirmation email sent to', sub.email);
-    }).catch(e => {
-      console.error('Email error:', e);
     });
-  } catch(e) {
-    console.error('EmailJS error:', e);
-  }
-}
-
-
-/* ════════════════════════════════════════
-   SUBSCRIPTION CONFIRMATION EMAIL
-════════════════════════════════════════ */
-function sendConfirmationEmail(sub) {
-  const EMAILJS_PUBLIC_KEY  = 'KbAWcBNxayfWnSH4R';
-  const EMAILJS_SERVICE_ID  = 'service_mw59a1f';
-  const EMAILJS_TEMPLATE_ID = 'template_nbxr39o';
-
-  try {
-    emailjs.init(EMAILJS_PUBLIC_KEY);
-    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-      to_email:        sub.email,
-      subscriber_name: sub.name,
-      mandir_name:     sub.mandir ? sub.mandir.name : 'Your Temple',
-      puja_dates:      (sub.pujasDates || [1,8,15,22]).map(d => d+'th').join(', '),
-      subscription_id: sub.id,
-      gotra:           sub.gotra || 'Not specified',
-    }).then(() => {
-      console.log('Confirmation email sent to:', sub.email);
-    }).catch(e => {
-      console.error('Email send error:', e);
-    });
-  } catch(e) {
-    console.error('EmailJS error:', e);
-  }
-}
-
-
-/* ════════════════════════════════════════
-   SUBSCRIPTION CONFIRMATION EMAIL
-════════════════════════════════════════ */
-function sendConfirmationEmail(sub) {
-  const EMAILJS_PUBLIC_KEY  = 'KbAWcBNxayfWnSH4R';
-  const EMAILJS_SERVICE_ID  = 'service_mw59a1f';
-  const EMAILJS_TEMPLATE_ID = 'template_nbxr39o'; // Subscription confirmation
-
-  try {
-    emailjs.init(EMAILJS_PUBLIC_KEY);
-    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-      to_email:        sub.email,
-      subscriber_name: sub.name,
-      mandir_name:     sub.mandir ? sub.mandir.name : 'Selected Mandir',
-      puja_dates:      (sub.pujasDates || [1,8,15,22]).map(d => d+'th').join(', '),
-      subscription_id: sub.id,
-      gotra:           sub.gotra || 'Not specified',
-    }).then(() => {
-      console.log('Confirmation email sent to', sub.email);
-    }).catch(e => {
-      console.error('Email send error:', e);
-    });
+    console.log('Confirmation email sent to:', sub.email);
   } catch(e) {
     console.error('EmailJS error:', e);
   }
