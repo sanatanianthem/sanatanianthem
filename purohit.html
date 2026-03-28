@@ -283,43 +283,43 @@ button{cursor:pointer;font-family:inherit;border:none}
 }
 
 /* ── STEP DOTS ── */
-.su-dot{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Cinzel',serif;font-size:11px;border:1px solid rgba(212,175,55,.2);color:rgba(255,246,229,.3);background:rgba(212,175,55,.05);transition:all .3s}
-.su-dot.active{background:linear-gradient(135deg,var(--saffron),var(--saffron-d));border-color:var(--saffron);color:#fff}
-.su-dot.done{background:rgba(34,197,94,.15);border-color:rgba(34,197,94,.4);color:#22C55E}
+.sdot{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Cinzel',serif;font-size:11px;border:1px solid rgba(212,175,55,.2);color:rgba(255,246,229,.3);background:rgba(212,175,55,.05);transition:all .3s;flex-shrink:0}
+.sdot.active{background:linear-gradient(135deg,var(--saffron),var(--saffron-d));border-color:var(--saffron);color:#fff}
+.sdot.done{background:rgba(34,197,94,.15);border-color:rgba(34,197,94,.4);color:#22C55E}
 
-/* ── PATTERN LOCK OVERLAY ── */
-#pattern-overlay{position:fixed;inset:0;z-index:9999;background:#0F0A05;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
-#pattern-overlay.hidden{display:none}
-.pat-title{font-family:'Cinzel Decorative',serif;font-size:17px;color:var(--gold);margin-bottom:4px;text-align:center}
-.pat-sub{font-size:12px;color:rgba(255,246,229,.35);margin-bottom:6px;text-align:center;font-family:'Cinzel',serif;letter-spacing:.5px}
-.pat-status{font-family:'Cinzel',serif;font-size:12px;letter-spacing:.5px;height:22px;margin-bottom:14px;text-align:center;transition:color .25s}
-.pat-status.err{color:#EF4444}
-.pat-status.ok{color:#22C55E}
-.pat-status.info{color:rgba(255,246,229,.35)}
-#pat-canvas{touch-action:none;cursor:crosshair;border-radius:12px}
-.pat-hint{font-size:11px;color:rgba(255,246,229,.2);margin-top:16px;text-align:center;font-family:'Cinzel',serif}
-.pat-forgot{margin-top:14px;padding:8px 22px;background:transparent;border:1px solid rgba(212,175,55,.2);border-radius:6px;color:rgba(255,246,229,.3);font-family:'Cinzel',serif;font-size:10px;letter-spacing:1px;cursor:pointer;transition:all .2s}
-.pat-forgot:hover{border-color:rgba(212,175,55,.4);color:rgba(255,246,229,.6)}
+/* ── OR DIVIDER ── */
+.divor{display:flex;align-items:center;gap:10px;margin:14px 0}
+.divor span{flex:1;height:1px;background:rgba(212,175,55,.12)}
+.divor em{font-family:'Cinzel',serif;font-size:9px;color:rgba(255,246,229,.25);letter-spacing:1px;font-style:normal;white-space:nowrap}
 
-/* ── DIVIDER ── */
-.divider-or{display:flex;align-items:center;gap:10px;margin:14px 0}
-.divider-or span{flex:1;height:1px;background:rgba(212,175,55,.12)}
-.divider-or label{font-family:'Cinzel',serif;font-size:9px;color:rgba(255,246,229,.25);letter-spacing:1px;white-space:nowrap}
+/* ── GOOGLE BTN ── */
+.gbtn{width:100%;padding:11px;border-radius:6px;border:1px solid rgba(212,175,55,.2);background:rgba(255,255,255,.04);color:var(--cream);font-family:'Cinzel',serif;font-size:11px;letter-spacing:.8px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:border-color .2s}
+.gbtn:hover{border-color:rgba(212,175,55,.4)}
+
+/* ── PATTERN OVERLAY ── */
+#pat-ov{position:fixed;inset:0;z-index:9999;background:#0F0A05;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+#pat-ov.hidden{display:none}
+.pat-t{font-family:'Cinzel Decorative',serif;font-size:17px;color:var(--gold);text-align:center;margin-bottom:4px}
+.pat-s{font-size:12px;color:rgba(255,246,229,.3);text-align:center;margin-bottom:6px;font-family:'Cinzel',serif}
+.pat-st{font-family:'Cinzel',serif;font-size:12px;height:20px;margin-bottom:14px;text-align:center;transition:color .2s}
+.pat-st.e{color:#EF4444}.pat-st.ok{color:#22C55E}.pat-st.i{color:rgba(255,246,229,.3)}
+#pat-cv{touch-action:none;cursor:crosshair}
+.pat-hint{font-size:11px;color:rgba(255,246,229,.18);margin-top:14px;text-align:center;font-family:'Cinzel',serif}
+.pat-fb{margin-top:14px;padding:8px 22px;background:transparent;border:1px solid rgba(212,175,55,.18);border-radius:6px;color:rgba(255,246,229,.28);font-family:'Cinzel',serif;font-size:10px;letter-spacing:1px;cursor:pointer}
+.pat-fb:hover{border-color:rgba(212,175,55,.4);color:rgba(255,246,229,.6)}
 </style>
 </head>
 <body>
 
 <!-- ══ PATTERN LOCK OVERLAY ══ -->
-<div id="pattern-overlay" class="hidden">
-  <div style="font-size:44px;margin-bottom:14px">🔐</div>
-  <div class="pat-title" id="pat-title">Welcome Back</div>
-  <div class="pat-sub"   id="pat-sub">Apna pattern draw karein</div>
-  <div class="pat-status info" id="pat-status">Draw karna shuru karein</div>
-  <canvas id="pat-canvas" width="264" height="264"></canvas>
-  <div class="pat-hint"  id="pat-hint">Kam se kam 4 dots connect karein</div>
-  <button class="pat-forgot" id="pat-forgot" style="display:none" onclick="forgotPattern()">
-    🔑 Pattern bhool gaye? Full login karein
-  </button>
+<div id="pat-ov" class="hidden">
+  <div style="font-size:44px;margin-bottom:12px">🔐</div>
+  <div class="pat-t" id="pat-t">Welcome Back</div>
+  <div class="pat-s" id="pat-s">Apna pattern draw karein</div>
+  <div class="pat-st i" id="pat-st">Draw karna shuru karein</div>
+  <canvas id="pat-cv" width="264" height="264"></canvas>
+  <div class="pat-hint">Kam se kam 4 dots connect karein</div>
+  <button class="pat-fb" id="pat-fb" style="display:none" onclick="forgotPattern()">🔑 Pattern bhool gaye? Full login karein</button>
 </div>
 <div class="topbar">
   <div class="logo">
@@ -339,148 +339,136 @@ button{cursor:pointer;font-family:inherit;border:none}
       <div class="login-sub">&#x92A;&#x941;&#x930;&#x94B;&#x939;&#x93F;&#x924; &#x932;&#x93E;&#x907;&#x935; &#x92A;&#x94B;&#x930;&#x94D;&#x91F;&#x932;</div>
     </div>
 
-    <!-- Pending approval notice -->
-    <div id="pending-notice" style="display:none;background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.3);border-radius:10px;padding:18px;text-align:center;margin-bottom:16px">
+    <!-- Pending notice -->
+    <div id="pend-notice" style="display:none;background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.3);border-radius:10px;padding:18px;text-align:center;margin-bottom:16px">
       <div style="font-size:28px;margin-bottom:8px">🕐</div>
       <div style="font-family:'Cinzel',serif;font-size:13px;color:var(--gold);margin-bottom:6px">Registration Ho Gayi!</div>
       <div style="font-size:12px;color:rgba(255,246,229,.5);line-height:1.7">Admin se approval ka wait karein.<br/>Approve hone ke baad login kar payenge.</div>
     </div>
 
-    <!-- Global error -->
-    <div id="login-err" style="display:none;margin-bottom:14px;font-size:12px;color:#EF4444;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);padding:10px 14px;border-radius:6px;font-family:'Cinzel',serif;text-align:center"></div>
+    <!-- Error -->
+    <div id="lg-err" style="display:none;margin-bottom:12px;font-size:12px;color:#EF4444;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);padding:10px 14px;border-radius:6px;font-family:'Cinzel',serif;text-align:center"></div>
 
-    <!-- ══ REGISTRATION VIEW (default) ══ -->
-    <div id="view-signup">
-
+    <!-- ══ REGISTRATION (default) ══ -->
+    <div id="vw-reg">
       <!-- Step dots -->
-      <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:4px">
-        <div class="su-dot active" id="sd1">1</div>
-        <div style="flex:1;max-width:32px;height:2px;background:rgba(212,175,55,.15)"></div>
-        <div class="su-dot" id="sd2">2</div>
-        <div style="flex:1;max-width:32px;height:2px;background:rgba(212,175,55,.15)"></div>
-        <div class="su-dot" id="sd3">3</div>
+      <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:4px">
+        <div class="sdot active" id="sd1">1</div>
+        <div style="width:28px;height:2px;background:rgba(212,175,55,.15)"></div>
+        <div class="sdot" id="sd2">2</div>
+        <div style="width:28px;height:2px;background:rgba(212,175,55,.15)"></div>
+        <div class="sdot" id="sd3">3</div>
       </div>
-      <div style="text-align:center;font-family:'Cinzel',serif;font-size:9px;color:rgba(255,246,229,.2);letter-spacing:1.5px;margin-bottom:16px" id="su-step-lbl">STEP 1 OF 3 — EMAIL REGISTER</div>
+      <div style="text-align:center;font-family:'Cinzel',serif;font-size:9px;color:rgba(255,246,229,.2);letter-spacing:1.5px;margin-bottom:14px" id="sd-lbl">STEP 1 OF 3 — EMAIL REGISTER</div>
 
-      <!-- STEP 1: Email + Password -->
-      <div id="su-step1" class="card">
+      <!-- Step 1: Email + Password -->
+      <div id="rs1" class="card">
         <div class="card-title">📝 New Registration</div>
         <div class="field">
           <label class="label">Email Address</label>
-          <input class="input" id="su-email" type="email" placeholder="purohit@example.com"/>
+          <input class="input" id="r-email" type="email" placeholder="purohit@example.com"/>
         </div>
         <div class="field">
           <label class="label">Password Banayein</label>
-          <input class="input" id="su-pass" type="password" placeholder="Min 6 characters"/>
+          <input class="input" id="r-pass" type="password" placeholder="Min 6 characters"/>
         </div>
         <div class="field">
           <label class="label">Password Confirm Karein</label>
-          <input class="input" id="su-pass2" type="password" placeholder="••••••••"
-            onkeydown="if(event.key==='Enter')suStep1()"/>
+          <input class="input" id="r-pass2" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')rStep1()"/>
         </div>
-        <button class="btn btn-primary" id="su-s1-btn" onclick="suStep1()" style="width:100%;justify-content:center">
-          Next → Mobile Verify
-        </button>
-        <div class="divider-or"><span></span><label>YA PHIR</label><span></span></div>
-        <button onclick="doGoogleLogin()" style="width:100%;padding:11px;border-radius:6px;border:1px solid rgba(212,175,55,.2);background:rgba(255,255,255,.04);color:var(--cream);font-family:'Cinzel',serif;font-size:11px;letter-spacing:.8px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px">
-          <span style="font-weight:900;font-size:15px;color:#4285F4">G</span> Google se Register / Login
-        </button>
-        <div style="text-align:center;margin-top:14px;font-size:12px;color:rgba(255,246,229,.25)">
-          Already registered?
-          <button onclick="setMode('signin')" style="background:none;border:none;color:var(--saffron);font-family:'Cinzel',serif;font-size:11px;cursor:pointer">Login karein →</button>
+        <button class="btn btn-primary" id="rs1-btn" onclick="rStep1()" style="width:100%;justify-content:center">Next → Mobile Verify</button>
+        <div class="divor"><span></span><em>YA PHIR</em><span></span></div>
+        <button class="gbtn" onclick="doGoogle()"><span style="font-weight:900;font-size:15px;color:#4285F4">G</span> Google se Register / Login</button>
+        <div style="text-align:center;margin-top:14px;font-size:12px;color:rgba(255,246,229,.22)">
+          Already registered? <button onclick="showMode('login')" style="background:none;border:none;color:var(--saffron);font-family:'Cinzel',serif;font-size:11px;cursor:pointer">Login karein →</button>
         </div>
       </div>
 
-      <!-- STEP 2: Mobile OTP -->
-      <div id="su-step2" class="card" style="display:none">
+      <!-- Step 2: Mobile OTP -->
+      <div id="rs2" class="card" style="display:none">
         <div class="card-title">📱 Step 2: Mobile Verify</div>
         <div style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:6px;padding:10px;margin-bottom:14px;font-size:11px;color:#22C55E;text-align:center">✅ Email registered!</div>
-        <div id="su-ph1">
+        <div id="rs2a">
           <div class="field">
             <label class="label">Mobile Number</label>
-            <input class="input" id="su-phone" type="tel" placeholder="+91 98765 43210"/>
+            <input class="input" id="r-phone" type="tel" placeholder="+91 98765 43210"/>
             <div style="font-size:11px;color:rgba(255,246,229,.2);margin-top:4px">+91 ke saath likhein</div>
           </div>
-          <div id="su-recaptcha" style="margin-bottom:12px"></div>
-          <button class="btn btn-primary" id="su-otp-btn" onclick="suSendOTP()" style="width:100%;justify-content:center">📤 OTP Bhejo</button>
+          <div id="r-recaptcha" style="margin-bottom:12px"></div>
+          <button class="btn btn-primary" id="rs2-otp-btn" onclick="rSendOTP()" style="width:100%;justify-content:center">📤 OTP Bhejo</button>
         </div>
-        <div id="su-ph2" style="display:none">
-          <div style="text-align:center;font-size:12px;color:rgba(255,246,229,.35);margin-bottom:12px" id="su-otp-msg"></div>
+        <div id="rs2b" style="display:none">
+          <div style="text-align:center;font-size:12px;color:rgba(255,246,229,.3);margin-bottom:12px" id="rs2-msg"></div>
           <div class="field">
             <label class="label">OTP Enter Karein</label>
-            <input class="input code-input" id="su-otp" type="text" maxlength="6" placeholder="• • • • • •" onkeydown="if(event.key==='Enter')suVerifyOTP()"/>
+            <input class="input code-input" id="r-otp" type="text" maxlength="6" placeholder="• • • • • •" onkeydown="if(event.key==='Enter')rVerifyOTP()"/>
           </div>
-          <button class="btn btn-primary" id="su-ver-btn" onclick="suVerifyOTP()" style="width:100%;justify-content:center">✅ Verify Karein</button>
-          <button onclick="suResetPhone()" style="width:100%;background:none;border:none;color:rgba(255,246,229,.25);font-family:'Cinzel',serif;font-size:10px;cursor:pointer;padding:8px">← Number change karein</button>
+          <button class="btn btn-primary" id="rs2-ver-btn" onclick="rVerifyOTP()" style="width:100%;justify-content:center">✅ Verify Karein</button>
+          <button onclick="rResetPhone()" style="width:100%;background:none;border:none;color:rgba(255,246,229,.22);font-family:'Cinzel',serif;font-size:10px;cursor:pointer;padding:8px">← Number change karein</button>
         </div>
       </div>
 
-      <!-- STEP 3: Profile -->
-      <div id="su-step3" class="card" style="display:none">
+      <!-- Step 3: Profile -->
+      <div id="rs3" class="card" style="display:none">
         <div class="card-title">🛕 Step 3: Purohit Details</div>
         <div style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:6px;padding:10px;margin-bottom:14px;font-size:11px;color:#22C55E;text-align:center">✅ Email & Mobile verified!</div>
-        <div class="field"><label class="label">Full Name</label><input class="input" id="su-name" type="text" placeholder="Pandit Ramesh Sharma"/></div>
-        <div class="field"><label class="label">Mandir Name</label><input class="input" id="su-mandir" type="text" placeholder="Kashi Vishwanath Mandir"/></div>
-        <div class="field"><label class="label">City / Location</label><input class="input" id="su-city" type="text" placeholder="Varanasi, UP"/></div>
-        <div class="field"><label class="label">Experience (Years)</label><input class="input" id="su-exp" type="number" placeholder="5" min="0"/></div>
-        <div class="field"><label class="label">Specialization</label><input class="input" id="su-spec" type="text" placeholder="e.g. Vedic Rituals, Rudrabhishek"/></div>
-        <button class="btn btn-primary" id="su-sub-btn" onclick="suSubmit()" style="width:100%;justify-content:center">🙏 Registration Submit Karein</button>
+        <div class="field"><label class="label">Full Name</label><input class="input" id="r-name" type="text" placeholder="Pandit Ramesh Sharma"/></div>
+        <div class="field"><label class="label">Mandir Name</label><input class="input" id="r-mandir" type="text" placeholder="Kashi Vishwanath Mandir"/></div>
+        <div class="field"><label class="label">City / Location</label><input class="input" id="r-city" type="text" placeholder="Varanasi, UP"/></div>
+        <div class="field"><label class="label">Experience (Years)</label><input class="input" id="r-exp" type="number" placeholder="5" min="0"/></div>
+        <div class="field"><label class="label">Specialization</label><input class="input" id="r-spec" type="text" placeholder="Vedic Rituals, Rudrabhishek"/></div>
+        <button class="btn btn-primary" id="rs3-btn" onclick="rSubmit()" style="width:100%;justify-content:center">🙏 Registration Submit Karein</button>
       </div>
-    </div><!-- end signup -->
+    </div><!-- end vw-reg -->
 
-    <!-- ══ LOGIN VIEW (hidden by default) ══ -->
-    <div id="view-signin" style="display:none">
+    <!-- ══ LOGIN (hidden by default) ══ -->
+    <div id="vw-login" style="display:none">
       <div class="card">
         <div class="card-title">🔐 Login Karein</div>
 
         <!-- Smart single input -->
-        <div class="field" id="si-id-wrap">
-          <label class="label" id="si-id-label">Mobile Number ya Email</label>
-          <input class="input" id="si-id" type="text" placeholder="+91 number ya Email address"
-            oninput="detectType(this.value)" onkeydown="if(event.key==='Enter')siNext()"/>
-          <div style="font-size:11px;margin-top:5px;font-family:'Cinzel',serif;letter-spacing:.3px;min-height:16px;transition:color .2s" id="si-type-hint"></div>
-        </div>
-
-        <!-- Password — shown for email -->
-        <div class="field" id="si-pass-wrap" style="display:none">
-          <label class="label">Password</label>
-          <input class="input" id="si-pass" type="password" placeholder="••••••••"
+        <div class="field">
+          <label class="label" id="si-lbl">Mobile Number ya Email</label>
+          <input class="input" id="si-id" type="text"
+            placeholder="+91 number ya Email address"
+            oninput="siDetect(this.value)"
             onkeydown="if(event.key==='Enter')siNext()"/>
+          <div style="font-size:11px;margin-top:5px;min-height:16px;font-family:'Cinzel',serif;letter-spacing:.3px" id="si-hint"></div>
         </div>
 
-        <!-- reCAPTCHA — shown for mobile -->
-        <div id="si-recaptcha" style="margin-bottom:12px"></div>
+        <!-- Password — shown only for email -->
+        <div class="field" id="si-pw-wrap" style="display:none">
+          <label class="label">Password</label>
+          <input class="input" id="si-pw" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')siNext()"/>
+        </div>
 
-        <!-- OTP verify -->
+        <!-- reCAPTCHA for mobile OTP -->
+        <div id="si-recaptcha" style="margin-bottom:10px"></div>
+
+        <!-- OTP step -->
         <div id="si-otp-wrap" style="display:none">
-          <div style="text-align:center;font-size:12px;color:rgba(255,246,229,.35);margin-bottom:10px" id="si-otp-msg"></div>
+          <div style="text-align:center;font-size:12px;color:rgba(255,246,229,.3);margin-bottom:10px" id="si-otp-msg"></div>
           <div class="field">
             <label class="label">OTP Enter Karein</label>
-            <input class="input code-input" id="si-otp" type="text" maxlength="6" placeholder="• • • • • •"
-              onkeydown="if(event.key==='Enter')siVerifyOTP()"/>
+            <input class="input code-input" id="si-otp" type="text" maxlength="6" placeholder="• • • • • •" onkeydown="if(event.key==='Enter')siVerifyOTP()"/>
           </div>
           <button class="btn btn-primary" id="si-ver-btn" onclick="siVerifyOTP()" style="width:100%;justify-content:center;margin-bottom:8px">✅ Verify & Login</button>
-          <button onclick="siResetOTP()" style="width:100%;background:none;border:none;color:rgba(255,246,229,.25);font-family:'Cinzel',serif;font-size:10px;cursor:pointer;padding:6px">← Number change karein</button>
+          <button onclick="siResetOTP()" style="width:100%;background:none;border:none;color:rgba(255,246,229,.22);font-family:'Cinzel',serif;font-size:10px;cursor:pointer;padding:6px">← Number change karein</button>
         </div>
 
-        <!-- Next / Sign In button -->
+        <!-- Main action button -->
         <button class="btn btn-primary" id="si-btn" onclick="siNext()" style="width:100%;justify-content:center;display:none">
           <span id="si-btn-lbl">Login →</span>
         </button>
 
-        <div class="divider-or"><span></span><label>YA PHIR</label><span></span></div>
+        <div class="divor"><span></span><em>YA PHIR</em><span></span></div>
+        <button class="gbtn" onclick="doGoogle()"><span style="font-weight:900;font-size:15px;color:#4285F4">G</span> Google se Login</button>
 
-        <!-- Google -->
-        <button onclick="doGoogleLogin()" style="width:100%;padding:11px;border-radius:6px;border:1px solid rgba(212,175,55,.2);background:rgba(255,255,255,.04);color:var(--cream);font-family:'Cinzel',serif;font-size:11px;letter-spacing:.8px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px">
-          <span style="font-weight:900;font-size:15px;color:#4285F4">G</span> Google se Login
-        </button>
-
-        <div style="text-align:center;margin-top:14px;font-size:12px;color:rgba(255,246,229,.25)">
-          Naya purohit hain?
-          <button onclick="setMode('signup')" style="background:none;border:none;color:var(--saffron);font-family:'Cinzel',serif;font-size:11px;cursor:pointer">Register karein →</button>
+        <div style="text-align:center;margin-top:14px;font-size:12px;color:rgba(255,246,229,.22)">
+          Naya purohit hain? <button onclick="showMode('reg')" style="background:none;border:none;color:var(--saffron);font-family:'Cinzel',serif;font-size:11px;cursor:pointer">Register karein →</button>
         </div>
       </div>
-    </div><!-- end signin -->
+    </div><!-- end vw-login -->
 
   </div><!-- end view-login -->
 
@@ -708,59 +696,31 @@ const firebaseConfig = {
   appId: "1:1031082702558:web:744ffa9cfa54ff838db44f"
 };
 firebase.initializeApp(firebaseConfig);
-const db_rt   = firebase.database();
-const auth    = firebase.auth();
+const db_rt = firebase.database();
+const auth  = firebase.auth();
 
-/* ════════════════════════════════
-   SESSION (7 days) + PATTERN LOCK
-════════════════════════════════ */
-const S_KEY  = 'sa_pur_session';
-const P_KEY  = 'sa_pur_pattern';
-const S_DAYS = 7;
-const MAX_FAIL = 5;
-let _patMode = 'unlock'; // 'unlock' | 'set' | 'confirm'
-let _patFirst = null;
-let _patFails = 0;
-let _patLockUntil = 0;
-let _setupUser = null;
-let _setupPhone = '';
+/* ════ SESSION (7 days) ════ */
+const SK='sa_pur_s', PK='sa_pur_p', SD=7;
+let _setupUser=null, _setupPhone='';
 
-function saveSession(user, mandir){
-  localStorage.setItem(S_KEY, JSON.stringify({
-    uid: user.uid, email: user.email||'', mandir,
-    exp: Date.now() + S_DAYS*864e5
-  }));
-}
-function getSession(){
-  try{
-    const s=JSON.parse(localStorage.getItem(S_KEY)||'null');
-    if(!s||Date.now()>s.exp){localStorage.removeItem(S_KEY);return null;}
-    return s;
-  }catch(e){return null;}
-}
-function clearSession(){ localStorage.removeItem(S_KEY); localStorage.removeItem(P_KEY); }
+function saveSess(user,mandir){ localStorage.setItem(SK,JSON.stringify({uid:user.uid,email:user.email||'',mandir,exp:Date.now()+SD*864e5})); }
+function getSess(){ try{ const s=JSON.parse(localStorage.getItem(SK)||'null'); if(!s||Date.now()>s.exp){localStorage.removeItem(SK);return null;} return s; }catch(e){return null;} }
+function clearSess(){ localStorage.removeItem(SK); localStorage.removeItem(PK); }
+async function hashPat(a){ const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(a.join('-'))); return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join(''); }
+function getPatH(){ return localStorage.getItem(PK)||null; }
+async function savePatH(a){ localStorage.setItem(PK,await hashPat(a)); }
 
-async function hashPat(arr){
-  const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(arr.join('-')));
-  return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');
-}
-function getPatHash(){ return localStorage.getItem(P_KEY)||null; }
-async function savePatHash(arr){ localStorage.setItem(P_KEY, await hashPat(arr)); }
-
-/* ── On page load: check session ── */
+/* ── On load: check session ── */
 window.addEventListener('load',()=>{
-  const s=getSession();
-  if(!s) return;
+  const s=getSess(); if(!s)return;
   currentMandir=s.mandir;
-  if(getPatHash()) showPatUnlock(s);
-  else showPortal(s.mandir);
+  if(getPatH()) showPatUnlock(s); else showPortal(s.mandir);
 });
 
-/* ── Firebase auth state ── */
+/* ── Auth state ── */
 auth.onAuthStateChanged(async user=>{
-  if(!user) return;
-  const s=getSession();
-  if(s && s.uid===user.uid) return; // already handled by session
+  if(!user)return;
+  const s=getSess(); if(s&&s.uid===user.uid)return;
   await checkAndEnter(user);
 });
 
@@ -768,197 +728,169 @@ async function checkAndEnter(user){
   try{
     const snap=await db_rt.ref('purohits/'+user.uid).once('value');
     const d=snap.val();
-    if(!d){ _setupUser=user; setMode('signup'); suGoStep(3); return; }
-    if(d.status==='pending'){ document.getElementById('pending-notice').style.display='block'; auth.signOut(); return; }
+    if(!d){ _setupUser=user; showMode('reg'); rGoStep(3); return; }
+    if(d.status==='pending'){ document.getElementById('pend-notice').style.display='block'; auth.signOut(); return; }
     if(d.status==='rejected'){ showErr('Account reject ho gaya. Admin se contact karein.'); auth.signOut(); return; }
     if(d.status==='approved'){
       currentMandir=d.mandirObj||{id:user.uid,name:d.mandir||d.mandirName,location:d.city,emoji:'🛕'};
-      saveSession(user,currentMandir);
-      if(getPatHash()) showPatUnlock(getSession());
-      else showPatSetup();
+      saveSess(user,currentMandir);
+      if(getPatH()) showPatUnlock(getSess()); else showPatSetup();
     }
   }catch(e){ showErr('Connection error. Dobara try karein.'); }
 }
 
-/* ════════════════════════════════
-   UI HELPERS
-════════════════════════════════ */
-function showErr(msg){ const e=document.getElementById('login-err'); e.textContent='⚠️ '+msg; e.style.display='block'; }
-function hideErr(){ document.getElementById('login-err').style.display='none'; }
-
-const ERR={
+/* ════ UI HELPERS ════ */
+function showErr(m){ const e=document.getElementById('lg-err'); e.textContent='⚠️ '+m; e.style.display='block'; }
+function hideErr(){ document.getElementById('lg-err').style.display='none'; }
+function showMode(m){
+  hideErr();
+  document.getElementById('vw-reg').style.display   = m==='reg'  ?'block':'none';
+  document.getElementById('vw-login').style.display = m==='login'?'block':'none';
+  if(m==='login') setTimeout(initSiRecap,300);
+}
+const ERRS={
   'auth/email-already-in-use':'Yeh email already registered hai. Login karein.',
   'auth/wrong-password':'Galat password.',
-  'auth/user-not-found':'Yeh email registered nahi hai. Register karein.',
+  'auth/user-not-found':'Email registered nahi hai. Register karein.',
   'auth/invalid-credential':'Galat email ya password.',
-  'auth/weak-password':'Password kam se kam 6 characters ka hona chahiye.',
-  'auth/invalid-email':'Valid email address bharein.',
-  'auth/too-many-requests':'Bahut zyada attempts. Kuch der baad try karein.',
+  'auth/weak-password':'Password kam se kam 6 characters.',
+  'auth/invalid-email':'Valid email likhein.',
+  'auth/too-many-requests':'Bahut attempts. Baad mein try karein.',
   'auth/popup-closed-by-user':'Google login cancel ho gayi.',
-  'auth/invalid-phone-number':'Galat phone number. +91 ke saath likhein.',
+  'auth/invalid-phone-number':'Galat phone. +91 ke saath likhein.',
   'auth/quota-exceeded':'SMS limit khatam. Baad mein try karein.',
   'auth/network-request-failed':'Network error. Internet check karein.',
 };
 
-function setMode(mode){
-  hideErr();
-  document.getElementById('view-signup').style.display = mode==='signup'?'block':'none';
-  document.getElementById('view-signin').style.display = mode==='signin'?'block':'none';
-  if(mode==='signin') setTimeout(initSiRecaptcha,300);
-}
+/* ════ REGISTRATION FLOW ════ */
+let _rConfirm=null, _rRecap=null;
 
-/* ════════════════════════════════
-   REGISTRATION FLOW (3 steps)
-════════════════════════════════ */
-let _suConfirm=null, _suRecap=null;
-
-function suGoStep(n){
+function rGoStep(n){
   [1,2,3].forEach(i=>{
-    document.getElementById('su-step'+i).style.display=i===n?'block':'none';
+    document.getElementById('rs'+i).style.display=i===n?'block':'none';
     const d=document.getElementById('sd'+i);
-    d.className='su-dot'+(i===n?' active':i<n?' done':'');
+    d.className='sdot'+(i===n?' active':i<n?' done':'');
   });
-  const lbls={1:'STEP 1 OF 3 — EMAIL REGISTER',2:'STEP 2 OF 3 — MOBILE VERIFY',3:'STEP 3 OF 3 — PROFILE DETAILS'};
-  document.getElementById('su-step-lbl').textContent=lbls[n]||'';
+  const L={1:'STEP 1 OF 3 — EMAIL REGISTER',2:'STEP 2 OF 3 — MOBILE VERIFY',3:'STEP 3 OF 3 — PROFILE DETAILS'};
+  document.getElementById('sd-lbl').textContent=L[n]||'';
 }
 
-async function suStep1(){
-  const email=(document.getElementById('su-email').value||'').trim();
-  const pass=document.getElementById('su-pass').value||'';
-  const pass2=document.getElementById('su-pass2').value||'';
+async function rStep1(){
+  const email=(document.getElementById('r-email').value||'').trim();
+  const pass=document.getElementById('r-pass').value||'';
+  const pass2=document.getElementById('r-pass2').value||'';
   hideErr();
-  if(!email){ showErr('Email address bharein.'); return; }
-  if(pass.length<6){ showErr('Password kam se kam 6 characters.'); return; }
-  if(pass!==pass2){ showErr('Dono passwords match nahi karte.'); return; }
-  const btn=document.getElementById('su-s1-btn');
+  if(!email){showErr('Email address bharein.');return;}
+  if(pass.length<6){showErr('Password kam se kam 6 characters.');return;}
+  if(pass!==pass2){showErr('Dono passwords match nahi karte.');return;}
+  const btn=document.getElementById('rs1-btn');
   btn.disabled=true; btn.innerHTML='<div class="spinner"></div><span>Please wait...</span>';
   try{
-    const cred=await auth.createUserWithEmailAndPassword(email,pass);
-    _setupUser=cred.user;
-    suGoStep(2);
-    setTimeout(initSuRecaptcha,300);
+    const c=await auth.createUserWithEmailAndPassword(email,pass);
+    _setupUser=c.user;
+    rGoStep(2);
+    setTimeout(initRRecap,300);
   }catch(e){
-    showErr(ERR[e.code]||e.message);
+    showErr(ERRS[e.code]||e.message);
     btn.disabled=false; btn.innerHTML='Next → Mobile Verify';
   }
 }
 
-function initSuRecaptcha(){
-  if(_suRecap) return;
-  _suRecap=new firebase.auth.RecaptchaVerifier('su-recaptcha',{size:'normal',callback:()=>{},expired-callback:()=>{}});
-  _suRecap.render();
+function initRRecap(){
+  if(_rRecap)return;
+  _rRecap=new firebase.auth.RecaptchaVerifier('r-recaptcha',{size:'normal',callback:()=>{},['expired-callback']:()=>{}});
+  _rRecap.render();
 }
 
-async function suSendOTP(){
-  const phone=(document.getElementById('su-phone').value||'').trim();
-  if(!phone.startsWith('+')){ showErr('+91 ke saath likhein. Example: +91 98765 43210'); return; }
-  const btn=document.getElementById('su-otp-btn');
+async function rSendOTP(){
+  const phone=(document.getElementById('r-phone').value||'').trim();
+  if(!phone.startsWith('+')){showErr('+91 ke saath likhein. Ex: +91 98765 43210');return;}
+  const btn=document.getElementById('rs2-otp-btn');
   btn.disabled=true; btn.innerHTML='<div class="spinner"></div><span>Bhej raha hoon...</span>';
   hideErr();
   try{
-    _suConfirm=await auth.signInWithPhoneNumber(phone,_suRecap);
+    _rConfirm=await auth.signInWithPhoneNumber(phone,_rRecap);
     _setupPhone=phone;
-    document.getElementById('su-ph1').style.display='none';
-    document.getElementById('su-ph2').style.display='block';
-    document.getElementById('su-otp-msg').textContent='✅ OTP bheja gaya: '+phone;
+    document.getElementById('rs2a').style.display='none';
+    document.getElementById('rs2b').style.display='block';
+    document.getElementById('rs2-msg').textContent='✅ OTP bheja gaya: '+phone;
   }catch(e){
-    showErr(ERR[e.code]||e.message);
+    showErr(ERRS[e.code]||e.message);
     btn.disabled=false; btn.innerHTML='📤 OTP Bhejo';
   }
 }
 
-async function suVerifyOTP(){
-  const otp=(document.getElementById('su-otp').value||'').trim();
-  if(otp.length<6){ showErr('6 digit OTP bharein.'); return; }
-  const btn=document.getElementById('su-ver-btn');
+async function rVerifyOTP(){
+  const otp=(document.getElementById('r-otp').value||'').trim();
+  if(otp.length<6){showErr('6 digit OTP bharein.');return;}
+  const btn=document.getElementById('rs2-ver-btn');
   btn.disabled=true; btn.innerHTML='<div class="spinner"></div><span>Verifying...</span>';
-  try{
-    await _suConfirm.confirm(otp);
-    suGoStep(3);
-  }catch(e){
-    showErr('Galat OTP. Dobara check karein.');
-    btn.disabled=false; btn.innerHTML='✅ Verify Karein';
-  }
+  try{ await _rConfirm.confirm(otp); rGoStep(3); }
+  catch(e){ showErr('Galat OTP.'); btn.disabled=false; btn.innerHTML='✅ Verify Karein'; }
 }
 
-function suResetPhone(){
-  document.getElementById('su-ph1').style.display='block';
-  document.getElementById('su-ph2').style.display='none';
-  document.getElementById('su-otp').value='';
-  _suConfirm=null;
-  if(_suRecap){_suRecap.clear();_suRecap=null;}
-  setTimeout(initSuRecaptcha,200);
+function rResetPhone(){
+  document.getElementById('rs2a').style.display='block';
+  document.getElementById('rs2b').style.display='none';
+  document.getElementById('r-otp').value='';
+  _rConfirm=null;
+  if(_rRecap){_rRecap.clear();_rRecap=null;}
+  setTimeout(initRRecap,200);
 }
 
-async function suSubmit(){
-  const name=(document.getElementById('su-name').value||'').trim();
-  const mandir=(document.getElementById('su-mandir').value||'').trim();
-  const city=(document.getElementById('su-city').value||'').trim();
-  const exp=(document.getElementById('su-exp').value||'').trim();
-  const spec=(document.getElementById('su-spec').value||'').trim();
-  if(!name||!mandir||!city){ showErr('Name, Mandir aur City zaroori hain.'); return; }
-  const btn=document.getElementById('su-sub-btn');
+async function rSubmit(){
+  const name=(document.getElementById('r-name').value||'').trim();
+  const mandir=(document.getElementById('r-mandir').value||'').trim();
+  const city=(document.getElementById('r-city').value||'').trim();
+  const exp=(document.getElementById('r-exp').value||'').trim();
+  const spec=(document.getElementById('r-spec').value||'').trim();
+  if(!name||!mandir||!city){showErr('Name, Mandir aur City zaroori hain.');return;}
+  const btn=document.getElementById('rs3-btn');
   btn.disabled=true; btn.innerHTML='<div class="spinner"></div><span>Submit ho raha hai...</span>';
   const user=_setupUser||auth.currentUser;
-  if(!user){ showErr('Session expire. Dobara try karein.'); btn.disabled=false; btn.innerHTML='🙏 Registration Submit Karein'; return; }
-  const profile={
-    uid:user.uid, name, mandir, city, exp, spec,
-    email:user.email||'', phone:_setupPhone||'',
-    status:'pending', registeredAt:new Date().toISOString(),
-    mandirObj:{id:'m_'+user.uid.slice(0,6),name:mandir,location:city,emoji:'🛕',code:''}
-  };
+  if(!user){showErr('Session expire. Dobara try karein.');btn.disabled=false;btn.innerHTML='🙏 Registration Submit Karein';return;}
+  const profile={uid:user.uid,name,mandir,city,exp,spec,email:user.email||'',phone:_setupPhone||'',status:'pending',registeredAt:new Date().toISOString(),mandirObj:{id:'m_'+user.uid.slice(0,6),name:mandir,location:city,emoji:'🛕',code:''}};
   await db_rt.ref('purohits/'+user.uid).set(profile);
   await db_rt.ref('adminNotifications').push({type:'new_purohit',name,mandir,uid:user.uid,at:new Date().toISOString(),read:false});
   await auth.signOut();
-  document.getElementById('view-signup').style.display='none';
-  document.getElementById('pending-notice').style.display='block';
+  document.getElementById('vw-reg').style.display='none';
+  document.getElementById('pend-notice').style.display='block';
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
-/* ════════════════════════════════
-   SIGN IN FLOW — Smart single input
-   Mobile → OTP
-   Email  → Password
-════════════════════════════════ */
+/* ════ LOGIN FLOW — Smart single input ════ */
 let _siConfirm=null, _siRecap=null, _siType='';
 
-function initSiRecaptcha(){
-  if(_siRecap||document.getElementById('si-recaptcha').children.length) return;
-  _siRecap=new firebase.auth.RecaptchaVerifier('si-recaptcha',{size:'normal',callback:()=>{},expired-callback:()=>{}});
+function initSiRecap(){
+  if(_siRecap||document.getElementById('si-recaptcha').children.length)return;
+  _siRecap=new firebase.auth.RecaptchaVerifier('si-recaptcha',{size:'normal',callback:()=>{},['expired-callback']:()=>{}});
   _siRecap.render();
 }
 
-function detectType(val){
+function siDetect(val){
   hideErr();
-  const hint=document.getElementById('si-type-hint');
-  const passWrap=document.getElementById('si-pass-wrap');
+  const hint=document.getElementById('si-hint');
+  const pwWrap=document.getElementById('si-pw-wrap');
   const btn=document.getElementById('si-btn');
-  const otp=document.getElementById('si-otp-wrap');
-  // Reset OTP if typing again
-  if(otp.style.display!=='none'){ otp.style.display='none'; _siConfirm=null; }
-  if(!val){ hint.textContent=''; hint.style.color=''; passWrap.style.display='none'; btn.style.display='none'; return; }
-  const isPhone=/^[+\d]/.test(val) && val.replace(/\D/g,'').length >= 7;
+  const otpWrap=document.getElementById('si-otp-wrap');
+  if(otpWrap.style.display!=='none'){otpWrap.style.display='none';_siConfirm=null;}
+  if(!val){hint.textContent='';pwWrap.style.display='none';btn.style.display='none';return;}
+  const isPhone=/^[+\d]/.test(val)&&val.replace(/\D/g,'').length>=7;
   const isEmail=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
   if(isPhone){
     _siType='phone';
-    hint.textContent='📱 Mobile OTP se login hoga';
-    hint.style.color='rgba(255,246,229,.4)';
-    passWrap.style.display='none';
-    btn.style.display='flex';
+    hint.textContent='📱 Mobile OTP se login hoga'; hint.style.color='rgba(255,246,229,.4)';
+    pwWrap.style.display='none'; btn.style.display='flex';
     document.getElementById('si-btn-lbl').textContent='OTP Bhejo →';
   } else if(isEmail){
     _siType='email';
-    hint.textContent='📧 Email + Password se login hoga';
-    hint.style.color='rgba(255,246,229,.4)';
-    passWrap.style.display='block';
-    btn.style.display='flex';
+    hint.textContent='📧 Email + Password se login hoga'; hint.style.color='rgba(255,246,229,.4)';
+    pwWrap.style.display='block'; btn.style.display='flex';
     document.getElementById('si-btn-lbl').textContent='Login →';
   } else {
     _siType='';
-    hint.textContent='Mobile number (+91...) ya Email likhein';
-    hint.style.color='rgba(255,246,229,.2)';
-    passWrap.style.display='none';
-    btn.style.display='none';
+    hint.textContent='Mobile (+91...) ya Email likhein'; hint.style.color='rgba(255,246,229,.2)';
+    pwWrap.style.display='none'; btn.style.display='none';
   }
 }
 
@@ -966,43 +898,33 @@ async function siNext(){
   const val=(document.getElementById('si-id').value||'').trim();
   hideErr();
   if(_siType==='email'){
-    const pass=document.getElementById('si-pass').value||'';
-    if(!pass){ showErr('Password bharein.'); return; }
+    const pw=document.getElementById('si-pw').value||'';
+    if(!pw){showErr('Password bharein.');return;}
     const btn=document.getElementById('si-btn');
     btn.disabled=true; btn.innerHTML='<div class="spinner"></div><span>Logging in...</span>';
-    try{
-      await auth.signInWithEmailAndPassword(val,pass);
-    }catch(e){
-      showErr(ERR[e.code]||e.message);
-      btn.disabled=false; btn.innerHTML='<span id="si-btn-lbl">Login →</span>';
-    }
+    try{ await auth.signInWithEmailAndPassword(val,pw); }
+    catch(e){ showErr(ERRS[e.code]||e.message); btn.disabled=false; btn.innerHTML='<span id="si-btn-lbl">Login →</span>'; }
   } else if(_siType==='phone'){
-    let phone=val.trim();
-    if(!phone.startsWith('+')) phone='+91'+phone.replace(/\D/g,'');
+    let phone=val; if(!phone.startsWith('+')) phone='+91'+phone.replace(/\D/g,'');
     const btn=document.getElementById('si-btn');
     btn.disabled=true; btn.innerHTML='<div class="spinner"></div><span>OTP bhej raha hoon...</span>';
     try{
-      if(!_siRecap) initSiRecaptcha();
+      if(!_siRecap) initSiRecap();
       _siConfirm=await auth.signInWithPhoneNumber(phone,_siRecap);
       document.getElementById('si-otp-wrap').style.display='block';
       document.getElementById('si-otp-msg').textContent='✅ OTP bheja gaya: '+phone;
       btn.style.display='none';
-    }catch(e){
-      showErr(ERR[e.code]||e.message);
-      btn.disabled=false; btn.innerHTML='<span id="si-btn-lbl">OTP Bhejo →</span>';
-    }
-  } else {
-    showErr('Mobile number ya Email sahi se likhein.');
-  }
+    }catch(e){ showErr(ERRS[e.code]||e.message); btn.disabled=false; btn.innerHTML='<span id="si-btn-lbl">OTP Bhejo →</span>'; }
+  } else { showErr('Mobile number ya Email sahi se likhein.'); }
 }
 
 async function siVerifyOTP(){
   const otp=(document.getElementById('si-otp').value||'').trim();
-  if(otp.length<6){ showErr('6 digit OTP bharein.'); return; }
+  if(otp.length<6){showErr('6 digit OTP bharein.');return;}
   const btn=document.getElementById('si-ver-btn');
   btn.disabled=true; btn.innerHTML='<div class="spinner"></div><span>Verifying...</span>';
   try{ await _siConfirm.confirm(otp); }
-  catch(e){ showErr('Galat OTP. Dobara check karein.'); btn.disabled=false; btn.innerHTML='✅ Verify & Login'; }
+  catch(e){ showErr('Galat OTP.'); btn.disabled=false; btn.innerHTML='✅ Verify & Login'; }
 }
 
 function siResetOTP(){
@@ -1012,130 +934,106 @@ function siResetOTP(){
   _siConfirm=null;
 }
 
-/* Google */
-async function doGoogleLogin(){
+async function doGoogle(){
   hideErr();
-  try{
-    const p=new firebase.auth.GoogleAuthProvider();
-    await auth.signInWithPopup(p);
-  }catch(e){ showErr(ERR[e.code]||e.message); }
+  try{ await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()); }
+  catch(e){ showErr(ERRS[e.code]||e.message); }
 }
 
-/* ════════════════════════════════
-   PATTERN LOCK ENGINE
-════════════════════════════════ */
-const ROWS=3,COLS=3,DOT_R=17,PAD=44;
-let _patDots=[], _patDrawing=false, _patLocked=false;
+/* ════ PATTERN LOCK ════ */
+const MAXF=5; const PAD=44; const DR=17;
+let _pMode='unlock',_pFirst=null,_pFails=0,_pLock=0,_pDots=[],_pDrg=false,_pLkd=false;
 
-function patCenter(i){ const c=document.getElementById('pat-canvas'); const sp=(c.width-PAD*2)/(COLS-1); return{x:PAD+(i%COLS)*sp,y:PAD+Math.floor(i/COLS)*sp}; }
+function pC(i){ const cv=document.getElementById('pat-cv'),sp=(cv.width-PAD*2)/2; return{x:PAD+(i%3)*sp,y:PAD+Math.floor(i/3)*sp}; }
 
-function patDraw(){
-  const c=document.getElementById('pat-canvas'); const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height);
-  if(_patDots.length>1){
-    ctx.beginPath(); const f=patCenter(_patDots[0]); ctx.moveTo(f.x,f.y);
-    for(let i=1;i<_patDots.length;i++){const p=patCenter(_patDots[i]);ctx.lineTo(p.x,p.y);}
-    ctx.strokeStyle=_patLocked?'#EF4444':'rgba(255,107,0,.75)'; ctx.lineWidth=4; ctx.lineCap='round'; ctx.lineJoin='round'; ctx.stroke();
+function pDraw(){
+  const cv=document.getElementById('pat-cv'),ctx=cv.getContext('2d');
+  ctx.clearRect(0,0,cv.width,cv.height);
+  if(_pDots.length>1){
+    ctx.beginPath(); const f=pC(_pDots[0]); ctx.moveTo(f.x,f.y);
+    for(let i=1;i<_pDots.length;i++){const p=pC(_pDots[i]);ctx.lineTo(p.x,p.y);}
+    ctx.strokeStyle=_pLkd?'#EF4444':'rgba(255,107,0,.75)'; ctx.lineWidth=4; ctx.lineCap='round'; ctx.lineJoin='round'; ctx.stroke();
   }
   for(let i=0;i<9;i++){
-    const{x,y}=patCenter(i); const sel=_patDots.includes(i);
-    ctx.beginPath(); ctx.arc(x,y,DOT_R,0,Math.PI*2);
-    ctx.fillStyle=sel?(_patLocked?'rgba(239,68,68,.15)':'rgba(255,107,0,.12)'):'rgba(212,175,55,.06)'; ctx.fill();
-    ctx.strokeStyle=sel?(_patLocked?'#EF4444':'var(--saffron)'):'rgba(212,175,55,.18)'; ctx.lineWidth=1.5; ctx.stroke();
+    const{x,y}=pC(i),sel=_pDots.includes(i);
+    ctx.beginPath(); ctx.arc(x,y,DR,0,Math.PI*2);
+    ctx.fillStyle=sel?(_pLkd?'rgba(239,68,68,.15)':'rgba(255,107,0,.12)'):'rgba(212,175,55,.06)'; ctx.fill();
+    ctx.strokeStyle=sel?(_pLkd?'#EF4444':'var(--saffron)'):'rgba(212,175,55,.18)'; ctx.lineWidth=1.5; ctx.stroke();
     ctx.beginPath(); ctx.arc(x,y,sel?7:4,0,Math.PI*2);
-    ctx.fillStyle=sel?(_patLocked?'#EF4444':'var(--saffron)'):'rgba(212,175,55,.3)'; ctx.fill();
+    ctx.fillStyle=sel?(_pLkd?'#EF4444':'var(--saffron)'):'rgba(212,175,55,.3)'; ctx.fill();
   }
 }
 
-function patPos(e,c){ const r=c.getBoundingClientRect(),sx=c.width/r.width,sy=c.height/r.height,cx=e.touches?e.touches[0].clientX:e.clientX,cy=e.touches?e.touches[0].clientY:e.clientY; return{x:(cx-r.left)*sx,y:(cy-r.top)*sy}; }
-function patHit(x,y){ for(let i=0;i<9;i++){const c=patCenter(i);if(Math.hypot(x-c.x,y-c.y)<=DOT_R+6)return i;}return -1; }
+function pPos(e,cv){ const r=cv.getBoundingClientRect(),sx=cv.width/r.width,sy=cv.height/r.height,cx=e.touches?e.touches[0].clientX:e.clientX,cy=e.touches?e.touches[0].clientY:e.clientY; return{x:(cx-r.left)*sx,y:(cy-r.top)*sy}; }
+function pHit(x,y){ for(let i=0;i<9;i++){const c=pC(i);if(Math.hypot(x-c.x,y-c.y)<=DR+6)return i;} return -1; }
 
-function initPatCanvas(){
-  _patDots=[]; _patLocked=false; patDraw();
-  const c=document.getElementById('pat-canvas');
-  const nc=c.cloneNode(true); c.parentNode.replaceChild(nc,c);
-  const cv=document.getElementById('pat-canvas');
-  const s=(e)=>{e.preventDefault();if(_patLocked)return;_patDrawing=true;_patDots=[];const p=patPos(e,cv);const d=patHit(p.x,p.y);if(d!==-1){_patDots.push(d);patDraw();}};
-  const m=(e)=>{e.preventDefault();if(!_patDrawing||_patLocked)return;const p=patPos(e,cv);const d=patHit(p.x,p.y);if(d!==-1&&!_patDots.includes(d)){_patDots.push(d);patDraw();}};
-  const en=(e)=>{e.preventDefault();if(!_patDrawing)return;_patDrawing=false;onPatDone();};
-  cv.addEventListener('mousedown',s,{passive:false}); cv.addEventListener('mousemove',m,{passive:false}); cv.addEventListener('mouseup',en,{passive:false});
-  cv.addEventListener('touchstart',s,{passive:false}); cv.addEventListener('touchmove',m,{passive:false}); cv.addEventListener('touchend',en,{passive:false});
+function initPat(){
+  _pDots=[]; _pLkd=false; pDraw();
+  const cv=document.getElementById('pat-cv');
+  const nc=cv.cloneNode(true); cv.parentNode.replaceChild(nc,cv);
+  const c=document.getElementById('pat-cv');
+  const s=e=>{e.preventDefault();if(_pLkd)return;_pDrg=true;_pDots=[];const p=pPos(e,c);const d=pHit(p.x,p.y);if(d!==-1){_pDots.push(d);pDraw();}};
+  const m=e=>{e.preventDefault();if(!_pDrg||_pLkd)return;const p=pPos(e,c);const d=pHit(p.x,p.y);if(d!==-1&&!_pDots.includes(d)){_pDots.push(d);pDraw();}};
+  const en=e=>{e.preventDefault();if(!_pDrg)return;_pDrg=false;onPat();};
+  c.addEventListener('mousedown',s,{passive:false}); c.addEventListener('mousemove',m,{passive:false}); c.addEventListener('mouseup',en,{passive:false});
+  c.addEventListener('touchstart',s,{passive:false}); c.addEventListener('touchmove',m,{passive:false}); c.addEventListener('touchend',en,{passive:false});
 }
 
-function setPatStatus(msg,type='info'){ const e=document.getElementById('pat-status'); e.textContent=msg; e.className='pat-status '+type; }
+function pSt(msg,t='i'){ const e=document.getElementById('pat-st'); e.textContent=msg; e.className='pat-st '+t; }
+function pFlash(t,msg,cb){ _pLkd=true; pDraw(); pSt(msg,t); setTimeout(()=>{ _pLkd=false; _pDots=[]; pDraw(); if(cb)cb(); },1100); }
 
-function patFlash(type,msg,cb){
-  _patLocked=true; patDraw(); setPatStatus(msg,type);
-  setTimeout(()=>{ _patLocked=false; _patDots=[]; patDraw(); if(cb)cb(); },1100);
-}
-
-async function onPatDone(){
-  if(_patDots.length<4){ patFlash('err','Kam se kam 4 dots chahiye!',()=>setPatStatus('Dobara try karein','info')); return; }
-
-  if(_patMode==='set'){
-    if(!_patFirst){
-      _patFirst=[..._patDots]; setPatStatus('✅ Confirm karein — dobara draw karein','ok');
-      setTimeout(()=>{ _patDots=[]; patDraw(); },700);
+async function onPat(){
+  if(_pDots.length<4){ pFlash('e','Kam se kam 4 dots chahiye!',()=>pSt('Dobara try karein','i')); return; }
+  if(_pMode==='set'){
+    if(!_pFirst){
+      _pFirst=[..._pDots]; pSt('✅ Confirm karein — dobara draw karein','ok');
+      setTimeout(()=>{_pDots=[];pDraw();},700);
     } else {
-      if(_patFirst.join('')===_patDots.join('')){
-        await savePatHash(_patDots);
-        setPatStatus('✅ Pattern set ho gaya!','ok');
-        setTimeout(()=>{ document.getElementById('pattern-overlay').classList.add('hidden'); showPortal(currentMandir); },700);
-      } else {
-        _patFirst=null;
-        patFlash('err','❌ Match nahi kiya. Phir se shuru karein.',()=>setPatStatus('Phirse pattern draw karein','info'));
-      }
+      if(_pFirst.join('')===_pDots.join('')){
+        await savePatH(_pDots); pSt('✅ Pattern set ho gaya!','ok');
+        setTimeout(()=>{ document.getElementById('pat-ov').classList.add('hidden'); showPortal(currentMandir); },700);
+      } else { _pFirst=null; pFlash('e','❌ Match nahi kiya. Phir se shuru karein.',()=>pSt('Phirse draw karein','i')); }
     }
     return;
   }
-
-  // UNLOCK mode
-  if(_patLockUntil>Date.now()){ setPatStatus('⛔ '+Math.ceil((_patLockUntil-Date.now())/1000)+'s baad try karein','err'); _patDots=[]; patDraw(); return; }
-  const h=await hashPat(_patDots);
-  if(h===getPatHash()){
-    _patFails=0; setPatStatus('✅ Unlocked!','ok');
-    setTimeout(()=>{ document.getElementById('pattern-overlay').classList.add('hidden'); showPortal(currentMandir); },600);
+  if(_pLock>Date.now()){ pSt('⛔ '+Math.ceil((_pLock-Date.now())/1000)+'s baad try karein','e'); _pDots=[]; pDraw(); return; }
+  const h=await hashPat(_pDots);
+  if(h===getPatH()){
+    _pFails=0; pSt('✅ Unlocked!','ok');
+    setTimeout(()=>{ document.getElementById('pat-ov').classList.add('hidden'); showPortal(currentMandir); },600);
   } else {
-    _patFails++;
-    const rem=MAX_FAIL-_patFails;
-    if(_patFails>=MAX_FAIL){ _patLockUntil=Date.now()+2*60*1000; _patFails=0; patFlash('err','⛔ 2 minute ke liye locked!',()=>setPatStatus('2 min ke baad try karein','err')); }
-    else patFlash('err','❌ Galat pattern. '+rem+' attempts bache.',()=>setPatStatus('Dobara try karein','info'));
+    _pFails++;
+    if(_pFails>=MAXF){ _pLock=Date.now()+2*60*1000; _pFails=0; pFlash('e','⛔ 2 minute ke liye locked!',()=>pSt('2 min baad try karein','e')); }
+    else pFlash('e','❌ Galat. '+(MAXF-_pFails)+' attempts bache.',()=>pSt('Dobara try karein','i'));
   }
 }
 
 function showPatSetup(){
-  _patMode='set'; _patFirst=null;
-  const ov=document.getElementById('pattern-overlay'); ov.classList.remove('hidden');
+  _pMode='set'; _pFirst=null;
+  document.getElementById('pat-ov').classList.remove('hidden');
   document.getElementById('view-login').style.display='none';
-  document.getElementById('pat-title').textContent='Pattern Set Karein 🔐';
-  document.getElementById('pat-sub').textContent='Ek naya pattern banayein';
-  document.getElementById('pat-hint').textContent='Kam se kam 4 dots connect karein';
-  document.getElementById('pat-forgot').style.display='none';
-  setPatStatus('Pattern draw karna shuru karein','info');
-  initPatCanvas();
+  document.getElementById('pat-t').textContent='Pattern Set Karein 🔐';
+  document.getElementById('pat-s').textContent='Ek naya pattern banayein';
+  document.getElementById('pat-fb').style.display='none';
+  pSt('Pattern draw karna shuru karein','i');
+  initPat();
 }
 
-function showPatUnlock(session){
-  _patMode='unlock'; currentMandir=session.mandir;
-  const ov=document.getElementById('pattern-overlay'); ov.classList.remove('hidden');
+function showPatUnlock(sess){
+  _pMode='unlock'; currentMandir=sess.mandir;
+  document.getElementById('pat-ov').classList.remove('hidden');
   document.getElementById('view-login').style.display='none';
-  document.getElementById('pat-title').textContent='Welcome Back 🙏';
-  document.getElementById('pat-sub').textContent=session.mandir?.name||'Purohit Portal';
-  document.getElementById('pat-hint').textContent='Apna pattern draw karein';
-  document.getElementById('pat-forgot').style.display='block';
-  if(_patLockUntil>Date.now()) setPatStatus('⛔ '+Math.ceil((_patLockUntil-Date.now())/1000)+'s baad try karein','err');
-  else setPatStatus('Draw karein unlock karne ke liye','info');
-  initPatCanvas();
+  document.getElementById('pat-t').textContent='Welcome Back 🙏';
+  document.getElementById('pat-s').textContent=sess.mandir?.name||'Purohit Portal';
+  document.getElementById('pat-fb').style.display='block';
+  if(_pLock>Date.now()) pSt('⛔ '+Math.ceil((_pLock-Date.now())/1000)+'s baad try karein','e');
+  else pSt('Draw karein unlock karne ke liye','i');
+  initPat();
 }
 
-function forgotPattern(){
-  if(!confirm('Pattern reset karein? Full login karna hoga.')) return;
-  clearSession(); auth.signOut().then(()=>location.reload());
-}
+function forgotPattern(){ if(!confirm('Pattern reset karein? Full login karna hoga.'))return; clearSess(); auth.signOut().then(()=>location.reload()); }
 
-/* ════════════════════════════════
-   LOGOUT
-════════════════════════════════ */
-function doLogout(){ auth.signOut().then(()=>{ clearSession(); location.reload(); }); }
+/* ════ CLOUDINARY CONFIG ════ */
 const CONFIG = {
   CLOUDINARY_CLOUD_NAME:    'dfx2veoqn',
   CLOUDINARY_UPLOAD_PRESET: 'SanataniAnthem',
@@ -1178,6 +1076,8 @@ function showPortal(m){
   loadSubscribers(m);
   startBhagwanLive();
 }
+
+function doLogout(){ auth.signOut().then(()=>{ clearSess(); location.reload(); }); }
 
 function loadSubscribers(mandir){
   const db=getDB();
