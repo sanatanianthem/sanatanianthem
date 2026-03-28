@@ -799,7 +799,7 @@ const auth  = firebase.auth();
 const SK='sa_pur_s', PK='sa_pur_p', SD=7;
 let _setupUser=null, _setupPhone='';
 
-function saveSess(user,mandir){ localStorage.setItem(SK,JSON.stringify({uid:user.uid,email:user.email||'',mandir,exp:Date.now()+SD*864e5})); }
+function saveSess(user,mandir){ localStorage.setItem(SK,JSON.stringify({uid:user.uid,email:user.email||'',name:user.displayName||'',mandir,exp:Date.now()+SD*864e5})); }
 function getSess(){ try{ const s=JSON.parse(localStorage.getItem(SK)||'null'); if(!s||Date.now()>s.exp){localStorage.removeItem(SK);return null;} return s; }catch(e){return null;} }
 function clearSess(){ localStorage.removeItem(SK); localStorage.removeItem(PK); }
 async function hashPat(a){ const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(a.join('-'))); return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join(''); }
@@ -935,22 +935,16 @@ window.addEventListener('load',()=>{
   const img = document.getElementById('cc-flag-img');
   if(img) img.src = 'https://flagcdn.com/w40/in.png';
   ccRenderList();
-  const s=getSess(); if(!s)return;
-  currentMandir=s.mandir;
-  // Session ache — DB se profile lo aur dashboard dikhao
-  db_rt.ref('purohits/'+s.uid).once('value').then(snap=>{
-    const d=snap.val();
-    if(!d){ clearSess(); return; }
-    showDashboard({uid:s.uid,email:s.email||'',phoneNumber:d.phone||'',displayName:d.name||'Purohit ji'},d);
-  }).catch(()=>{
-    // Offline fallback
-    showPortal(s.mandir);
-  });
+
+  // ── If already logged in → go straight to dashboard ──
+  const s=getSess();
+  if(s){
+    window.location.replace('purohitdashboard.html');
+    return;
+  }
 });
 let _otpMode  = 'demo';
 let _demoOTP  = '';
-let _rConfirm = null;
-let _rRecap   = null;
 
 /* otpMode is hardcoded as demo — admin can change via Firebase later */
 
@@ -1022,9 +1016,11 @@ async function regDirect(){
     // Check if already registered
     const existing = await db_rt.ref('purohits').orderByChild('phone').equalTo(fullPhone).once('value');
     if(existing.val()){
-      err.textContent='Yeh number already registered hai. Login tab use karein.';
+      err.textContent='Yeh number already registered hai. Niche "Login" tab use karein.';
       err.style.display='block';
       if(regBtn){ regBtn.disabled=false; regBtn.innerHTML='🙏 Register & Dashboard Dekho'; }
+      // Auto-switch to login tab after 1.5s
+      setTimeout(()=>{ showMode('login'); document.getElementById('si-id').value=document.getElementById('r-phone').value; siDetect(document.getElementById('r-phone').value); }, 1500);
       return;
     }
   } catch(e){ /* network issue — continue */ }
@@ -1047,6 +1043,8 @@ async function regDirect(){
     });
     var fakeUser = { uid, email:'', phoneNumber:fullPhone, displayName:name };
     saveSess(fakeUser, profile.mandirObj);
+    // Also store name separately for dashboard greeting
+    localStorage.setItem('sa_pur_name', name);
     // Redirect to dedicated dashboard page
     window.location.href = 'purohitdashboard.html';
   } catch(e){
@@ -1104,6 +1102,7 @@ async function regVerifyOTP(){
     await db_rt.ref('adminNotifications').push({ type:'new_purohit', name:_regName, phone:_regPhone, uid, at:new Date().toISOString(), read:false });
     var fakeUser = { uid, email:'', phoneNumber:_regPhone, displayName:_regName };
     saveSess(fakeUser, profile.mandirObj);
+    localStorage.setItem('sa_pur_name', _regName);
     // Redirect to dedicated dashboard page
     window.location.href = 'purohitdashboard.html';
   }catch(e){
@@ -1294,7 +1293,9 @@ async function siNext(){
     // Logged in — restore session
     const fakeUser = { uid:foundUid, email:found.email||'', phoneNumber:found.phone||'', displayName:found.name||'Purohit ji' };
     saveSess(fakeUser, found.mandirObj||{id:foundUid,name:found.mandir||'',location:found.city||'',emoji:'🛕'});
-    showDashboard(fakeUser, found);
+    localStorage.setItem('sa_pur_name', found.name||'Purohit ji');
+    // Redirect to dashboard
+    window.location.href = 'purohitdashboard.html';
 
   } catch(e){
     showErr('Login error: '+e.message);
@@ -2488,13 +2489,12 @@ function resetForNext(){
 function doLogout(){
   cleanupLive();
   if(currentMandir) clearLiveSignal(currentMandir.id);
+  clearSess();
+  localStorage.removeItem('sa_pur_name');
+  auth.signOut().catch(()=>{});
   currentMandir=null;
-  document.getElementById('view-portal').style.display='none';
-  document.getElementById('view-login').style.display='block';
-  document.getElementById('code-input').value='';
-  setState('offline');
-  window.scrollTo({top:0,behavior:'smooth'});
-  showToast('Logout. Jai Shri Ram! 🙏');
+  showToast('Logout ho gaye. Jai Shri Ram! 🙏');
+  setTimeout(()=>{ window.location.replace('purohit.html'); }, 1200);
 }
 
 function showToast(msg){
