@@ -9,9 +9,9 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-<!-- TensorFlow.js + NSFWJS for real-time content moderation -->
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.10.0/dist/tf.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/nsfwjs@2.4.2/dist/nsfwjs.min.js"></script>
+<!-- TensorFlow.js + NSFWJS — loaded async so it doesn't block login -->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.10.0/dist/tf.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/nsfwjs@2.4.2/dist/nsfwjs.min.js" defer></script>
 
 <style>
 :root{--saffron:#FF6B00;--saffron-d:#C95000;--gold:#D4AF37;--gold-h:#E8CC6A;--maroon:#5A0E0E;--cream:#FFF6E5;--bg-dark:#140800;--green:#16A34A;}
@@ -283,9 +283,9 @@ button{cursor:pointer;font-family:inherit;border:none}
 }
 
 /* ── STEP DOTS ── */
-.sdot{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Cinzel',serif;font-size:11px;border:1px solid rgba(212,175,55,.2);color:rgba(255,246,229,.3);background:rgba(212,175,55,.05);transition:all .3s;flex-shrink:0}
-.sdot.active{background:linear-gradient(135deg,var(--saffron),var(--saffron-d));border-color:var(--saffron);color:#fff}
-.sdot.done{background:rgba(34,197,94,.15);border-color:rgba(34,197,94,.4);color:#22C55E}
+.reg-dot{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Cinzel',serif;font-size:11px;border:1px solid rgba(212,175,55,.2);color:rgba(255,246,229,.3);background:rgba(212,175,55,.05);transition:all .3s;flex-shrink:0}
+.reg-dot.active{background:linear-gradient(135deg,var(--saffron),var(--saffron-d));border-color:var(--saffron);color:#fff}
+.reg-dot.done{background:rgba(34,197,94,.15);border-color:rgba(34,197,94,.4);color:#22C55E}
 
 /* ── OR DIVIDER ── */
 .divor{display:flex;align-items:center;gap:10px;margin:14px 0}
@@ -366,9 +366,9 @@ button{cursor:pointer;font-family:inherit;border:none}
 
       <!-- Step dots -->
       <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:4px">
-        <div class="sdot active" id="sd1">1</div>
+        <div class="reg-dot active" id="sd1">1</div>
         <div style="width:28px;height:2px;background:rgba(212,175,55,.15)"></div>
-        <div class="sdot" id="sd2">2</div>
+        <div class="reg-dot" id="sd2">2</div>
       </div>
       <div style="text-align:center;font-family:'Cinzel',serif;font-size:9px;color:rgba(255,246,229,.2);letter-spacing:1.5px;margin-bottom:14px" id="sd-lbl">STEP 1 OF 2 — BASIC DETAILS</div>
 
@@ -383,8 +383,57 @@ button{cursor:pointer;font-family:inherit;border:none}
 
         <div class="field">
           <label class="label">Mobile Number</label>
-          <input class="input" id="r-phone" type="tel" placeholder="+91 98765 43210"/>
-          <div style="font-size:11px;color:rgba(255,246,229,.2);margin-top:4px">+91 ke saath likhein — OTP aayega</div>
+          <div style="display:flex;gap:0;align-items:stretch;border:1.5px solid rgba(212,175,55,.2);border-radius:8px;overflow:hidden">
+
+            <!-- Flag display + native select overlay -->
+            <div style="position:relative;flex-shrink:0;background:#2A1E12;border-right:1px solid rgba(212,175,55,.15)">
+              <div id="cc-display" style="display:flex;align-items:center;gap:6px;padding:0 10px;height:100%;pointer-events:none;min-width:90px">
+                <img id="cc-flag-img" src="" width="24" height="16" style="border-radius:2px;object-fit:cover" onerror="this.style.display='none'"/>
+                <span id="cc-code-lbl" style="font-family:'Cinzel',serif;font-size:12px;color:rgba(255,246,229,.8)">+91</span>
+                <span style="font-size:9px;color:rgba(255,246,229,.3)">▼</span>
+              </div>
+              <select id="r-country-code" onchange="ccChanged(this)"
+                style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;font-size:14px">
+                <option value="+91" data-flag="IN">🇮🇳 India +91</option>
+                <option value="+1" data-flag="US">🇺🇸 USA +1</option>
+                <option value="+44" data-flag="GB">🇬🇧 UK +44</option>
+                <option value="+61" data-flag="AU">🇦🇺 Australia +61</option>
+                <option value="+971" data-flag="AE">🇦🇪 UAE +971</option>
+                <option value="+65" data-flag="SG">🇸🇬 Singapore +65</option>
+                <option value="+60" data-flag="MY">🇲🇾 Malaysia +60</option>
+                <option value="+64" data-flag="NZ">🇳🇿 New Zealand +64</option>
+                <option value="+880" data-flag="BD">🇧🇩 Bangladesh +880</option>
+                <option value="+92" data-flag="PK">🇵🇰 Pakistan +92</option>
+                <option value="+94" data-flag="LK">🇱🇰 Sri Lanka +94</option>
+                <option value="+977" data-flag="NP">🇳🇵 Nepal +977</option>
+                <option value="+975" data-flag="BT">🇧🇹 Bhutan +975</option>
+                <option value="+960" data-flag="MV">🇲🇻 Maldives +960</option>
+                <option value="+27" data-flag="ZA">🇿🇦 South Africa +27</option>
+                <option value="+49" data-flag="DE">🇩🇪 Germany +49</option>
+                <option value="+33" data-flag="FR">🇫🇷 France +33</option>
+                <option value="+81" data-flag="JP">🇯🇵 Japan +81</option>
+                <option value="+82" data-flag="KR">🇰🇷 South Korea +82</option>
+                <option value="+86" data-flag="CN">🇨🇳 China +86</option>
+                <option value="+55" data-flag="BR">🇧🇷 Brazil +55</option>
+                <option value="+39" data-flag="IT">🇮🇹 Italy +39</option>
+                <option value="+34" data-flag="ES">🇪🇸 Spain +34</option>
+                <option value="+7" data-flag="RU">🇷🇺 Russia +7</option>
+                <option value="+966" data-flag="SA">🇸🇦 Saudi Arabia +966</option>
+                <option value="+965" data-flag="KW">🇰🇼 Kuwait +965</option>
+                <option value="+974" data-flag="QA">🇶🇦 Qatar +974</option>
+                <option value="+973" data-flag="BH">🇧🇭 Bahrain +973</option>
+                <option value="+968" data-flag="OM">🇴🇲 Oman +968</option>
+                <option value="+230" data-flag="MU">🇲🇺 Mauritius +230</option>
+                <option value="+234" data-flag="NG">🇳🇬 Nigeria +234</option>
+                <option value="+254" data-flag="KE">🇰🇪 Kenya +254</option>
+              </select>
+            </div>
+
+            <!-- Phone number input -->
+            <input id="r-phone" type="tel" placeholder="9876543210"
+              style="flex:1;background:#2A1E12;border:none;outline:none;color:var(--cream);font-family:'Lora',serif;font-size:15px;padding:13px 14px"/>
+          </div>
+          <div style="font-size:11px;color:rgba(255,246,229,.2);margin-top:4px">Sirf number likhein — OTP screen pe aayega</div>
         </div>
 
         <button class="btn btn-primary" id="rs1-btn" onclick="rStep1()" style="width:100%;justify-content:center">
@@ -814,13 +863,6 @@ async function hashPat(a){ const b=await crypto.subtle.digest('SHA-256',new Text
 function getPatH(){ return localStorage.getItem(PK)||null; }
 async function savePatH(a){ localStorage.setItem(PK,await hashPat(a)); }
 
-/* ── On load: check session ── */
-window.addEventListener('load',()=>{
-  const s=getSess(); if(!s)return;
-  currentMandir=s.mandir;
-  if(getPatH()) showPatUnlock(s); else showPortal(s.mandir);
-});
-
 /* ── Auth state ── */
 auth.onAuthStateChanged(async user=>{
   if(!user)return;
@@ -889,18 +931,76 @@ function rGoStep(n){
   [1,2].forEach(i=>{
     document.getElementById('rs'+i).style.display=i===n?'block':'none';
     const d=document.getElementById('sd'+i);
-    d.className='sdot'+(i===n?' active':i<n?' done':'');
+    d.className='reg-dot'+(i===n?' active':i<n?' done':'');
   });
   document.getElementById('sd-lbl').textContent=n===1?'STEP 1 OF 2 — BASIC DETAILS':'STEP 2 OF 2 — OTP VERIFY';
 }
 
+/* ════ COUNTRY CODE PICKER ════ */
+const COUNTRIES=[
+  {flag:'🇮🇳',name:'India',code:'+91'},
+  {flag:'🇺🇸',name:'USA',code:'+1'},
+  {flag:'🇬🇧',name:'UK',code:'+44'},
+  {flag:'🇦🇺',name:'Australia',code:'+61'},
+  {flag:'🇦🇪',name:'UAE',code:'+971'},
+  {flag:'🇸🇬',name:'Singapore',code:'+65'},
+  {flag:'🇲🇾',name:'Malaysia',code:'+60'},
+  {flag:'🇳🇿',name:'New Zealand',code:'+64'},
+  {flag:'🇧🇩',name:'Bangladesh',code:'+880'},
+  {flag:'🇵🇰',name:'Pakistan',code:'+92'},
+  {flag:'🇱🇰',name:'Sri Lanka',code:'+94'},
+  {flag:'🇳🇵',name:'Nepal',code:'+977'},
+  {flag:'🇧🇹',name:'Bhutan',code:'+975'},
+  {flag:'🇲🇻',name:'Maldives',code:'+960'},
+  {flag:'🇿🇦',name:'South Africa',code:'+27'},
+  {flag:'🇩🇪',name:'Germany',code:'+49'},
+  {flag:'🇫🇷',name:'France',code:'+33'},
+  {flag:'🇯🇵',name:'Japan',code:'+81'},
+  {flag:'🇰🇷',name:'South Korea',code:'+82'},
+  {flag:'🇨🇳',name:'China',code:'+86'},
+  {flag:'🇧🇷',name:'Brazil',code:'+55'},
+  {flag:'🇨🇦',name:'Canada',code:'+1'},
+  {flag:'🇮🇹',name:'Italy',code:'+39'},
+  {flag:'🇪🇸',name:'Spain',code:'+34'},
+  {flag:'🇷🇺',name:'Russia',code:'+7'},
+  {flag:'🇸🇦',name:'Saudi Arabia',code:'+966'},
+  {flag:'🇰🇼',name:'Kuwait',code:'+965'},
+  {flag:'🇶🇦',name:'Qatar',code:'+974'},
+  {flag:'🇧🇭',name:'Bahrain',code:'+973'},
+  {flag:'🇴🇲',name:'Oman',code:'+968'},
+  {flag:'🇲🇺',name:'Mauritius',code:'+230'},
+  {flag:'🇫🇯',name:'Fiji',code:'+679'},
+  {flag:'🇿🇼',name:'Zimbabwe',code:'+263'},
+  {flag:'🇳🇬',name:'Nigeria',code:'+234'},
+  {flag:'🇰🇪',name:'Kenya',code:'+254'},
+  {flag:'🇺🇬',name:'Uganda',code:'+256'},
+  {flag:'🇹🇿',name:'Tanzania',code:'+255'},
+  {flag:'🇬🇾',name:'Guyana',code:'+592'},
+];
+
+function ccRenderList(){} 
+
+/* ════ COUNTRY CODE PICKER ════ */
+function ccChanged(sel){
+  const opt = sel.options[sel.selectedIndex];
+  const code = sel.value;
+  const flagCode = opt.getAttribute('data-flag');
+  document.getElementById('cc-code-lbl').textContent = code;
+  /* Use flagcdn.com for reliable flag images */
+  const img = document.getElementById('cc-flag-img');
+  img.src = 'https://flagcdn.com/w40/' + flagCode.toLowerCase() + '.png';
+  img.style.display = 'inline';
+}
+
 window.addEventListener('load',()=>{
+  /* Set default India flag */
+  const img = document.getElementById('cc-flag-img');
+  if(img) img.src = 'https://flagcdn.com/w40/in.png';
+  ccRenderList();
   const s=getSess(); if(!s)return;
   currentMandir=s.mandir;
   if(getPatH()) showPatUnlock(s); else showPortal(s.mandir);
 });
-
-/* ════ DEMO OTP MODE — No Firebase Auth needed ════ */
 let _otpMode  = 'demo';
 let _demoOTP  = '';
 let _rConfirm = null;
@@ -911,15 +1011,23 @@ db_rt.ref('settings/otpMode').on('value', snap => {
 });
 
 async function rStep1(){
-  const name  = (document.getElementById('r-name').value||'').trim();
-  const phone = (document.getElementById('r-phone').value||'').trim();
+  const name    = (document.getElementById('r-name').value||'').trim();
+  const phone   = (document.getElementById('r-phone').value||'').trim();
+  const cc = document.getElementById('r-country-code').value || '+91';
   hideErr();
   if(!name) { showErr('Apna naam bharein.'); return; }
   if(!phone){ showErr('Mobile number bharein.'); return; }
-  let ph = phone.replace(/\D/g,'');
-  if(ph.length < 10){ showErr('Valid 10 digit mobile number likhein.'); return; }
-  if(!ph.startsWith('91')) ph = '91' + ph;
-  ph = '+' + ph;
+
+  /* Extract only digits from input */
+  const digits = phone.replace(/\D/g,'');
+  if(digits.length < 6 || digits.length > 15){
+    showErr('Valid mobile number likhein.');
+    document.getElementById('r-phone').style.borderColor='#EF4444';
+    return;
+  }
+  document.getElementById('r-phone').style.borderColor='';
+
+  const ph = cc + digits;
   _rName  = name;
   _rPhone = ph;
 
@@ -927,18 +1035,20 @@ async function rStep1(){
   btn.disabled = true;
   btn.innerHTML = '<div class="spinner"></div><span>OTP generate ho raha hai...</span>';
 
-  // Generate 6-digit demo OTP
+  /* Generate 6-digit demo OTP */
   _demoOTP = String(Math.floor(100000 + Math.random() * 900000));
 
   setTimeout(()=>{
-    // Show OTP on screen
-    document.getElementById('demo-otp-display').textContent = _demoOTP;
-    document.getElementById('demo-otp-box').style.display   = 'block';
-    document.getElementById('real-otp-box').style.display   = 'none';
-    // Go to step 2
-    rGoStep(2);
-    // Auto-fill OTP
-    document.getElementById('r-otp').value = _demoOTP;
+    try {
+      document.getElementById('demo-otp-display').textContent = _demoOTP;
+      document.getElementById('demo-otp-box').style.display   = 'block';
+      document.getElementById('real-otp-box').style.display   = 'none';
+      rGoStep(2);
+      document.getElementById('r-otp').value = _demoOTP;
+    } catch(err) {
+      console.error('OTP display error:', err);
+      showErr('Error: ' + err.message);
+    }
     btn.disabled = false;
     btn.innerHTML = '📤 OTP Bhejo → Mobile Verify';
   }, 800);
