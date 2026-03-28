@@ -250,6 +250,9 @@ function initDashboard(){
     return;
   }
 
+  // Get purohit name from session or localStorage backup
+  const purohitName = sess.name || localStorage.getItem('sa_pur_name') || 'Purohit ji';
+
   const mandir = sess.mandir || {
     id: sess.uid, name: 'Aapka Mandir',
     location: '', emoji: '🛕'
@@ -259,10 +262,16 @@ function initDashboard(){
   // Load fresh profile from Firebase
   db_rt.ref('purohits/' + sess.uid).once('value').then(snap => {
     const profile = snap.val();
-    if(profile && profile.mandirObj) currentMandir = profile.mandirObj;
-    showPortal(currentMandir, sess.name || 'Purohit ji');
+    if(profile){
+      if(profile.mandirObj && profile.mandirObj.name) currentMandir = profile.mandirObj;
+      const displayName = profile.name || purohitName;
+      showPortal(currentMandir, displayName);
+    } else {
+      showPortal(mandir, purohitName);
+    }
   }).catch(() => {
-    showPortal(mandir, sess.name || 'Purohit ji');
+    // Offline fallback — use session data
+    showPortal(mandir, purohitName);
   });
 }
 
@@ -567,6 +576,7 @@ function doLogout(){
   cleanupLive();
   if(currentMandir) clearLiveSignal(currentMandir.id);
   localStorage.removeItem(SK);
+  localStorage.removeItem('sa_pur_name');
   currentMandir=null;
   showToast('Logout ho gaye. Jai Shri Ram! 🙏');
   setTimeout(()=>{ window.location.replace('purohit.html'); }, 1500);
