@@ -281,44 +281,44 @@ button{cursor:pointer;font-family:inherit;border:none}
   pointer-events:none;
   top:0; left:0;
 }
-.login-tab{flex:1;padding:10px 6px;background:transparent;border:none;color:rgba(255,246,229,.4);font-family:'Cinzel',serif;font-size:10px;letter-spacing:1px;cursor:pointer;transition:all .2s}
-.login-tab.active{background:rgba(255,107,0,.15);color:var(--saffron)}
-.login-tab:hover{color:var(--cream)}
-.su-step-dot{width:28px;height:28px;border-radius:50%;background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.2);color:rgba(255,246,229,.3);font-family:'Cinzel',serif;font-size:11px;display:flex;align-items:center;justify-content:center;transition:all .3s}
-.su-step-dot.active{background:linear-gradient(135deg,var(--saffron),var(--saffron-d));border-color:var(--saffron);color:#fff}
-.su-step-dot.done{background:rgba(34,197,94,.2);border-color:rgba(34,197,94,.4);color:#22C55E}
 
-/* ── PATTERN LOCK ── */
-#pattern-overlay{position:fixed;inset:0;z-index:9999;background:#0F0A05;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Lora',serif}
+/* ── STEP DOTS ── */
+.su-dot{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Cinzel',serif;font-size:11px;border:1px solid rgba(212,175,55,.2);color:rgba(255,246,229,.3);background:rgba(212,175,55,.05);transition:all .3s}
+.su-dot.active{background:linear-gradient(135deg,var(--saffron),var(--saffron-d));border-color:var(--saffron);color:#fff}
+.su-dot.done{background:rgba(34,197,94,.15);border-color:rgba(34,197,94,.4);color:#22C55E}
+
+/* ── PATTERN LOCK OVERLAY ── */
+#pattern-overlay{position:fixed;inset:0;z-index:9999;background:#0F0A05;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
 #pattern-overlay.hidden{display:none}
-.pattern-title{font-family:'Cinzel Decorative',serif;font-size:18px;color:var(--gold);margin-bottom:6px;text-align:center}
-.pattern-sub{font-size:12px;color:rgba(255,246,229,.35);margin-bottom:32px;text-align:center;font-family:'Cinzel',serif;letter-spacing:1px}
-.pattern-status{font-family:'Cinzel',serif;font-size:12px;letter-spacing:1px;height:20px;margin-bottom:16px;text-align:center;transition:color .3s}
-.pattern-status.error{color:#EF4444}
-.pattern-status.success{color:#22C55E}
-.pattern-status.info{color:rgba(255,246,229,.4)}
-#pattern-canvas{touch-action:none;cursor:crosshair}
-.pattern-hint{font-size:11px;color:rgba(255,246,229,.2);margin-top:20px;text-align:center;font-family:'Cinzel',serif;letter-spacing:.5px}
-.pattern-reset-btn{margin-top:16px;padding:8px 20px;background:transparent;border:1px solid rgba(212,175,55,.2);border-radius:6px;color:rgba(255,246,229,.3);font-family:'Cinzel',serif;font-size:10px;letter-spacing:1px;cursor:pointer;transition:all .2s}
-.pattern-reset-btn:hover{border-color:rgba(212,175,55,.4);color:rgba(255,246,229,.6)}
+.pat-title{font-family:'Cinzel Decorative',serif;font-size:17px;color:var(--gold);margin-bottom:4px;text-align:center}
+.pat-sub{font-size:12px;color:rgba(255,246,229,.35);margin-bottom:6px;text-align:center;font-family:'Cinzel',serif;letter-spacing:.5px}
+.pat-status{font-family:'Cinzel',serif;font-size:12px;letter-spacing:.5px;height:22px;margin-bottom:14px;text-align:center;transition:color .25s}
+.pat-status.err{color:#EF4444}
+.pat-status.ok{color:#22C55E}
+.pat-status.info{color:rgba(255,246,229,.35)}
+#pat-canvas{touch-action:none;cursor:crosshair;border-radius:12px}
+.pat-hint{font-size:11px;color:rgba(255,246,229,.2);margin-top:16px;text-align:center;font-family:'Cinzel',serif}
+.pat-forgot{margin-top:14px;padding:8px 22px;background:transparent;border:1px solid rgba(212,175,55,.2);border-radius:6px;color:rgba(255,246,229,.3);font-family:'Cinzel',serif;font-size:10px;letter-spacing:1px;cursor:pointer;transition:all .2s}
+.pat-forgot:hover{border-color:rgba(212,175,55,.4);color:rgba(255,246,229,.6)}
+
+/* ── DIVIDER ── */
+.divider-or{display:flex;align-items:center;gap:10px;margin:14px 0}
+.divider-or span{flex:1;height:1px;background:rgba(212,175,55,.12)}
+.divider-or label{font-family:'Cinzel',serif;font-size:9px;color:rgba(255,246,229,.25);letter-spacing:1px;white-space:nowrap}
 </style>
 </head>
 <body>
 
-<!-- ══════════════════════════════════════
-     PATTERN LOCK OVERLAY
-     Shown instead of full login after
-     first login within 7-day session
-══════════════════════════════════════ -->
+<!-- ══ PATTERN LOCK OVERLAY ══ -->
 <div id="pattern-overlay" class="hidden">
-  <div style="font-size:48px;margin-bottom:16px">🔐</div>
-  <div class="pattern-title" id="pattern-title">Welcome Back</div>
-  <div class="pattern-sub" id="pattern-sub">Apna pattern draw karein</div>
-  <div class="pattern-status info" id="pattern-status">Pattern draw karna shuru karein</div>
-  <canvas id="pattern-canvas" width="280" height="280"></canvas>
-  <div class="pattern-hint" id="pattern-hint">Kam se kam 4 dots connect karein</div>
-  <button class="pattern-reset-btn" id="pattern-reset-btn" style="display:none" onclick="forgotPattern()">
-    🔑 Bhool gaye? Full login karein
+  <div style="font-size:44px;margin-bottom:14px">🔐</div>
+  <div class="pat-title" id="pat-title">Welcome Back</div>
+  <div class="pat-sub"   id="pat-sub">Apna pattern draw karein</div>
+  <div class="pat-status info" id="pat-status">Draw karna shuru karein</div>
+  <canvas id="pat-canvas" width="264" height="264"></canvas>
+  <div class="pat-hint"  id="pat-hint">Kam se kam 4 dots connect karein</div>
+  <button class="pat-forgot" id="pat-forgot" style="display:none" onclick="forgotPattern()">
+    🔑 Pattern bhool gaye? Full login karein
   </button>
 </div>
 <div class="topbar">
@@ -339,121 +339,32 @@ button{cursor:pointer;font-family:inherit;border:none}
       <div class="login-sub">&#x92A;&#x941;&#x930;&#x94B;&#x939;&#x93F;&#x924; &#x932;&#x93E;&#x907;&#x935; &#x92A;&#x94B;&#x930;&#x94D;&#x91F;&#x932;</div>
     </div>
 
-    <!-- ── PENDING APPROVAL NOTICE ── -->
+    <!-- Pending approval notice -->
     <div id="pending-notice" style="display:none;background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.3);border-radius:10px;padding:18px;text-align:center;margin-bottom:16px">
       <div style="font-size:28px;margin-bottom:8px">🕐</div>
-      <div style="font-family:'Cinzel',serif;font-size:13px;color:var(--gold);margin-bottom:6px">Registration Successful!</div>
-      <div style="font-size:12px;color:rgba(255,246,229,.5);line-height:1.7">Admin se approval ka wait karein.<br/>Approve hone ke baad aap login kar payenge.</div>
+      <div style="font-family:'Cinzel',serif;font-size:13px;color:var(--gold);margin-bottom:6px">Registration Ho Gayi!</div>
+      <div style="font-size:12px;color:rgba(255,246,229,.5);line-height:1.7">Admin se approval ka wait karein.<br/>Approve hone ke baad login kar payenge.</div>
     </div>
 
-    <!-- ── SIGN IN / SIGN UP MODE SWITCHER ── -->
-    <div style="display:flex;gap:0;margin-bottom:20px;border-radius:10px;overflow:hidden;border:1px solid rgba(212,175,55,.25);background:rgba(0,0,0,.2)">
-      <button id="mode-signin" onclick="setAuthMode('signin')"
-        style="flex:1;padding:12px;border:none;font-family:'Cinzel',serif;font-size:11px;letter-spacing:1.5px;cursor:pointer;transition:all .25s;background:linear-gradient(135deg,var(--saffron),var(--saffron-d));color:#fff">
-        🔐 Sign In
-      </button>
-      <button id="mode-signup" onclick="setAuthMode('signup')"
-        style="flex:1;padding:12px;border:none;font-family:'Cinzel',serif;font-size:11px;letter-spacing:1.5px;cursor:pointer;transition:all .25s;background:transparent;color:rgba(255,246,229,.4)">
-        📝 Sign Up
-      </button>
-    </div>
-
-    <!-- ── ERROR BOX ── -->
+    <!-- Global error -->
     <div id="login-err" style="display:none;margin-bottom:14px;font-size:12px;color:#EF4444;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);padding:10px 14px;border-radius:6px;font-family:'Cinzel',serif;text-align:center"></div>
 
-    <!-- ══════════════════════════════
-         SIGN IN VIEW
-    ══════════════════════════════ -->
-    <div id="view-signin">
-      <div class="card">
+    <!-- ══ REGISTRATION VIEW (default) ══ -->
+    <div id="view-signup">
 
-        <!-- Email + Password -->
-        <div class="field">
-          <label class="label">Email Address</label>
-          <input class="input" id="si-email" type="email" placeholder="purohit@example.com"
-            onkeydown="if(event.key==='Enter')document.getElementById('si-pass').focus()"/>
-        </div>
-        <div class="field">
-          <label class="label">Password</label>
-          <input class="input" id="si-pass" type="password" placeholder="••••••••"
-            onkeydown="if(event.key==='Enter')doSignIn()"/>
-        </div>
-        <button class="btn btn-primary" id="si-btn" onclick="doSignIn()" style="width:100%;justify-content:center;margin-bottom:14px">
-          🔐 Sign In
-        </button>
-
-        <!-- Divider -->
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
-          <div style="flex:1;height:1px;background:rgba(212,175,55,.15)"></div>
-          <div style="font-family:'Cinzel',serif;font-size:9px;color:rgba(255,246,229,.3);letter-spacing:1px">YA PHIR</div>
-          <div style="flex:1;height:1px;background:rgba(212,175,55,.15)"></div>
-        </div>
-
-        <!-- Mobile OTP Sign In -->
-        <div id="si-phone-step1">
-          <div class="field">
-            <label class="label">Mobile Number se Login</label>
-            <input class="input" id="si-phone" type="tel" placeholder="+91 98765 43210"/>
-            <div style="font-size:11px;color:rgba(255,246,229,.25);margin-top:4px">+91 ke saath likhein</div>
-          </div>
-          <div id="si-recaptcha" style="margin-bottom:12px"></div>
-          <button class="btn btn-primary" id="si-otp-btn" onclick="signInSendOTP()" style="width:100%;justify-content:center;background:linear-gradient(135deg,rgba(212,175,55,.8),rgba(160,136,40,.8))">
-            📱 Mobile OTP Bhejo
-          </button>
-        </div>
-
-        <div id="si-phone-step2" style="display:none">
-          <div style="text-align:center;font-size:12px;color:rgba(255,246,229,.4);margin-bottom:12px" id="si-otp-msg"></div>
-          <div class="field">
-            <label class="label">OTP Enter Karein</label>
-            <input class="input code-input" id="si-otp" type="text" maxlength="6" placeholder="• • • • • •"
-              onkeydown="if(event.key==='Enter')signInVerifyOTP()"/>
-          </div>
-          <button class="btn btn-primary" id="si-verify-btn" onclick="signInVerifyOTP()" style="width:100%;justify-content:center;margin-bottom:10px">
-            ✅ Verify & Login
-          </button>
-          <button onclick="resetSignInOTP()" style="width:100%;background:none;border:none;color:rgba(255,246,229,.3);font-family:'Cinzel',serif;font-size:10px;cursor:pointer;padding:6px">
-            ← Number change karein
-          </button>
-        </div>
-
-        <!-- Divider -->
-        <div style="display:flex;align-items:center;gap:10px;margin:14px 0">
-          <div style="flex:1;height:1px;background:rgba(212,175,55,.15)"></div>
-          <div style="font-family:'Cinzel',serif;font-size:9px;color:rgba(255,246,229,.3);letter-spacing:1px">YA PHIR</div>
-          <div style="flex:1;height:1px;background:rgba(212,175,55,.15)"></div>
-        </div>
-
-        <!-- Google Sign In -->
-        <button id="si-google-btn" onclick="doGoogleLogin()" style="width:100%;padding:12px;border-radius:6px;border:1px solid rgba(212,175,55,.25);background:rgba(255,255,255,.05);color:var(--cream);font-family:'Cinzel',serif;font-size:11px;letter-spacing:1px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .2s">
-          <span style="font-weight:700;font-size:15px;color:#4285F4">G</span> Google se Sign In
-        </button>
-
+      <!-- Step dots -->
+      <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:4px">
+        <div class="su-dot active" id="sd1">1</div>
+        <div style="flex:1;max-width:32px;height:2px;background:rgba(212,175,55,.15)"></div>
+        <div class="su-dot" id="sd2">2</div>
+        <div style="flex:1;max-width:32px;height:2px;background:rgba(212,175,55,.15)"></div>
+        <div class="su-dot" id="sd3">3</div>
       </div>
+      <div style="text-align:center;font-family:'Cinzel',serif;font-size:9px;color:rgba(255,246,229,.2);letter-spacing:1.5px;margin-bottom:16px" id="su-step-lbl">STEP 1 OF 3 — EMAIL REGISTER</div>
 
-      <div style="text-align:center;margin-top:14px;font-size:12px;color:rgba(255,246,229,.3)">
-        Naya purohit hain?
-        <button onclick="setAuthMode('signup')" style="background:none;border:none;color:var(--saffron);font-family:'Cinzel',serif;font-size:11px;cursor:pointer;letter-spacing:.5px">Sign Up karein →</button>
-      </div>
-    </div>
-
-    <!-- ══════════════════════════════
-         SIGN UP VIEW (3 steps)
-    ══════════════════════════════ -->
-    <div id="view-signup" style="display:none">
-
-      <!-- Step indicator -->
-      <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:20px">
-        <div class="su-step-dot active" id="su-dot-1">1</div>
-        <div style="width:28px;height:2px;background:rgba(212,175,55,.2)" id="su-line-1"></div>
-        <div class="su-step-dot" id="su-dot-2">2</div>
-        <div style="width:28px;height:2px;background:rgba(212,175,55,.2)" id="su-line-2"></div>
-        <div class="su-step-dot" id="su-dot-3">3</div>
-      </div>
-
-      <!-- STEP 1: Email verify -->
+      <!-- STEP 1: Email + Password -->
       <div id="su-step1" class="card">
-        <div class="card-title">📧 Step 1: Email Verify Karein</div>
+        <div class="card-title">📝 New Registration</div>
         <div class="field">
           <label class="label">Email Address</label>
           <input class="input" id="su-email" type="email" placeholder="purohit@example.com"/>
@@ -464,77 +375,112 @@ button{cursor:pointer;font-family:inherit;border:none}
         </div>
         <div class="field">
           <label class="label">Password Confirm Karein</label>
-          <input class="input" id="su-pass2" type="password" placeholder="••••••••"/>
+          <input class="input" id="su-pass2" type="password" placeholder="••••••••"
+            onkeydown="if(event.key==='Enter')suStep1()"/>
         </div>
-        <button class="btn btn-primary" id="su-step1-btn" onclick="signUpStep1()" style="width:100%;justify-content:center">
-          Next → Email Verify
+        <button class="btn btn-primary" id="su-s1-btn" onclick="suStep1()" style="width:100%;justify-content:center">
+          Next → Mobile Verify
         </button>
-        <div style="text-align:center;margin-top:14px">
-          <button onclick="setAuthMode('signin')" style="background:none;border:none;color:rgba(255,246,229,.3);font-family:'Cinzel',serif;font-size:10px;cursor:pointer">← Already registered? Sign In</button>
+        <div class="divider-or"><span></span><label>YA PHIR</label><span></span></div>
+        <button onclick="doGoogleLogin()" style="width:100%;padding:11px;border-radius:6px;border:1px solid rgba(212,175,55,.2);background:rgba(255,255,255,.04);color:var(--cream);font-family:'Cinzel',serif;font-size:11px;letter-spacing:.8px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px">
+          <span style="font-weight:900;font-size:15px;color:#4285F4">G</span> Google se Register / Login
+        </button>
+        <div style="text-align:center;margin-top:14px;font-size:12px;color:rgba(255,246,229,.25)">
+          Already registered?
+          <button onclick="setMode('signin')" style="background:none;border:none;color:var(--saffron);font-family:'Cinzel',serif;font-size:11px;cursor:pointer">Login karein →</button>
         </div>
       </div>
 
-      <!-- STEP 2: Mobile OTP verify -->
+      <!-- STEP 2: Mobile OTP -->
       <div id="su-step2" class="card" style="display:none">
-        <div class="card-title">📱 Step 2: Mobile Verify Karein</div>
-        <div style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:6px;padding:10px;margin-bottom:14px;font-size:11px;color:rgba(34,197,94,.8);text-align:center">
-          ✅ Email verified!
-        </div>
-        <div id="su-phone-step1">
+        <div class="card-title">📱 Step 2: Mobile Verify</div>
+        <div style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:6px;padding:10px;margin-bottom:14px;font-size:11px;color:#22C55E;text-align:center">✅ Email registered!</div>
+        <div id="su-ph1">
           <div class="field">
             <label class="label">Mobile Number</label>
             <input class="input" id="su-phone" type="tel" placeholder="+91 98765 43210"/>
-            <div style="font-size:11px;color:rgba(255,246,229,.25);margin-top:4px">+91 ke saath likhein</div>
+            <div style="font-size:11px;color:rgba(255,246,229,.2);margin-top:4px">+91 ke saath likhein</div>
           </div>
           <div id="su-recaptcha" style="margin-bottom:12px"></div>
-          <button class="btn btn-primary" id="su-otp-btn" onclick="signUpSendOTP()" style="width:100%;justify-content:center">
-            📤 OTP Bhejo
-          </button>
+          <button class="btn btn-primary" id="su-otp-btn" onclick="suSendOTP()" style="width:100%;justify-content:center">📤 OTP Bhejo</button>
         </div>
-        <div id="su-phone-step2" style="display:none">
-          <div style="text-align:center;font-size:12px;color:rgba(255,246,229,.4);margin-bottom:12px" id="su-otp-msg"></div>
+        <div id="su-ph2" style="display:none">
+          <div style="text-align:center;font-size:12px;color:rgba(255,246,229,.35);margin-bottom:12px" id="su-otp-msg"></div>
           <div class="field">
             <label class="label">OTP Enter Karein</label>
-            <input class="input code-input" id="su-otp" type="text" maxlength="6" placeholder="• • • • • •"/>
+            <input class="input code-input" id="su-otp" type="text" maxlength="6" placeholder="• • • • • •" onkeydown="if(event.key==='Enter')suVerifyOTP()"/>
           </div>
-          <button class="btn btn-primary" id="su-verify-btn" onclick="signUpVerifyOTP()" style="width:100%;justify-content:center">
-            ✅ Mobile Verify Karein
-          </button>
+          <button class="btn btn-primary" id="su-ver-btn" onclick="suVerifyOTP()" style="width:100%;justify-content:center">✅ Verify Karein</button>
+          <button onclick="suResetPhone()" style="width:100%;background:none;border:none;color:rgba(255,246,229,.25);font-family:'Cinzel',serif;font-size:10px;cursor:pointer;padding:8px">← Number change karein</button>
         </div>
       </div>
 
-      <!-- STEP 3: Profile details -->
+      <!-- STEP 3: Profile -->
       <div id="su-step3" class="card" style="display:none">
         <div class="card-title">🛕 Step 3: Purohit Details</div>
-        <div style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:6px;padding:10px;margin-bottom:14px;font-size:11px;color:rgba(34,197,94,.8);text-align:center">
-          ✅ Email & Mobile verified!
-        </div>
-        <div class="field">
-          <label class="label">Full Name</label>
-          <input class="input" id="su-name" type="text" placeholder="Pandit Ramesh Sharma"/>
-        </div>
-        <div class="field">
-          <label class="label">Mandir Name</label>
-          <input class="input" id="su-mandir" type="text" placeholder="Kashi Vishwanath Mandir"/>
-        </div>
-        <div class="field">
-          <label class="label">City / Location</label>
-          <input class="input" id="su-city" type="text" placeholder="Varanasi, UP"/>
-        </div>
-        <div class="field">
-          <label class="label">Experience (Years)</label>
-          <input class="input" id="su-exp" type="number" placeholder="5" min="0"/>
-        </div>
-        <div class="field">
-          <label class="label">Specialization</label>
-          <input class="input" id="su-spec" type="text" placeholder="e.g. Vedic Rituals, Rudrabhishek"/>
-        </div>
-        <button class="btn btn-primary" id="su-submit-btn" onclick="signUpSubmit()" style="width:100%;justify-content:center">
-          🙏 Registration Submit Karein
-        </button>
+        <div style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:6px;padding:10px;margin-bottom:14px;font-size:11px;color:#22C55E;text-align:center">✅ Email & Mobile verified!</div>
+        <div class="field"><label class="label">Full Name</label><input class="input" id="su-name" type="text" placeholder="Pandit Ramesh Sharma"/></div>
+        <div class="field"><label class="label">Mandir Name</label><input class="input" id="su-mandir" type="text" placeholder="Kashi Vishwanath Mandir"/></div>
+        <div class="field"><label class="label">City / Location</label><input class="input" id="su-city" type="text" placeholder="Varanasi, UP"/></div>
+        <div class="field"><label class="label">Experience (Years)</label><input class="input" id="su-exp" type="number" placeholder="5" min="0"/></div>
+        <div class="field"><label class="label">Specialization</label><input class="input" id="su-spec" type="text" placeholder="e.g. Vedic Rituals, Rudrabhishek"/></div>
+        <button class="btn btn-primary" id="su-sub-btn" onclick="suSubmit()" style="width:100%;justify-content:center">🙏 Registration Submit Karein</button>
       </div>
+    </div><!-- end signup -->
 
-    </div><!-- end view-signup -->
+    <!-- ══ LOGIN VIEW (hidden by default) ══ -->
+    <div id="view-signin" style="display:none">
+      <div class="card">
+        <div class="card-title">🔐 Login Karein</div>
+
+        <!-- Smart single input -->
+        <div class="field" id="si-id-wrap">
+          <label class="label" id="si-id-label">Mobile Number ya Email</label>
+          <input class="input" id="si-id" type="text" placeholder="+91 number ya Email address"
+            oninput="detectType(this.value)" onkeydown="if(event.key==='Enter')siNext()"/>
+          <div style="font-size:11px;margin-top:5px;font-family:'Cinzel',serif;letter-spacing:.3px;min-height:16px;transition:color .2s" id="si-type-hint"></div>
+        </div>
+
+        <!-- Password — shown for email -->
+        <div class="field" id="si-pass-wrap" style="display:none">
+          <label class="label">Password</label>
+          <input class="input" id="si-pass" type="password" placeholder="••••••••"
+            onkeydown="if(event.key==='Enter')siNext()"/>
+        </div>
+
+        <!-- reCAPTCHA — shown for mobile -->
+        <div id="si-recaptcha" style="margin-bottom:12px"></div>
+
+        <!-- OTP verify -->
+        <div id="si-otp-wrap" style="display:none">
+          <div style="text-align:center;font-size:12px;color:rgba(255,246,229,.35);margin-bottom:10px" id="si-otp-msg"></div>
+          <div class="field">
+            <label class="label">OTP Enter Karein</label>
+            <input class="input code-input" id="si-otp" type="text" maxlength="6" placeholder="• • • • • •"
+              onkeydown="if(event.key==='Enter')siVerifyOTP()"/>
+          </div>
+          <button class="btn btn-primary" id="si-ver-btn" onclick="siVerifyOTP()" style="width:100%;justify-content:center;margin-bottom:8px">✅ Verify & Login</button>
+          <button onclick="siResetOTP()" style="width:100%;background:none;border:none;color:rgba(255,246,229,.25);font-family:'Cinzel',serif;font-size:10px;cursor:pointer;padding:6px">← Number change karein</button>
+        </div>
+
+        <!-- Next / Sign In button -->
+        <button class="btn btn-primary" id="si-btn" onclick="siNext()" style="width:100%;justify-content:center;display:none">
+          <span id="si-btn-lbl">Login →</span>
+        </button>
+
+        <div class="divider-or"><span></span><label>YA PHIR</label><span></span></div>
+
+        <!-- Google -->
+        <button onclick="doGoogleLogin()" style="width:100%;padding:11px;border-radius:6px;border:1px solid rgba(212,175,55,.2);background:rgba(255,255,255,.04);color:var(--cream);font-family:'Cinzel',serif;font-size:11px;letter-spacing:.8px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px">
+          <span style="font-weight:900;font-size:15px;color:#4285F4">G</span> Google se Login
+        </button>
+
+        <div style="text-align:center;margin-top:14px;font-size:12px;color:rgba(255,246,229,.25)">
+          Naya purohit hain?
+          <button onclick="setMode('signup')" style="background:none;border:none;color:var(--saffron);font-family:'Cinzel',serif;font-size:11px;cursor:pointer">Register karein →</button>
+        </div>
+      </div>
+    </div><!-- end signin -->
 
   </div><!-- end view-login -->
 
@@ -762,937 +708,434 @@ const firebaseConfig = {
   appId: "1:1031082702558:web:744ffa9cfa54ff838db44f"
 };
 firebase.initializeApp(firebaseConfig);
-const db_rt = firebase.database();
-const purohitAuth = firebase.auth();
+const db_rt   = firebase.database();
+const auth    = firebase.auth();
 
-/* ══════════════════════════════════════════
-   MODE SWITCHER — Sign In / Sign Up
-══════════════════════════════════════════ */
-function setAuthMode(mode){
-  const isSignup = mode === 'signup';
-  document.getElementById('view-signin').style.display = isSignup ? 'none' : 'block';
-  document.getElementById('view-signup').style.display = isSignup ? 'block' : 'none';
-  document.getElementById('mode-signin').style.background = isSignup ? 'transparent' : 'linear-gradient(135deg,var(--saffron),var(--saffron-d))';
-  document.getElementById('mode-signin').style.color = isSignup ? 'rgba(255,246,229,.4)' : '#fff';
-  document.getElementById('mode-signup').style.background = isSignup ? 'linear-gradient(135deg,var(--saffron),var(--saffron-d))' : 'transparent';
-  document.getElementById('mode-signup').style.color = isSignup ? '#fff' : 'rgba(255,246,229,.4)';
-  document.getElementById('login-err').style.display = 'none';
+/* ════════════════════════════════
+   SESSION (7 days) + PATTERN LOCK
+════════════════════════════════ */
+const S_KEY  = 'sa_pur_session';
+const P_KEY  = 'sa_pur_pattern';
+const S_DAYS = 7;
+const MAX_FAIL = 5;
+let _patMode = 'unlock'; // 'unlock' | 'set' | 'confirm'
+let _patFirst = null;
+let _patFails = 0;
+let _patLockUntil = 0;
+let _setupUser = null;
+let _setupPhone = '';
+
+function saveSession(user, mandir){
+  localStorage.setItem(S_KEY, JSON.stringify({
+    uid: user.uid, email: user.email||'', mandir,
+    exp: Date.now() + S_DAYS*864e5
+  }));
 }
-
-function showLoginError(msg){
-  const el = document.getElementById('login-err');
-  el.textContent = '⚠️ ' + msg;
-  el.style.display = 'block';
+function getSession(){
+  try{
+    const s=JSON.parse(localStorage.getItem(S_KEY)||'null');
+    if(!s||Date.now()>s.exp){localStorage.removeItem(S_KEY);return null;}
+    return s;
+  }catch(e){return null;}
 }
+function clearSession(){ localStorage.removeItem(S_KEY); localStorage.removeItem(P_KEY); }
 
-const AUTH_MSGS = {
-  'auth/email-already-in-use':  'Yeh email already registered hai. Sign In karein.',
-  'auth/wrong-password':         'Galat password.',
-  'auth/user-not-found':         'Yeh email registered nahi hai. Sign Up karein.',
-  'auth/invalid-credential':     'Galat email ya password.',
-  'auth/weak-password':          'Password kam se kam 6 characters ka hona chahiye.',
-  'auth/invalid-email':          'Valid email address bharein.',
-  'auth/too-many-requests':      'Bahut zyada attempts. Kuch der baad try karein.',
-  'auth/popup-closed-by-user':   'Google login cancel ho gayi.',
-  'auth/popup-blocked':          'Popup block ho gayi. Browser settings check karein.',
-  'auth/invalid-phone-number':   'Galat phone number. +91 ke saath likhein.',
-  'auth/quota-exceeded':         'SMS limit khatam. Baad mein try karein.',
-  'auth/network-request-failed': 'Network error. Internet check karein.',
-};
+async function hashPat(arr){
+  const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(arr.join('-')));
+  return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+function getPatHash(){ return localStorage.getItem(P_KEY)||null; }
+async function savePatHash(arr){ localStorage.setItem(P_KEY, await hashPat(arr)); }
 
-/* ══════════════════════════════════════════
-   AUTH STATE WATCHER
-══════════════════════════════════════════ */
-purohitAuth.onAuthStateChanged(async user => {
-  if(!user) return;
-  await checkApprovalAndEnter(user);
+/* ── On page load: check session ── */
+window.addEventListener('load',()=>{
+  const s=getSession();
+  if(!s) return;
+  currentMandir=s.mandir;
+  if(getPatHash()) showPatUnlock(s);
+  else showPortal(s.mandir);
 });
 
-async function checkApprovalAndEnter(user){
-  try {
-    const snap = await db_rt.ref('purohits/' + user.uid).once('value');
-    const data = snap.val();
-    if(!data){
-      /* First Google login — go to signup step 3 directly */
-      _signupUser = user;
-      setAuthMode('signup');
-      goToSignupStep(3);
-      return;
+/* ── Firebase auth state ── */
+auth.onAuthStateChanged(async user=>{
+  if(!user) return;
+  const s=getSession();
+  if(s && s.uid===user.uid) return; // already handled by session
+  await checkAndEnter(user);
+});
+
+async function checkAndEnter(user){
+  try{
+    const snap=await db_rt.ref('purohits/'+user.uid).once('value');
+    const d=snap.val();
+    if(!d){ _setupUser=user; setMode('signup'); suGoStep(3); return; }
+    if(d.status==='pending'){ document.getElementById('pending-notice').style.display='block'; auth.signOut(); return; }
+    if(d.status==='rejected'){ showErr('Account reject ho gaya. Admin se contact karein.'); auth.signOut(); return; }
+    if(d.status==='approved'){
+      currentMandir=d.mandirObj||{id:user.uid,name:d.mandir||d.mandirName,location:d.city,emoji:'🛕'};
+      saveSession(user,currentMandir);
+      if(getPatHash()) showPatUnlock(getSession());
+      else showPatSetup();
     }
-    if(data.status === 'pending'){
-      document.getElementById('pending-notice').style.display = 'block';
-      purohitAuth.signOut();
-      return;
-    }
-    if(data.status === 'approved'){
-      currentMandir = data.mandir || {id:user.uid, name:data.mandirName, location:data.city, emoji:'🛕'};
-      showPortal(currentMandir);
-      return;
-    }
-    if(data.status === 'rejected'){
-      showLoginError('Aapka account reject kar diya gaya. Admin se contact karein.');
-      purohitAuth.signOut();
-    }
-  } catch(e){ showLoginError('Connection error. Dobara try karein.'); }
+  }catch(e){ showErr('Connection error. Dobara try karein.'); }
 }
 
-/* ══════════════════════════════════════════
-   SIGN IN — Email/Password
-══════════════════════════════════════════ */
-async function doSignIn(){
-  const email = (document.getElementById('si-email').value||'').trim();
-  const pass  =  document.getElementById('si-pass').value||'';
-  if(!email||!pass){ showLoginError('Email aur password dono bharein.'); return; }
-  const btn = document.getElementById('si-btn');
-  btn.disabled=true; btn.innerHTML='<div class="spinner"></div><span>Signing in...</span>';
-  document.getElementById('login-err').style.display='none';
-  try {
-    await purohitAuth.signInWithEmailAndPassword(email, pass);
-  } catch(e){
-    showLoginError(AUTH_MSGS[e.code]||e.message);
-    btn.disabled=false; btn.innerHTML='🔐 Sign In';
-  }
+/* ════════════════════════════════
+   UI HELPERS
+════════════════════════════════ */
+function showErr(msg){ const e=document.getElementById('login-err'); e.textContent='⚠️ '+msg; e.style.display='block'; }
+function hideErr(){ document.getElementById('login-err').style.display='none'; }
+
+const ERR={
+  'auth/email-already-in-use':'Yeh email already registered hai. Login karein.',
+  'auth/wrong-password':'Galat password.',
+  'auth/user-not-found':'Yeh email registered nahi hai. Register karein.',
+  'auth/invalid-credential':'Galat email ya password.',
+  'auth/weak-password':'Password kam se kam 6 characters ka hona chahiye.',
+  'auth/invalid-email':'Valid email address bharein.',
+  'auth/too-many-requests':'Bahut zyada attempts. Kuch der baad try karein.',
+  'auth/popup-closed-by-user':'Google login cancel ho gayi.',
+  'auth/invalid-phone-number':'Galat phone number. +91 ke saath likhein.',
+  'auth/quota-exceeded':'SMS limit khatam. Baad mein try karein.',
+  'auth/network-request-failed':'Network error. Internet check karein.',
+};
+
+function setMode(mode){
+  hideErr();
+  document.getElementById('view-signup').style.display = mode==='signup'?'block':'none';
+  document.getElementById('view-signin').style.display = mode==='signin'?'block':'none';
+  if(mode==='signin') setTimeout(initSiRecaptcha,300);
 }
 
-/* ══════════════════════════════════════════
-   SIGN IN — Google
-══════════════════════════════════════════ */
-async function doGoogleLogin(){
-  document.getElementById('login-err').style.display='none';
-  try {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    await purohitAuth.signInWithPopup(provider);
-  } catch(e){ showLoginError(AUTH_MSGS[e.code]||e.message); }
-}
+/* ════════════════════════════════
+   REGISTRATION FLOW (3 steps)
+════════════════════════════════ */
+let _suConfirm=null, _suRecap=null;
 
-/* ══════════════════════════════════════════
-   SIGN IN — Mobile OTP
-══════════════════════════════════════════ */
-let _siConfirmation = null;
-let _siRecaptcha    = null;
-
-function initSignInRecaptcha(){
-  if(_siRecaptcha) return;
-  _siRecaptcha = new firebase.auth.RecaptchaVerifier('si-recaptcha',{
-    size:'normal',
-    callback:()=>{ document.getElementById('si-otp-btn').disabled=false; },
-    'expired-callback':()=>{ document.getElementById('si-otp-btn').disabled=true; }
-  });
-  _siRecaptcha.render();
-}
-/* Init recaptcha on page load for sign in OTP */
-window.addEventListener('load', ()=> setTimeout(initSignInRecaptcha, 500));
-
-async function signInSendOTP(){
-  const phone = (document.getElementById('si-phone').value||'').trim();
-  if(!phone.startsWith('+')){ showLoginError('+91 ke saath number likhein. Example: +91 98765 43210'); return; }
-  const btn = document.getElementById('si-otp-btn');
-  btn.disabled=true; btn.innerHTML='<div class="spinner"></div><span>Bhej raha hoon...</span>';
-  document.getElementById('login-err').style.display='none';
-  try {
-    _siConfirmation = await purohitAuth.signInWithPhoneNumber(phone, _siRecaptcha);
-    document.getElementById('si-phone-step1').style.display='none';
-    document.getElementById('si-phone-step2').style.display='block';
-    document.getElementById('si-otp-msg').textContent='✅ OTP bheja gaya: '+phone;
-  } catch(e){
-    showLoginError(AUTH_MSGS[e.code]||e.message);
-    btn.disabled=false; btn.innerHTML='📱 Mobile OTP Bhejo';
-  }
-}
-
-async function signInVerifyOTP(){
-  const otp=(document.getElementById('si-otp').value||'').trim();
-  if(otp.length<6){ showLoginError('6 digit OTP bharein.'); return; }
-  const btn=document.getElementById('si-verify-btn');
-  btn.disabled=true; btn.innerHTML='<div class="spinner"></div><span>Verifying...</span>';
-  try {
-    await _siConfirmation.confirm(otp);
-  } catch(e){
-    showLoginError('Galat OTP. Dobara check karein.');
-    btn.disabled=false; btn.innerHTML='✅ Verify & Login';
-  }
-}
-
-function resetSignInOTP(){
-  document.getElementById('si-phone-step1').style.display='block';
-  document.getElementById('si-phone-step2').style.display='none';
-  document.getElementById('si-otp').value='';
-  _siConfirmation=null;
-  if(_siRecaptcha){ _siRecaptcha.clear(); _siRecaptcha=null; }
-  setTimeout(initSignInRecaptcha,200);
-}
-
-/* ══════════════════════════════════════════
-   SIGN UP — 3 Step Flow
-   Step 1: Email + Password (create account)
-   Step 2: Mobile OTP verify
-   Step 3: Profile details → submit for approval
-══════════════════════════════════════════ */
-let _signupUser        = null;
-let _suConfirmation    = null;
-let _suRecaptcha       = null;
-let _signupVerifiedPhone = '';
-
-function goToSignupStep(n){
+function suGoStep(n){
   [1,2,3].forEach(i=>{
-    document.getElementById('su-step'+i).style.display = i===n?'block':'none';
-    const dot=document.getElementById('su-dot-'+i);
-    dot.classList.remove('active','done');
-    if(i===n) dot.classList.add('active');
-    else if(i<n) dot.classList.add('done');
+    document.getElementById('su-step'+i).style.display=i===n?'block':'none';
+    const d=document.getElementById('sd'+i);
+    d.className='su-dot'+(i===n?' active':i<n?' done':'');
   });
+  const lbls={1:'STEP 1 OF 3 — EMAIL REGISTER',2:'STEP 2 OF 3 — MOBILE VERIFY',3:'STEP 3 OF 3 — PROFILE DETAILS'};
+  document.getElementById('su-step-lbl').textContent=lbls[n]||'';
 }
 
-/* STEP 1 — Create Firebase account with email */
-async function signUpStep1(){
-  const email = (document.getElementById('su-email').value||'').trim();
-  const pass  =  document.getElementById('su-pass').value||'';
-  const pass2 =  document.getElementById('su-pass2').value||'';
-  if(!email){ showLoginError('Email address bharein.'); return; }
-  if(pass.length<6){ showLoginError('Password kam se kam 6 characters ka hona chahiye.'); return; }
-  if(pass!==pass2){ showLoginError('Dono passwords match nahi karte.'); return; }
-  const btn=document.getElementById('su-step1-btn');
-  btn.disabled=true; btn.innerHTML='<div class="spinner"></div><span>Creating account...</span>';
-  document.getElementById('login-err').style.display='none';
-  try {
-    const cred = await purohitAuth.createUserWithEmailAndPassword(email,pass);
-    _signupUser = cred.user;
-    /* Send email verification */
-    await cred.user.sendEmailVerification().catch(()=>{});
-    goToSignupStep(2);
-    setTimeout(initSignUpRecaptcha, 200);
-  } catch(e){
-    showLoginError(AUTH_MSGS[e.code]||e.message);
-    btn.disabled=false; btn.innerHTML='Next → Email Verify';
+async function suStep1(){
+  const email=(document.getElementById('su-email').value||'').trim();
+  const pass=document.getElementById('su-pass').value||'';
+  const pass2=document.getElementById('su-pass2').value||'';
+  hideErr();
+  if(!email){ showErr('Email address bharein.'); return; }
+  if(pass.length<6){ showErr('Password kam se kam 6 characters.'); return; }
+  if(pass!==pass2){ showErr('Dono passwords match nahi karte.'); return; }
+  const btn=document.getElementById('su-s1-btn');
+  btn.disabled=true; btn.innerHTML='<div class="spinner"></div><span>Please wait...</span>';
+  try{
+    const cred=await auth.createUserWithEmailAndPassword(email,pass);
+    _setupUser=cred.user;
+    suGoStep(2);
+    setTimeout(initSuRecaptcha,300);
+  }catch(e){
+    showErr(ERR[e.code]||e.message);
+    btn.disabled=false; btn.innerHTML='Next → Mobile Verify';
   }
 }
 
-/* STEP 2 — Mobile OTP */
-function initSignUpRecaptcha(){
-  if(_suRecaptcha) return;
-  _suRecaptcha = new firebase.auth.RecaptchaVerifier('su-recaptcha',{
-    size:'normal',
-    callback:()=>{ document.getElementById('su-otp-btn').disabled=false; },
-    'expired-callback':()=>{ document.getElementById('su-otp-btn').disabled=true; }
-  });
-  _suRecaptcha.render();
+function initSuRecaptcha(){
+  if(_suRecap) return;
+  _suRecap=new firebase.auth.RecaptchaVerifier('su-recaptcha',{size:'normal',callback:()=>{},expired-callback:()=>{}});
+  _suRecap.render();
 }
 
-async function signUpSendOTP(){
+async function suSendOTP(){
   const phone=(document.getElementById('su-phone').value||'').trim();
-  if(!phone.startsWith('+')){ showLoginError('+91 ke saath number likhein.'); return; }
+  if(!phone.startsWith('+')){ showErr('+91 ke saath likhein. Example: +91 98765 43210'); return; }
   const btn=document.getElementById('su-otp-btn');
   btn.disabled=true; btn.innerHTML='<div class="spinner"></div><span>Bhej raha hoon...</span>';
-  document.getElementById('login-err').style.display='none';
-  try {
-    _suConfirmation = await purohitAuth.signInWithPhoneNumber(phone, _suRecaptcha);
-    _signupVerifiedPhone = phone;
-    document.getElementById('su-phone-step1').style.display='none';
-    document.getElementById('su-phone-step2').style.display='block';
+  hideErr();
+  try{
+    _suConfirm=await auth.signInWithPhoneNumber(phone,_suRecap);
+    _setupPhone=phone;
+    document.getElementById('su-ph1').style.display='none';
+    document.getElementById('su-ph2').style.display='block';
     document.getElementById('su-otp-msg').textContent='✅ OTP bheja gaya: '+phone;
-  } catch(e){
-    showLoginError(AUTH_MSGS[e.code]||e.message);
+  }catch(e){
+    showErr(ERR[e.code]||e.message);
     btn.disabled=false; btn.innerHTML='📤 OTP Bhejo';
   }
 }
 
-async function signUpVerifyOTP(){
+async function suVerifyOTP(){
   const otp=(document.getElementById('su-otp').value||'').trim();
-  if(otp.length<6){ showLoginError('6 digit OTP bharein.'); return; }
-  const btn=document.getElementById('su-verify-btn');
+  if(otp.length<6){ showErr('6 digit OTP bharein.'); return; }
+  const btn=document.getElementById('su-ver-btn');
   btn.disabled=true; btn.innerHTML='<div class="spinner"></div><span>Verifying...</span>';
-  try {
-    await _suConfirmation.confirm(otp);
-    goToSignupStep(3);
-  } catch(e){
-    showLoginError('Galat OTP. Dobara check karein.');
-    btn.disabled=false; btn.innerHTML='✅ Mobile Verify Karein';
+  try{
+    await _suConfirm.confirm(otp);
+    suGoStep(3);
+  }catch(e){
+    showErr('Galat OTP. Dobara check karein.');
+    btn.disabled=false; btn.innerHTML='✅ Verify Karein';
   }
 }
 
-/* STEP 3 — Save profile, wait for admin approval */
-async function signUpSubmit(){
-  const name    =(document.getElementById('su-name').value||'').trim();
-  const mandir  =(document.getElementById('su-mandir').value||'').trim();
-  const city    =(document.getElementById('su-city').value||'').trim();
-  const exp     =(document.getElementById('su-exp').value||'').trim();
-  const spec    =(document.getElementById('su-spec').value||'').trim();
-  if(!name||!mandir||!city){ showLoginError('Name, Mandir aur City zaroori hain.'); return; }
-  const btn=document.getElementById('su-submit-btn');
+function suResetPhone(){
+  document.getElementById('su-ph1').style.display='block';
+  document.getElementById('su-ph2').style.display='none';
+  document.getElementById('su-otp').value='';
+  _suConfirm=null;
+  if(_suRecap){_suRecap.clear();_suRecap=null;}
+  setTimeout(initSuRecaptcha,200);
+}
+
+async function suSubmit(){
+  const name=(document.getElementById('su-name').value||'').trim();
+  const mandir=(document.getElementById('su-mandir').value||'').trim();
+  const city=(document.getElementById('su-city').value||'').trim();
+  const exp=(document.getElementById('su-exp').value||'').trim();
+  const spec=(document.getElementById('su-spec').value||'').trim();
+  if(!name||!mandir||!city){ showErr('Name, Mandir aur City zaroori hain.'); return; }
+  const btn=document.getElementById('su-sub-btn');
   btn.disabled=true; btn.innerHTML='<div class="spinner"></div><span>Submit ho raha hai...</span>';
-  document.getElementById('login-err').style.display='none';
-
-  const user = _signupUser || purohitAuth.currentUser;
-  if(!user){ showLoginError('Session expire ho gaya. Dobara try karein.'); btn.disabled=false; btn.innerHTML='🙏 Registration Submit Karein'; return; }
-
-  const profile = {
-    uid: user.uid,
-    name, mandir, city, exp, spec,
-    email: user.email||'',
-    phone: _signupVerifiedPhone||'',
-    status: 'pending',
-    registeredAt: new Date().toISOString(),
-    mandirObj:{ id:'m_'+user.uid.slice(0,6), name:mandir, location:city, emoji:'🛕', code:'' }
+  const user=_setupUser||auth.currentUser;
+  if(!user){ showErr('Session expire. Dobara try karein.'); btn.disabled=false; btn.innerHTML='🙏 Registration Submit Karein'; return; }
+  const profile={
+    uid:user.uid, name, mandir, city, exp, spec,
+    email:user.email||'', phone:_setupPhone||'',
+    status:'pending', registeredAt:new Date().toISOString(),
+    mandirObj:{id:'m_'+user.uid.slice(0,6),name:mandir,location:city,emoji:'🛕',code:''}
   };
-
   await db_rt.ref('purohits/'+user.uid).set(profile);
-  await db_rt.ref('adminNotifications').push({
-    type:'new_purohit',
-    name, mandir, uid:user.uid,
-    at: new Date().toISOString(),
-    read:false
-  });
-
-  await purohitAuth.signOut();
+  await db_rt.ref('adminNotifications').push({type:'new_purohit',name,mandir,uid:user.uid,at:new Date().toISOString(),read:false});
+  await auth.signOut();
   document.getElementById('view-signup').style.display='none';
-  document.getElementById('view-signin').style.display='block';
   document.getElementById('pending-notice').style.display='block';
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
-/* ══════════════════════════════════════════
-   LOGOUT
-══════════════════════════════════════════ */
-function doLogout(){
-  purohitAuth.signOut().then(()=>location.reload());
+/* ════════════════════════════════
+   SIGN IN FLOW — Smart single input
+   Mobile → OTP
+   Email  → Password
+════════════════════════════════ */
+let _siConfirm=null, _siRecap=null, _siType='';
+
+function initSiRecaptcha(){
+  if(_siRecap||document.getElementById('si-recaptcha').children.length) return;
+  _siRecap=new firebase.auth.RecaptchaVerifier('si-recaptcha',{size:'normal',callback:()=>{},expired-callback:()=>{}});
+  _siRecap.render();
 }
 
-/* ══════════════════════════════════════════
-   7-DAY SESSION + PATTERN LOCK SYSTEM
-══════════════════════════════════════════ */
-const SESSION_DAYS  = 7;
-const SESSION_KEY   = 'sa_purohit_session';
-const PATTERN_KEY   = 'sa_purohit_pattern';
-const MAX_ATTEMPTS  = 5;
-const LOCKOUT_MS    = 2 * 60 * 1000; // 2 min lockout
-
-/* Save session after successful login */
-function saveSession(user, mandirData){
-  const session = {
-    uid:       user.uid,
-    email:     user.email || '',
-    name:      mandirData.name || '',
-    mandir:    mandirData,
-    savedAt:   Date.now(),
-    expiresAt: Date.now() + SESSION_DAYS * 24 * 60 * 60 * 1000
-  };
-  localStorage.setItem(SESSION_KEY, JSON.stringify(session));
-}
-
-function getSession(){
-  try {
-    const s = JSON.parse(localStorage.getItem(SESSION_KEY)||'null');
-    if(!s) return null;
-    if(Date.now() > s.expiresAt){ localStorage.removeItem(SESSION_KEY); return null; }
-    return s;
-  } catch(e){ return null; }
-}
-
-function clearSession(){
-  localStorage.removeItem(SESSION_KEY);
-  localStorage.removeItem(PATTERN_KEY);
-}
-
-/* Hash pattern for secure storage */
-async function hashPattern(pattern){
-  const str = pattern.join('-');
-  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
-  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
-}
-
-function getSavedPatternHash(){
-  return localStorage.getItem(PATTERN_KEY) || null;
-}
-
-async function savePatternHash(pattern){
-  const hash = await hashPattern(pattern);
-  localStorage.setItem(PATTERN_KEY, hash);
-}
-
-/* Override checkApprovalAndEnter to also save session */
-const _origCheck = checkApprovalAndEnter;
-checkApprovalAndEnter = async function(user){
-  try {
-    const snap = await db_rt.ref('purohits/'+user.uid).once('value');
-    const data = snap.val();
-    if(!data){ _signupUser=user; setAuthMode('signup'); goToSignupStep(3); return; }
-    if(data.status==='pending'){ document.getElementById('pending-notice').style.display='block'; purohitAuth.signOut(); return; }
-    if(data.status==='rejected'){ showLoginError('Aapka account reject ho gaya. Admin se contact karein.'); purohitAuth.signOut(); return; }
-    if(data.status==='approved'){
-      currentMandir = data.mandirObj || {id:user.uid, name:data.mandir||data.mandirName, location:data.city, emoji:'🛕'};
-      saveSession(user, currentMandir);
-      const hasPattern = getSavedPatternHash();
-      if(!hasPattern){
-        /* First time — ask to set pattern */
-        showPatternSetup();
-      } else {
-        showPortal(currentMandir);
-      }
-    }
-  } catch(e){ showLoginError('Connection error. Dobara try karein.'); }
-};
-
-/* On page load — check for existing session */
-window.addEventListener('load', ()=>{
-  const session = getSession();
-  if(!session) return; /* No session — normal login flow */
-
-  const hasPattern = getSavedPatternHash();
-  if(hasPattern){
-    /* Show pattern unlock screen */
-    showPatternUnlock(session);
+function detectType(val){
+  hideErr();
+  const hint=document.getElementById('si-type-hint');
+  const passWrap=document.getElementById('si-pass-wrap');
+  const btn=document.getElementById('si-btn');
+  const otp=document.getElementById('si-otp-wrap');
+  // Reset OTP if typing again
+  if(otp.style.display!=='none'){ otp.style.display='none'; _siConfirm=null; }
+  if(!val){ hint.textContent=''; hint.style.color=''; passWrap.style.display='none'; btn.style.display='none'; return; }
+  const isPhone=/^[+\d]/.test(val) && val.replace(/\D/g,'').length >= 7;
+  const isEmail=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+  if(isPhone){
+    _siType='phone';
+    hint.textContent='📱 Mobile OTP se login hoga';
+    hint.style.color='rgba(255,246,229,.4)';
+    passWrap.style.display='none';
+    btn.style.display='flex';
+    document.getElementById('si-btn-lbl').textContent='OTP Bhejo →';
+  } else if(isEmail){
+    _siType='email';
+    hint.textContent='📧 Email + Password se login hoga';
+    hint.style.color='rgba(255,246,229,.4)';
+    passWrap.style.display='block';
+    btn.style.display='flex';
+    document.getElementById('si-btn-lbl').textContent='Login →';
   } else {
-    /* Session exists but no pattern set — go directly */
-    currentMandir = session.mandir;
-    showPortal(currentMandir);
+    _siType='';
+    hint.textContent='Mobile number (+91...) ya Email likhein';
+    hint.style.color='rgba(255,246,229,.2)';
+    passWrap.style.display='none';
+    btn.style.display='none';
   }
-});
-
-/* ══════════════════════════════════════════
-   PATTERN CANVAS ENGINE
-══════════════════════════════════════════ */
-const DOTS = 9;
-const COLS = 3;
-const DOT_R = 18;       // dot radius
-const LINE_R = 4;       // line width
-let _patternMode   = 'unlock'; // 'unlock' | 'set' | 'confirm'
-let _selectedDots  = [];
-let _isDrawing     = false;
-let _patternLocked = false;
-let _failAttempts  = 0;
-let _lockoutUntil  = 0;
-let _dotPositions  = [];
-let _session       = null;
-
-function getDotCenter(idx){
-  const col = idx % COLS;
-  const row = Math.floor(idx / COLS);
-  const canvas = document.getElementById('pattern-canvas');
-  const pad = 40;
-  const spacing = (canvas.width - pad*2) / (COLS-1);
-  return { x: pad + col*spacing, y: pad + row*spacing };
 }
 
-function drawPatternCanvas(){
-  const canvas = document.getElementById('pattern-canvas');
-  const ctx = canvas.getContext('2d');
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-
-  /* Draw lines between selected dots */
-  if(_selectedDots.length > 1){
-    ctx.beginPath();
-    const first = getDotCenter(_selectedDots[0]);
-    ctx.moveTo(first.x, first.y);
-    for(let i=1;i<_selectedDots.length;i++){
-      const p = getDotCenter(_selectedDots[i]);
-      ctx.lineTo(p.x, p.y);
+async function siNext(){
+  const val=(document.getElementById('si-id').value||'').trim();
+  hideErr();
+  if(_siType==='email'){
+    const pass=document.getElementById('si-pass').value||'';
+    if(!pass){ showErr('Password bharein.'); return; }
+    const btn=document.getElementById('si-btn');
+    btn.disabled=true; btn.innerHTML='<div class="spinner"></div><span>Logging in...</span>';
+    try{
+      await auth.signInWithEmailAndPassword(val,pass);
+    }catch(e){
+      showErr(ERR[e.code]||e.message);
+      btn.disabled=false; btn.innerHTML='<span id="si-btn-lbl">Login →</span>';
     }
-    ctx.strokeStyle = _patternLocked ? '#EF4444' : 'rgba(255,107,0,0.7)';
-    ctx.lineWidth = LINE_R;
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    ctx.stroke();
-  }
-
-  /* Draw all dots */
-  for(let i=0;i<DOTS;i++){
-    const {x,y} = getDotCenter(i);
-    const isSelected = _selectedDots.includes(i);
-
-    /* Outer ring */
-    ctx.beginPath();
-    ctx.arc(x,y,DOT_R,0,Math.PI*2);
-    ctx.fillStyle = isSelected
-      ? (_patternLocked ? 'rgba(239,68,68,.15)' : 'rgba(255,107,0,.15)')
-      : 'rgba(212,175,55,.06)';
-    ctx.fill();
-    ctx.strokeStyle = isSelected
-      ? (_patternLocked ? '#EF4444' : 'var(--saffron)')
-      : 'rgba(212,175,55,.2)';
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
-
-    /* Inner dot */
-    ctx.beginPath();
-    ctx.arc(x,y, isSelected ? 8 : 5, 0, Math.PI*2);
-    ctx.fillStyle = isSelected
-      ? (_patternLocked ? '#EF4444' : 'var(--saffron)')
-      : 'rgba(212,175,55,.35)';
-    ctx.fill();
-  }
-}
-
-function getPointerPos(e, canvas){
-  const rect = canvas.getBoundingClientRect();
-  const scaleX = canvas.width / rect.width;
-  const scaleY = canvas.height / rect.height;
-  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-  const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-  return { x:(clientX-rect.left)*scaleX, y:(clientY-rect.top)*scaleY };
-}
-
-function getDotAtPos(x,y){
-  for(let i=0;i<DOTS;i++){
-    const c = getDotCenter(i);
-    const dist = Math.hypot(x-c.x, y-c.y);
-    if(dist <= DOT_R+6) return i;
-  }
-  return -1;
-}
-
-function initPatternCanvas(){
-  const canvas = document.getElementById('pattern-canvas');
-  _selectedDots = [];
-  _patternLocked = false;
-  drawPatternCanvas();
-
-  function onStart(e){
-    e.preventDefault();
-    if(_patternLocked) return;
-    _isDrawing = true;
-    _selectedDots = [];
-    const pos = getPointerPos(e, canvas);
-    const dot = getDotAtPos(pos.x, pos.y);
-    if(dot !== -1){ _selectedDots.push(dot); drawPatternCanvas(); }
-  }
-
-  function onMove(e){
-    e.preventDefault();
-    if(!_isDrawing || _patternLocked) return;
-    const pos = getPointerPos(e, canvas);
-    const dot = getDotAtPos(pos.x, pos.y);
-    if(dot !== -1 && !_selectedDots.includes(dot)){
-      _selectedDots.push(dot);
-      drawPatternCanvas();
+  } else if(_siType==='phone'){
+    let phone=val.trim();
+    if(!phone.startsWith('+')) phone='+91'+phone.replace(/\D/g,'');
+    const btn=document.getElementById('si-btn');
+    btn.disabled=true; btn.innerHTML='<div class="spinner"></div><span>OTP bhej raha hoon...</span>';
+    try{
+      if(!_siRecap) initSiRecaptcha();
+      _siConfirm=await auth.signInWithPhoneNumber(phone,_siRecap);
+      document.getElementById('si-otp-wrap').style.display='block';
+      document.getElementById('si-otp-msg').textContent='✅ OTP bheja gaya: '+phone;
+      btn.style.display='none';
+    }catch(e){
+      showErr(ERR[e.code]||e.message);
+      btn.disabled=false; btn.innerHTML='<span id="si-btn-lbl">OTP Bhejo →</span>';
     }
+  } else {
+    showErr('Mobile number ya Email sahi se likhein.');
   }
-
-  function onEnd(e){
-    e.preventDefault();
-    if(!_isDrawing) return;
-    _isDrawing = false;
-    onPatternComplete();
-  }
-
-  /* Remove old listeners */
-  const c2 = canvas.cloneNode(true);
-  canvas.parentNode.replaceChild(c2, canvas);
-  const nc = document.getElementById('pattern-canvas');
-
-  nc.addEventListener('mousedown',  onStart, {passive:false});
-  nc.addEventListener('mousemove',  onMove,  {passive:false});
-  nc.addEventListener('mouseup',    onEnd,   {passive:false});
-  nc.addEventListener('touchstart', onStart, {passive:false});
-  nc.addEventListener('touchmove',  onMove,  {passive:false});
-  nc.addEventListener('touchend',   onEnd,   {passive:false});
-
-  drawPatternCanvas();
 }
 
-function setPatternStatus(msg, type='info'){
-  const el = document.getElementById('pattern-status');
-  el.textContent = msg;
-  el.className = 'pattern-status ' + type;
+async function siVerifyOTP(){
+  const otp=(document.getElementById('si-otp').value||'').trim();
+  if(otp.length<6){ showErr('6 digit OTP bharein.'); return; }
+  const btn=document.getElementById('si-ver-btn');
+  btn.disabled=true; btn.innerHTML='<div class="spinner"></div><span>Verifying...</span>';
+  try{ await _siConfirm.confirm(otp); }
+  catch(e){ showErr('Galat OTP. Dobara check karein.'); btn.disabled=false; btn.innerHTML='✅ Verify & Login'; }
 }
 
-/* ── UNLOCK MODE ── */
-function showPatternUnlock(session){
-  _session = session;
-  _patternMode = 'unlock';
-  currentMandir = session.mandir;
+function siResetOTP(){
+  document.getElementById('si-otp-wrap').style.display='none';
+  document.getElementById('si-btn').style.display='flex';
+  document.getElementById('si-otp').value='';
+  _siConfirm=null;
+}
 
-  const overlay = document.getElementById('pattern-overlay');
-  overlay.classList.remove('hidden');
-  document.getElementById('view-login').style.display = 'none';
+/* Google */
+async function doGoogleLogin(){
+  hideErr();
+  try{
+    const p=new firebase.auth.GoogleAuthProvider();
+    await auth.signInWithPopup(p);
+  }catch(e){ showErr(ERR[e.code]||e.message); }
+}
 
-  document.getElementById('pattern-title').textContent = 'Welcome Back 🙏';
-  document.getElementById('pattern-sub').textContent   = session.name || 'Purohit Portal';
-  document.getElementById('pattern-hint').textContent  = 'Apna pattern draw karein unlock karne ke liye';
-  document.getElementById('pattern-reset-btn').style.display = 'block';
-  setPatternStatus('Pattern draw karein', 'info');
+/* ════════════════════════════════
+   PATTERN LOCK ENGINE
+════════════════════════════════ */
+const ROWS=3,COLS=3,DOT_R=17,PAD=44;
+let _patDots=[], _patDrawing=false, _patLocked=false;
 
-  /* Check lockout */
-  if(_lockoutUntil > Date.now()){
-    const s = Math.ceil((_lockoutUntil-Date.now())/1000);
-    setPatternStatus('⛔ '+s+'s baad try karein', 'error');
+function patCenter(i){ const c=document.getElementById('pat-canvas'); const sp=(c.width-PAD*2)/(COLS-1); return{x:PAD+(i%COLS)*sp,y:PAD+Math.floor(i/COLS)*sp}; }
+
+function patDraw(){
+  const c=document.getElementById('pat-canvas'); const ctx=c.getContext('2d'); ctx.clearRect(0,0,c.width,c.height);
+  if(_patDots.length>1){
+    ctx.beginPath(); const f=patCenter(_patDots[0]); ctx.moveTo(f.x,f.y);
+    for(let i=1;i<_patDots.length;i++){const p=patCenter(_patDots[i]);ctx.lineTo(p.x,p.y);}
+    ctx.strokeStyle=_patLocked?'#EF4444':'rgba(255,107,0,.75)'; ctx.lineWidth=4; ctx.lineCap='round'; ctx.lineJoin='round'; ctx.stroke();
   }
-
-  initPatternCanvas();
-}
-
-/* ── SETUP MODE (first time) ── */
-let _setupFirstPattern = null;
-
-function showPatternSetup(){
-  _patternMode = 'set';
-  _setupFirstPattern = null;
-
-  const overlay = document.getElementById('pattern-overlay');
-  overlay.classList.remove('hidden');
-  document.getElementById('view-login').style.display = 'none';
-
-  document.getElementById('pattern-title').textContent = 'Pattern Set Karein 🔐';
-  document.getElementById('pattern-sub').textContent   = 'Naya pattern banayein';
-  document.getElementById('pattern-hint').textContent  = 'Kam se kam 4 dots connect karein';
-  document.getElementById('pattern-reset-btn').style.display = 'none';
-  setPatternStatus('Pattern draw karna shuru karein', 'info');
-  initPatternCanvas();
-}
-
-/* ── PATTERN COMPLETE HANDLER ── */
-async function onPatternComplete(){
-  if(_selectedDots.length < 4){
-    setPatternStatus('Kam se kam 4 dots chahiye!', 'error');
-    _patternLocked = true;
-    drawPatternCanvas();
-    setTimeout(()=>{ _patternLocked=false; _selectedDots=[]; drawPatternCanvas(); setPatternStatus('Dobara try karein','info'); }, 1000);
-    return;
+  for(let i=0;i<9;i++){
+    const{x,y}=patCenter(i); const sel=_patDots.includes(i);
+    ctx.beginPath(); ctx.arc(x,y,DOT_R,0,Math.PI*2);
+    ctx.fillStyle=sel?(_patLocked?'rgba(239,68,68,.15)':'rgba(255,107,0,.12)'):'rgba(212,175,55,.06)'; ctx.fill();
+    ctx.strokeStyle=sel?(_patLocked?'#EF4444':'var(--saffron)'):'rgba(212,175,55,.18)'; ctx.lineWidth=1.5; ctx.stroke();
+    ctx.beginPath(); ctx.arc(x,y,sel?7:4,0,Math.PI*2);
+    ctx.fillStyle=sel?(_patLocked?'#EF4444':'var(--saffron)'):'rgba(212,175,55,.3)'; ctx.fill();
   }
+}
 
-  if(_patternMode === 'set'){
-    if(!_setupFirstPattern){
-      /* First draw — save and ask to confirm */
-      _setupFirstPattern = [..._selectedDots];
-      setPatternStatus('✅ Ab confirm karein — dobara draw karein', 'success');
-      setTimeout(()=>{ _selectedDots=[]; drawPatternCanvas(); }, 800);
+function patPos(e,c){ const r=c.getBoundingClientRect(),sx=c.width/r.width,sy=c.height/r.height,cx=e.touches?e.touches[0].clientX:e.clientX,cy=e.touches?e.touches[0].clientY:e.clientY; return{x:(cx-r.left)*sx,y:(cy-r.top)*sy}; }
+function patHit(x,y){ for(let i=0;i<9;i++){const c=patCenter(i);if(Math.hypot(x-c.x,y-c.y)<=DOT_R+6)return i;}return -1; }
+
+function initPatCanvas(){
+  _patDots=[]; _patLocked=false; patDraw();
+  const c=document.getElementById('pat-canvas');
+  const nc=c.cloneNode(true); c.parentNode.replaceChild(nc,c);
+  const cv=document.getElementById('pat-canvas');
+  const s=(e)=>{e.preventDefault();if(_patLocked)return;_patDrawing=true;_patDots=[];const p=patPos(e,cv);const d=patHit(p.x,p.y);if(d!==-1){_patDots.push(d);patDraw();}};
+  const m=(e)=>{e.preventDefault();if(!_patDrawing||_patLocked)return;const p=patPos(e,cv);const d=patHit(p.x,p.y);if(d!==-1&&!_patDots.includes(d)){_patDots.push(d);patDraw();}};
+  const en=(e)=>{e.preventDefault();if(!_patDrawing)return;_patDrawing=false;onPatDone();};
+  cv.addEventListener('mousedown',s,{passive:false}); cv.addEventListener('mousemove',m,{passive:false}); cv.addEventListener('mouseup',en,{passive:false});
+  cv.addEventListener('touchstart',s,{passive:false}); cv.addEventListener('touchmove',m,{passive:false}); cv.addEventListener('touchend',en,{passive:false});
+}
+
+function setPatStatus(msg,type='info'){ const e=document.getElementById('pat-status'); e.textContent=msg; e.className='pat-status '+type; }
+
+function patFlash(type,msg,cb){
+  _patLocked=true; patDraw(); setPatStatus(msg,type);
+  setTimeout(()=>{ _patLocked=false; _patDots=[]; patDraw(); if(cb)cb(); },1100);
+}
+
+async function onPatDone(){
+  if(_patDots.length<4){ patFlash('err','Kam se kam 4 dots chahiye!',()=>setPatStatus('Dobara try karein','info')); return; }
+
+  if(_patMode==='set'){
+    if(!_patFirst){
+      _patFirst=[..._patDots]; setPatStatus('✅ Confirm karein — dobara draw karein','ok');
+      setTimeout(()=>{ _patDots=[]; patDraw(); },700);
     } else {
-      /* Second draw — compare */
-      if(_setupFirstPattern.join('')===_selectedDots.join('')){
-        await savePatternHash(_selectedDots);
-        setPatternStatus('✅ Pattern set ho gaya!', 'success');
-        setTimeout(()=>{
-          document.getElementById('pattern-overlay').classList.add('hidden');
-          showPortal(currentMandir);
-        }, 800);
+      if(_patFirst.join('')===_patDots.join('')){
+        await savePatHash(_patDots);
+        setPatStatus('✅ Pattern set ho gaya!','ok');
+        setTimeout(()=>{ document.getElementById('pattern-overlay').classList.add('hidden'); showPortal(currentMandir); },700);
       } else {
-        _setupFirstPattern = null;
-        _patternLocked = true;
-        drawPatternCanvas();
-        setPatternStatus('❌ Match nahi kiya. Phirse shuru karein.', 'error');
-        setTimeout(()=>{ _patternLocked=false; _selectedDots=[]; drawPatternCanvas(); setPatternStatus('Phirse pattern draw karein','info'); }, 1200);
+        _patFirst=null;
+        patFlash('err','❌ Match nahi kiya. Phir se shuru karein.',()=>setPatStatus('Phirse pattern draw karein','info'));
       }
     }
     return;
   }
 
-  if(_patternMode === 'unlock'){
-    /* Check lockout */
-    if(_lockoutUntil > Date.now()){
-      const s = Math.ceil((_lockoutUntil-Date.now())/1000);
-      setPatternStatus('⛔ '+s+'s baad try karein', 'error');
-      _selectedDots=[]; drawPatternCanvas(); return;
-    }
-
-    const savedHash = getSavedPatternHash();
-    const inputHash = await hashPattern(_selectedDots);
-
-    if(inputHash === savedHash){
-      _failAttempts = 0;
-      setPatternStatus('✅ Unlocked!', 'success');
-      setTimeout(()=>{
-        document.getElementById('pattern-overlay').classList.add('hidden');
-        showPortal(currentMandir);
-      }, 600);
-    } else {
-      _failAttempts++;
-      const remaining = MAX_ATTEMPTS - _failAttempts;
-      _patternLocked = true;
-      drawPatternCanvas();
-
-      if(_failAttempts >= MAX_ATTEMPTS){
-        _lockoutUntil = Date.now() + LOCKOUT_MS;
-        _failAttempts = 0;
-        setPatternStatus('⛔ 2 minute ke liye locked!', 'error');
-      } else {
-        setPatternStatus('❌ Galat pattern. '+remaining+' attempts bache.', 'error');
-      }
-
-      setTimeout(()=>{ _patternLocked=false; _selectedDots=[]; drawPatternCanvas();
-        if(_lockoutUntil<=Date.now()) setPatternStatus('Dobara try karein','info');
-      }, 1000);
-    }
+  // UNLOCK mode
+  if(_patLockUntil>Date.now()){ setPatStatus('⛔ '+Math.ceil((_patLockUntil-Date.now())/1000)+'s baad try karein','err'); _patDots=[]; patDraw(); return; }
+  const h=await hashPat(_patDots);
+  if(h===getPatHash()){
+    _patFails=0; setPatStatus('✅ Unlocked!','ok');
+    setTimeout(()=>{ document.getElementById('pattern-overlay').classList.add('hidden'); showPortal(currentMandir); },600);
+  } else {
+    _patFails++;
+    const rem=MAX_FAIL-_patFails;
+    if(_patFails>=MAX_FAIL){ _patLockUntil=Date.now()+2*60*1000; _patFails=0; patFlash('err','⛔ 2 minute ke liye locked!',()=>setPatStatus('2 min ke baad try karein','err')); }
+    else patFlash('err','❌ Galat pattern. '+rem+' attempts bache.',()=>setPatStatus('Dobara try karein','info'));
   }
+}
+
+function showPatSetup(){
+  _patMode='set'; _patFirst=null;
+  const ov=document.getElementById('pattern-overlay'); ov.classList.remove('hidden');
+  document.getElementById('view-login').style.display='none';
+  document.getElementById('pat-title').textContent='Pattern Set Karein 🔐';
+  document.getElementById('pat-sub').textContent='Ek naya pattern banayein';
+  document.getElementById('pat-hint').textContent='Kam se kam 4 dots connect karein';
+  document.getElementById('pat-forgot').style.display='none';
+  setPatStatus('Pattern draw karna shuru karein','info');
+  initPatCanvas();
+}
+
+function showPatUnlock(session){
+  _patMode='unlock'; currentMandir=session.mandir;
+  const ov=document.getElementById('pattern-overlay'); ov.classList.remove('hidden');
+  document.getElementById('view-login').style.display='none';
+  document.getElementById('pat-title').textContent='Welcome Back 🙏';
+  document.getElementById('pat-sub').textContent=session.mandir?.name||'Purohit Portal';
+  document.getElementById('pat-hint').textContent='Apna pattern draw karein';
+  document.getElementById('pat-forgot').style.display='block';
+  if(_patLockUntil>Date.now()) setPatStatus('⛔ '+Math.ceil((_patLockUntil-Date.now())/1000)+'s baad try karein','err');
+  else setPatStatus('Draw karein unlock karne ke liye','info');
+  initPatCanvas();
 }
 
 function forgotPattern(){
-  if(!confirm('Pattern reset karein? Aapko full login karna hoga.')) return;
-  clearSession();
-  purohitAuth.signOut().then(()=>location.reload());
+  if(!confirm('Pattern reset karein? Full login karna hoga.')) return;
+  clearSession(); auth.signOut().then(()=>location.reload());
 }
 
-
-/* ══════════════════════════════════════════
-   LOGIN TAB SWITCHER
-══════════════════════════════════════════ */
-function switchLoginTab(tab){
-  ['email','google','phone'].forEach(t => {
-    document.getElementById('panel-'+t).style.display = t===tab ? 'block' : 'none';
-    document.getElementById('tab-'+t).classList.toggle('active', t===tab);
-  });
-  document.getElementById('login-err').style.display = 'none';
-}
-
-function showEmailMode(mode){
-  const isRegister = mode === 'register';
-  document.getElementById('register-fields').style.display = isRegister ? 'block' : 'none';
-  document.getElementById('email-btn-text').textContent = isRegister ? '📝 Register' : '🔐 Login';
-  document.getElementById('btn-show-login').style.background = isRegister ? 'transparent' : 'rgba(255,107,0,.15)';
-  document.getElementById('btn-show-login').style.color = isRegister ? 'rgba(255,246,229,.4)' : 'var(--saffron)';
-  document.getElementById('btn-show-register').style.background = isRegister ? 'rgba(255,107,0,.15)' : 'transparent';
-  document.getElementById('btn-show-register').style.color = isRegister ? 'var(--saffron)' : 'rgba(255,246,229,.4)';
-  document.getElementById('login-err').style.display = 'none';
-}
-
-function showLoginError(msg){
-  const el = document.getElementById('login-err');
-  el.textContent = '⚠️ ' + msg;
-  el.style.display = 'block';
-}
-
-/* ══════════════════════════════════════════
-   AUTH STATE — check on load
-══════════════════════════════════════════ */
-purohitAuth.onAuthStateChanged(async user => {
-  if(!user) return;
-  /* User is signed in — check approval status */
-  await checkApprovalAndEnter(user);
-});
-
-async function checkApprovalAndEnter(user){
-  try {
-    const snap = await db_rt.ref('purohits/' + user.uid).once('value');
-    const data = snap.val();
-
-    if(!data){
-      /* First time Google/Phone login — show registration form */
-      showRegistrationForm(user);
-      return;
-    }
-    if(data.status === 'pending'){
-      document.getElementById('pending-notice').style.display = 'block';
-      document.getElementById('view-login').style.display = 'block';
-      purohitAuth.signOut();
-      return;
-    }
-    if(data.status === 'approved'){
-      currentMandir = data.mandir || {id: user.uid, name: data.mandirName, location: data.city, emoji:'🛕'};
-      showPortal(currentMandir);
-      return;
-    }
-    if(data.status === 'rejected'){
-      showLoginError('Aapka account reject kar diya gaya. Admin se contact karein.');
-      purohitAuth.signOut();
-      return;
-    }
-  } catch(e){
-    showLoginError('Connection error. Dobara try karein.');
-  }
-}
-
-/* ══════════════════════════════════════════
-   REGISTRATION — save purohit profile
-══════════════════════════════════════════ */
-function showRegistrationForm(user){
-  /* Pre-fill email if available */
-  if(user.email) document.getElementById('email-input').value = user.email;
-  showEmailMode('register');
-  switchLoginTab('email');
-  showLoginError('Pehli baar login kar rahe hain — registration form bharein.');
-}
-
-async function savePurohitProfile(user, name, phone, mandirName, city){
-  const profile = {
-    uid: user.uid,
-    name: name,
-    email: user.email || '',
-    phone: phone,
-    mandirName: mandirName,
-    city: city,
-    status: 'pending', /* Admin will approve */
-    registeredAt: new Date().toISOString(),
-    loginMethod: user.providerData[0]?.providerId || 'unknown',
-    mandir: {
-      id: 'm_' + user.uid.slice(0,6),
-      name: mandirName,
-      location: city,
-      emoji: '🛕',
-      code: ''
-    }
-  };
-  await db_rt.ref('purohits/' + user.uid).set(profile);
-  /* Also notify admin */
-  await db_rt.ref('adminNotifications').push({
-    type: 'new_purohit_registration',
-    name: name,
-    mandirName: mandirName,
-    uid: user.uid,
-    at: new Date().toISOString(),
-    read: false
-  });
-}
-
-/* ══════════════════════════════════════════
-   EMAIL LOGIN / REGISTER
-══════════════════════════════════════════ */
-async function doEmailAuth(){
-  const email = (document.getElementById('email-input').value || '').trim();
-  const pass  =  document.getElementById('pass-input').value || '';
-  const isRegister = document.getElementById('register-fields').style.display !== 'none';
-  const btn = document.getElementById('email-auth-btn');
-
-  if(!email || !pass){ showLoginError('Email aur password dono bharein.'); return; }
-
-  btn.disabled = true;
-  btn.innerHTML = '<div class="spinner"></div><span>Please wait...</span>';
-  document.getElementById('login-err').style.display = 'none';
-
-  try {
-    if(isRegister){
-      const name      = (document.getElementById('reg-name').value || '').trim();
-      const phone     = (document.getElementById('reg-phone').value || '').trim();
-      const mandirName= (document.getElementById('reg-mandir').value || '').trim();
-      const city      = (document.getElementById('reg-city').value || '').trim();
-      if(!name || !mandirName || !city){ showLoginError('Sabhi fields bharein.'); btn.disabled=false; btn.innerHTML='<span>📝 Register</span>'; return; }
-
-      const cred = await purohitAuth.createUserWithEmailAndPassword(email, pass);
-      await savePurohitProfile(cred.user, name, phone, mandirName, city);
-      await purohitAuth.signOut();
-      document.getElementById('pending-notice').style.display = 'block';
-      document.getElementById('login-err').style.display = 'none';
-      showEmailMode('login');
-
-    } else {
-      await purohitAuth.signInWithEmailAndPassword(email, pass);
-      /* onAuthStateChanged handles the rest */
-    }
-  } catch(e){
-    const msgs = {
-      'auth/email-already-in-use': 'Yeh email already registered hai. Login karein.',
-      'auth/wrong-password':        'Galat password.',
-      'auth/user-not-found':        'Yeh email registered nahi hai. Register karein.',
-      'auth/invalid-credential':    'Galat email ya password.',
-      'auth/weak-password':         'Password kam se kam 6 characters ka hona chahiye.',
-      'auth/invalid-email':         'Valid email address bharein.',
-      'auth/too-many-requests':     'Bahut zyada attempts. Kuch der baad try karein.',
-    };
-    showLoginError(msgs[e.code] || e.message);
-  }
-  btn.disabled = false;
-  btn.innerHTML = isRegister ? '<span>📝 Register</span>' : '<span>🔐 Login</span>';
-}
-
-/* ══════════════════════════════════════════
-   GOOGLE LOGIN
-══════════════════════════════════════════ */
-async function doGoogleLogin(){
-  const btn = document.getElementById('google-btn');
-  btn.disabled = true;
-  btn.innerHTML = '<div class="spinner"></div><span>Opening Google...</span>';
-  document.getElementById('login-err').style.display = 'none';
-
-  try {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    await purohitAuth.signInWithPopup(provider);
-    /* onAuthStateChanged handles the rest */
-  } catch(e){
-    const msgs = {
-      'auth/popup-closed-by-user':    'Login cancel kar diya.',
-      'auth/popup-blocked':           'Popup block ho gayi. Browser settings check karein.',
-      'auth/network-request-failed':  'Network error. Internet check karein.',
-    };
-    showLoginError(msgs[e.code] || e.message);
-    btn.disabled = false;
-    btn.innerHTML = '<span style="font-size:16px">G</span> Google se Sign In';
-  }
-}
-
-/* ══════════════════════════════════════════
-   PHONE OTP LOGIN
-══════════════════════════════════════════ */
-let _confirmationResult = null;
-let _recaptchaVerifier  = null;
-
-function initRecaptcha(){
-  if(_recaptchaVerifier) return;
-  _recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-    size: 'normal',
-    callback: () => { document.getElementById('send-otp-btn').disabled = false; },
-    'expired-callback': () => { document.getElementById('send-otp-btn').disabled = true; }
-  });
-  _recaptchaVerifier.render();
-}
-
-/* init recaptcha when phone tab is first opened */
-const _origSwitchTab = switchLoginTab;
-switchLoginTab = function(tab){
-  _origSwitchTab(tab);
-  if(tab === 'phone') setTimeout(initRecaptcha, 100);
-};
-
-async function sendOTP(){
-  const phone = (document.getElementById('phone-input').value || '').trim();
-  if(!phone){ showLoginError('Mobile number bharein.'); return; }
-  if(!phone.startsWith('+')){ showLoginError('Country code ke saath likhein. Example: +91 98765 43210'); return; }
-
-  const btn = document.getElementById('send-otp-btn');
-  btn.disabled = true;
-  btn.innerHTML = '<div class="spinner"></div><span>Bhej raha hoon...</span>';
-  document.getElementById('login-err').style.display = 'none';
-
-  try {
-    _confirmationResult = await purohitAuth.signInWithPhoneNumber(phone, _recaptchaVerifier);
-    document.getElementById('otp-step-phone').style.display = 'none';
-    document.getElementById('otp-step-verify').style.display = 'block';
-    document.getElementById('otp-sent-msg').textContent = '✅ OTP bheja gaya: ' + phone;
-  } catch(e){
-    const msgs = {
-      'auth/invalid-phone-number':   'Galat phone number format.',
-      'auth/too-many-requests':      'Bahut zyada attempts. Baad mein try karein.',
-      'auth/quota-exceeded':         'SMS limit khatam. Kal try karein.',
-    };
-    showLoginError(msgs[e.code] || e.message);
-    btn.disabled = false;
-    btn.innerHTML = '📤 OTP Bhejo';
-  }
-}
-
-async function verifyOTP(){
-  const otp = (document.getElementById('otp-input').value || '').trim();
-  if(!otp || otp.length < 6){ showLoginError('6 digit OTP bharein.'); return; }
-
-  const btn = document.getElementById('verify-otp-btn');
-  btn.disabled = true;
-  btn.innerHTML = '<div class="spinner"></div><span>Verify ho raha hai...</span>';
-
-  try {
-    await _confirmationResult.confirm(otp);
-    /* onAuthStateChanged handles the rest */
-  } catch(e){
-    showLoginError('Galat OTP. Dobara check karein.');
-    btn.disabled = false;
-    btn.innerHTML = '✅ Verify & Login';
-  }
-}
-
-function resetOTPStep(){
-  document.getElementById('otp-step-phone').style.display = 'block';
-  document.getElementById('otp-step-verify').style.display = 'none';
-  document.getElementById('otp-input').value = '';
-  _confirmationResult = null;
-  if(_recaptchaVerifier){ _recaptchaVerifier.clear(); _recaptchaVerifier = null; }
-  setTimeout(initRecaptcha, 100);
-}
-
-/* ══════════════════════════════════════════
+/* ════════════════════════════════
    LOGOUT
-══════════════════════════════════════════ */
-function doLogout(){
-  purohitAuth.signOut().then(() => location.reload());
-}
-
-/* ══════════════════════════════════════════
-   CLOUDINARY CONFIG
-══════════════════════════════════════════ */
+════════════════════════════════ */
+function doLogout(){ auth.signOut().then(()=>{ clearSession(); location.reload(); }); }
 const CONFIG = {
   CLOUDINARY_CLOUD_NAME:    'dfx2veoqn',
   CLOUDINARY_UPLOAD_PRESET: 'SanataniAnthem',
@@ -1726,88 +1169,6 @@ function saveRecordingToFirebase(rec) {
   db_rt.ref('pujaRecordings/' + rec.id).set(rec);
 }
 
-/* ══════════════════════════════════════════
-   SECURE LOGIN — codes verified from Firebase
-   (codes are NOT stored in this file anymore)
-══════════════════════════════════════════ */
-
-/* Rate limiting — max 5 attempts, then 2 min lockout */
-let _loginAttempts = 0;
-let _loginLockedUntil = 0;
-
-function doLogin(){
-  const code = (document.getElementById('code-input').value || '').trim().toUpperCase();
-  if(!code){ showToast('Code enter karein'); return; }
-
-  /* Rate limit check */
-  const now = Date.now();
-  if(_loginLockedUntil > now){
-    const secsLeft = Math.ceil((_loginLockedUntil - now) / 1000);
-    document.getElementById('login-err').textContent = '⚠️ Bahut zyada galat attempts. ' + secsLeft + ' seconds baad try karein.';
-    document.getElementById('login-err').style.display = 'block';
-    return;
-  }
-
-  const btn = document.getElementById('login-btn');
-  btn.innerHTML = '<div class="spinner"></div><span>Checking...</span>';
-  btn.disabled = true;
-
-  /* Verify code against Firebase — codes never exposed in frontend */
-  db_rt.ref('mandirs').once('value')
-    .then(snapshot => {
-      const data = snapshot.val();
-
-      /* Fallback: also check cms/mandirs for backward compatibility */
-      let mandirs = [];
-      if(data){
-        mandirs = Object.values(data).filter(m => m && m.active !== false);
-      } else {
-        /* Try cms path */
-        return db_rt.ref('cms/mandirs').once('value').then(snap2 => {
-          const d2 = snap2.val();
-          if(d2 && Array.isArray(d2)) mandirs = d2.filter(m => m && m.active !== false);
-          return checkCode(code, mandirs, btn);
-        });
-      }
-      return checkCode(code, mandirs, btn);
-    })
-    .catch(err => {
-      btn.innerHTML = '<span>Login</span>';
-      btn.disabled = false;
-      document.getElementById('login-err').textContent = '⚠️ Connection error. Internet check karein.';
-      document.getElementById('login-err').style.display = 'block';
-    });
-}
-
-function checkCode(code, mandirs, btn){
-  btn.innerHTML = '<span>Login</span>';
-  btn.disabled = false;
-
-  const mandir = mandirs.find(m => m.code && m.code.toUpperCase() === code);
-
-  if(!mandir){
-    _loginAttempts++;
-    if(_loginAttempts >= 5){
-      _loginLockedUntil = Date.now() + (2 * 60 * 1000); /* 2 min lockout */
-      _loginAttempts = 0;
-      document.getElementById('login-err').textContent = '⚠️ 5 baar galat code. 2 minute ke liye locked.';
-    } else {
-      const remaining = 5 - _loginAttempts;
-      document.getElementById('login-err').textContent = '❌ Galat code. ' + remaining + ' attempts bache hain.';
-    }
-    document.getElementById('login-err').style.display = 'block';
-    document.getElementById('code-input').classList.add('error');
-    return;
-  }
-
-  /* ✅ Valid code */
-  _loginAttempts = 0;
-  document.getElementById('login-err').style.display = 'none';
-  document.getElementById('code-input').classList.remove('error');
-  currentMandir = mandir;
-  showPortal(mandir);
-}
-
 function showPortal(m){
   document.getElementById('view-login').style.display='none';
   document.getElementById('view-portal').style.display='block';
@@ -1815,7 +1176,6 @@ function showPortal(m){
   document.getElementById('mandir-name').textContent=m.name;
   document.getElementById('mandir-loc').textContent='📍 '+m.location+(m.purohit?' • '+m.purohit:'');
   loadSubscribers(m);
-  // Auto-start Step 1 immediately after login
   startBhagwanLive();
 }
 
