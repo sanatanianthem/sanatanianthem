@@ -5,44 +5,73 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>LocalMandir Live – Purohit Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Noto+Sans+Devanagari:wght@400;600&family=Lora:wght@400;600&display=swap" rel="stylesheet"/>
-<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-
 <style>
 :root{--saffron:#FF6B00;--saffron-d:#C95000;--gold:#D4AF37;--gold-h:#E8CC6A;--maroon:#5A0E0E;--cream:#FFF6E5;--bg-dark:#140800;--green:#16A34A;}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Lora',serif;background:var(--bg-dark);color:var(--cream);min-height:100vh;display:flex;flex-direction:column}
 button{cursor:pointer;font-family:inherit;border:none}
+/* TOPBAR */
 .topbar{background:var(--maroon);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid rgba(212,175,55,.3)}
-.logo{display:flex;align-items:center;gap:10px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
 .logo-icon{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--saffron),var(--gold));display:flex;align-items:center;justify-content:center;font-size:18px}
 .logo-name{font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:var(--gold)}
 .logo-sub{font-family:'Noto Sans Devanagari',sans-serif;font-size:10px;color:rgba(255,246,229,.5);letter-spacing:1px}
 .topbar-badge{font-family:'Cinzel',serif;font-size:10px;color:#FC8181;background:rgba(229,62,62,.1);border:1px solid rgba(229,62,62,.3);padding:4px 12px;border-radius:20px;letter-spacing:1px}
+/* LAYOUT */
 .main{flex:1;padding:28px 20px;max-width:520px;width:100%;margin:0 auto}
 .card{background:rgba(255,246,229,.05);border:1px solid rgba(212,175,55,.18);border-radius:14px;padding:24px;margin-bottom:20px}
 .card-title{font-family:'Cinzel',serif;font-size:14px;color:var(--gold-h);margin-bottom:16px;display:flex;align-items:center;gap:8px}
-.login-header{text-align:center;padding:20px 0 32px}
-.login-om{font-family:'Noto Sans Devanagari',sans-serif;font-size:64px;color:var(--gold);line-height:1;margin-bottom:12px;animation:glow 3s ease-in-out infinite}
-@keyframes glow{0%,100%{text-shadow:0 0 20px rgba(212,175,55,.4)}50%{text-shadow:0 0 50px rgba(212,175,55,.8)}}
-.login-title{font-family:'Cinzel',serif;font-size:20px;color:var(--gold);margin-bottom:6px}
-.login-sub{font-family:'Noto Sans Devanagari',sans-serif;font-size:13px;color:rgba(255,246,229,.5)}
-.field{margin-bottom:18px}
-.label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,246,229,.5);margin-bottom:8px;display:block}
-.input{width:100%;padding:13px 16px;background:rgba(255,246,229,.07);border:1.5px solid rgba(212,175,55,.2);border-radius:8px;color:var(--cream);font-family:'Lora',serif;font-size:15px;outline:none;transition:all .25s}
-.input:focus{border-color:var(--saffron)}
-.input.code-input{font-family:'Cinzel',serif;font-size:22px;letter-spacing:6px;text-transform:uppercase;text-align:center}
-.input.error{border-color:#EF4444}
-.err{font-size:12px;color:#EF4444;margin-top:5px;font-family:'Cinzel',serif;display:none}
-.btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px 24px;border-radius:6px;font-family:'Cinzel',serif;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;transition:all .3s;width:100%}
+/* BUTTONS */
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px 24px;border-radius:8px;font-family:'Cinzel',serif;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;transition:all .3s;width:100%}
 .btn-primary{background:linear-gradient(135deg,var(--saffron),var(--saffron-d));color:#fff;box-shadow:0 4px 20px rgba(255,107,0,.3)}
 .btn-primary:hover:not(:disabled){transform:translateY(-2px)}
 .btn-red{background:linear-gradient(135deg,#E53E3E,#C53030);color:#fff;box-shadow:0 4px 20px rgba(229,62,62,.35)}
-.btn-red:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 28px rgba(229,62,62,.5)}
+.btn-red:hover:not(:disabled){transform:translateY(-2px)}
 .btn-ghost{background:rgba(255,246,229,.07);color:rgba(255,246,229,.6);border:1px solid rgba(212,175,55,.2);font-size:11px;padding:10px 18px}
 .btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
 .btn:disabled{opacity:.5;cursor:not-allowed;transform:none !important}
+/* THE ONE BIG LAUNCH BUTTON */
+.launch-wrap{margin:32px 0 10px}
+.launch-btn{width:100%;padding:20px 24px;border-radius:14px;background:linear-gradient(135deg,var(--saffron),var(--saffron-d));color:#fff;font-family:'Cinzel',serif;font-size:16px;font-weight:700;letter-spacing:2.5px;border:none;cursor:pointer;box-shadow:0 8px 32px rgba(255,107,0,.45);transition:all .3s;display:flex;align-items:center;justify-content:center;gap:12px;text-transform:uppercase}
+.launch-btn:hover{transform:translateY(-3px);box-shadow:0 14px 40px rgba(255,107,0,.6)}
+.launch-icon{font-size:22px}
+/* SERVICE MODAL */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.78);backdrop-filter:blur(5px);z-index:300;display:none;align-items:flex-end;justify-content:center}
+.overlay.open{display:flex}
+.sheet{background:#1E0800;border:1px solid rgba(212,175,55,.25);border-radius:20px 20px 0 0;padding:28px 20px 40px;width:100%;max-width:520px;animation:slideUp .35s cubic-bezier(.22,1,.36,1)}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.sheet-handle{width:44px;height:4px;background:rgba(255,246,229,.15);border-radius:2px;margin:0 auto 24px}
+.sheet-title{font-family:'Cinzel',serif;font-size:16px;color:var(--gold-h);text-align:center;margin-bottom:4px;letter-spacing:1px}
+.sheet-sub{font-size:12px;color:rgba(255,246,229,.35);text-align:center;margin-bottom:26px;font-family:'Noto Sans Devanagari',sans-serif}
+/* SERVICE CARDS IN SHEET */
+.svc-grid{display:flex;flex-direction:column;gap:14px;margin-bottom:22px}
+.svc-card{background:rgba(255,246,229,.05);border:1.5px solid rgba(212,175,55,.15);border-radius:14px;padding:20px;cursor:pointer;transition:all .25s}
+.svc-card:hover{border-color:rgba(255,107,0,.5);background:rgba(255,107,0,.07);transform:translateY(-2px)}
+.svc-card.selected{border-color:var(--saffron);background:rgba(255,107,0,.1);box-shadow:0 0 0 1px rgba(255,107,0,.3)}
+.svc-header{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+.svc-icon{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.svc-icon-m{background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.3)}
+.svc-icon-s{background:rgba(255,107,0,.15);border:1px solid rgba(255,107,0,.3)}
+.svc-name{font-family:'Cinzel',serif;font-size:15px;color:var(--gold-h)}
+.svc-tag{font-size:10px;color:rgba(255,246,229,.35);letter-spacing:.8px;margin-top:3px}
+.svc-pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.pill{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.8px;padding:3px 10px;border-radius:20px}
+.pill-gold{background:rgba(212,175,55,.12);color:var(--gold);border:1px solid rgba(212,175,55,.25)}
+.pill-saffron{background:rgba(255,107,0,.12);color:var(--saffron);border:1px solid rgba(255,107,0,.25)}
+.pill-green{background:rgba(22,163,74,.1);color:#22C55E;border:1px solid rgba(22,163,74,.25)}
+.svc-desc{font-size:11px;color:rgba(255,246,229,.35);line-height:1.65}
+/* ACTIVE SERVICE BANNER */
+.active-banner{display:flex;align-items:center;gap:12px;background:rgba(255,107,0,.08);border:1px solid rgba(255,107,0,.22);border-radius:10px;padding:12px 16px;margin-bottom:18px}
+.ab-icon{font-size:22px;flex-shrink:0}
+.ab-name{font-family:'Cinzel',serif;font-size:11px;color:var(--saffron);letter-spacing:.8px;margin-bottom:3px}
+.ab-detail{font-size:11px;color:rgba(255,246,229,.38)}
+/* WEEKLY TRACKER */
+.week-track{display:flex;gap:8px;justify-content:center;margin:12px 0 6px}
+.wdot{width:38px;height:38px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Cinzel',serif;font-size:10px;border:1.5px solid rgba(212,175,55,.18);color:rgba(255,246,229,.3);gap:1px}
+.wdot.done{background:rgba(22,163,74,.15);border-color:#22C55E;color:#22C55E}
+.wdot.next{background:rgba(255,107,0,.12);border-color:var(--saffron);color:var(--saffron)}
 /* LIVE UI */
 .live-preview{position:relative;border-radius:10px;overflow:hidden;background:#000;margin-bottom:14px}
 #local-video{width:100%;display:block;max-height:280px;object-fit:cover}
@@ -51,59 +80,94 @@ button{cursor:pointer;font-family:inherit;border:none}
 .viewer-count{position:absolute;bottom:10px;right:10px;background:rgba(0,0,0,.65);color:rgba(255,255,255,.75);font-family:'Cinzel',serif;font-size:10px;padding:3px 10px;border-radius:4px}
 .rec-badge{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.65);color:#FC8181;font-family:'Cinzel',serif;font-size:10px;padding:3px 10px;border-radius:4px;display:flex;align-items:center;gap:4px}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-/* TIMER */
 .live-timer{text-align:center;font-family:'Cinzel',serif;font-size:28px;color:#FC8181;margin:8px 0 16px;letter-spacing:2px}
-/* SUBSCRIBERS */
+/* SUBS */
 .sub-card{background:rgba(255,246,229,.04);border:1px solid rgba(212,175,55,.12);border-radius:10px;padding:14px;margin-bottom:8px}
 .sub-name{font-family:'Cinzel',serif;font-size:13px;color:var(--gold-h);margin-bottom:3px}
 .sub-detail{font-size:12px;color:rgba(255,246,229,.45);line-height:1.6}
 .badge{display:inline-flex;align-items:center;gap:4px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:1px;padding:2px 8px;border-radius:12px;margin-top:6px}
 .badge-active{background:rgba(22,163,74,.1);color:#22C55E;border:1px solid rgba(22,163,74,.3)}
 .badge-today{background:rgba(255,107,0,.1);color:var(--saffron);border:1px solid rgba(255,107,0,.3)}
-/* RECORDING STATUS */
+/* REC STATUS */
 .rec-status{background:rgba(22,163,74,.08);border:1px solid rgba(22,163,74,.3);border-radius:10px;padding:16px;text-align:center;margin-top:12px}
 .rec-status-icon{font-size:32px;margin-bottom:8px}
 .rec-status-title{font-family:'Cinzel',serif;font-size:14px;color:#22C55E;margin-bottom:6px}
 .rec-status-desc{font-size:12px;color:rgba(255,246,229,.5);line-height:1.6}
+/* MISC */
 .footer{padding:20px;text-align:center;border-top:1px solid rgba(212,175,55,.08);margin-top:auto}
 .footer-text{font-family:'Cinzel',serif;font-size:10px;color:rgba(255,246,229,.15);letter-spacing:1px}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#1E0C00;color:var(--gold-h);font-family:'Cinzel',serif;font-size:12px;padding:12px 24px;border-radius:8px;border:1px solid rgba(212,175,55,.3);box-shadow:0 8px 24px rgba(0,0,0,.6);opacity:0;transition:all .35s;pointer-events:none;z-index:999;max-width:90vw;text-align:center}
 .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
 @keyframes spin{to{transform:rotate(360deg)}}
+@keyframes glow{0%,100%{text-shadow:0 0 20px rgba(212,175,55,.4)}50%{text-shadow:0 0 60px rgba(212,175,55,.9)}}
 .spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
-@media(max-width:480px){.main{padding:16px 12px}.card{padding:16px}.input.code-input{font-size:18px;letter-spacing:4px}}
+@media(max-width:480px){.main{padding:16px 12px}.card{padding:16px}.launch-btn{font-size:14px;padding:17px 20px}}
 </style>
 </head>
 <body>
+
+<!-- TOPBAR -->
 <div class="topbar">
-  <a href="index.html" class="logo" style="text-decoration:none">
+  <a href="index.html" class="logo">
     <div class="logo-icon">&#x1F549;</div>
-    <div><div class="logo-name">LocalMandir Live</div><div class="logo-sub">&#x939;&#x930; &#x918;&#x930; &#x92E;&#x902;&#x926;&#x93F;&#x930;</div></div>
+    <div>
+      <div class="logo-name">LocalMandir Live</div>
+      <div class="logo-sub">&#x939;&#x930; &#x918;&#x930; &#x92E;&#x902;&#x926;&#x93F;&#x930;</div>
+    </div>
   </a>
-  <div style="display:flex;align-items:center;gap:12px">
-    <div class="topbar-badge">&#x1F534; PUROHIT LIVE</div>
-  </div>
+  <div class="topbar-badge">&#x1F534; PUROHIT LIVE</div>
 </div>
 
 <div class="main">
 
+  <!-- LOADING -->
+  <div id="view-loading" style="text-align:center;padding:80px 20px">
+    <div style="font-size:64px;color:var(--gold);animation:glow 2s ease-in-out infinite;margin-bottom:16px">&#x950;</div>
+    <div style="font-family:'Cinzel',serif;font-size:12px;color:rgba(255,246,229,.35);letter-spacing:2px">Loading...</div>
+  </div>
 
-  <!-- ════ PORTAL ════ -->
-  <div id="view-portal">
+  <!-- PORTAL -->
+  <div id="view-portal" style="display:none">
 
     <!-- Mandir Header -->
-    <div style="text-align:center;margin-bottom:24px">
-      <div style="font-size:44px;margin-bottom:8px" id="mandir-emoji">&#x1F6D5;</div>
-      <div style="font-family:'Cinzel',serif;font-size:19px;color:var(--gold)" id="mandir-name">-</div>
-      <div style="font-size:12px;color:rgba(255,246,229,.4);margin-top:4px" id="mandir-loc">-</div>
+    <div style="text-align:center;margin-bottom:28px;padding-top:8px">
+      <div style="font-size:48px;margin-bottom:10px" id="mandir-emoji">&#x1F6D5;</div>
+      <div style="font-family:'Cinzel',serif;font-size:20px;color:var(--gold)" id="mandir-name">-</div>
+      <div style="font-size:12px;color:rgba(255,246,229,.38);margin-top:5px" id="mandir-loc">-</div>
     </div>
 
-    <!-- ── LIVE CARD ── -->
-    <div class="card" style="border-color:rgba(229,62,62,.25)">
+    <!-- ══ THE ONE BUTTON ══ -->
+    <div class="launch-wrap">
+      <button class="launch-btn" onclick="openSheet()">
+        <span class="launch-icon">&#x1F534;</span>
+        LocalMandir Live
+        <span class="launch-icon">&#x1F549;</span>
+      </button>
+    </div>
+    <div style="text-align:center;font-size:10px;color:rgba(255,246,229,.22);font-family:'Cinzel',serif;letter-spacing:1.2px;margin-bottom:30px">TAP TO SELECT SERVICE &amp; GO LIVE</div>
+
+    <!-- LIVE CARD (hidden until service chosen) -->
+    <div class="card" id="live-card" style="display:none;border-color:rgba(229,62,62,.25)">
+
+      <!-- Active service banner -->
+      <div class="active-banner" id="active-banner">
+        <div class="ab-icon" id="ab-icon">🙏</div>
+        <div>
+          <div class="ab-name" id="ab-name">-</div>
+          <div class="ab-detail" id="ab-detail">-</div>
+        </div>
+      </div>
+
       <div class="card-title" style="color:#FC8181">&#x1F534; Live Puja — Auto Record</div>
 
       <!-- OFFLINE -->
       <div id="state-offline">
+        <!-- Monthly weekly tracker -->
+        <div id="weekly-tracker" style="display:none;margin-bottom:16px">
+          <div style="font-family:'Cinzel',serif;font-size:10px;color:rgba(255,246,229,.3);text-align:center;letter-spacing:1px;margin-bottom:10px">IS MAHINE KI 4 PUJAS</div>
+          <div class="week-track" id="week-dots"></div>
+        </div>
+
         <div style="background:rgba(255,107,0,.06);border:1px solid rgba(255,107,0,.15);border-radius:10px;padding:16px;margin-bottom:18px">
           <div style="font-family:'Cinzel',serif;font-size:11px;color:var(--gold-h);margin-bottom:10px;letter-spacing:1px">&#x2728; KAISE KAAM KARTA HAI</div>
           <div style="font-size:12px;color:rgba(255,246,229,.55);line-height:1.9">
@@ -113,7 +177,7 @@ button{cursor:pointer;font-family:inherit;border:none}
             &#x2705; Admin approve kare &#x2192; Subscribers ko email jaaye
           </div>
         </div>
-        <button class="btn btn-red" id="start-btn" onclick="startLive()">
+        <button class="btn btn-red" onclick="startLive()">
           <span>&#x1F534; Start Live &amp; Record</span>
         </button>
       </div>
@@ -158,374 +222,277 @@ button{cursor:pointer;font-family:inherit;border:none}
       </div>
     </div>
 
-    <!-- Subscribers List -->
-    <div class="card">
-      <div class="card-title">&#x1F64F; Is Mandir Ke Subscribers (<span id="sub-count">0</span>)</div>
+    <!-- Subscribers -->
+    <div class="card" id="subs-card" style="display:none">
+      <div class="card-title">&#x1F64F; Subscribers (<span id="sub-count">0</span>)</div>
       <div id="subs-list"><div style="color:rgba(255,246,229,.3);font-size:13px;text-align:center;padding:20px">Loading...</div></div>
     </div>
 
+  </div><!-- /view-portal -->
+</div><!-- /main -->
 
+<!-- ════ SERVICE SELECTION SHEET ════ -->
+<div class="overlay" id="overlay" onclick="closeIfOutside(event)">
+  <div class="sheet" id="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">&#x1F549; Service Chunein</div>
+    <div class="sheet-sub">Kaun si puja service shuru karni hai?</div>
+
+    <div class="svc-grid">
+
+      <!-- Monthly Puja -->
+      <div class="svc-card" id="svc-monthly" onclick="selectSvc('monthly')">
+        <div class="svc-header">
+          <div class="svc-icon svc-icon-m">&#x1F4C5;</div>
+          <div>
+            <div class="svc-name">Monthly Puja</div>
+            <div class="svc-tag">Maasik Seva</div>
+          </div>
+        </div>
+        <div class="svc-pills">
+          <span class="pill pill-gold">4 Pujas / Month</span>
+          <span class="pill pill-gold">1 Puja / Week</span>
+          <span class="pill pill-green">Scheduled</span>
+        </div>
+        <div class="svc-desc">Har hafte ek niyamit puja — subscribers ko weekly notification milegi.</div>
+      </div>
+
+      <!-- Special Puja -->
+      <div class="svc-card" id="svc-special" onclick="selectSvc('special')">
+        <div class="svc-header">
+          <div class="svc-icon svc-icon-s">&#x2728;</div>
+          <div>
+            <div class="svc-name">Special Puja</div>
+            <div class="svc-tag">Vishesh Seva</div>
+          </div>
+        </div>
+        <div class="svc-pills">
+          <span class="pill pill-saffron">On Demand</span>
+          <span class="pill pill-saffron">Festival / Occasion</span>
+        </div>
+        <div class="svc-desc">Tyohar, utsav ya kisi khaas mauke ki puja — subscribers ko turant alert milega.</div>
+      </div>
+
+    </div>
+
+    <button class="btn btn-primary" id="go-btn" onclick="confirmSvc()" disabled style="opacity:.4">
+      &#x1F534;&nbsp; Go Live
+    </button>
+    <div style="text-align:center;margin-top:12px">
+      <button class="btn btn-ghost" onclick="closeSheet()" style="width:auto;padding:8px 22px;font-size:10px">Cancel</button>
+    </div>
   </div>
-
 </div>
 
 <div class="footer"><div class="footer-text">LocalMandir Live Purohit Portal • Confidential</div></div>
 <div class="toast" id="toast"></div>
 
 <script>
-/* ══════════════════════════════════════════
-   FIREBASE CONFIG
-══════════════════════════════════════════ */
-const firebaseConfig = {
-  apiKey: "AIzaSyBC1yt-YE74pKCKMfukmc7_3vicM49h6vE",
-  authDomain: "sanatanianthem-652a3.firebaseapp.com",
-  databaseURL: "https://sanatanianthem-652a3-default-rtdb.firebaseio.com",
-  projectId: "sanatanianthem-652a3",
-  storageBucket: "sanatanianthem-652a3.firebasestorage.app",
-  messagingSenderId: "1031082702558",
-  appId: "1:1031082702558:web:744ffa9cfa54ff838db44f"
-};
+/* ── FIREBASE ── */
+const firebaseConfig={apiKey:"AIzaSyBC1yt-YE74pKCKMfukmc7_3vicM49h6vE",authDomain:"sanatanianthem-652a3.firebaseapp.com",databaseURL:"https://sanatanianthem-652a3-default-rtdb.firebaseio.com",projectId:"sanatanianthem-652a3",storageBucket:"sanatanianthem-652a3.firebasestorage.app",messagingSenderId:"1031082702558",appId:"1:1031082702558:web:744ffa9cfa54ff838db44f"};
 firebase.initializeApp(firebaseConfig);
-const db_rt = firebase.database();
+const db_rt=firebase.database();
 
-/* ══════════════════════════════════════════
-   CLOUDINARY CONFIG
-══════════════════════════════════════════ */
-const CONFIG = {
-  CLOUDINARY_CLOUD_NAME:    'dfx2veoqn',
-  CLOUDINARY_UPLOAD_PRESET: 'SanataniAnthem',
-};
+/* ── CLOUDINARY ── */
+const CONFIG={CLOUDINARY_CLOUD_NAME:'dfx2veoqn',CLOUDINARY_UPLOAD_PRESET:'SanataniAnthem'};
 
 /* ── STATE ── */
-let currentMandir = null;
-let localStream = null;
-let mediaRecorder = null;
-let recordedChunks = [];
-// WebRTC native — no PeerJS needed
-let activeConnections = []; // {pc, id}
-let offerCheckInterval = null;
-let timerInterval = null;
-let liveSeconds = 0;
-let camOn = true;
-let micOn = true;
+let currentMandir=null,localStream=null,mediaRecorder=null,recordedChunks=[],activeConnections=[],offerCheckInterval=null,timerInterval=null,liveSeconds=0,camOn=true,micOn=true,selectedSvc=null;
 
-/* ── LOCAL DB (for subscriber data) ── */
+/* ── DB ── */
 function getDB(){try{return JSON.parse(localStorage.getItem('sanatani_cms')||'{}')}catch(e){return{}}}
 function saveDB(db){localStorage.setItem('sanatani_cms',JSON.stringify(db))}
 
-/* ── FIREBASE LIVE SIGNAL ── */
-function setLiveSignal(mandirId, data) {
-  db_rt.ref('liveStreams/' + mandirId).set(data);
-}
-function clearLiveSignal(mandirId) {
-  db_rt.ref('liveStreams/' + mandirId).remove();
-}
-function saveRecordingToFirebase(rec) {
-  db_rt.ref('pujaRecordings/' + rec.id).set(rec);
+/* ── FIREBASE HELPERS ── */
+function setLiveSignal(id,d){db_rt.ref('liveStreams/'+id).set(d);}
+function clearLiveSignal(id){db_rt.ref('liveStreams/'+id).remove();}
+function saveRecFB(rec){db_rt.ref('pujaRecordings/'+rec.id).set(rec);}
+
+/* ── SESSION ── */
+const SK='sa_pur_s';
+function getSession(){try{const r=localStorage.getItem(SK);if(!r)return null;const s=JSON.parse(r);if(!s||Date.now()>s.exp){localStorage.removeItem(SK);return null;}return s;}catch(e){return null;}}
+
+/* ── DEFAULT MANDIRS ── */
+function getDefaultMandirs(){return[{id:'m1',name:'Kashi Vishwanath',location:'Varanasi, UP',emoji:'🛕',code:'KASHI7'},{id:'m2',name:'Tirupati Balaji',location:'Tirupati, AP',emoji:'🙏',code:'TIRUPA7'}];}
+
+/* ── INIT ── */
+function initDashboard(){
+  const sess=getSession();
+  let mandir,name;
+  if(sess){
+    mandir=sess.mandir||{id:sess.uid,name:'Aapka Mandir',location:'',emoji:'🛕'};
+    name=sess.name||'Purohit ji';
+    db_rt.ref('purohits/'+sess.uid).once('value').then(snap=>{
+      const p=snap.val();if(p&&p.mandirObj)currentMandir=p.mandirObj;
+      showPortal(currentMandir,name);
+    }).catch(()=>showPortal(mandir,name));
+  }else{
+    const db=getDB();const mandirs=(db.mandirs&&db.mandirs.length)?db.mandirs:getDefaultMandirs();
+    mandir=mandirs[0];name='Purohit ji';
+    showPortal(mandir,name);
+  }
+  currentMandir=mandir;
 }
 
-function getDefaultMandirs(){return[
-  {id:'m1',name:'Kashi Vishwanath',location:'Varanasi, UP',emoji:'🛕',code:'KASHI7',active:true},
-  {id:'m2',name:'Tirupati Balaji',location:'Tirupati, AP',emoji:'🙏',code:'TIRUPA7',active:true},
-  {id:'m3',name:'Vaishno Devi',location:'Katra, J&K',emoji:'⛰️',code:'VAISH7',active:true},
-  {id:'m4',name:'Jagannath Puri',location:'Puri, Odisha',emoji:'🌊',code:'JAGANN7',active:true},
-  {id:'m5',name:'Somnath Mandir',location:'Prabhas Patan',emoji:'🌙',code:'SOMNAT7',active:true},
-  {id:'m6',name:'Shirdi Sai Baba',location:'Shirdi, MH',emoji:'🌹',code:'SHIRDI7',active:true},
-]}
-
-/* ── AUTO-LOAD PORTAL ── */
-function autoLoadPortal(){
-  const db=getDB();
-  const mandirs=(db.mandirs&&db.mandirs.length>0)?db.mandirs:getDefaultMandirs();
-  currentMandir=mandirs[0];
-  showPortal(currentMandir);
-}
-
-window.addEventListener('DOMContentLoaded', autoLoadPortal);
-
-function showPortal(m){
+function showPortal(m,pName){
+  document.getElementById('view-loading').style.display='none';
+  document.getElementById('view-portal').style.display='block';
   document.getElementById('mandir-emoji').textContent=m.emoji||'🛕';
-  document.getElementById('mandir-name').textContent=m.name;
-  document.getElementById('mandir-loc').textContent='📍 '+m.location+(m.purohit?' • '+m.purohit:'');
-  loadSubscribers(m);
+  document.getElementById('mandir-name').textContent=m.name||'Aapka Mandir';
+  document.getElementById('mandir-loc').textContent='📍 '+(m.location||'')+(pName?' • 🙏 '+pName:'');
 }
 
-function loadSubscribers(mandir){
+/* ══════════════════════════════════════════
+   SERVICE SHEET
+══════════════════════════════════════════ */
+function openSheet(){
+  selectedSvc=null;
+  document.getElementById('svc-monthly').classList.remove('selected');
+  document.getElementById('svc-special').classList.remove('selected');
+  const gb=document.getElementById('go-btn');gb.disabled=true;gb.style.opacity='.4';
+  document.getElementById('overlay').classList.add('open');
+}
+function closeSheet(){document.getElementById('overlay').classList.remove('open');}
+function closeIfOutside(e){if(e.target===document.getElementById('overlay'))closeSheet();}
+
+function selectSvc(type){
+  selectedSvc=type;
+  document.getElementById('svc-monthly').classList.toggle('selected',type==='monthly');
+  document.getElementById('svc-special').classList.toggle('selected',type==='special');
+  const gb=document.getElementById('go-btn');gb.disabled=false;gb.style.opacity='1';
+}
+
+function confirmSvc(){
+  if(!selectedSvc)return;
+  closeSheet();
+  // Show live card + subs card
+  document.getElementById('live-card').style.display='block';
+  document.getElementById('subs-card').style.display='block';
+  // Set banner
+  if(selectedSvc==='monthly'){
+    document.getElementById('ab-icon').textContent='📅';
+    document.getElementById('ab-name').textContent='Monthly Puja — Maasik Seva';
+    document.getElementById('ab-detail').textContent='4 Pujas / Month  •  1 Puja per Week';
+    document.getElementById('weekly-tracker').style.display='block';
+    renderWeekDots();
+  }else{
+    document.getElementById('ab-icon').textContent='✨';
+    document.getElementById('ab-name').textContent='Special Puja — Vishesh Seva';
+    document.getElementById('ab-detail').textContent='Festival / On-demand occasion';
+    document.getElementById('weekly-tracker').style.display='none';
+  }
+  setState('offline');
+  loadSubscribers(currentMandir,selectedSvc);
+  showToast('🙏 '+(selectedSvc==='monthly'?'Monthly Puja':'Special Puja')+' selected. Ready!');
+  setTimeout(()=>document.getElementById('live-card').scrollIntoView({behavior:'smooth',block:'start'}),150);
+}
+
+/* ── WEEKLY DOT TRACKER ── */
+function renderWeekDots(){
   const db=getDB();
-  const subs=(db.subscriptions||[]).filter(s=>s.mandir&&s.mandir.id===mandir.id&&s.status==='active');
+  const recs=(db.pujaRecordings||[]).filter(r=>r.mandirId===currentMandir.id&&r.serviceType==='monthly');
+  const now=new Date();const m=now.getMonth(),y=now.getFullYear();
+  const done=Math.min(recs.filter(r=>{const d=new Date(r.recordedAt);return d.getMonth()===m&&d.getFullYear()===y;}).length,4);
+  const c=document.getElementById('week-dots');c.innerHTML='';
+  for(let i=1;i<=4;i++){
+    const el=document.createElement('div');
+    el.className='wdot'+(i<=done?' done':i===done+1?' next':'');
+    el.innerHTML='<span style="font-size:11px">'+(i<=done?'✓':'W'+i)+'</span><span style="font-size:7px">'+(i<=done?'Done':'Puja')+'</span>';
+    c.appendChild(el);
+  }
+}
+
+/* ── SUBSCRIBERS ── */
+function loadSubscribers(mandir,svcType){
+  const db=getDB();
+  let subs=(db.subscriptions||[]).filter(s=>s.mandir&&s.mandir.id===mandir.id&&s.status==='active');
   document.getElementById('sub-count').textContent=subs.length;
   const list=document.getElementById('subs-list');
-  if(!subs.length){list.innerHTML='<div style="color:rgba(255,246,229,.3);font-size:13px;text-align:center;padding:24px">Abhi koi active subscriber nahi hai.</div>';return}
+  if(!subs.length){list.innerHTML='<div style="color:rgba(255,246,229,.3);font-size:13px;text-align:center;padding:24px">Abhi koi active subscriber nahi hai.</div>';return;}
   const today=new Date().getDate();
   list.innerHTML=subs.map(s=>{
     const isToday=(s.pujasDates||[]).includes(today);
-    return '<div class="sub-card"><div class="sub-name">🙏 '+s.name+
-      (s.gotra?'<span style="font-size:11px;opacity:.5;margin-left:6px">(Gotra: '+s.gotra+')</span>':'')+
-      '</div>'+
-      (s.sankalp?'<div class="sub-detail" style="color:rgba(255,140,53,.7)">🙏 '+s.sankalp+'</div>':'')+
-      '<div><span class="badge badge-active">Active</span>'+(isToday?' <span class="badge badge-today">Aaj Ka Din</span>':'')+'</div></div>';
+    return '<div class="sub-card"><div class="sub-name">🙏 '+s.name+(s.gotra?'<span style="font-size:11px;opacity:.5;margin-left:6px">(Gotra: '+s.gotra+')</span>':'')+
+    '</div>'+(s.sankalp?'<div class="sub-detail" style="color:rgba(255,140,53,.7)">🙏 '+s.sankalp+'</div>':'')+
+    '<div><span class="badge badge-active">Active</span>'+(isToday?' <span class="badge badge-today">Aaj Ka Din</span>':'')+'</div></div>';
   }).join('');
 }
 
 /* ══════════════════════════════════════════
    LIVE + RECORD
 ══════════════════════════════════════════ */
-function setState(name){
-  ['offline','preparing','live','saving','saved'].forEach(s=>{
-    document.getElementById('state-'+s).style.display = s===name ? 'block' : 'none';
-  });
-}
+function setState(n){['offline','preparing','live','saving','saved'].forEach(s=>{document.getElementById('state-'+s).style.display=s===n?'block':'none';});}
 
 async function startLive(){
   setState('preparing');
   document.getElementById('prepare-text').textContent='Camera permission maang raha hai...';
-
   try{
-    // Get camera + mic
-    localStream = await navigator.mediaDevices.getUserMedia({
-      video:{
-        facingMode:{ideal:'environment'},
-        width:{ideal:1280},
-        height:{ideal:720},
-        frameRate:{ideal:30}
-      },
-      audio:{
-        echoCancellation:true,
-        noiseSuppression:true
-      }
-    });
-    console.log('Stream tracks:', localStream.getTracks().map(t=>t.kind+':'+t.label));
-
+    localStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720},frameRate:{ideal:30}},audio:{echoCancellation:true,noiseSuppression:true}});
     document.getElementById('prepare-text').textContent='Live connect ho raha hai...';
-
-    // Show preview
-    document.getElementById('local-video').srcObject = localStream;
-
-    // Start MediaRecorder for local recording
-    recordedChunks = [];
-    const mimeType = MediaRecorder.isTypeSupported('video/webm;codecs=vp9,opus')
-      ? 'video/webm;codecs=vp9,opus'
-      : MediaRecorder.isTypeSupported('video/webm')
-      ? 'video/webm' : 'video/mp4';
-
-    mediaRecorder = new MediaRecorder(localStream, {mimeType, videoBitsPerSecond:1500000});
-    mediaRecorder.ondataavailable = e => { if(e.data.size>0) recordedChunks.push(e.data); };
-    mediaRecorder.start(1000); // collect every 1s
-
-    // Mark live in Firebase — visitors turant dekhenge
-    setLiveSignal(currentMandir.id, {
-      mandirId: currentMandir.id,
-      mandirName: currentMandir.name,
-      mandirEmoji: currentMandir.emoji || '🛕',
-      startTime: new Date().toISOString(),
-      isLive: true
-    });
-
-    setState('live');
-    startTimer();
-    showToast('🔴 Live shuru! Recording bhi chal rahi hai.');
-
-    // Native WebRTC — Firebase signaling, no external server needed!
-    offerCheckInterval = db_rt.ref('webrtc/' + currentMandir.id + '/offers').on('child_added', async snap => {
-      const data = snap.val();
-      if(!data || !data.offer || !localStream) return;
-      const viewerId = data.viewerId;
-
-      const ICE_CONFIG = { iceServers:[
-        {urls:'stun:stun.l.google.com:19302'},
-        {urls:'stun:stun1.l.google.com:19302'},
-        {urls:'turn:openrelay.metered.ca:80',username:'openrelayproject',credential:'openrelayproject'},
-        {urls:'turn:openrelay.metered.ca:443',username:'openrelayproject',credential:'openrelayproject'}
-      ]};
-
-      const pc = new RTCPeerConnection(ICE_CONFIG);
-
-      // Send local stream to viewer
-      localStream.getTracks().forEach(track => pc.addTrack(track, localStream));
-
-      // Send ICE candidates to Firebase
-      pc.onicecandidate = e => {
-        if(e.candidate)
-          db_rt.ref('webrtc/'+currentMandir.id+'/purohitCandidates/'+viewerId).push({candidate: e.candidate.candidate, sdpMid: e.candidate.sdpMid, sdpMLineIndex: e.candidate.sdpMLineIndex});
-      };
-
-      pc.onconnectionstatechange = () => {
-        if(pc.connectionState === 'connected'){
-          activeConnections.push({pc, id:viewerId});
-          updateViewerCount();
-          showToast('Ek viewer join kiya! 👁');
-        }
-        if(['disconnected','failed','closed'].includes(pc.connectionState)){
-          activeConnections = activeConnections.filter(c=>c.id!==viewerId);
-          updateViewerCount();
-        }
-      };
-
+    document.getElementById('local-video').srcObject=localStream;
+    recordedChunks=[];
+    const mt=MediaRecorder.isTypeSupported('video/webm;codecs=vp9,opus')?'video/webm;codecs=vp9,opus':MediaRecorder.isTypeSupported('video/webm')?'video/webm':'video/mp4';
+    mediaRecorder=new MediaRecorder(localStream,{mimeType:mt,videoBitsPerSecond:1500000});
+    mediaRecorder.ondataavailable=e=>{if(e.data.size>0)recordedChunks.push(e.data);};
+    mediaRecorder.start(1000);
+    setLiveSignal(currentMandir.id,{mandirId:currentMandir.id,mandirName:currentMandir.name,mandirEmoji:currentMandir.emoji||'🛕',serviceType:selectedSvc,startTime:new Date().toISOString(),isLive:true});
+    setState('live');startTimer();
+    showToast('🔴 Live shuru! Recording chal rahi hai.');
+    offerCheckInterval=db_rt.ref('webrtc/'+currentMandir.id+'/offers').on('child_added',async snap=>{
+      const data=snap.val();if(!data||!data.offer||!localStream)return;
+      const vid=data.viewerId;
+      const ICE={iceServers:[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun1.l.google.com:19302'},{urls:'turn:openrelay.metered.ca:80',username:'openrelayproject',credential:'openrelayproject'},{urls:'turn:openrelay.metered.ca:443',username:'openrelayproject',credential:'openrelayproject'}]};
+      const pc=new RTCPeerConnection(ICE);
+      localStream.getTracks().forEach(t=>pc.addTrack(t,localStream));
+      pc.onicecandidate=e=>{if(e.candidate)db_rt.ref('webrtc/'+currentMandir.id+'/purohitCandidates/'+vid).push({candidate:e.candidate.candidate,sdpMid:e.candidate.sdpMid,sdpMLineIndex:e.candidate.sdpMLineIndex});};
+      pc.onconnectionstatechange=()=>{if(pc.connectionState==='connected'){activeConnections.push({pc,id:vid});updateViewerCount();showToast('Ek viewer join kiya! 👁');}if(['disconnected','failed','closed'].includes(pc.connectionState)){activeConnections=activeConnections.filter(c=>c.id!==vid);updateViewerCount();}};
       await pc.setRemoteDescription(new RTCSessionDescription(data.offer));
-      const answer = await pc.createAnswer();
-      await pc.setLocalDescription(answer);
-
-      // Send answer back
-      db_rt.ref('webrtc/'+currentMandir.id+'/answers/'+viewerId).set({answer: {type: pc.localDescription.type, sdp: pc.localDescription.sdp}});
-
-      // Receive viewer ICE candidates
-      db_rt.ref('webrtc/'+currentMandir.id+'/viewerCandidates/'+viewerId).on('child_added', candSnap => {
-        pc.addIceCandidate(new RTCIceCandidate(candSnap.val())).catch(()=>{});
-      });
-
-      snap.ref.remove(); // clean up offer
+      const ans=await pc.createAnswer();await pc.setLocalDescription(ans);
+      db_rt.ref('webrtc/'+currentMandir.id+'/answers/'+vid).set({answer:{type:pc.localDescription.type,sdp:pc.localDescription.sdp}});
+      db_rt.ref('webrtc/'+currentMandir.id+'/viewerCandidates/'+vid).on('child_added',cs=>{pc.addIceCandidate(new RTCIceCandidate(cs.val())).catch(()=>{});});
+      snap.ref.remove();
     });
-
-  } catch(err){
-    setState('offline');
-    if(err.name==='NotAllowedError') showToast('Camera permission denied!');
-    else showToast('Camera start nahi hua: '+err.message);
-  }
+  }catch(err){setState('offline');if(err.name==='NotAllowedError')showToast('Camera permission denied!');else showToast('Camera start nahi hua: '+err.message);}
 }
 
 function stopLive(){
-  if(!mediaRecorder && !localStream){ setState('offline'); return; }
-
-  setState('saving');
-  stopTimer();
-
-  // Remove from Firebase live registry
-  if(currentMandir) clearLiveSignal(currentMandir.id);
-
-  // Close all peer connections
-  activeConnections.forEach(c => { try{c.pc.close()}catch(e){} });
-  activeConnections = [];
-  // Stop listening for new offers
-  if(offerCheckInterval){
-    db_rt.ref('webrtc/'+currentMandir.id+'/offers').off('child_added', offerCheckInterval);
-    offerCheckInterval = null;
-  }
-  // Clean up WebRTC data from Firebase
-  if(currentMandir) db_rt.ref('webrtc/'+currentMandir.id).remove();
-
-  // Stop camera first (but keep stream data for upload)
+  if(!mediaRecorder&&!localStream){setState('offline');return;}
+  setState('saving');stopTimer();
+  if(currentMandir)clearLiveSignal(currentMandir.id);
+  activeConnections.forEach(c=>{try{c.pc.close()}catch(e){}});activeConnections=[];
+  if(offerCheckInterval){db_rt.ref('webrtc/'+currentMandir.id+'/offers').off('child_added',offerCheckInterval);offerCheckInterval=null;}
+  if(currentMandir)db_rt.ref('webrtc/'+currentMandir.id).remove();
   document.getElementById('local-video').srcObject=null;
-
-  // Stop recording — onstop must be set BEFORE calling stop()
-  if(mediaRecorder && mediaRecorder.state!=='inactive'){
-    mediaRecorder.onstop = () => {
-      // Now stop camera tracks
-      if(localStream){ localStream.getTracks().forEach(t=>t.stop()); localStream=null; }
-      uploadRecording();
-    };
-    mediaRecorder.stop();
-  } else {
-    if(localStream){ localStream.getTracks().forEach(t=>t.stop()); localStream=null; }
-    uploadRecording();
-  }
+  if(mediaRecorder&&mediaRecorder.state!=='inactive'){mediaRecorder.onstop=()=>{if(localStream){localStream.getTracks().forEach(t=>t.stop());localStream=null;}uploadRecording();};mediaRecorder.stop();}
+  else{if(localStream){localStream.getTracks().forEach(t=>t.stop());localStream=null;}uploadRecording();}
 }
 
 async function uploadRecording(){
-  console.log('Upload starting. Chunks:', recordedChunks.length);
-  if(recordedChunks.length===0){
-    showToast('Koi recording nahi mili. Dobara try karein.');
-    setState('offline');
-    return;
-  }
-
-  const mimeType = recordedChunks[0].type || 'video/webm';
-  const ext = mimeType.includes('mp4') ? 'mp4' : 'webm';
-  const blob = new Blob(recordedChunks, {type: mimeType});
-  recordedChunks = [];
-
-  const date = new Date().toISOString().split('T')[0];
-  const filename = currentMandir.code + '_puja_' + date + '_' + Date.now();
-
-  const fd = new FormData();
-  fd.append('file', blob, filename+'.'+ext);
-  fd.append('upload_preset', CONFIG.CLOUDINARY_UPLOAD_PRESET);
-  fd.append('folder', 'sanatanianthem_recordings');
-  fd.append('public_id', filename);
-
+  if(!recordedChunks.length){showToast('Koi recording nahi mili. Dobara try karein.');setState('offline');return;}
+  const mt=recordedChunks[0].type||'video/webm';const ext=mt.includes('mp4')?'mp4':'webm';
+  const blob=new Blob(recordedChunks,{type:mt});recordedChunks=[];
+  const date=new Date().toISOString().split('T')[0];
+  const fn=(currentMandir.code||'mandir')+'_puja_'+date+'_'+Date.now();
+  const fd=new FormData();fd.append('file',blob,fn+'.'+ext);fd.append('upload_preset',CONFIG.CLOUDINARY_UPLOAD_PRESET);fd.append('folder','sanatanianthem_recordings');fd.append('public_id',fn);
   try{
-    const res = await fetch(
-      'https://api.cloudinary.com/v1_1/'+CONFIG.CLOUDINARY_CLOUD_NAME+'/video/upload',
-      {method:'POST', body:fd}
-    );
-    const data = await res.json();
-    if(data.secure_url){
-      saveRecordingToDB(data.secure_url, data.duration||0);
-      setState('saved');
-      showToast('Recording save ho gayi! ✓');
-    } else {
-      throw new Error(data.error?.message || 'Upload failed');
-    }
-  } catch(err){
-    console.error('Upload error:', err);
-    showToast('Upload error: '+err.message+'. Internet check karo.');
-    setState('offline');
-  }
+    const res=await fetch('https://api.cloudinary.com/v1_1/'+CONFIG.CLOUDINARY_CLOUD_NAME+'/video/upload',{method:'POST',body:fd});
+    const d=await res.json();
+    if(d.secure_url){saveRecDB(d.secure_url,d.duration||0);setState('saved');showToast('Recording save ho gayi! ✓');}
+    else throw new Error(d.error?.message||'Upload failed');
+  }catch(err){showToast('Upload error: '+err.message);setState('offline');}
 }
 
-function saveRecordingToDB(videoUrl, duration){
-  const rec = {
-    id: 'rec_'+Date.now(),
-    mandirId: currentMandir.id,
-    mandirName: currentMandir.name,
-    mandirEmoji: currentMandir.emoji||'🛕',
-    videoUrl,
-    duration: Math.round(duration),
-    recordedAt: new Date().toISOString(),
-    status: 'pending',
-    approvedAt: null,
-    notifiedSubscribers: false,
-  };
-  // Save to Firebase — admin panel instantly dekh sakta hai
-  saveRecordingToFirebase(rec);
-  // Also save locally as backup
-  const db = getDB();
-  if(!db.pujaRecordings) db.pujaRecordings = [];
-  db.pujaRecordings.unshift(rec);
-  saveDB(db);
+function saveRecDB(url,dur){
+  const rec={id:'rec_'+Date.now(),mandirId:currentMandir.id,mandirName:currentMandir.name,mandirEmoji:currentMandir.emoji||'🛕',serviceType:selectedSvc,videoUrl:url,duration:Math.round(dur),recordedAt:new Date().toISOString(),status:'pending',approvedAt:null,notifiedSubscribers:false};
+  saveRecFB(rec);const db=getDB();if(!db.pujaRecordings)db.pujaRecordings=[];db.pujaRecordings.unshift(rec);saveDB(db);
 }
 
-/* ── TIMER ── */
-function startTimer(){
-  liveSeconds=0;
-  timerInterval=setInterval(()=>{
-    liveSeconds++;
-    const h=String(Math.floor(liveSeconds/3600)).padStart(2,'0');
-    const m=String(Math.floor((liveSeconds%3600)/60)).padStart(2,'0');
-    const s=String(liveSeconds%60).padStart(2,'0');
-    document.getElementById('live-timer').textContent=h+':'+m+':'+s;
-  },1000);
-}
-function stopTimer(){ clearInterval(timerInterval); }
+function startTimer(){liveSeconds=0;timerInterval=setInterval(()=>{liveSeconds++;const h=String(Math.floor(liveSeconds/3600)).padStart(2,'0');const m=String(Math.floor((liveSeconds%3600)/60)).padStart(2,'0');const s=String(liveSeconds%60).padStart(2,'0');document.getElementById('live-timer').textContent=h+':'+m+':'+s;},1000);}
+function stopTimer(){clearInterval(timerInterval);}
 
-/* ── CAM / MIC TOGGLE ── */
-function toggleCamera(){
-  if(!localStream)return;
-  const t=localStream.getVideoTracks()[0];if(!t)return;
-  camOn=!camOn; t.enabled=camOn;
-  document.getElementById('cam-btn').textContent=camOn?'📷 Cam Off':'📷 Cam On';
-}
-function toggleMic(){
-  if(!localStream)return;
-  const t=localStream.getAudioTracks()[0];if(!t)return;
-  micOn=!micOn; t.enabled=micOn;
-  document.getElementById('mic-btn').textContent=micOn?'🎤 Mic Off':'🎤 Mic On';
-}
-function updateViewerCount(){
-  document.getElementById('viewer-count').textContent='👁 '+activeConnections.length;
-}
-
-/* ── CLEANUP ── */
-function cleanupLive(){
-  if(localStream){localStream.getTracks().forEach(t=>t.stop());localStream=null;}
-  activeConnections.forEach(c=>{try{c.pc.close()}catch(e){}});
-  activeConnections=[];
-  if(offerCheckInterval && currentMandir){
-    db_rt.ref('webrtc/'+currentMandir.id+'/offers').off('child_added', offerCheckInterval);
-    offerCheckInterval=null;
-  }
-  if(mediaRecorder&&mediaRecorder.state!=='inactive')mediaRecorder.stop();
-  stopTimer(); activeConnections=[];
-}
+function toggleCamera(){if(!localStream)return;const t=localStream.getVideoTracks()[0];if(!t)return;camOn=!camOn;t.enabled=camOn;document.getElementById('cam-btn').textContent=camOn?'📷 Cam Off':'📷 Cam On';}
+function toggleMic(){if(!localStream)return;const t=localStream.getAudioTracks()[0];if(!t)return;micOn=!micOn;t.enabled=micOn;document.getElementById('mic-btn').textContent=micOn?'🎤 Mic Off':'🎤 Mic On';}
+function updateViewerCount(){document.getElementById('viewer-count').textContent='👁 '+activeConnections.length;}
 
 function resetForNext(){
   setState('offline');
@@ -533,15 +500,14 @@ function resetForNext(){
   document.getElementById('viewer-count').textContent='👁 0';
   document.getElementById('cam-btn').textContent='📷 Cam Off';
   document.getElementById('mic-btn').textContent='🎤 Mic Off';
-  camOn=true; micOn=true;
-  loadSubscribers(currentMandir);
+  camOn=true;micOn=true;
+  if(selectedSvc==='monthly')renderWeekDots();
+  loadSubscribers(currentMandir,selectedSvc);
 }
 
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3200);}
 
-function showToast(msg){
-  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),3200);
-}
+document.addEventListener('DOMContentLoaded',initDashboard);
 </script>
 </body>
 </html>
