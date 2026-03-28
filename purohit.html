@@ -322,11 +322,14 @@ button{cursor:pointer;font-family:inherit;border:none}
   <button class="pat-fb" id="pat-fb" style="display:none" onclick="forgotPattern()">🔑 Pattern bhool gaye? Full login karein</button>
 </div>
 <div class="topbar">
-  <div class="logo">
+  <a href="index.html" class="logo" style="text-decoration:none">
     <div class="logo-icon">&#x1F549;</div>
     <div><div class="logo-name">SanataniAnthem</div><div class="logo-sub">&#x939;&#x930; &#x918;&#x930; &#x92E;&#x902;&#x926;&#x93F;&#x930;</div></div>
+  </a>
+  <div style="display:flex;align-items:center;gap:12px">
+    <a href="purohitdashboard.html" style="font-family:'Cinzel',serif;font-size:10px;color:var(--gold);border:1px solid rgba(212,175,55,.4);padding:5px 12px;border-radius:20px;text-decoration:none">📊 Dashboard</a>
+    <div class="topbar-badge">&#x1F534; PUROHIT LIVE</div>
   </div>
-  <div class="topbar-badge">&#x1F534; PUROHIT LIVE</div>
 </div>
 
 <div class="main">
@@ -1044,7 +1047,8 @@ async function regDirect(){
     });
     var fakeUser = { uid, email:'', phoneNumber:fullPhone, displayName:name };
     saveSess(fakeUser, profile.mandirObj);
-    showDashboard(fakeUser, profile);
+    // Redirect to dedicated dashboard page
+    window.location.href = 'purohitdashboard.html';
   } catch(e){
     err.textContent='Save failed: '+e.message+'. Internet check karein aur retry karein.';
     err.style.display='block';
@@ -1100,7 +1104,8 @@ async function regVerifyOTP(){
     await db_rt.ref('adminNotifications').push({ type:'new_purohit', name:_regName, phone:_regPhone, uid, at:new Date().toISOString(), read:false });
     var fakeUser = { uid, email:'', phoneNumber:_regPhone, displayName:_regName };
     saveSess(fakeUser, profile.mandirObj);
-    showDashboard(fakeUser, profile);
+    // Redirect to dedicated dashboard page
+    window.location.href = 'purohitdashboard.html';
   }catch(e){
     err.textContent='Save error: '+e.message; err.style.display='block';
     if(btn){ btn.disabled=false; btn.textContent='✅ Verify & Dashboard Dekho'; }
@@ -1109,13 +1114,11 @@ async function regVerifyOTP(){
 
 async function rVerifyOTP(){ await regVerifyOTP(); }
 
-
+/* Legacy rStep2 verify — delegates to regVerifyOTP */
+async function rStep2(){
   const btn = document.getElementById('rs2-ver-btn');
-  btn.disabled = true;
-  btn.innerHTML = '<div class="spinner"></div><span>Verifying...</span>';
-
+  if(btn){ btn.disabled = true; btn.innerHTML = '<div class="spinner"></div><span>Verifying...</span>'; }
   try {
-    // Save to Firebase RTDB directly (no Auth needed in demo mode)
     const uid = 'demo_' + _rPhone.replace(/\D/g,'') + '_' + Date.now().toString(36);
     const profile = {
       uid, name:_rName, phone:_rPhone,
@@ -1129,16 +1132,12 @@ async function rVerifyOTP(){ await regVerifyOTP(); }
       type:'new_purohit', name:_rName, phone:_rPhone,
       uid, at:new Date().toISOString(), read:false
     });
-
-    // Save session locally
     const fakeUser = {uid, email:'', phoneNumber:_rPhone, displayName:_rName};
     saveSess(fakeUser, profile.mandirObj);
     showDashboard(fakeUser, profile);
-
   } catch(e){
     showErr('Error: ' + e.message);
-    btn.disabled = false;
-    btn.innerHTML = '✅ Verify & Dashboard Dekho';
+    if(btn){ btn.disabled = false; btn.innerHTML = '✅ Verify & Dashboard Dekho'; }
   }
 }
 
